@@ -20,7 +20,6 @@ public class TileSection {
 
     private int pointMultiplier;
 
-
     public TileSection(TerrainType terrain) {
         this.terrain = terrain;
         nodeNumbers = new ArrayList<>();
