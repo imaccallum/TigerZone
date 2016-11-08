@@ -1,8 +1,11 @@
 package entities.overlay;
 
-import entities.board.Follower;
-import entities.board.TerrainType;
-import entities.board.TileSection;
+import entities.board.*;
+// Importing specific classes is giving me compile errors. We may need to fix that in the future if
+// other people are having the same issue. -nikhil
+//import entities.board.Follower;
+//import entities.board.TerrainType;
+//import entities.board.TileSection;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ public class Region {
     private UUID tileId;
     private TerrainType terrain;
     private List<TileSection> sections;
-    private boolean isFinished = false;
     private List<Follower> followers;
+    private boolean isFinished = false;
 
     public Region(TerrainType terrain){
         tileId = UUID.randomUUID();
