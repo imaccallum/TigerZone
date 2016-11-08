@@ -36,6 +36,7 @@ public class Tile {
     private Tile rightAdjacentTile;
     private Tile topAdjacentTile;
     private Tile bottomAdjacentTile;
+    private TileCoordinate coordinate;
 
 
     public Tile() {
@@ -102,6 +103,12 @@ public class Tile {
 
     public void setBottomAdjacentTile(Tile bottomAdjacentTile) {
         this.bottomAdjacentTile = bottomAdjacentTile;
+    }
+
+    public void setCoordinate(int x, int y) { this.coordinate = new TileCoordinate(x, y); }
+
+    public TileCoordinate getCoordinate() {
+        return coordinate;
     }
 
     public UUID getTileId() {
