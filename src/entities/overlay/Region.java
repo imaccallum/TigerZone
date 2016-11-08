@@ -1,11 +1,8 @@
 package entities.overlay;
 
-import entities.board.*;
-// Importing specific classes is giving me compile errors. We may need to fix that in the future if
-// other people are having the same issue. -nikhil
-//import entities.board.Follower;
-//import entities.board.TerrainType;
-//import entities.board.TileSection;
+import entities.board.Follower;
+import entities.board.TerrainType;
+import entities.board.TileSection;
 
 import java.util.List;
 import java.util.ArrayList;
