@@ -1,18 +1,16 @@
 package entities.board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import entities.board.Node.Node;
 
 public class Tile {
 
-    //				Edge[0]
+    //			Edge[0]
     //		Corner[3]	Corner[0]
-    //	Edge[3]					Edge[1]
+    //	Edge[3]		Center		Edge[1]
     //		Corner[2]	Corner[1]
-    //				Edge[2]
-    private final int COUNT = 4;
+    //			Edge[2]
+
+	private final int COUNT = 4;
     private Node[] edges;
     private Node[] corners;
     private Node center;
