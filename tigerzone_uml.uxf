@@ -4,278 +4,407 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>402</y>
-      <w>282</w>
-      <h>216</h>
+      <x>786</x>
+      <y>330</y>
+      <w>222</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>Tile
 --
-- edges: Node[]
-- corners: Node[]
-- hasDen: boolean
-- preyAnimal: PreyAnimal
-- location: Point
-- tileSections : List&lt;TileSection&gt;
+- tileId: UUID { getter }
+- sections: List&lt;TileSection&gt;
+- rotationalOffset: int
+- rightAdjeacentTile: Tile {getter, setter}
+- leftAdjacentTile: Tile {getter, setter}
+- topAdjacentTile: Tile {getter, setter}
+- bottomAdjacentTile: Tile {getter, setter}
 --
-+ rotateClockwise(numberOfRotations: int) : void
-+ addTileSections(TileSection... tileSections) : void
-+ toString() : String
++ sectionForNode(node: int) : TileSection
++ rotateClockwise(numberOfRotations: int) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1068</x>
+      <y>426</y>
+      <w>228</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>TileSection
 --
-+ hasDen() : boolean
-+ setHasDen(hasDen: boolean) : void
-+ getEdge(location: EdgeLocation) : Node
-+ setEdge(edgeNode: Node, location: EdgeLocation) : void
-+ getCorner(location: CornerLocation) : Node
-+ setConer(cornerNode: Node, location: CornerLocation) : void
-+ getPreyAnimal() : PreyAnimal
-+ setPreyAnimal(preyAnimal: PreyAnimal) : void
-+ getLocation() : Point
-+ setLocation(location: Point) : void
-+ getTileSections() : List&lt;TileSection&gt;
+- id: UUID
+- tileNodes: List&lt;int&gt;
+- type: TerrainType
+- tile: Tile
+- region: Region
+- follower: Follower { getter }
+- pointMultiplier: int { getter }
+--
++ Section(type: SectionType)
++ getType() : SectionType
++ getId() : UUID
++ hasUnconnectedNodes() : boolean
++ hasFollower() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1212</x>
+      <y>342</y>
+      <w>84</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+TerrainType
+--
+Grass
+Road
+City
+Monastary
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>354</y>
+      <w>78</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0;70.0;130.0;110.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>786</x>
+      <y>474</y>
+      <w>222</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>Region
+--
+- id: UUID { geter }
+- sections: Map&lt;UUID, Section&gt;
+- terrain: TerrainType { getter }
+- isFinished: Bool { getter }
+- followers: List&lt;Follower&gt;
+--
++ calculatePointValue() : int
++ pointsForPlayerNumber(playerNumber: int) : int
++ containsTileSection(section: TileSection) : boolean
++ adjacentRegions() : List&lt;Region&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>330</y>
+      <w>318</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;510.0;10.0;510.0;240.0;490.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>426</y>
+      <w>54</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;130.0;70.0;130.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>474</y>
+      <w>318</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>490.0;20.0;510.0;20.0;510.0;160.0;50.0;160.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>318</y>
+      <w>378</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>GameController
+--
+- centerTile: Tile
+- remainingTileStack: List&lt;Tile&gt;
+- regions: List&lt;Region&gt; { getter }
+- openTileLocations: List&lt;TileCoordinate&gt; { getter }
+- players: List&lt;Player&gt;
+- playerTurn: int { getter }
+- playerNotifier: PlayerNotifier
+- regionLinkers: Map&lt;UUID, RegionLinker&gt;
+--
++ placeTile(tile: Tile, coordinate: TileCoordinate) throws BadPlacementException
++ getRemainingTilesAndCounts() : List&lt;Pair&lt;tile: Tile, count: int&gt; &gt;
++ getValidPlacementsForTile(tile: Tile) : List&lt;Pair&lt;coord: TileCoordinate, rotations: int&gt; &gt;
++ regionCompleted(region: Region) : void
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1236</x>
-      <y>498</y>
-      <w>168</w>
-      <h>174</h>
-    </coordinates>
-    <panel_attributes>TileSection
---
-- nodes: List&lt;Node&gt;
-- terrain : Terrain
-- tile: Tile
-- tiger: Tiger
---
-+ TileSection(terrain: Terrain)
---
-+ addNodes(Node... node) : void
-+ toString() : void
---
-+ getTerrain() : Terrain
-+ getTile() : Tile
-+ setTile(tile: Tile) : void
-+ getRegion() : Region
-+ setRegion(region: Region) : void
-+ getNodes() : List&lt;Node&gt;
-+ getTiger() : Tiger
-+ setTiger(tiger: Tiger) : void</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>774</x>
-      <y>636</y>
-      <w>282</w>
-      <h>132</h>
-    </coordinates>
-    <panel_attributes>Region
---
-- regionId : UUID
-- tileSections : List&lt;TileSection&gt;
-- terrain: Terrain
---
-+ addTileSection(section : TileSection) : void
-+ combineWithRegion(region: Region) : void
-+ isFinished() : boolean
-+ containsTigers() : boolean
-+ getScorer() : Scorer  // Factory
---
-+ getRegionId() : UUID
-+ getTileSections() : List&lt;TileSection&gt; : void
-+ getTerrain() : Terrain</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1050</x>
-      <y>462</y>
-      <w>198</w>
+      <x>528</x>
+      <y>252</y>
+      <w>126</w>
       <h>54</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;240.0;10.0;240.0;70.0;310.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1050</x>
-      <y>498</y>
-      <w>156</w>
-      <h>180</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;280.0;240.0;280.0;240.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>228</x>
-      <y>390</y>
-      <w>414</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>Board
+    <panel_attributes>TileCoordinate
 --
-- boardMatrix: Tile[][]
-- regions: Map&lt;UUID, Region&gt;
-- tileStack: Stack&lt;Tile&gt;
-- openTileLocations: List&lt;Point&gt;
-- possibleTileSectionTigerPlacements: List&lt;TileSections&gt;
-- dens: List&lt;TigerDen&gt;
+- x: int { get }
+- y: int { get }
 --
-+ insert(tile: Tile, locationAndRotation: LocationAndRotation) : void throws
-+ findValidTilePlacements(tile: Tile) : List&lt;LocationAndOrientation&gt; 
-+ getTile(tileLocation: Point) : Tile
-+ resetPossibleTigerPlacements() : void
---
-+ getTileStack() : Stack&lt;Tile&gt;
-+ getPossibleTileSectionTigerPlacements() : List&lt;TileSection&gt;</panel_attributes>
+TileCoordinate(x: int, y: int)
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>402</y>
+      <x>648</x>
+      <y>330</y>
       <w>150</w>
       <h>18</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>414</y>
+      <x>648</x>
+      <y>348</y>
       <w>150</w>
-      <h>240</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;90.0;10.0;90.0;380.0;230.0;380.0</additional_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0;190.0;220.0;230.0;220.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>948</x>
-      <y>306</y>
-      <w>108</w>
-      <h>66</h>
+      <x>786</x>
+      <y>624</y>
+      <w>156</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>&lt;&lt; enum &gt;&gt;
-CornerLocation
+    <panel_attributes>Player
 --
-TOP_LEFT
-TOP_RIGHT
-BOTTOM_LEFT
-BOTTOM_RIGHT
-</panel_attributes>
+- name: String { getter }
+- score: int { getter }
+- remainingFollowers: int { getter }
+- playerNumber: int { getter }</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>372</y>
+      <w>150</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0;150.0;430.0;230.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>42</x>
+      <y>0</y>
+      <w>234</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; interface &gt;&gt;
+PlayerNotifier
+--
++ notifyTurnForPlayerNumber(playerNumber: int) : void
++ notifyPlayerUpdate() : void
++ notifyPlayerCanPlaceFollower() : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>306</y>
-      <w>108</w>
-      <h>66</h>
+      <x>1038</x>
+      <y>594</y>
+      <w>162</w>
+      <h>30</h>
     </coordinates>
-    <panel_attributes>&lt;&lt; enum &gt;&gt;
-EdgeLocation
+    <panel_attributes>Follower
 --
-TOP
-RIGHT
-BOTTOM
-LEFT
-</panel_attributes>
+- owningPlayerNumber: int { getter }</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>528</y>
+      <w>48</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;120.0;60.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>96</y>
+      <w>336</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>PlayerController
+--
+- player: Player { getter }
+- gameController: GameController
+--
++ getRemainingTilesAndCounts() : List&lt;Pair&lt;tile: Tile, count: int&gt; &gt;
++ getTileLocations() : List&lt;TileCoordinates&gt;
++ getCurrentRegions() : List&lt;Region&gt;
++ getPossibleTileLocations() : List&lt;Pair&lt;coord: TileCoordinate rotations: int&gt; &gt;
++ getOtherPlayers() : List&lt;Player&gt;
++ placeTile(coordinate: TileCoordinate) throws BadPlacementException : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1254</x>
-      <y>348</y>
+      <x>96</x>
+      <y>96</y>
       <w>126</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>PLAYER PORT</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>54</y>
+      <w>18</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>216</x>
+      <y>96</y>
+      <w>72</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>120</y>
+      <w>54</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;340.0;70.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>12</y>
+      <w>288</w>
+      <h>396</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;640.0;460.0;640.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>282</x>
+      <y>516</y>
+      <w>336</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>RegionLinker
+--
+- region: Region
+- unconnectedNodeLocations: List&lt;Pair&lt;tileCoord: TileCoordinate, node: int&gt; &gt;
+- scoreUpdater: ScoreUpdater
+- performLink(region: Region, section: Section)
+--
++ notifyLink(nodeLocations: List&lt;Pair&lt;tileCoord: TileCoordinate, node: int&gt; &gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>348</x>
+      <y>246</y>
+      <w>156</w>
       <h>42</h>
     </coordinates>
-    <panel_attributes>Tiger
+    <panel_attributes>&lt;&lt; interface &gt;&gt;
+ScoreUpdater
 --
-- owningPlayer: Player
-- </panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>774</x>
-      <y>792</y>
-      <w>282</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>TigerDen
---
-- centralTileLocation : Point
-- tileLocationsRequired : Map&lt;Point, Boolean&gt;
-- tiger: Tiger
---
-+ TigerDen(centralPoint: Point, board: Board)
-+ isComplete() : boolean
---
-+ getCentralTileLocation() : Point
-+ getRequiredTileLocations() : List&lt;Point&gt;
-+ getTiger() : Tiger
+/+ regionCompleted(region: Region)/
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>444</y>
-      <w>150</w>
-      <h>366</h>
+      <x>426</x>
+      <y>282</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>192</x>
+      <y>246</y>
+      <w>168</w>
+      <h>318</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0;10.0;510.0;150.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>402</y>
+      <w>60</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;70.0;10.0;70.0;590.0;230.0;590.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>42</x>
-      <y>684</y>
-      <w>306</w>
-      <h>102</h>
-    </coordinates>
-    <panel_attributes>notify all players about status of game (score, forfeits, tigers left)
-advance turn
-notify a player that its their turn
-give them valid tile placements and orientations
-give them all tiles in the stack
-wait for tile placement (hand control to player controller)
-game manager receives player's move
-check for tiger placements
-notify player of tiger placements
-receive possible tiger placement
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1500</x>
-      <y>132</y>
-      <w>60</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>/AbstractClass/
-</panel_attributes>
-    <additional_attributes/>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;200.0;80.0;200.0</additional_attributes>
   </element>
 </diagram>

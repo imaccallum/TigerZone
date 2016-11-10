@@ -1,105 +1,79 @@
 package entities.board;
 
-import entities.overlay.TileSection;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Tile {
 
-    //			    Edge[0]
-    //		Corner[0]	Corner[1]
-    //	Edge[3]		Center		Edge[1]
-    //		Corner[3]	Corner[2]
-    //			    Edge[2]
-    private final int COUNT = 4; // Count of orientations
+    //				Edge[0]
+    //		Corner[3]	Corner[0]
+    //	Edge[3]					Edge[1]
+    //		Corner[2]	Corner[1]
+    //				Edge[2]
+    private final int COUNT = 4;
     private Node[] edges;
     private Node[] corners;
-    private boolean hasDen;
-    private PreyAnimal preyAnimal;
-    private Point location;
-    private List<TileSection> tileSections;
+    private Node center;
+    private Tile[] tiles; // Adjacent tiles
+    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees
+    private int score = 1;
+
+
 
     public Tile() {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
-        tileSections = new ArrayList<>();
-        preyAnimal = null;
+        tiles = new Tile[COUNT];
     }
 
-    // HAS TESTS
-    public void rotateClockwise(int numberOfRotations) {
-
-        Node[] tempEdges = new Node[COUNT];
-        Node[] tempCorners = new Node[COUNT];
-
-        for (int i = 0; i < COUNT; i++) {
-            int index = (i + numberOfRotations) % COUNT;
-            tempEdges[index] = edges[i];
-            tempCorners[index] = corners[i];
-        }
-        edges = tempEdges;
-        corners = tempCorners;
+    public Tile[] getTiles() {
+        return tiles;
     }
 
-    // HAS TEST
-    public void addTileSections(TileSection... sections) {
-        for (TileSection tileSection: sections){
-            tileSection.setTile(this);
-        }
-        tileSections.addAll(Arrays.asList(sections));
+    public Tile getTile(int index) {
+        return null;
     }
 
-    public String toString(){
-        return "Tile: " + this.hashCode() + "\n" + "TileSections: " + tileSections;
+    public Node getCorner(int index) {
+        return null;
+    }
+
+    public  Node getEdge(int index) {
+        return null;
+    }
+
+    public void setOrientation(int o) {
+        orientation = o;
+    }
+
+    public void rotate(int r) {
+        orientation = (orientation + r) % COUNT;
     }
 
 
-    // MARK: Getters and Setters
-
-    public boolean hasDen() {
-        return hasDen;
+    public void attachLeft(Tile t) {
+        // link corresponding nodes
     }
 
-    public void setHasDen(boolean hasDen) {
-        this.hasDen = hasDen;
+    public void attachRight(Tile t) {
+        // link corresponding nodes
     }
 
-    public Node getEdge(EdgeLocation location) {
-        return edges[location.ordinal()];
+    public void attachBelow(Tile t) {
+        // link corresponding nodes
+    }
+    public void attachAbove(Tile t) {
+        // link corresponding nodes
     }
 
-    public void setEdge(Node node, EdgeLocation location){
-        edges[location.ordinal()] = node;
+    private void setTile(Tile t, int i) {
+        if (i < 0 || i >= COUNT) throw new RuntimeException("Illegal index");
+        tiles[i] = t;
+        t.getTiles()[inverse(i)] = this;
     }
-
-    public Node getCorner(CornerLocation location) {
-        return corners[location.ordinal()];
-    }
-
-    public void setCorner(Node node, CornerLocation location){
-        corners[location.ordinal()] = node;
-    }
-
-    public PreyAnimal getPreyAnimal() {
-        return preyAnimal;
-    }
-
-    public void setPreyAnimal(PreyAnimal preyAnimal) {
-        this.preyAnimal = preyAnimal;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
-    public List<TileSection> getTileSections() {
-        return tileSections;
+    private int inverse(int i) {
+        return (i + 2) % COUNT;
     }
 }
