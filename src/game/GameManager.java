@@ -2,10 +2,12 @@ package game;
 
 import entities.board.Node.Node;
 import entities.board.Tile;
+import entities.player.Player;
 
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class GameManager {
@@ -16,15 +18,20 @@ public class GameManager {
     private ArrayList<Point> openTiles;		// A list of all current open tile positions
     private Point lastTilePlaced;			// Set on insert, used for getTigerPlacementOptions()
 
-    private int playerOneScore = 0;
-    private int playerTwoScore = 0;
+    private List<Player> players;
+    private int playerTurn;
 
-    public GameManager(Stack<Tile> stack) {
+    // *TODO PlayerNotifier notifier;
+    // *TODO RegionLinker regionLinker;
+
+    public GameManager(Stack<Tile> stack, Player... p) {
+        for(Player player : p)
+            players.add(player);
+
         tileStack = stack;
         map = new Tile[80][80]; 			// .648 Kb of overhead for array + storage = not a problem
 
         insert(tileStack.pop(), 40, 40);	// Assuming starting tile is placed at top of stack
-
     }
 
     public ArrayList<Point> getTileOptions() {
@@ -63,7 +70,6 @@ public class GameManager {
     public ArrayList<Node> getTigerPlacementOptions() {
         return null;
     }
-
 
     public static void main(String[] args) throws IOException {
 
