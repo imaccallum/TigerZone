@@ -9,10 +9,10 @@ public class Tile {
 
     //				Edge[0]
     //		Corner[3]	Corner[0]
-    //	Edge[3]					Edge[1]
+    //	Edge[3]		Center		Edge[1]
     //		Corner[2]	Corner[1]
     //				Edge[2]
-    private final int COUNT = 0;
+    private final int COUNT = 4;
     private Node[] edges;
     private Node[] corners;
     private Node center;
