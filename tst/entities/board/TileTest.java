@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static entities.board.TerrainType.GRASS;
-
 public class TileTest {
     private Tile leftAdjacentTile;
     private Tile rightAdjacentTile;
@@ -49,7 +47,6 @@ public class TileTest {
     @Test
     public void testCorrectSectionForNodeNumber() {
         Tile tile = new Tile();
-        TileSection section = new TileSection(GRASS);
         section.addNodeNumbers(1,2,3);
         tile.addSections(section);
         Assert.assertTrue(tile.sectionForNodeNumber(1).equals(section));

@@ -6,9 +6,8 @@ import entities.overlay.Region;
 import java.util.ArrayList;
 
 public abstract class Node {
-
     private ArrayList<Node> connectedNodes = new ArrayList<Node>(); // List of all possible connections a Node might might have
-    Region attributes;	// Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
+    public Region region;	// Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
     private Tiger tiger;
 
     public Node getConnectedNode(int x){
@@ -22,6 +21,7 @@ public abstract class Node {
 
     public void placeTiger(Tiger t) {
         tiger = t;
+        region.addTiger(t);
     }
 
     public void removeTiger() {
