@@ -16,8 +16,13 @@ public class Tile {
 		corners = new Node[4];
 	}
 	
-	public void rotate() {
-		// Pass parameter or 2 separate functions for clockwise v CCW
+	public void rotate() {	//will rotate clockwise 90 degrees, call multiple times if desired
+		Node tempedge = edges[3];
+       		Node tempcorner = corners[3];
+        	System.arraycopy(edges, 0, edges, 1, 3);    //shifts all down one
+        	System.arraycopy(corners, 0, corners, 1, 3);
+		edges[0] = tempedge;
+		corners[0] = tempcorner;
 	}
 	
 	public void attachLeft(Tile t) {
