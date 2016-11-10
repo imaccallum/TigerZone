@@ -1,8 +1,8 @@
 package entities.overlay;
 
-import entities.board.Follower;
+import entities.board.Node;
 import entities.board.TerrainType;
-import entities.board.TileSection;
+import entities.board.Tiger;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -14,23 +14,24 @@ import java.util.UUID;
 public class Region {
     private UUID tileId;
     private TerrainType terrain;
-    private List<TileSection> sections;
-    private List<Follower> followers;
+    private List<Node> nodes;
+    private List<Tiger> tigers;
     private boolean isFinished = false;
+    private boolean isDisputed = false;
 
     public Region(TerrainType terrain){
         tileId = UUID.randomUUID();
         this.terrain = terrain;
-        sections = new ArrayList<>();
-        followers = new ArrayList<>();
+        nodes = new ArrayList<>();
+        tigers = new ArrayList<>();
     }
 
-    public void addSection(TileSection section){
-        sections.add(section);
+    public void addSection(Node section){
+        nodes.add(section);
     }
 
-    public boolean containsTileSection(TileSection section){
-        return sections.contains(section);
+    public boolean containsTileSection(Node section){
+        return nodes.contains(section);
     }
 
     public int calculatePointValue(){
