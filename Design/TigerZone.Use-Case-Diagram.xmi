@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_0MOaEKSOEeaiBJ7PH1W80g" name="model">
+  <eAnnotations xmi:id="_0MOaEaSOEeaiBJ7PH1W80g" source="genmymodel">
+    <details xmi:id="_0MOaEqSOEeaiBJ7PH1W80g" key="uuid" value="_YNrd0KSJEeaiBJ7PH1W80g"/>
+    <details xmi:id="_0MOaE6SOEeaiBJ7PH1W80g" key="author" value="Dean904"/>
+  </eAnnotations>
+  <packageImport xmi:id="_0MOaFKSOEeaiBJ7PH1W80g">
+    <eAnnotations xmi:id="_0MOaFaSOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOaFqSOEeaiBJ7PH1W80g" key="uuid" value="_YNtTAKSJEeaiBJ7PH1W80g"/>
+    </eAnnotations>
+    <importedPackage href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#/"/>
+  </packageImport>
+  <packageImport xmi:id="_0MOaF6SOEeaiBJ7PH1W80g">
+    <eAnnotations xmi:id="_0MOaGKSOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOaGaSOEeaiBJ7PH1W80g" key="uuid" value="_YN0nwKSJEeaiBJ7PH1W80g"/>
+    </eAnnotations>
+    <importedPackage href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#/"/>
+  </packageImport>
+  <packagedElement xsi:type="uml:Actor" xmi:id="_0MOaGqSOEeaiBJ7PH1W80g" name="Player AI">
+    <eAnnotations xmi:id="_0MOaG6SOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOaHKSOEeaiBJ7PH1W80g" key="uuid" value="_6DS2oYa3EDSNtJMhKp6ElQ"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xsi:type="uml:UseCase" xmi:id="_0MOaHaSOEeaiBJ7PH1W80g" name="view meeples left">
+    <eAnnotations xmi:id="_0MOaHqSOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOaH6SOEeaiBJ7PH1W80g" key="uuid" value="_-Nz50Ia4EDSNtJMhKp6ElQ"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xsi:type="uml:Component" xmi:id="_0MOaIKSOEeaiBJ7PH1W80g" name="">
+    <eAnnotations xmi:id="_0MOaIaSOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOaIqSOEeaiBJ7PH1W80g" key="uuid" value="_qr91YIa5EDSNtJMhKp6ElQ"/>
+    </eAnnotations>
+    <ownedUseCase xmi:id="_0MOaI6SOEeaiBJ7PH1W80g" name="remove card from stack">
+      <eAnnotations xmi:id="_0MOaJKSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaJaSOEeaiBJ7PH1W80g" key="uuid" value="_ERgFIIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <extensionPoint xmi:id="_0MOaJqSOEeaiBJ7PH1W80g" name="ExtPoint">
+        <eAnnotations xmi:id="_0MOaJ6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaKKSOEeaiBJ7PH1W80g" key="uuid" value="_iv_LYYa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+    </ownedUseCase>
+    <ownedUseCase xmi:id="_0MOaKaSOEeaiBJ7PH1W80g" name="insert tile">
+      <eAnnotations xmi:id="_0MOaKqSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaK6SOEeaiBJ7PH1W80g" key="uuid" value="_jtgZAIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </ownedUseCase>
+    <ownedUseCase xmi:id="_0MOaLKSOEeaiBJ7PH1W80g" name="check inserted tiles effects">
+      <eAnnotations xmi:id="_0MOaLaSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaLqSOEeaiBJ7PH1W80g" key="uuid" value="_oipjAIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <extensionPoint xmi:id="_0MOaL6SOEeaiBJ7PH1W80g" name="ExtPoint">
+        <eAnnotations xmi:id="_0MOaMKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaMaSOEeaiBJ7PH1W80g" key="uuid" value="_lUJKMYa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+    </ownedUseCase>
+    <ownedUseCase xmi:id="_0MOaMqSOEeaiBJ7PH1W80g" name="calculate and distribute points">
+      <eAnnotations xmi:id="_0MOaM6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaNKSOEeaiBJ7PH1W80g" key="uuid" value="_rlGnYIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <extensionPoint xmi:id="_0MOaNaSOEeaiBJ7PH1W80g" name="ExtPoint">
+        <eAnnotations xmi:id="_0MOaNqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaN6SOEeaiBJ7PH1W80g" key="uuid" value="_lstbMYa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+    </ownedUseCase>
+    <ownedUseCase xmi:id="_0MOaOKSOEeaiBJ7PH1W80g" name="control turn cycle">
+      <eAnnotations xmi:id="_0MOaOaSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaOqSOEeaiBJ7PH1W80g" key="uuid" value="_wI9NEIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <extensionPoint xmi:id="_0MOaO6SOEeaiBJ7PH1W80g" name="ExtPoint">
+        <eAnnotations xmi:id="_0MOaPKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaPaSOEeaiBJ7PH1W80g" key="uuid" value="_mEV4EYa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+    </ownedUseCase>
+    <ownedUseCase xmi:id="_0MOaPqSOEeaiBJ7PH1W80g" name="Game Manager">
+      <eAnnotations xmi:id="_0MOaP6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaQKSOEeaiBJ7PH1W80g" key="uuid" value="__wBokIa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <extend xmi:id="_0MOaQaSOEeaiBJ7PH1W80g" extendedCase="_0MOaI6SOEeaiBJ7PH1W80g" extensionLocation="_0MOaJqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaQqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaQ6SOEeaiBJ7PH1W80g" key="uuid" value="_iv_LYIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extend>
+      <extend xmi:id="_0MOaRKSOEeaiBJ7PH1W80g" extendedCase="_0MOaKaSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaRaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaRqSOEeaiBJ7PH1W80g" key="uuid" value="_jYt_UIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extend>
+      <extend xmi:id="_0MOaR6SOEeaiBJ7PH1W80g" extendedCase="_0MOaLKSOEeaiBJ7PH1W80g" extensionLocation="_0MOaL6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaSKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaSaSOEeaiBJ7PH1W80g" key="uuid" value="_lUJKMIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extend>
+      <extend xmi:id="_0MOaSqSOEeaiBJ7PH1W80g" extendedCase="_0MOaMqSOEeaiBJ7PH1W80g" extensionLocation="_0MOaNaSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaS6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaTKSOEeaiBJ7PH1W80g" key="uuid" value="_lstbMIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extend>
+      <extend xmi:id="_0MOaTaSOEeaiBJ7PH1W80g" extendedCase="_0MOaOKSOEeaiBJ7PH1W80g" extensionLocation="_0MOaO6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaTqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaT6SOEeaiBJ7PH1W80g" key="uuid" value="_mEV4EIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extend>
+      <extensionPoint xmi:id="_0MOaUKSOEeaiBJ7PH1W80g" name="Tile Map">
+        <eAnnotations xmi:id="_0MOaUaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaUqSOEeaiBJ7PH1W80g" key="uuid" value="_GThKwIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+      <extensionPoint xmi:id="_0MOaU6SOEeaiBJ7PH1W80g" name="Tile Stack">
+        <eAnnotations xmi:id="_0MOaVKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaVaSOEeaiBJ7PH1W80g" key="uuid" value="_H38x8Ia7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </extensionPoint>
+      <include xmi:id="_0MOaVqSOEeaiBJ7PH1W80g" addition="_0MOadKSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaV6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaWKSOEeaiBJ7PH1W80g" key="uuid" value="_n9qxMIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaWaSOEeaiBJ7PH1W80g" addition="_0MOacaSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaWqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaW6SOEeaiBJ7PH1W80g" key="uuid" value="_oQsa4Ia7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaXKSOEeaiBJ7PH1W80g" addition="_0MOabqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaXaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaXqSOEeaiBJ7PH1W80g" key="uuid" value="_oh3DYIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaX6SOEeaiBJ7PH1W80g" addition="_0MOaeqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaYKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaYaSOEeaiBJ7PH1W80g" key="uuid" value="_o0ymcIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaYqSOEeaiBJ7PH1W80g" addition="_0MOad6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaY6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaZKSOEeaiBJ7PH1W80g" key="uuid" value="_pNUbMIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaZaSOEeaiBJ7PH1W80g" addition="_0MOafaSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaZqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaZ6SOEeaiBJ7PH1W80g" key="uuid" value="_pdassIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaaKSOEeaiBJ7PH1W80g" addition="_0MOagKSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaaaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaaqSOEeaiBJ7PH1W80g" key="uuid" value="_pv0EQIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+      <include xmi:id="_0MOaa6SOEeaiBJ7PH1W80g" addition="_0MOag6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOabKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOabaSOEeaiBJ7PH1W80g" key="uuid" value="_qITcwIa7EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+      </include>
+    </ownedUseCase>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOabqSOEeaiBJ7PH1W80g" name="get available placement positions">
+      <eAnnotations xmi:id="_0MOab6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOacKSOEeaiBJ7PH1W80g" key="uuid" value="_u4tioIa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOacaSOEeaiBJ7PH1W80g" name="View remaining tiles">
+      <eAnnotations xmi:id="_0MOacqSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOac6SOEeaiBJ7PH1W80g" key="uuid" value="_u4tioYa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOadKSOEeaiBJ7PH1W80g" name="view current scores">
+      <eAnnotations xmi:id="_0MOadaSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOadqSOEeaiBJ7PH1W80g" key="uuid" value="_u4tiooa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOad6SOEeaiBJ7PH1W80g" name="Place tile">
+      <eAnnotations xmi:id="_0MOaeKSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaeaSOEeaiBJ7PH1W80g" key="uuid" value="_u4tio4a5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOaeqSOEeaiBJ7PH1W80g" name="Draw tile">
+      <eAnnotations xmi:id="_0MOae6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOafKSOEeaiBJ7PH1W80g" key="uuid" value="_u4uJsIa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOafaSOEeaiBJ7PH1W80g" name="view open territorys in placed tile">
+      <eAnnotations xmi:id="_0MOafqSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaf6SOEeaiBJ7PH1W80g" key="uuid" value="_u4uJsYa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOagKSOEeaiBJ7PH1W80g" name="place meeple">
+      <eAnnotations xmi:id="_0MOagaSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOagqSOEeaiBJ7PH1W80g" key="uuid" value="_u4uJsoa5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <nestedClassifier xsi:type="uml:UseCase" xmi:id="_0MOag6SOEeaiBJ7PH1W80g" name="retrieve meeple">
+      <eAnnotations xmi:id="_0MOahKSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOahaSOEeaiBJ7PH1W80g" key="uuid" value="_u4uJs4a5EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+    </nestedClassifier>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOahqSOEeaiBJ7PH1W80g" name="view current scores_Player AI" memberEnd="_0MOaiaSOEeaiBJ7PH1W80g _0MOajqSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOaiaSOEeaiBJ7PH1W80g _0MOajqSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOah6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaiKSOEeaiBJ7PH1W80g" key="uuid" value="_Grk64Ia6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOaiaSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOahqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaiqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOai6SOEeaiBJ7PH1W80g" key="uuid" value="_GrkT0Ia6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOajKSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOajaSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOajqSOEeaiBJ7PH1W80g" name="view current scores" type="_0MOadKSOEeaiBJ7PH1W80g" association="_0MOahqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaj6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOakKSOEeaiBJ7PH1W80g" key="uuid" value="_GrkT0Ya6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOakaSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOakqSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOak6SOEeaiBJ7PH1W80g" name="get available placement positions_Player AI" memberEnd="_0MOam6SOEeaiBJ7PH1W80g _0MOalqSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOalqSOEeaiBJ7PH1W80g _0MOam6SOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOalKSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOalaSOEeaiBJ7PH1W80g" key="uuid" value="_Hx1YUYa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOalqSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOak6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOal6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOamKSOEeaiBJ7PH1W80g" key="uuid" value="_Hx0xQIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOamaSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOamqSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOam6SOEeaiBJ7PH1W80g" name="get available placement positions" type="_0MOabqSOEeaiBJ7PH1W80g" association="_0MOak6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOanKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOanaSOEeaiBJ7PH1W80g" key="uuid" value="_Hx1YUIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOanqSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOan6SOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOaoKSOEeaiBJ7PH1W80g" name="View remaining tiles_Player AI" memberEnd="_0MOaqKSOEeaiBJ7PH1W80g _0MOao6SOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOao6SOEeaiBJ7PH1W80g _0MOaqKSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOaoaSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOaoqSOEeaiBJ7PH1W80g" key="uuid" value="_It4w4Ya6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOao6SOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOaoKSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOapKSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOapaSOEeaiBJ7PH1W80g" key="uuid" value="_It4J0Ia6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOapqSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOap6SOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOaqKSOEeaiBJ7PH1W80g" name="view remaining tiles" type="_0MOacaSOEeaiBJ7PH1W80g" association="_0MOaoKSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaqaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaqqSOEeaiBJ7PH1W80g" key="uuid" value="_It4w4Ia6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOaq6SOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOarKSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOaraSOEeaiBJ7PH1W80g" name="Draw tile_Player AI" memberEnd="_0MOataSOEeaiBJ7PH1W80g _0MOasKSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOasKSOEeaiBJ7PH1W80g _0MOataSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOarqSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOar6SOEeaiBJ7PH1W80g" key="uuid" value="_JOvbMoa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOasKSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOaraSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOasaSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOasqSOEeaiBJ7PH1W80g" key="uuid" value="_JOvbMIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOas6SOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOatKSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOataSOEeaiBJ7PH1W80g" name="draw tile" type="_0MOaeqSOEeaiBJ7PH1W80g" association="_0MOaraSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOatqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOat6SOEeaiBJ7PH1W80g" key="uuid" value="_JOvbMYa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOauKSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOauaSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOauqSOEeaiBJ7PH1W80g" name="Place tile_Player AI" memberEnd="_0MOawqSOEeaiBJ7PH1W80g _0MOavaSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOavaSOEeaiBJ7PH1W80g _0MOawqSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOau6SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOavKSOEeaiBJ7PH1W80g" key="uuid" value="_JmGLQoa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOavaSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOauqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOavqSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOav6SOEeaiBJ7PH1W80g" key="uuid" value="_JmGLQIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOawKSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOawaSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOawqSOEeaiBJ7PH1W80g" name="place tile" type="_0MOad6SOEeaiBJ7PH1W80g" association="_0MOauqSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOaw6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOaxKSOEeaiBJ7PH1W80g" key="uuid" value="_JmGLQYa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOaxaSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOaxqSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOax6SOEeaiBJ7PH1W80g" name="view open territorys in placed tile_Player AI" memberEnd="_0MOaz6SOEeaiBJ7PH1W80g _0MOayqSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOayqSOEeaiBJ7PH1W80g _0MOaz6SOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOayKSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOayaSOEeaiBJ7PH1W80g" key="uuid" value="_J9sL4oa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOayqSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOax6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOay6SOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOazKSOEeaiBJ7PH1W80g" key="uuid" value="_J9sL4Ia6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOazaSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOazqSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOaz6SOEeaiBJ7PH1W80g" name="view open territorys in placed tile" type="_0MOafaSOEeaiBJ7PH1W80g" association="_0MOax6SOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOa0KSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOa0aSOEeaiBJ7PH1W80g" key="uuid" value="_J9sL4Ya6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa0qSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa06SOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOa1KSOEeaiBJ7PH1W80g" name="place meeple_Player AI" memberEnd="_0MOa3KSOEeaiBJ7PH1W80g _0MOa16SOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOa16SOEeaiBJ7PH1W80g _0MOa3KSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOa1aSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOa1qSOEeaiBJ7PH1W80g" key="uuid" value="_KP6kUYa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOa16SOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOa1KSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOa2KSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOa2aSOEeaiBJ7PH1W80g" key="uuid" value="_KP59QIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa2qSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa26SOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOa3KSOEeaiBJ7PH1W80g" name="place meeple" type="_0MOagKSOEeaiBJ7PH1W80g" association="_0MOa1KSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOa3aSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOa3qSOEeaiBJ7PH1W80g" key="uuid" value="_KP6kUIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa36SOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa4KSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xsi:type="uml:Association" xmi:id="_0MOa4aSOEeaiBJ7PH1W80g" name="retrieve meeple_Player AI" memberEnd="_0MOa6aSOEeaiBJ7PH1W80g _0MOa5KSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOa5KSOEeaiBJ7PH1W80g _0MOa6aSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOa4qSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOa46SOEeaiBJ7PH1W80g" key="uuid" value="_Ksekgoa6EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <ownedEnd xmi:id="_0MOa5KSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOa4aSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOa5aSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOa5qSOEeaiBJ7PH1W80g" key="uuid" value="_KsekgIa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa56SOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa6KSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_0MOa6aSOEeaiBJ7PH1W80g" name="retrieve meeple" type="_0MOag6SOEeaiBJ7PH1W80g" association="_0MOa4aSOEeaiBJ7PH1W80g">
+        <eAnnotations xmi:id="_0MOa6qSOEeaiBJ7PH1W80g" source="genmymodel">
+          <details xmi:id="_0MOa66SOEeaiBJ7PH1W80g" key="uuid" value="_KsekgYa6EDSNtJMhKp6ElQ"/>
+        </eAnnotations>
+        <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa7KSOEeaiBJ7PH1W80g"/>
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa7aSOEeaiBJ7PH1W80g" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xsi:type="uml:Association" xmi:id="_0MOa7qSOEeaiBJ7PH1W80g" name="Player AI_view meeples left" memberEnd="_0MOa8aSOEeaiBJ7PH1W80g _0MOa9qSOEeaiBJ7PH1W80g" navigableOwnedEnd="_0MOa8aSOEeaiBJ7PH1W80g _0MOa9qSOEeaiBJ7PH1W80g">
+    <eAnnotations xmi:id="_0MOa76SOEeaiBJ7PH1W80g" source="genmymodel">
+      <details xmi:id="_0MOa8KSOEeaiBJ7PH1W80g" key="uuid" value="_gblf0oa7EDSNtJMhKp6ElQ"/>
+    </eAnnotations>
+    <ownedEnd xmi:id="_0MOa8aSOEeaiBJ7PH1W80g" name="view meeples left" type="_0MOaHaSOEeaiBJ7PH1W80g" association="_0MOa7qSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOa8qSOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOa86SOEeaiBJ7PH1W80g" key="uuid" value="_gblf0Ia7EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa9KSOEeaiBJ7PH1W80g"/>
+      <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa9aSOEeaiBJ7PH1W80g" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_0MOa9qSOEeaiBJ7PH1W80g" name="player AI" type="_0MOaGqSOEeaiBJ7PH1W80g" association="_0MOa7qSOEeaiBJ7PH1W80g">
+      <eAnnotations xmi:id="_0MOa96SOEeaiBJ7PH1W80g" source="genmymodel">
+        <details xmi:id="_0MOa-KSOEeaiBJ7PH1W80g" key="uuid" value="_gblf0Ya7EDSNtJMhKp6ElQ"/>
+      </eAnnotations>
+      <lowerValue xsi:type="uml:LiteralInteger" xmi:id="_0MOa-aSOEeaiBJ7PH1W80g"/>
+      <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_0MOa-qSOEeaiBJ7PH1W80g" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Model>
