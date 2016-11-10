@@ -59,7 +59,7 @@ public class Region {
     public void combineWithRegion(Region r) {
         for (Node n : r.nodes) {
             if (n.tiger != null) {
-
+                this.addTiger(n.tiger);
             }
             this.addNode(n);
         }
