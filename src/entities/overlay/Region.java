@@ -15,8 +15,8 @@ public class Region {
     private UUID tileId;
     private TerrainType terrain;
     private List<TileSection> sections;
-    private boolean isFinished = false;
     private List<Follower> followers;
+    private boolean isFinished = false;
 
     public Region(TerrainType terrain){
         tileId = UUID.randomUUID();
