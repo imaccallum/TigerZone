@@ -1,6 +1,6 @@
 package entities.overlay;
 
-import entities.board.Node;
+import entities.board.Node.Node;
 import entities.board.TerrainType;
 import entities.board.Tiger;
 

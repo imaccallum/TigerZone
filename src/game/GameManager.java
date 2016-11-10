@@ -1,4 +1,7 @@
-package entities.board;
+package game;
+
+import entities.board.Node.Node;
+import entities.board.Tile;
 
 import java.awt.Point;
 import java.io.IOException;

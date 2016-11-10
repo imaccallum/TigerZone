@@ -1,9 +1,6 @@
 package entities.board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import entities.board.Node.Node;
 
 public class Tile {
 
