@@ -28,41 +28,19 @@ public class Tile {
     public Tile[] getTiles() {
         return tiles;
     }
-
-    public Tile getTile(int index) {
-        return null;
-    }
-
+    public Tile getTile(int index) { return tiles[adjustedIndex(i)]; }
     public Node getCorner(int index) {
-        return null;
+        return corners[adjustedIndex(i)];
     }
-
-    public  Node getEdge(int index) {
-        return null;
+    public Node getEdge(int index) {
+        return edges[adjustedIndex(i)];
     }
 
     public void setOrientation(int o) {
-        orientation = o;
+        orientation = o % COUNT;
     }
-
     public void rotate(int r) {
         orientation = (orientation + r) % COUNT;
-    }
-
-
-    public void attachLeft(Tile t) {
-        // link corresponding nodes
-    }
-
-    public void attachRight(Tile t) {
-        // link corresponding nodes
-    }
-
-    public void attachBelow(Tile t) {
-        // link corresponding nodes
-    }
-    public void attachAbove(Tile t) {
-        // link corresponding nodes
     }
 
     private void setTile(Tile t, int i) {
@@ -70,6 +48,9 @@ public class Tile {
         tiles[i] = t;
         t.getTiles()[inverse(i)] = this;
     }
+
+    // Helpers
+    private int adjustedIndex(int i) { return (i + orientation) % COUNT }
     private int inverse(int i) {
         return (i + 2) % COUNT;
     }
