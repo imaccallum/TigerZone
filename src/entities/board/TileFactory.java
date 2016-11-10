@@ -7,36 +7,149 @@ public class TileFactory {
     public Tile makeTile(char c) {
         switch (c) {
             case 'a': return makeTileA();
-            case 'b': break;
-            case 'c': break;
-            case 'd': break;
-            case 'e': break;
-            case 'f': break;
-            case 'g': break;
-            case 'h': break;
-            case 'i': break;
-            case 'j': break;
-            case 'k': break;
-            case 'l': break;
-            case 'm': break;
-            case 'n': break;
-            case 'o': break;
-            case 'p': break;
-            case 'q': break;
-            case 'r': break;
-            case 's': break;
-            case 't': break;
-            case 'u': break;
-            case 'v': break;
-            case 'w': break;
-            case 'x': break;
-            case 'y': break;
-            case 'z': break;
+            case 'b': return makeTileB();
+            case 'c': return makeTileC();
+            case 'd': return makeTileD();
+            case 'e': return makeTileE();
+            case 'f': return makeTileF();
+            case 'g': return makeTileG();
+            case 'h': return makeTileH();
+            case 'i': return makeTileI();
+            case 'j': return makeTileJ();
+            case 'k': return makeTileK();
+            case 'l': return makeTileL();
+            case 'm': return makeTileM();
+            case 'n': return makeTileN();
+            case 'o': return makeTileO();
+            case 'p': return makeTileP();
+            case 'q': return makeTileQ();
+            case 'r': return makeTileR();
+            case 's': return makeTileS();
+            case 't': return makeTileT();
+            case 'u': return makeTileU();
+            case 'v': return makeTileV();
+            case 'w': return makeTileW();
+            case 'x': return makeTileX();
             default: throw new RuntimeException("Invalid tile identifier");
         }
     }
 
     private Tile makeTileA() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileB() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileC() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileD() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileE() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileF() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileG() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileH() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileI() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileJ() {
+        Tile t = new Tile();
+        return t;
+
+    }
+
+    private Tile makeTileK() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileL() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileM() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileN() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileO() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileP() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileQ() {
+        Tile t = new Tile();
+        return t;
+    }
+    private Tile makeTileR() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileS() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileT() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileU() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileV() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileW() {
+        Tile t = new Tile();
+        return t;
+    }
+
+    private Tile makeTileX() {
         Tile t = new Tile();
         return t;
     }
