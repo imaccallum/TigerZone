@@ -1,4 +1,4 @@
-package entities.board;
+package game;
 
 public class GamePort {
 
