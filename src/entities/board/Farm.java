@@ -1,5 +1,5 @@
 package entities.board;
 
-public class Farm extends Node{
+public class Farm extends Node {
 
 }
