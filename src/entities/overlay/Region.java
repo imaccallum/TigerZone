@@ -11,21 +11,23 @@ import java.util.UUID;
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
 // the tilesections are given a region object (composition)
 public class Region {
-    private UUID tileId;
+    private UUID regionId;
     private List<Node> nodes;
     private List<Tiger> tigers;
+    private List<Region> adjacentRegions;
     private boolean isFinished = false;
     private boolean isDisputed = false;
 
     public Region(){
-        tileId = UUID.randomUUID();
-        nodes = new ArrayList<>();
+        regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
+        nodes = new ArrayList<>();
+        adjacentRegions = new ArrayList<>();
     }
 
-    public void addNode(Node n){
-        n.region = this;
-        nodes.add(n);
+    public void addNode(Node node){
+        node.setRegion(this);
+        nodes.add(node);
     }
 
     public boolean containsTileSection(Node section){
@@ -44,25 +46,37 @@ public class Region {
         return null;
     }
 
-    public UUID getTileId() {
-        return tileId;
-    }
-
-    public boolean isFinished() {
-        return isFinished;
+    public UUID getRegionId() {
+        return regionId;
     }
 
     public void addTiger(Tiger t){
         tigers.add(t);
     }
 
-    public void combineWithRegion(Region r) {
-        for (Node n : r.nodes) {
-            if (n.tiger != null) {
-                this.addTiger(n.tiger);
+    public void combineWithRegion(Region region) {
+        for (Node node : region.nodes) {
+            if (node.getTiger() != null) {
+                this.addTiger(node.getTiger());
             }
-            this.addNode(n);
+            this.addNode(node);
         }
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public boolean isDisputed() {
+        return isDisputed;
+    }
+
+    public void setDisputed(boolean disputed) {
+        isDisputed = disputed;
     }
 }
 
