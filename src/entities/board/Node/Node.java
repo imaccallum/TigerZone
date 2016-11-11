@@ -6,12 +6,17 @@ import entities.overlay.Region;
 import java.util.ArrayList;
 
 public abstract class Node {
-    private ArrayList<Node> connectedNodes = new ArrayList<Node>(); // List of all possible connections a Node might might have
-    public Region region;	// Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
+    // List of all possible connections a Node might might have
+    private ArrayList<Node> connectedNodes = new ArrayList<Node>();
+
+    // Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
+    public Region region;
     private Tiger tiger;
 
-    public Node getConnectedNode(int x){
-        if (x >= connectedNodes.size()) throw new IndexOutOfBoundsException("The index is larger than the amount of Connected Nodes for this Node");
+    public Node getConnectedNode(int x) {
+        if (x >= connectedNodes.size()) {
+            throw new IndexOutOfBoundsException("The index is larger than the amount of Connected Nodes for this Node");
+        }
         return connectedNodes.get(x);
     }
 
