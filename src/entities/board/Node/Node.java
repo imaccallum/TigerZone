@@ -13,6 +13,12 @@ public class Node {
     private Tiger tiger;
     private Terrain terrain;
 
+    public Node(TileSection tilesection, Terrain terrain, Node... connectedNodes){
+        tiger = null;
+        this.tilesection = tilesection;
+        this.terrain = terrain;
+    }
+    
     public Node getConnectedNode() {
         return connectedNode;
     }
