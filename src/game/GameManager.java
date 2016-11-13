@@ -1,6 +1,7 @@
 package game;
 
 import entities.board.Node.Node;
+import entities.board.Node.Terrain;
 import entities.board.Tile;
 import entities.player.Player;
 
@@ -45,26 +46,51 @@ public class GameManager {
         if(map[x+1][y] == null)
             openTiles.add(new Point(x+1, y));
         else
-            map[x+1][y].attachLeft(t);
+            map[x+1][y].setTile(t, 3);
 
 
         if(map[x-1][y] == null)
             openTiles.add(new Point(x-1, y));
         else
-            map[x-1][y].attachRight(t);
+            map[x-1][y].setTile(t, 1);
 
 
         if(map[x][y+1] == null)
             openTiles.add(new Point(x, y+1));
         else
-            map[x][y+1].attachBelow(t);
+            map[x][y+1].setTile(t, 2);
 
 
         if(map[x][y-1] == null)
             openTiles.add(new Point(x, y-1));
         else
-            map[x][y-1].attachAbove(t);
+            map[x][y-1].setTile(t, 0);
 
+        attach(t);
+
+    }
+
+    private void attach(Tile t) {
+        Tile[] adjTiles = t.getAdjacentTiles();
+        for(int i = 0; i < 4; i++) {	// for each side
+            int inverseIndex = (i + 2) % 4;
+            if(adjTiles[i] != null) {	// if tile on that side
+                if(adjTiles[i].getEdge(inverseIndex) == t.getEdge(i)) { //Adj Node  is same type -> should always be true
+                    adjTiles[i].getEdge(inverseIndex).setConnection(t.getEdge(i));
+                    t.getEdge(i).setConnection(adjTiles[i].getEdge(inverseIndex));		// Set link both ways
+                    if(t.getEdge(i).getTerrain() == Terrain.TRAIL) {
+                        // This may need to change, but I believe fields need to only be linked through road sides
+                        int adjCornerIndex1 = inverseIndex;
+                        int adjCornerIndex2 = inverseIndex - 1;
+                        if(adjCornerIndex2 == -1) adjCornerIndex2 = 3;
+                        //connect corners
+                    }
+                }
+                else {
+                    System.out.println("Error: Cannot add Tile there, incompatible nodes.");
+                }
+            }
+        }
     }
 
     public ArrayList<Node> getTigerPlacementOptions() {
