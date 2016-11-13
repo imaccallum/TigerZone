@@ -1,6 +1,7 @@
 package game;
 
-import entities.board.Node.Terrain;
+import entities.board.Node;
+import entities.board.Terrain;
 import entities.board.Tile;
 import entities.player.Player;
 
@@ -13,9 +14,10 @@ import java.util.Stack;
 public class GameManager {
 
     private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
-    private Tile center;					// The map of tiles
-    private List<Point> openTiles;		    // A list of all current open tile positions
-    private Point lastTilePlaced;
+    private Tile[][] map;					// The map of tiles
+
+    private ArrayList<Point> openTiles;		// A list of all current open tile positions
+    private Point lastTilePlaced;			// Set on insert, used for getTigerPlacementOptions()
 
     private List<Player> players;
     private int playerTurn;
@@ -23,19 +25,47 @@ public class GameManager {
     // *TODO PlayerNotifier notifier;
     // *TODO RegionLinker regionLinker;
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
+    public GameManager(Stack<Tile> stack, Player... p) {
+        for(Player player : p)
+            players.add(player);
 
         tileStack = stack;
-        center = tileStack.pop();
-        openTiles = new ArrayList<>();
+        map = new Tile[80][80]; 			// .648 Kb of overhead for array + storage = not a problem
+
+        insert(tileStack.pop(), 40, 40);	// Assuming starting tile is placed at top of stack
     }
 
-    public List<Point> getTileOptions() {
+    public ArrayList<Point> getTileOptions() {
         return openTiles;
     }
+    public void insert(Tile t, int x, int y) {
+
+        // update openTiles & attach to adjacent tiles
+
+        if(map[x+1][y] == null)
+            openTiles.add(new Point(x+1, y));
+        else
+            map[x+1][y].setTile(t, 3);
+
+
+        if(map[x-1][y] == null)
+            openTiles.add(new Point(x-1, y));
+        else
+            map[x-1][y].setTile(t, 1);
+
+
+        if(map[x][y+1] == null)
+            openTiles.add(new Point(x, y+1));
+        else
+            map[x][y+1].setTile(t, 2);
+
+
+        if(map[x][y-1] == null)
+            openTiles.add(new Point(x, y-1));
+        else
+            map[x][y-1].setTile(t, 0);
+
+        attach(t);
 
     public void insert(Tile tile, int x, int y) throws BadPlacementException {
         Tile currentTile = center;
@@ -110,6 +140,10 @@ public class GameManager {
                 }
             }
         }
+    }
+
+    public ArrayList<Node> getTigerPlacementOptions() {
+        return null;
     }
 
     public static void main(String[] args) throws IOException {
