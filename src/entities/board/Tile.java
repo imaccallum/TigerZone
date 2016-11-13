@@ -56,12 +56,12 @@ public class Tile {
 
     public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
 
-    public Node getCorner(int index) {
-        return corners[adjustedIndex(index)];
+    public Node getCorner(CornerLocation index) {
+        return corners[adjustedIndex(index.ordinal())];
     }
 
-    public Node getEdge(int index) {
-        return edges[adjustedIndex(index)];
+    public Node getEdge(EdgeLocation index) {
+        return edges[adjustedIndex(index.ordinal())];
     }
 
     public Node getCenter(int index) {
