@@ -3,6 +3,7 @@ package entities.overlay;
 import entities.board.Node;
 import entities.board.Tiger;
 import entities.player.Player;
+import game.scoring.Scorer;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Region {
     private List<TileSection> tileSections;
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
+    private Scorer scorer;
 
     public Region(){
         regionId = UUID.randomUUID();
@@ -29,7 +31,7 @@ public class Region {
         tileSections.add(tileSection);
     }
 
-    public boolean containsTileSection(Node section){
+    public boolean containsTileSection(TileSection section){
         return tileSections.contains(section);
     }
 
@@ -43,6 +45,10 @@ public class Region {
     public List<Region> getAdjacentRegions(){
         //Return the adjacent regions
         return null;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
     }
 
     public UUID getRegionId() {
