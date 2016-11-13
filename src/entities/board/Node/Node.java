@@ -6,22 +6,19 @@ import java.util.ArrayList;
 
 public class Node {
     // List of all possible connections a Node might might have
-    private ArrayList<Node> connectedNodes = new ArrayList<>();
+    private Node connectedNode = null;
 
     // Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
     private Region region;
     private Tiger tiger;
     private Terrain terrain;
 
-    public Node getConnectedNode(int x) {
-        if (x >= connectedNodes.size()) {
-            throw new IndexOutOfBoundsException("The index is larger than the amount of connected Nodes for this Node");
-        }
-        return connectedNodes.get(x);
+    public Node getConnectedNode() {
+        return connectedNode;
     }
 
-    public void setConnection(Node node){
-        connectedNodes.add(node);
+    public void setConnectedNode(Node node) {
+        connectedNode = node;
     }
 
     public void placeTiger(Tiger t) {
@@ -32,6 +29,12 @@ public class Node {
     public void removeTiger() {
         tiger = null;
     }
+
+    public boolean isConnected() {
+        return connectedNode != null;
+    }
+
+    // Getters and Setters
 
     public Tiger getTiger() {
         return tiger;

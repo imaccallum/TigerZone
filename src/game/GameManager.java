@@ -71,7 +71,7 @@ public class GameManager {
     }
 
     private void attach(Tile t) {
-        Tile[] adjTiles = t.getTiles();
+        Tile[] adjTiles = t.getAdjacentTiles();
         for(int i = 0; i < 4; i++) {	// for each side
             int inverseIndex = (i + 2) % 4;
             if(adjTiles[i] != null) {	// if tile on that side
