@@ -103,24 +103,24 @@ public class Tile {
         corners = tempCorners;
     }
 
-    private void setTile(Tile t, int index) {
+    private void setTile(Tile t, int index) throws BadPlacementException {
         if (index < 0 || index >= COUNT) throw new BadPlacementException("Illegal index");
         adjacentTiles[index] = t;
     }
 
-    public void setTopTile(Tile t) {
+    public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
     }
 
-    public void setRightTile(Tile t) {
+    public void setRightTile(Tile t) throws BadPlacementException {
         setTile(t, 1);
     }
 
-    public void setBottomTile(Tile t) {
+    public void setBottomTile(Tile t) throws BadPlacementException {
         setTile(t, 2);
     }
 
-    public void setLeftTile(Tile t) {
+    public void setLeftTile(Tile t) throws BadPlacementException {
         setTile(t, 3);
     }
 
