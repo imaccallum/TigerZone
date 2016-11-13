@@ -9,10 +9,9 @@ public class Node {
     private Tiger tiger;
     private TileSection tileSection;
 
-    public Node(TileSection tileSection, Terrain terrain) {
+    public Node() {
         this.connectedNode = null;
         this.tiger = null;
-        this.tileSection = tileSection;
         this.region = null;
     }
     
@@ -51,7 +50,7 @@ public class Node {
         this.region = region;
     }
 
-    public TileSection getTileSection() {
-        return tileSection;
+    public void setTileSection(TileSection tileSection){
+        this.tileSection = tileSection;
     }
 }
