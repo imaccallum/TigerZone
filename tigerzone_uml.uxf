@@ -7,19 +7,22 @@
       <x>786</x>
       <y>330</y>
       <w>222</w>
-      <h>108</h>
+      <h>138</h>
     </coordinates>
     <panel_attributes>Tile
 --
-- tileId: UUID { getter }
-- sections: List&lt;TileSection&gt;
-- rotationalOffset: int
-- rightAdjeacentTile: Tile {getter, setter}
-- leftAdjacentTile: Tile {getter, setter}
-- topAdjacentTile: Tile {getter, setter}
-- bottomAdjacentTile: Tile {getter, setter}
+- edges: Node[4]
+- corners: Node[4]
+- center: Node
+- adjacentTiles: Tile[]
+- orientation: int
+- tileSections: List&lt;TileSection&gt;
 --
-+ sectionForNode(node: int) : TileSection
++ getAdjacentTiles() : Tile[]
++ getTile(int index) : Tile
++ getCorner(int index) : Node
++ getEdge(int index) : Node
++ getCenter() : Node
 + rotateClockwise(numberOfRotations: int) : void</panel_attributes>
     <additional_attributes/>
   </element>
@@ -57,7 +60,7 @@
       <h>78</h>
     </coordinates>
     <panel_attributes>&lt;&lt; enum &gt;&gt;
-TerrainType
+Terrain
 --
 Grass
 Road

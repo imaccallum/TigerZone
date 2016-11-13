@@ -1,5 +1,7 @@
 package entities.board;
 
+import entities.board.Node.Node;
+import entities.board.Node.Terrain;
 import entities.overlay.Region;
 
 import java.util.ArrayList;
@@ -11,32 +13,30 @@ import java.util.List;
 // Also keeps track of the tile it is on and the region it is a part of in the game's overlay.
 // Has the ability to have a tiger placed on it.
 public class TileSection {
-    private List<Integer> nodeNumbers;
+    private List<Node> nodes;
     private Terrain terrain;
     private Tile tile;
     private Region region;
-
     private Tiger tiger;
-
     private int pointMultiplier;
 
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
-        nodeNumbers = new ArrayList<>();
+        nodes = new ArrayList<>();
         this.pointMultiplier = 1;
     }
 
-    public void addNodeNumbers(Integer... nodeNumbersToAdd) {
-        nodeNumbers.addAll(Arrays.asList(nodeNumbersToAdd));
+    public void addNodeNumbers(Node... nodesToAdd) {
+        nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
     public Terrain getTerrain() {
         return terrain;
     }
 
-    public boolean contains(int nodeNumber) {
-        return nodeNumbers.contains(nodeNumber);
+    public boolean contains(Node node) {
+        return nodes.contains(node);
     }
 
     public boolean hasTiger() {
@@ -77,7 +77,7 @@ public class TileSection {
         this.tiger = tiger;
     }
 
-    public List<Integer> getNodeNumbers() {
-        return nodeNumbers;
+    public List<Node> getNodes() {
+        return nodes;
     }
 }
