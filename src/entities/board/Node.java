@@ -34,4 +34,8 @@ public class Node {
     public void setRegion(Region region) {
         this.region = region;
     }
+
+    public TileSection getTileSection() {
+        return tileSection;
+    }
 }
