@@ -137,7 +137,6 @@ public class GameManager {
 
     Tile iterateLeft(Tile current) {
         return current.getTile(3);
->>>>>>> refs/remotes/origin/master
     }
 
     private void attach(Tile t) {
