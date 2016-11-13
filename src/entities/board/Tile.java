@@ -39,9 +39,7 @@ public class Tile {
     public void setOrientation(int o) {
         orientation = o % COUNT;
     }
-    public void rotate(int r) {
-        orientation = (orientation + r) % COUNT;
-    }
+    public void rotate(int r) { setOrientation(orientation + r); }
 
     private void setTile(Tile t, int i) {
         if (i < 0 || i >= COUNT) throw new RuntimeException("Illegal index");
