@@ -52,5 +52,8 @@ public class Node {
 
     public void setTileSection(TileSection tileSection){
         this.tileSection = tileSection;
+
+    public TileSection getTileSection() {
+        return tileSection;
     }
 }
