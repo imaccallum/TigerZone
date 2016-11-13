@@ -4,7 +4,6 @@ import entities.board.Node.Node;
 import entities.board.Node.Terrain;
 import entities.board.Tiger;
 import entities.board.Tile;
-import entities.overlay.Region;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +28,7 @@ public class TileSection {
         this.pointMultiplier = 1;
     }
 
-    public void addNodeNumbers(Node... nodesToAdd) {
+    public void addNodes(Node... nodesToAdd) {
         nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
@@ -45,7 +44,7 @@ public class TileSection {
         return tiger != null;
     }
 
-    public boolean isComplete() {
+    public boolean hasOpenConnection() {
         if (terrain == Terrain.DEN) {
             Tile[] adjacentTiles = tile.getAdjacentTiles();
             if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
