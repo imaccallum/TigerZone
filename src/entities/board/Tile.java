@@ -1,6 +1,6 @@
 package entities.board;
 
-import entities.board.Node.Node;
+import entities.board.Node;
 import game.BadPlacementException;
 
 public class Tile {
