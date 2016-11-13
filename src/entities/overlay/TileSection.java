@@ -29,6 +29,9 @@ public class TileSection {
     }
 
     public void addNodes(Node... nodesToAdd) {
+        for (Node node: nodesToAdd) {
+            node.setTileSection(this);
+        }
         nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
