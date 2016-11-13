@@ -1,7 +1,7 @@
 package game;
 
 import entities.board.Node.Node;
-import entities.board.Node.Trail;
+import entities.board.Node.Terrain;
 import entities.board.Tile;
 import entities.player.Player;
 
@@ -76,14 +76,14 @@ public class GameManager {
             int inverseIndex = (i + 2) % 4;
             if(adjTiles[i] != null) {	// if tile on that side
                 if(adjTiles[i].getEdge(inverseIndex) == t.getEdge(i)) { //Adj Node  is same type -> should always be true
-                    adjTiles[i].getEdge(inverseIndex).connectedNodes.add(t.getEdge(i));
-                    t.getEdge(i).connectedNodes.add(adjTiles[i].getEdge(inverseIndex));		// Set link both ways
-                    if(t.getEdge(i).getClass() == Trail.class) {
+                    adjTiles[i].getEdge(inverseIndex).setConnection(t.getEdge(i));
+                    t.getEdge(i).setConnection(adjTiles[i].getEdge(inverseIndex));		// Set link both ways
+                    if(t.getEdge(i).getTerrain() == Terrain.TRAIL) {
                         // This may need to change, but I believe fields need to only be linked through road sides
                         int adjCornerIndex1 = inverseIndex;
-                        int adjCornerIndex2 = inverseIndex - 1; if(adjCornerIndex2 == -1) adjCornerIndex2 = 3;
+                        int adjCornerIndex2 = inverseIndex - 1;
+                        if(adjCornerIndex2 == -1) adjCornerIndex2 = 3;
                         //connect corners
-
                     }
                 }
                 else {

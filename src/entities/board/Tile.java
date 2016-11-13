@@ -13,7 +13,7 @@ public class Tile {
     private Node[] edges;
     private Node[] corners;
     private Node center;
-    private Tile[] tiles; // Adjacent tiles
+    private Tile[] adjacentTiles; // Adjacent tiles
     private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees
     private int score = 1;
 
@@ -22,13 +22,13 @@ public class Tile {
     public Tile() {
         edges = new Node[ORIENTATIONS_COUNT];
         corners = new Node[ORIENTATIONS_COUNT];
-        tiles = new Tile[ORIENTATIONS_COUNT];
+        adjacentTiles = new Tile[ORIENTATIONS_COUNT];
     }
 
     public Tile[] getTiles() {
-        return tiles;
+        return adjacentTiles;
     }
-    public Tile getTile(int index) { return tiles[adjustedIndex(index)]; }
+    public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
     public Node getCorner(int index) {
         return corners[adjustedIndex(index)];
     }
@@ -42,9 +42,9 @@ public class Tile {
 
     public void rotate(int r) { setOrientation(orientation + r); }
 
-    private void setTile(Tile t, int i) {
+    public void setTile(Tile t, int i) {
         if (i < 0 || i >= ORIENTATIONS_COUNT) throw new RuntimeException("Illegal index");
-        tiles[i] = t;
+        adjacentTiles[i] = t;
         t.getTiles()[inverse(i)] = this;
     }
 
