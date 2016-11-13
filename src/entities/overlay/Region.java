@@ -1,15 +1,12 @@
 package entities.overlay;
 
-import entities.board.Terrain;
+import entities.board.Node;
 import entities.board.Tiger;
-import exceptions.IncompatibleTerrainException;
-import game.scoring.JungleScorer;
-import game.scoring.LakeScorer;
-import game.scoring.Scorer;
-import game.scoring.TrailScorer;
+import entities.player.Player;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.UUID;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -17,35 +14,56 @@ import java.util.stream.Collectors;
 public class Region {
     private UUID regionId;
     private List<TileSection> tileSections;
-    private Terrain terrain;
+    private List<Tiger> tigers;
+    private List<Region> adjacentRegions;
 
-    public Region(Terrain terrain) {
-        this.terrain = terrain;
+    public Region(){
         regionId = UUID.randomUUID();
+        tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
+        adjacentRegions = new ArrayList<>();
     }
 
-    // HAS TESTS
-    public void addTileSection(TileSection tileSection) throws IncompatibleTerrainException {
-        if (tileSection.getTerrain() != terrain) {
-            throw new IncompatibleTerrainException("Tried adding a TileSection to a Region with different terrain.");
-        }
+    public void addTileSection(TileSection tileSection){
         tileSection.setRegion(this);
         tileSections.add(tileSection);
     }
 
-    // HAS TESTS
-    public void combineWithRegion(Region region) throws IncompatibleTerrainException {
-        for (TileSection section  : region.tileSections) {
-            addTileSection(section);
-        }
+    public boolean containsTileSection(Node section){
+        return tileSections.contains(section);
     }
 
-    // HAS TESTS
-    public boolean isFinished() {
-        if (tileSections.isEmpty()) {
-            System.err.println("Queried isFinished for region with no tile sections!!");
+    public int calculatePointValue(){
+        if(isFinished()){
+            //Do calculations
         }
+        return 0;
+    }
+
+    public List<Region> getAdjacentRegions(){
+        //Return the adjacent regions
+        return null;
+    }
+
+    public UUID getRegionId() {
+        return regionId;
+    }
+
+    public void addTiger(Tiger t){
+        tigers.add(t);
+    }
+
+    public void combineWithRegion(Region region) {
+        for (TileSection tileSection : region.tileSections) {
+            if (tileSection.getTiger() != null) {
+                this.addTiger(tileSection.getTiger());
+            }
+            this.addTileSection(tileSection);
+        }
+        region = null;
+    }
+
+    public boolean isFinished() {
         for (TileSection section : tileSections) {
             if (section.hasOpenConnection()) {
                 return false;
@@ -54,79 +72,16 @@ public class Region {
         return true;
     }
 
-    // HAS TEST
-    public boolean containsTigers() {
-        for (TileSection section : tileSections) {
-            if (section.getTiger() != null) {
-                return true;
+    public boolean isDisputed() {
+        if (!tigers.isEmpty()) {
+            Player player = tigers.get(0).getOwningPlayer();
+            for (Tiger tiger : tigers) {
+                if (tiger.getOwningPlayer() != player) {
+                    return true;
+                }
             }
         }
         return false;
     }
-
-    // HAS TEST
-    public Scorer getScorer() {
-        switch (terrain) {
-            case TRAIL: return new TrailScorer();
-            case LAKE: return new LakeScorer();
-            case JUNGLE: return new JungleScorer();
-        }
-
-        return null;
-    }
-
-    public List<Tiger> getAllTigers() {
-        List<Tiger> tigers = new ArrayList<>();
-        tigers.addAll(tileSections.stream().filter(section -> section.getTiger() != null)
-                .map(TileSection::getTiger).collect(Collectors.toList()));
-        return tigers;
-    }
-
-    // MARK: Getters and Setters
-
-    public UUID getRegionId() {
-        return regionId;
-    }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-    // MARK: NEED TO IMPLEMENT ELSEWHERE TODO
-
-    //    public boolean isDisputed() {
-//        if (!tigers.isEmpty()) {
-//            Player player = tigers.get(0).getOwningPlayer();
-//            for (Tiger tiger : tigers) {
-//                if (tiger.getOwningPlayer() != player) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public List<Player> getDominantPlayers() {
-//        List<Player> dominantList = new ArrayList<>();
-//        HashMap<Player, Integer> tigerCount = new HashMap<>();
-//        for(Tiger t : tigers){
-//            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
-//            tigerCount.put(t.getOwningPlayer(), count + 1);
-//        }
-//
-//        int max = Collections.max(tigerCount.values());
-//
-//        for(Player p : tigerCount.keySet()){
-//            if(tigerCount.get(p) == max)
-//                dominantList.add(p);
-//        }
-//
-//        return dominantList;
-//    }
-
 }
 

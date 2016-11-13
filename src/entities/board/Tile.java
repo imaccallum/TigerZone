@@ -1,7 +1,5 @@
 package entities.board;
 
-import entities.board.Node.Node;
-
 public class Tile {
 
     //			Edge[0]

@@ -1,24 +1,19 @@
 package entities.board;
 
+import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 public class Node {
-
     private Node connectedNode;
+    private Region region;
+    private Tiger tiger;
     private TileSection tileSection;
 
-    public Node() {
+    public Node(TileSection tileSection, Terrain terrain) {
         this.connectedNode = null;
-    }
-
-    // Getters and Setters
-
-    public TileSection getTileSection() {
-        return tileSection;
-    }
-
-    public void setTileSection(TileSection tileSection) {
+        this.tiger = null;
         this.tileSection = tileSection;
+        this.region = null;
     }
     
     public Node getConnectedNode() {
@@ -29,7 +24,30 @@ public class Node {
         connectedNode = node;
     }
 
+    public void placeTiger(Tiger t) {
+        tiger = t;
+        region.addTiger(t);
+    }
+
+    public void removeTiger() {
+        tiger = null;
+    }
+
     public boolean isConnected() {
         return connectedNode != null;
+    }
+
+    // Getters and Setters
+
+    public Tiger getTiger() {
+        return tiger;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 }

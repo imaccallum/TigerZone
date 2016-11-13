@@ -1,5 +1,5 @@
 package entities.board;
 
 public enum Terrain {
-    LAKE, TRAIL, JUNGLE
+    DEN, LAKE, TRAIL, JUNGLE
 }
