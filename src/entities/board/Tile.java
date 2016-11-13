@@ -1,7 +1,12 @@
 package entities.board;
 
 import entities.board.Node;
+import entities.overlay.TileSection;
 import game.BadPlacementException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Tile {
 
@@ -15,6 +20,7 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
+    private List<TileSection> tileSections;
 
     private boolean hasPenant;
 
@@ -22,6 +28,7 @@ public class Tile {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
         adjacentTiles = new Tile[COUNT];
+        tileSections = new ArrayList<>();
     }
 
     public Tile[] getAdjacentTiles() {
@@ -123,5 +130,13 @@ public class Tile {
 
     public void setCorner(Node node, int i){
         corners[i] = node;
+    }
+
+    public void setCenter(Node node){
+        center = node;
+    }
+
+    public void addTileSections(TileSection... sections){
+        tileSections.addAll(Arrays.asList(sections));
     }
 }
