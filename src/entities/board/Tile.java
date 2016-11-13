@@ -13,42 +13,61 @@ public class Tile {
     private Node[] edges;
     private Node[] corners;
     private Node center;
-    private Tile[] tiles; // Adjacent tiles
-    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees
-    private int score = 1;
+    private Tile[] adjacentTiles; // Adjacent tiles
+    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees]
+
 
     public Tile() {
         edges = new Node[ORIENTATIONS_COUNT];
         corners = new Node[ORIENTATIONS_COUNT];
-        tiles = new Tile[ORIENTATIONS_COUNT];
+        adjacentTiles = new Tile[ORIENTATIONS_COUNT];
     }
 
-    public Tile[] getTiles() {
-        return tiles;
+    public Tile[] getAdjacentTiles() {
+        return adjacentTiles;
     }
-    public Tile getTile(int index) { return tiles[adjustedIndex(index)]; }
+
+    public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
+
     public Node getCorner(int index) {
         return corners[adjustedIndex(index)];
     }
+
     public Node getEdge(int index) {
         return edges[adjustedIndex(index)];
     }
 
-    public void setOrientation(int o) {
-        orientation = o % ORIENTATIONS_COUNT;
-    }
-    public void rotate(int r) {
-        orientation = (orientation + r) % ORIENTATIONS_COUNT;
+    public Node getCenter(int index) {
+        return center;
     }
 
-    private void setTile(Tile t, int i) {
+    public void setOrientation(int orientation) {
+        this.orientation = orientation % ORIENTATIONS_COUNT;
+    }
+
+    public void rotateClockwise(int numberOfRotations) {
+        setOrientation((orientation + numberOfRotations) % ORIENTATIONS_COUNT);
+    }
+
+    public void setTile(Tile t, int i) {
         if (i < 0 || i >= ORIENTATIONS_COUNT) throw new RuntimeException("Illegal index");
-        tiles[i] = t;
-        t.getTiles()[inverse(i)] = this;
+        adjacentTiles[adjustedIndex(i)] = t;
+        t.getAdjacentTiles()[inverse(i)] = this;
+    }
+    
+    public void setedge(Node node, int i){
+        edges[i] = node;
+    }
+    
+    public void setcorner(Node node, int i){
+        corners[i] = node;
     }
 
     // Helpers
-    private int adjustedIndex(int i) { return (i + orientation) % ORIENTATIONS_COUNT; }
+    private int adjustedIndex(int i) {
+        return (i + orientation) % ORIENTATIONS_COUNT;
+    }
+
     private int inverse(int i) {
         return (i + 2) % ORIENTATIONS_COUNT;
     }

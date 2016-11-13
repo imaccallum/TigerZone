@@ -2,28 +2,31 @@ package entities.board.Node;
 
 import entities.board.Tiger;
 import entities.overlay.Region;
+import entities.overlay.TileSection;
 
 import java.util.ArrayList;
 
-public abstract class Node {
-    // List of all possible connections a Node might might have
-    private ArrayList<Node> connectedNodes = new ArrayList<Node>();
-
-    // Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
+public class Node {
+    private Node connectedNode;
     private Region region;
     private Tiger tiger;
     private Terrain terrain;
+    private TileSection tileSection;
 
-
-    public Node getConnectedNode(int x) {
-        if (x >= connectedNodes.size()) {
-            throw new IndexOutOfBoundsException("The index is larger than the amount of Connected Nodes for this Node");
-        }
-        return connectedNodes.get(x);
+    public Node(TileSection tileSection, Terrain terrain) {
+        this.connectedNode = null;
+        this.tiger = null;
+        this.tileSection = tileSection;
+        this.terrain = terrain;
+        this.region = null;
+    }
+    
+    public Node getConnectedNode() {
+        return connectedNode;
     }
 
-    public void setConnection(Node node){
-        connectedNodes.add(node);
+    public void setConnectedNode(Node node) {
+        connectedNode = node;
     }
 
     public void placeTiger(Tiger t) {
@@ -35,6 +38,12 @@ public abstract class Node {
         tiger = null;
     }
 
+    public boolean isConnected() {
+        return connectedNode != null;
+    }
+
+    // Getters and Setters
+
     public Tiger getTiger() {
         return tiger;
     }
@@ -45,5 +54,13 @@ public abstract class Node {
 
     public void setRegion(Region region) {
         this.region = region;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 }
