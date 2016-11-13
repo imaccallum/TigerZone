@@ -17,6 +17,7 @@ public class Tile {
     private Tile[] adjacentTiles; // Adjacent tiles
     private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees]
 
+    private boolean hasPenant;
 
     public Tile() {
         edges = new Node[COUNT];
@@ -76,25 +77,25 @@ public class Tile {
         setOrientation((orientation + numberOfRotations) % COUNT);
     }
 
-    private void setTile(Tile t, int i) {
+    private void setTile(Tile t, int i) throws BadPlacementException {
         if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
         adjacentTiles[adjustedIndex(i)] = t;
         t.getAdjacentTiles()[inverse(i)] = this;
     }
 
-    public void setTopTile(Tile t) {
+    public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
     }
 
-    public void setBottomTile(Tile t) {
+    public void setBottomTile(Tile t) throws BadPlacementException {
         setTile(t, 2);
     }
 
-    public void setLeftTile(Tile t) {
+    public void setLeftTile(Tile t) throws BadPlacementException {
         setTile(t, 3);
     }
 
-    public void setRightTile(Tile t) {
+    public void setRightTile(Tile t) throws BadPlacementException {
         setTile(t, 1);
     }
 
@@ -113,5 +114,9 @@ public class Tile {
 
     private int inverse(int i) {
         return (i + 2) % COUNT;
+    }
+
+    public boolean hasPenant() {
+        return hasPenant;
     }
 }
