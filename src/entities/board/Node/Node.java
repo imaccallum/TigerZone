@@ -12,8 +12,6 @@ public abstract class Node {
     // Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
     private Region region;
     private Tiger tiger;
-    private Terrain terrain;
-
 
     public Node getConnectedNode(int x) {
         if (x >= connectedNodes.size()) {

@@ -61,6 +61,7 @@ public class Region {
             }
             this.addNode(node);
         }
+        region = null;
     }
 
     public boolean isFinished() {
