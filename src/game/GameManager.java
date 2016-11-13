@@ -38,8 +38,6 @@ public class GameManager {
     public ArrayList<Point> getTileOptions() {
         return openTiles;
     }
-
-<<<<<<< HEAD
     public void insert(Tile t, int x, int y) {
 
         // update openTiles & attach to adjacent tiles
@@ -69,7 +67,6 @@ public class GameManager {
 
         attach(t);
 
-=======
     public void insert(Tile tile, int x, int y) throws BadPlacementException {
         Tile currentTile = center;
         while (x != 0 && y != 0) {
