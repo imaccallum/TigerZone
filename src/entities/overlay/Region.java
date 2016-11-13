@@ -11,26 +11,27 @@ import java.util.UUID;
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
 // the tilesections are given a region object (composition)
 public class Region {
-    private UUID tileId;
-    private Node terrainType;
+    private UUID regionId;
     private List<Node> nodes;
     private List<Tiger> tigers;
+    private List<Region> adjacentRegions;
     private boolean isFinished = false;
     private boolean isDisputed = false;
 
-    public Region(Node terrainType){
-        tileId = UUID.randomUUID();
-        this.terrainType = terrainType;
-        nodes = new ArrayList<>();
+    public Region(){
+        regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
+        nodes = new ArrayList<>();
+        adjacentRegions = new ArrayList<>();
     }
 
     public void addNode(Node node){
+        node.setRegion(this);
         nodes.add(node);
     }
 
-    public boolean containsNode(Node node){
-        return nodes.contains(node);
+    public boolean containsTileSection(Node section){
+        return nodes.contains(section);
     }
 
     public int calculatePointValue(){
@@ -40,24 +41,42 @@ public class Region {
         return 0;
     }
 
-    public void addRegion(Region region){
-        // **TODO If two regions are connected, have functionality to combine the two regions in one and update corresponding Nodes
-    }
-
     public List<Region> getAdjacentRegions(){
         //Return the adjacent regions
         return null;
     }
 
-    public UUID getTileId() {
-        return tileId;
+    public UUID getRegionId() {
+        return regionId;
     }
 
-    public Node getTerrain() {
-        return terrainType;
+    public void addTiger(Tiger t){
+        tigers.add(t);
+    }
+
+    public void combineWithRegion(Region region) {
+        for (Node node : region.nodes) {
+            if (node.getTiger() != null) {
+                this.addTiger(node.getTiger());
+            }
+            this.addNode(node);
+        }
     }
 
     public boolean isFinished() {
         return isFinished;
     }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public boolean isDisputed() {
+        return isDisputed;
+    }
+
+    public void setDisputed(boolean disputed) {
+        isDisputed = disputed;
+    }
 }
+
