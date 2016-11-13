@@ -1,6 +1,7 @@
 package game;
 
-import entities.board.Node.Terrain;
+import entities.board.Node;
+import entities.board.Terrain;
 import entities.board.Tile;
 import entities.player.Player;
 
