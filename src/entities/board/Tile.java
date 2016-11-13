@@ -17,6 +17,8 @@ public class Tile {
     private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees
     private int score = 1;
 
+
+
     public Tile() {
         edges = new Node[ORIENTATIONS_COUNT];
         corners = new Node[ORIENTATIONS_COUNT];
@@ -34,8 +36,8 @@ public class Tile {
         return edges[adjustedIndex(index)];
     }
 
-    public void setOrientation(int o) {
-        orientation = o % ORIENTATIONS_COUNT;
+    public void setOrientation(int orientation) {
+        this.orientation = orientation % ORIENTATIONS_COUNT;
     }
     public void rotate(int r) {
         orientation = (orientation + r) % ORIENTATIONS_COUNT;
