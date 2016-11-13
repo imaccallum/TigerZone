@@ -1,6 +1,7 @@
 package entities.overlay;
 
 import entities.board.Node;
+import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
 import game.scoring.Scorer;
@@ -18,12 +19,14 @@ public class Region {
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
     private Scorer scorer;
+    private Terrain terrain;
 
-    public Region(){
+    public Region(Terrain terrain){
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
         adjacentRegions = new ArrayList<>();
+        this.terrain = terrain;
     }
 
     public void addTileSection(TileSection tileSection){
@@ -88,6 +91,10 @@ public class Region {
             }
         }
         return false;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
     }
 }
 

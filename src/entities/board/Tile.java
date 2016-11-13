@@ -54,7 +54,19 @@ public class Tile {
         return cornerTiles;
     }
 
-    public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
+    public boolean hasTerrain(Terrain terrain){
+        for(Node n : edges){
+            if(n.getTileSection().getTerrain() == terrain)
+                return true;
+        }
+        for(Node n : corners){
+            if(n.getTileSection().getTerrain() == terrain)
+                return true;
+        }
+
+        return false;
+    }
+
     public Tile getTile(int index) { return adjacentTiles[index]; }
 
     public Node getCorner(int index) {
