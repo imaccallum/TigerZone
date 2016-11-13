@@ -41,33 +41,50 @@ public class GameManager {
         Tile currentTile = center;
         while (x != 0 && y != 0) {
             if (x == 1 && y == 0) {
-                currentTile.attachTop(tile);
+                currentTile.attachRight(tile);
+                break;
             }
             else if (x == 0 && y == 1) {
-
+                currentTile.attachTop(tile);
+                break;
             }
             else if (x == -1 && y == 0) {
-
+                currentTile.attachLeft(tile);
+                break;
             }
             else if (x == 0 & y == -1) {
-
+                currentTile.attachLeft(tile);
+                break;
             }
 
-            if (x < 0) {
 
+            boolean iterated = false;
+            if (!iterated && x < 0) {
+                Tile nextTile = iterateRight(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
             }
-            else {
-
+            if (!iterated && x > 0) {
+                Tile nextTile = iterateLeft(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+            if (!iterated && y < 0) {
+                Tile nextTile = iterateDown(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+            else if (!iterated) {
+                Tile nextTile = iterateUp(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
             }
 
-            if (y < 0) {
-
-            }
-            else  {
-
-            }
-
-            if (currentTile == null) {
+            if (!iterated) {
                 throw new BadPlacementException("Index given is out of bounds");
             }
         }
