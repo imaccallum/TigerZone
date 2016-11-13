@@ -1,118 +1,104 @@
 package game;
 
-import entities.board.Board;
+import entities.board.Node.Node;
+import entities.board.Node.Terrain;
 import entities.board.Tile;
-import entities.board.TileFactory;
-import entities.overlay.Region;
 import entities.player.Player;
-import exceptions.BadPlacementException;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class GameManager {
 
-    private List<Player> players = new ArrayList<>();
+    private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
+    private Tile[][] map;					// The map of tiles
+
+    private ArrayList<Point> openTiles;		// A list of all current open tile positions
+    private Point lastTilePlaced;			// Set on insert, used for getTigerPlacementOptions()
+
+    private List<Player> players;
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
+    // *TODO RegionLinker regionLinker;
 
-    private Board board;
+    public GameManager(Stack<Tile> stack, Player... p) {
+        for(Player player : p)
+            players.add(player);
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
-        board = new Board(stack.size(), stack.pop());
+        tileStack = stack;
+        map = new Tile[80][80]; 			// .648 Kb of overhead for array + storage = not a problem
+
+        insert(tileStack.pop(), 40, 40);	// Assuming starting tile is placed at top of stack
     }
 
-    /*
-    public void completeRegion(Region region){
-        List<Player> playersToGetScore = region.getDominantPlayers();
-        int score = region.getScorer().score(region);
-        for(Player p : playersToGetScore){
-            p.addToScore(score);
-        }
-    }
-    */
-
-    public Board getBoard() {
-        return board;
+    public ArrayList<Point> getTileOptions() {
+        return openTiles;
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException {
+    public void insert(Tile t, int x, int y) {
 
-        //region deckArray
-        Character[] myarray = {'a',
-                'b', 'b', 'b', 'b',
-                'c', 'c',
-                'd',
-                'e','e','e','e','e','e','e','e',
-                'f','f','f','f','f','f','f','f','f',
-                'g','g','g','g',
-                'h',
-                'i','i','i','i',
-                'j','j','j','j','j',
-                'k','k','k',
-                'l','l','l',
-                'm','m','m','m','m',
-                'n','n',
-                'o',
-                'p','p',
-                'q',
-                'r','r',
-                's','s','s',       // WEIRD # FORMAT 1 OR 3?
-                't','t',
-                'u','u','u',
-                'v',
-                'w','w',
-                'x','x','x',
-                'y','y',
-                'z',
-                '0','0'};
-        //endregion
+        // update openTiles & attach to adjacent tiles
 
-        List<Character> charList = Arrays.asList(myarray);
-        Collections.shuffle(charList);
-
-        TileFactory f = new TileFactory();
-        Stack<Tile> deck = new Stack<>();
-
-        for (Character c: charList) {
-            Tile t = f.makeTile(c);
-            deck.push(t);
-        }
-
-        Player p0 = new Player("Player 0");
-        Player p1 = new Player("Player 1");
-
-        GameManager gm = new GameManager(deck, p0, p1);
+        if(map[x+1][y] == null)
+            openTiles.add(new Point(x+1, y));
+        else
+            map[x+1][y].setTile(t, 3);
 
 
-//        TileFactory tf = new TileFactory();
-//        Tile t1 = tf.makeTile('a');
-//        Tile t2 = tf.makeTile('a');
+        if(map[x-1][y] == null)
+            openTiles.add(new Point(x-1, y));
+        else
+            map[x-1][y].setTile(t, 1);
 
-        while(!deck.empty())
-        {
-            Tile t = deck.pop();
-     //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
-            List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
-            if(tileOptions.size() > 0) {
-                LocationAndOrientation optimalPlacement = tileOptions.get(0);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
-                t.rotateClockwise(optimalPlacement.getOrientation());
-                gm.getBoard().insert(t, optimalPlacement.getLocation());
-            } else {
-                System.out.println("No valid moves, discarding tile.");
+
+        if(map[x][y+1] == null)
+            openTiles.add(new Point(x, y+1));
+        else
+            map[x][y+1].setTile(t, 2);
+
+
+        if(map[x][y-1] == null)
+            openTiles.add(new Point(x, y-1));
+        else
+            map[x][y-1].setTile(t, 0);
+
+        attach(t);
+
+    }
+
+    private void attach(Tile t) {
+        Tile[] adjTiles = t.getTiles();
+        for(int i = 0; i < 4; i++) {	// for each side
+            int inverseIndex = (i + 2) % 4;
+            if(adjTiles[i] != null) {	// if tile on that side
+                if(adjTiles[i].getEdge(inverseIndex) == t.getEdge(i)) { //Adj Node  is same type -> should always be true
+                    adjTiles[i].getEdge(inverseIndex).setConnection(t.getEdge(i));
+                    t.getEdge(i).setConnection(adjTiles[i].getEdge(inverseIndex));		// Set link both ways
+                    if(t.getEdge(i).getTerrain() == Terrain.TRAIL) {
+                        // This may need to change, but I believe fields need to only be linked through road sides
+                        int adjCornerIndex1 = inverseIndex;
+                        int adjCornerIndex2 = inverseIndex - 1;
+                        if(adjCornerIndex2 == -1) adjCornerIndex2 = 3;
+                        //connect corners
+                    }
+                }
+                else {
+                    System.out.println("Error: Cannot add Tile there, incompatible nodes.");
+                }
             }
         }
-
-//        gm.board.insert(t2, 40, 41);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        System.out.println(gm.board.getTileOptions());
     }
+
+    public ArrayList<Node> getTigerPlacementOptions() {
+        return null;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+    }
+
 }
