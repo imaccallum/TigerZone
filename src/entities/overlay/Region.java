@@ -2,6 +2,7 @@ package entities.overlay;
 
 import entities.board.Node.Node;
 import entities.board.Tiger;
+import entities.player.Player;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,30 +13,28 @@ import java.util.UUID;
 // the tilesections are given a region object (composition)
 public class Region {
     private UUID regionId;
-    private List<Node> nodes;
+    private List<TileSection> tileSections;
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
-    private boolean isFinished = false;
-    private boolean isDisputed = false;
 
     public Region(){
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
-        nodes = new ArrayList<>();
+        tileSections = new ArrayList<>();
         adjacentRegions = new ArrayList<>();
     }
 
-    public void addNode(Node node){
-        node.setRegion(this);
-        nodes.add(node);
+    public void addTileSection(TileSection tileSection){
+        tileSection.setRegion(this);
+        tileSections.add(tileSection);
     }
 
     public boolean containsTileSection(Node section){
-        return nodes.contains(section);
+        return tileSections.contains(section);
     }
 
     public int calculatePointValue(){
-        if(isFinished){
+        if(isFinished()){
             //Do calculations
         }
         return 0;
@@ -55,29 +54,34 @@ public class Region {
     }
 
     public void combineWithRegion(Region region) {
-        for (Node node : region.nodes) {
-            if (node.getTiger() != null) {
-                this.addTiger(node.getTiger());
+        for (TileSection tileSection : region.tileSections) {
+            if (tileSection.getTiger() != null) {
+                this.addTiger(tileSection.getTiger());
             }
-            this.addNode(node);
+            this.addTileSection(tileSection);
         }
         region = null;
     }
 
     public boolean isFinished() {
-        return isFinished;
-    }
-
-    public void setFinished(boolean finished) {
-        isFinished = finished;
+        for (TileSection section : tileSections) {
+            if (section.hasOpenConnection()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isDisputed() {
-        return isDisputed;
-    }
-
-    public void setDisputed(boolean disputed) {
-        isDisputed = disputed;
+        if (!tigers.isEmpty()) {
+            Player player = tigers.get(0).getOwningPlayer();
+            for (Tiger tiger : tigers) {
+                if (tiger.getOwningPlayer() != player) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
