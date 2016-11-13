@@ -1,7 +1,9 @@
-package entities.board;
+package entities.overlay;
 
 import entities.board.Node.Node;
 import entities.board.Node.Terrain;
+import entities.board.Tiger;
+import entities.board.Tile;
 import entities.overlay.Region;
 
 import java.util.ArrayList;
@@ -41,6 +43,31 @@ public class TileSection {
 
     public boolean hasTiger() {
         return tiger != null;
+    }
+
+    public boolean isComplete() {
+        if (terrain == Terrain.DEN) {
+            Tile[] adjacentTiles = tile.getAdjacentTiles();
+            if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
+                adjacentTiles[2] == null || adjacentTiles[3] == null) {
+                return false;
+            }
+
+            Tile leftTile = adjacentTiles[0];
+            Tile rightTile = adjacentTiles[2];
+            if (leftTile.getAdjacentTiles()[1] == null || leftTile.getAdjacentTiles()[3] == null ||
+                rightTile.getAdjacentTiles()[1] == null || rightTile.getAdjacentTiles()[3] == null) {
+                return false;
+            }
+        } else {
+            for (Node node : nodes) {
+                if (!node.isConnected()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     // MARK: Getters and setters
