@@ -15,7 +15,6 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees]
 
     private boolean hasPenant;
 
@@ -56,67 +55,61 @@ public class Tile {
     }
 
     public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
+    public Tile getTile(int index) { return adjacentTiles[index]; }
 
     public Node getCorner(int index) {
-        return corners[adjustedIndex(index)];
+        return corners[index];
     }
 
     public Node getEdge(int index) {
-        return edges[adjustedIndex(index)];
+        return edges[index];
     }
 
     public Node getCenter(int index) {
         return center;
     }
 
-    public void setOrientation(int orientation) {
-        this.orientation = orientation % COUNT;
-    }
-
     public void rotateClockwise(int numberOfRotations) {
-        setOrientation((orientation + numberOfRotations) % COUNT);
+
+        Node[] tempEdges = new Node[COUNT];
+        Node[] tempCorners = new Node[COUNT];
+
+        for (int i = 0; i < COUNT; i++) {
+            int index = (i + numberOfRotations) % COUNT;
+            tempEdges[index] = edges[i];
+            tempCorners[index] = corners[i];
+        }
+
+        edges = tempEdges;
+        corners = tempCorners;
     }
 
-    private void setTile(Tile t, int i) throws BadPlacementException {
-        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[adjustedIndex(i)] = t;
-        t.getAdjacentTiles()[inverse(i)] = this;
+    private void setTile(Tile t, int index) {
+        if (index < 0 || index >= COUNT) throw new BadPlacementException("Illegal index");
+        adjacentTiles[index] = t;
     }
 
-    public void setTopTile(Tile t) throws BadPlacementException {
+    public void setTopTile(Tile t) {
         setTile(t, 0);
     }
 
-    public void setBottomTile(Tile t) throws BadPlacementException {
-        setTile(t, 2);
-    }
-
-    public void setLeftTile(Tile t) throws BadPlacementException {
-        setTile(t, 3);
-    }
-
-    public void setRightTile(Tile t) throws BadPlacementException {
+    public void setRightTile(Tile t) {
         setTile(t, 1);
     }
 
-    public void setedge(Node node, int i){
+    public void setBottomTile(Tile t) {
+        setTile(t, 2);
+    }
+
+    public void setLeftTile(Tile t) {
+        setTile(t, 3);
+    }
+
+    public void setEdge(Node node, int i){
         edges[i] = node;
     }
-    
-    public void setcorner(Node node, int i){
+
+    public void setCorner(Node node, int i){
         corners[i] = node;
-    }
-
-    // Helpers
-    private int adjustedIndex(int i) {
-        return (i + orientation) % COUNT;
-    }
-
-    private int inverse(int i) {
-        return (i + 2) % COUNT;
-    }
-
-    public boolean hasPenant() {
-        return hasPenant;
     }
 }
