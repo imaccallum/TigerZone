@@ -2,7 +2,6 @@ package entities.board.Node;
 
 import entities.board.Tiger;
 import entities.overlay.Region;
-
 import java.util.ArrayList;
 
 public abstract class Node {
