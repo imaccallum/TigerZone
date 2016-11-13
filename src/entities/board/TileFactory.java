@@ -36,6 +36,9 @@ public class TileFactory {
 
     private Tile makeTileA() {
         Tile t = new Tile();
+        //create all the nodes for the tile, and add the nodes onto the tile in the appropriate spots in the arrays of Tile
+        //make sure to account for connections (use node.setConnection(Node node)), regions (use node.setRegion(Region region); this is just creating the tiles, no need to worry about linking them yet)
+        //in all of these, make sure to pass a reference to t when making the nodes for the tile
         return t;
     }
 
