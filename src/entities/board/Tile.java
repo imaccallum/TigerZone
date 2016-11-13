@@ -1,5 +1,8 @@
 package entities.board;
 
+import entities.board.Node;
+import game.BadPlacementException;
+
 public class Tile {
 
     //			Edge[0]
@@ -7,7 +10,7 @@ public class Tile {
     //	Edge[3]		Center		Edge[1]
     //		Corner[2]	Corner[1]
     //			Edge[2]
-    private final int ORIENTATIONS_COUNT = 4;
+    private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
     private Node center;
@@ -16,9 +19,9 @@ public class Tile {
 
 
     public Tile() {
-        edges = new Node[ORIENTATIONS_COUNT];
-        corners = new Node[ORIENTATIONS_COUNT];
-        adjacentTiles = new Tile[ORIENTATIONS_COUNT];
+        edges = new Node[COUNT];
+        corners = new Node[COUNT];
+        adjacentTiles = new Tile[COUNT];
     }
 
     public Tile[] getAdjacentTiles() {
@@ -40,19 +43,35 @@ public class Tile {
     }
 
     public void setOrientation(int orientation) {
-        this.orientation = orientation % ORIENTATIONS_COUNT;
+        this.orientation = orientation % COUNT;
     }
 
     public void rotateClockwise(int numberOfRotations) {
-        setOrientation((orientation + numberOfRotations) % ORIENTATIONS_COUNT);
+        setOrientation((orientation + numberOfRotations) % COUNT);
     }
 
-    public void setTile(Tile t, int i) {
-        if (i < 0 || i >= ORIENTATIONS_COUNT) throw new RuntimeException("Illegal index");
+    private void setTile(Tile t, int i) {
+        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
         adjacentTiles[adjustedIndex(i)] = t;
         t.getAdjacentTiles()[inverse(i)] = this;
     }
-    
+
+    public void setTopTile(Tile t) {
+        setTile(t, 0);
+    }
+
+    public void setBottomTile(Tile t) {
+        setTile(t, 2);
+    }
+
+    public void setLeftTile(Tile t) {
+        setTile(t, 3);
+    }
+
+    public void setRightTile(Tile t) {
+        setTile(t, 1);
+    }
+
     public void setedge(Node node, int i){
         edges[i] = node;
     }
@@ -63,10 +82,10 @@ public class Tile {
 
     // Helpers
     private int adjustedIndex(int i) {
-        return (i + orientation) % ORIENTATIONS_COUNT;
+        return (i + orientation) % COUNT;
     }
 
     private int inverse(int i) {
-        return (i + 2) % ORIENTATIONS_COUNT;
+        return (i + 2) % COUNT;
     }
 }

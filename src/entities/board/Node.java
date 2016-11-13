@@ -6,7 +6,10 @@ import entities.overlay.TileSection;
 public class Node {
     private Node connectedNode;
     private Region region;
+<<<<<<< HEAD
     private Tiger tiger;
+=======
+>>>>>>> refs/remotes/origin/master
     private TileSection tileSection;
 
     public Node(TileSection tileSection, Terrain terrain) {

@@ -39,6 +39,7 @@ public class GameManager {
         return openTiles;
     }
 
+<<<<<<< HEAD
     public void insert(Tile t, int x, int y) {
 
         // update openTiles & attach to adjacent tiles
@@ -68,6 +69,75 @@ public class GameManager {
 
         attach(t);
 
+=======
+    public void insert(Tile tile, int x, int y) throws BadPlacementException {
+        Tile currentTile = center;
+        while (x != 0 && y != 0) {
+            if (x == 1 && y == 0) {
+                currentTile.attachRight(tile);
+                break;
+            }
+            else if (x == 0 && y == 1) {
+                currentTile.attachTop(tile);
+                break;
+            }
+            else if (x == -1 && y == 0) {
+                currentTile.attachLeft(tile);
+                break;
+            }
+            else if (x == 0 & y == -1) {
+                currentTile.attachLeft(tile);
+                break;
+            }
+
+
+            boolean iterated = false;
+            if (!iterated && x < 0) {
+                Tile nextTile = iterateRight(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+            if (!iterated && x > 0) {
+                Tile nextTile = iterateLeft(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+            if (!iterated && y < 0) {
+                Tile nextTile = iterateDown(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+            else if (!iterated) {
+                Tile nextTile = iterateUp(currentTile);
+                if (nextTile != null) {
+                    currentTile = nextTile;
+                }
+            }
+
+            if (!iterated) {
+                throw new BadPlacementException("Index given is out of bounds");
+            }
+        }
+    }
+
+    Tile iterateUp(Tile current) {
+        return current.getTile(0);
+    }
+
+    Tile iterateDown(Tile current) {
+        return current.getTile(2);
+    }
+
+    Tile iterateRight(Tile current) {
+        return current.getTile(1);
+    }
+
+    Tile iterateLeft(Tile current) {
+        return current.getTile(3);
+>>>>>>> refs/remotes/origin/master
     }
 
     private void attach(Tile t) {
