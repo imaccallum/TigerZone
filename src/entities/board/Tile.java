@@ -54,6 +54,14 @@ public class Tile {
         adjacentTiles[adjustedIndex(i)] = t;
         t.getAdjacentTiles()[inverse(i)] = this;
     }
+    
+    public void setedge(Node node, int i){
+        edges[i] = node;
+    }
+    
+    public void setcorner(Node node, int i){
+        corners[i] = node;
+    }
 
     // Helpers
     private int adjustedIndex(int i) {
