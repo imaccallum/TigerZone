@@ -1,8 +1,7 @@
 package entities.overlay;
 
-import entities.board.Follower;
-import entities.board.TerrainType;
-import entities.board.TileSection;
+import entities.board.Node.Node;
+import entities.board.Tiger;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,25 +11,27 @@ import java.util.UUID;
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
 // the tilesections are given a region object (composition)
 public class Region {
-    private UUID tileId;
-    private TerrainType terrain;
-    private List<TileSection> sections;
-    private List<Follower> followers;
+    private UUID regionId;
+    private List<Node> nodes;
+    private List<Tiger> tigers;
+    private List<Region> adjacentRegions;
     private boolean isFinished = false;
+    private boolean isDisputed = false;
 
-    public Region(TerrainType terrain){
-        tileId = UUID.randomUUID();
-        this.terrain = terrain;
-        sections = new ArrayList<>();
-        followers = new ArrayList<>();
+    public Region(){
+        regionId = UUID.randomUUID();
+        tigers = new ArrayList<>();
+        nodes = new ArrayList<>();
+        adjacentRegions = new ArrayList<>();
     }
 
-    public void addSection(TileSection section){
-        sections.add(section);
+    public void addNode(Node node){
+        node.setRegion(this);
+        nodes.add(node);
     }
 
-    public boolean containsTileSection(TileSection section){
-        return sections.contains(section);
+    public boolean containsTileSection(Node section){
+        return nodes.contains(section);
     }
 
     public int calculatePointValue(){
@@ -45,15 +46,37 @@ public class Region {
         return null;
     }
 
-    public UUID getTileId() {
-        return tileId;
+    public UUID getRegionId() {
+        return regionId;
     }
 
-    public TerrainType getTerrain() {
-        return terrain;
+    public void addTiger(Tiger t){
+        tigers.add(t);
+    }
+
+    public void combineWithRegion(Region region) {
+        for (Node node : region.nodes) {
+            if (node.getTiger() != null) {
+                this.addTiger(node.getTiger());
+            }
+            this.addNode(node);
+        }
     }
 
     public boolean isFinished() {
         return isFinished;
     }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public boolean isDisputed() {
+        return isDisputed;
+    }
+
+    public void setDisputed(boolean disputed) {
+        isDisputed = disputed;
+    }
 }
+

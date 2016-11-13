@@ -3,10 +3,10 @@ package entities.board;
 import entities.player.Player;
 
 // A follower that a player can place in tile sections/regions to earn points.
-public class Follower {
+public class Tiger {
     private Player owningPlayer;
 
-    public Follower(Player player) {
+    public Tiger(Player player) {
         this.owningPlayer = player;
     }
 
