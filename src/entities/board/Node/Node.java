@@ -2,21 +2,23 @@ package entities.board.Node;
 
 import entities.board.Tiger;
 import entities.overlay.Region;
+import entities.overlay.TileSection;
+
 import java.util.ArrayList;
 
 public class Node {
-    // List of all possible connections a Node might might have
-    private Node connectedNode = null;
-
-    // Store attributes in a shared object so you don't have to iterate through chain to update each nodes values
+    private Node connectedNode;
     private Region region;
     private Tiger tiger;
     private Terrain terrain;
+    private TileSection tileSection;
 
-    public Node(TileSection tilesection, Terrain terrain){
-        tiger = null;
-        this.tilesection = tilesection;
+    public Node(TileSection tileSection, Terrain terrain) {
+        this.connectedNode = null;
+        this.tiger = null;
+        this.tileSection = tileSection;
         this.terrain = terrain;
+        this.region = null;
     }
     
     public Node getConnectedNode() {
