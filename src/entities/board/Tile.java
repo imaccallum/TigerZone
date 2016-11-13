@@ -14,9 +14,7 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees
-    private int score = 1;
-
+    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees]
 
 
     public Tile() {
@@ -25,31 +23,43 @@ public class Tile {
         adjacentTiles = new Tile[ORIENTATIONS_COUNT];
     }
 
-    public Tile[] getTiles() {
+    public Tile[] getAdjacentTiles() {
         return adjacentTiles;
     }
+
     public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
+
     public Node getCorner(int index) {
         return corners[adjustedIndex(index)];
     }
+
     public Node getEdge(int index) {
         return edges[adjustedIndex(index)];
+    }
+
+    public Node getCenter(int index) {
+        return center;
     }
 
     public void setOrientation(int orientation) {
         this.orientation = orientation % ORIENTATIONS_COUNT;
     }
 
-    public void rotate(int r) { setOrientation(orientation + r); }
+    public void rotateClockwise(int numberOfRotations) {
+        setOrientation((orientation + numberOfRotations) % ORIENTATIONS_COUNT);
+    }
 
     public void setTile(Tile t, int i) {
         if (i < 0 || i >= ORIENTATIONS_COUNT) throw new RuntimeException("Illegal index");
-        adjacentTiles[i] = t;
-        t.getTiles()[inverse(i)] = this;
+        adjacentTiles[adjustedIndex(i)] = t;
+        t.getAdjacentTiles()[inverse(i)] = this;
     }
 
     // Helpers
-    private int adjustedIndex(int i) { return (i + orientation) % ORIENTATIONS_COUNT; }
+    private int adjustedIndex(int i) {
+        return (i + orientation) % ORIENTATIONS_COUNT;
+    }
+
     private int inverse(int i) {
         return (i + 2) % ORIENTATIONS_COUNT;
     }
