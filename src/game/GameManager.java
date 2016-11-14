@@ -1,10 +1,8 @@
 package game;
 
 import entities.board.Node;
-import entities.board.Terrain;
 import entities.board.CornerLocation;
 import entities.board.EdgeLocation;
-import entities.board.Node;
 import entities.board.Tile;
 import entities.overlay.Region;
 import entities.player.Player;
