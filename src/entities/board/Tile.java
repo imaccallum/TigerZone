@@ -15,6 +15,7 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
+    private boolean hasPenant;
 
 
     public Tile() {
@@ -30,20 +31,22 @@ public class Tile {
     public Tile[] getCornerTiles() {
         Tile[] cornerTiles = new Tile[4];
 
-        if(adjacentTiles[0] != null){
+        if (adjacentTiles[0] != null) {
             cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
             cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
         }
 
-        if(adjacentTiles[1] != null){
+        if (adjacentTiles[1] != null) {
             cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
             cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
         }
 
-        if(adjacentTiles[2] != null){
+        if (adjacentTiles[2] != null) {
             cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
             cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
         }
+        return cornerTiles;
+    }
 
     public Tile getTile(int index) {
         return adjacentTiles[index];
@@ -96,15 +99,23 @@ public class Tile {
         setTile(t, 1);
     }
 
-    public void setedge(Node node, int i){
+    public void setEdge(Node node, int i){
         edges[i] = node;
     }
     
-    public void setcorner(Node node, int i){
+    public void setCorner(Node node, int i){
         corners[i] = node;
     }
 
     private int inverse(int i) {
         return (i + 2) % COUNT;
+    }
+
+    public boolean hasPenant() {
+        return hasPenant;
+    }
+
+    public void setCenter(Node center) {
+        this.center = center;
     }
 }
