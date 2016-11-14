@@ -30,6 +30,9 @@ public class Tile {
         corners = new Node[COUNT];
         adjacentTiles = new Tile[COUNT];
         tileSections = new ArrayList<>();
+        hasDeer = false;
+        hasBoar = false;
+        hasBuffalo = false;
     }
 
     public Tile[] getAdjacentTiles() {
