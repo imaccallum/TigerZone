@@ -113,6 +113,7 @@ public class GameManager {
                 throw new BadPlacementException("Index given is out of bounds");
             }
         }
+        return currentTile;
     }
 
     private Tile iterateUp(Tile current) {

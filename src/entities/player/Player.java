@@ -29,4 +29,8 @@ public class Player {
     public int getRemainingFollowers() {
         return remainingFollowers;
     }
+
+    public void addToScore(int scoreToAdd) {
+        score += scoreToAdd;
+    }
 }
