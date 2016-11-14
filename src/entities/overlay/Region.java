@@ -4,11 +4,13 @@ import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
+import game.scoring.DenScorer;
+import game.scoring.LakeScorer;
 import game.scoring.Scorer;
+import game.scoring.TrailScorer;
+import javafx.util.Pair;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -93,8 +95,21 @@ public class Region {
         return false;
     }
 
+    public Player getDominantPlayer() {
+
+    }
+
     public Terrain getTerrain() {
         return terrain;
+    }
+
+    public Scorer getScorer() {
+        switch (terrain) {
+            case DEN: return new DenScorer();
+            case TRAIL: return new TrailScorer();
+            case LAKE: return new LakeScorer();
+            case JUNGLE: return new LakeScorer();
+        }
     }
 }
 
