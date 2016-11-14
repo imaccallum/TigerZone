@@ -1,0 +1,1344 @@
+[33mcommit 9f16136e92b557a2011e6571fc9e2a9649949221[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Mon Nov 14 16:36:07 2016 -0500
+
+    Finished TileFactory and Tile Constructor
+
+[33mcommit 3c473a7e396fb2978a59afca3887a173dd66e9a8[m
+Merge: e9abb39 9807cbe
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Mon Nov 14 16:31:39 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Trevor
+
+[33mcommit 9807cbe3dd098c5faf51e8b85f40f401a64eefe8[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 14 16:11:29 2016 -0500
+
+    Added getDominantPlayers function
+
+[33mcommit 67d03da1fe8e4577a61798b50ec8de7dbdb934ce[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 14 15:22:20 2016 -0500
+
+    Updated jungle and trail scoring for new rule specifications
+
+[33mcommit d8b502a7fe77d817058825c3ba964f773469a678[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 14 13:48:36 2016 -0500
+
+    refactored scoring few new rules
+    
+    * Tile has booleans for unique animals
+    * Region has a list of unique tiles
+    * Scoring takes into account prey
+
+[33mcommit 9cce6cd7c3a219a1580b1436cfaa5ed64c23beb4[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 14 13:43:29 2016 -0500
+
+    Added PlayerNotifier, PlayerStatus, EndTurnStatus, etc
+
+[33mcommit ec90411159eed6f031f0bfa5bf72f913759d6aa6[m
+Merge: 9784aa5 514d4c1
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 14 13:37:59 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 9784aa550f02082e05993822eab98b323e6792c5[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 14 13:36:36 2016 -0500
+
+    Finalizing region merging
+
+[33mcommit 514d4c13aab38af01880666e6f310d7e5319d8e1[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 14 13:31:39 2016 -0500
+
+    Added function to return meeples after a score
+
+[33mcommit ee3788e880515de8de7ab20173ebf8a3fc0930bf[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 14 13:21:19 2016 -0500
+
+    Separated responsibilities into Board entity
+
+[33mcommit 943b458fa4af9771d369b18f0252eca743c36a3b[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 14 13:08:58 2016 -0500
+
+    Game manager place tile should be done
+
+[33mcommit 50aff70d3d19d6c0f3137d9c875269b42c8b02d8[m
+Merge: 25c44cb 42c6217
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 20:32:42 2016 -0500
+
+    Merge pull request #43 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 42c62170a3db0194b25bf0fdd77a0b39a2b8a99f[m
+Merge: 87720fc 25c44cb
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 20:32:24 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 87720fc0b4d994737a7fd19ecfd31a4643c24da5[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 20:32:08 2016 -0500
+
+    wrote a test removed player number
+
+[33mcommit 25c44cbe7d3155d1e61e05cd959259f10c657729[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 20:06:33 2016 -0500
+
+    Removed unused imports
+
+[33mcommit 28f8db64761a03c6c42a9c282323e5d1c6947fa9[m
+Merge: 096b3a5 d8c5f9d
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:59:51 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 096b3a52e12abfaad14fb0842588429ae90b5396[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:59:41 2016 -0500
+
+    Fixed ordinal issues
+
+[33mcommit a66a68823894d39a83f4f7dbfd0526016769c050[m
+Merge: ba9b33f d8c5f9d
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:59:03 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit d8c5f9d8c038f2a0f8d833cdbf87ae5e00fd9636[m
+Merge: d60b760 c647ba8
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:58:41 2016 -0500
+
+    Merge pull request #42 from imaccallum/Diego-Dev
+    
+    Diego dev
+
+[33mcommit c647ba88c2b23557472ddc6562a25e452aab2d33[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:57:57 2016 -0500
+
+    -Added Methods in the Factory A - H
+    -Fixed TileSection and Node
+
+[33mcommit 9affe1d98bd1e21af416a378722945105c03aadf[m
+Merge: f24e625 b24f68c
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:47:15 2016 -0500
+
+    Merge branch 'Diego-Dev' of https://github.com/imaccallum/TigerZone into Diego-Dev
+
+[33mcommit f24e625e42b3d4dcff29e4c235568b8b529957e0[m
+Merge: 54cf79d d60b760
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:46:53 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego-Dev
+
+[33mcommit b24f68cfcdaffc478d0f898e73dc414c3caba08b[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:44:15 2016 -0500
+
+    Added Methods in the Factory A - H
+
+[33mcommit ba9b33f63c09c06185af019ae1472e7acbef014a[m
+Merge: b457a9a d60b760
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:44:10 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit b457a9a8dd7ed0d26325cb1dc1eafc47b99c12b7[m
+Merge: 8edb365 4bdf03e
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:43:52 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit d60b760b13cffa434f9e1e341261716f2b41b47e[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:41:14 2016 -0500
+
+    fixed some changes
+
+[33mcommit 8edb365d8a54370f100097b7b70891edf16ed261[m
+Merge: 6e29158 683a0ee
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:35:59 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 4bdf03ea6f0fd13373c299e0c12e56baba01aeed[m
+Merge: 683a0ee 6e29158
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:35:39 2016 -0500
+
+    Merge pull request #41 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 6e291586ab052a02acd363ade9382c990d7bb27a[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:35:33 2016 -0500
+
+    fixed tile file
+
+[33mcommit 683a0ee75b05cea662eb32be3d5d8528d4bebf0f[m
+Merge: e473798 2f8f80a
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:34:07 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit e473798a91a417a047e7d4e02166a794cee34d28[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:33:57 2016 -0500
+
+    Added factory method to get scorer
+
+[33mcommit 8ebb5f485c29c446735bbbacbee330712cf9c331[m
+Merge: fa9fe83 2f8f80a
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:33:33 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 2f8f80a8728618fdf459be86da354480dca6779d[m
+Merge: 388b47f f9e4aa7
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:33:17 2016 -0500
+
+    Merge pull request #40 from imaccallum/nikhil-dev
+    
+    Nikhil dev
+
+[33mcommit f9e4aa77a4f46a57a707afefdfcfc66b61a1815d[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:32:43 2016 -0500
+
+    added method for getCorner
+
+[33mcommit fa9fe834ec6a8a9d4571e2d516abbcfbc902edec[m
+Merge: 9f74ff2 388b47f
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:25:00 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 9fd798f1600406150d211362b20bc89806a89271[m
+Merge: b02528f 388b47f
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:24:12 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit 388b47f0ca6a115ab8d88a9ef8d3d6d16f09c652[m
+Merge: 2a2e6ed a0b9437
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:15:54 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 2a2e6edc62e334425f368344a96c9e670f9ac492[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:15:41 2016 -0500
+
+    Added logic to game manager for placing tiles
+
+[33mcommit 8e097800e856723dfee68b4b58ac6636bb0a392f[m
+Merge: bdaa0ff eca55da
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:13:57 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       src/entities/board/Node.java
+    #       src/entities/board/Tile.java
+    #       src/game/GameManager.java
+
+[33mcommit b02528fb1fbe2a5bc5c76b808bb30a5fd2a23368[m
+Merge: 50ccae0 a0b9437
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:10:01 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit a0b94372b831ad6ec5d290a2cf753f8ce4de3fbe[m
+Merge: eca55da 9f74ff2
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:09:33 2016 -0500
+
+    Merge pull request #39 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit bdaa0ff5b5fe04adbe8de96d4213180733cef0d4[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 19:09:17 2016 -0500
+
+    Added logic to game manager for placing tiles
+
+[33mcommit 9f74ff2516f68730e5c299d196775bbbcda19f4c[m
+Merge: f025f3f eca55da
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:04:36 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit f025f3fb49c525c0fcc00a22d1d18d4036e44c26[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 19:04:29 2016 -0500
+
+    worked on tests
+
+[33mcommit 54cf79d5f19cd4a712fc06a580191a536f93c1d5[m
+Merge: eb5b2b6 3f20a4c
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:03:58 2016 -0500
+
+    Merge branch 'Diego-Dev' of https://github.com/imaccallum/TigerZone into Diego-Dev
+
+[33mcommit eb5b2b6d03ff7747234d3463c542a0eb7c09f6a8[m
+Merge: 5aa3a17 eca55da
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 19:03:49 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego-Dev
+
+[33mcommit 3f20a4c3ea1c62e9cba5830730e83c938b142c6a[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 19:03:04 2016 -0500
+
+    added tile L
+
+[33mcommit eca55da78ea10340b7d6c392fbad736bbca210ee[m
+Merge: 149df63 5aa3a17
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Sun Nov 13 18:52:14 2016 -0500
+
+    Merge pull request #38 from imaccallum/Diego-Dev
+    
+    Diego dev
+
+[33mcommit 5aa3a17a84fbf4706a80ddd041fdb006a0d14e53[m
+Merge: 988f3c0 149df63
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 18:50:43 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego-Dev
+
+[33mcommit 988f3c01c68bea181a94ea54161dc4408da88942[m
+Merge: bcd213e 00ed0f6
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 18:50:23 2016 -0500
+
+    Merge conflicts
+
+[33mcommit bcd213e851481efff7ff17c200a25a80b40c7497[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 18:45:45 2016 -0500
+
+    Added Methods in the Factory
+
+[33mcommit 149df63bb031caa52b0e455337ab13b5ebe27528[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:43:52 2016 -0500
+
+    exception handling
+
+[33mcommit 00ed0f606e109745ae61e5f3977908d2ab121bd8[m
+Merge: 8ee06bf 50ccae0
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:39:07 2016 -0500
+
+    Merge pull request #37 from imaccallum/nikhil-dev
+    
+    Nikhil dev
+
+[33mcommit 50ccae046f086f46ddcf7079c09dd2a865f96b35[m
+Merge: 9b92694 8ee06bf
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:38:23 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit 9b9269477ee240d832177838581af8fe11017375[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:38:16 2016 -0500
+
+    Added jungle scoring
+
+[33mcommit fe96263a8efde7ece29ac95f2015954e00afbda1[m
+Merge: 32ec1ed 1444a6d
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 18:20:55 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego-Dev
+    
+    # Conflicts:
+    #       src/game/GameManager.java
+
+[33mcommit 8ee06bf16b78cd894817ec8fa6730f9745772449[m
+Merge: 1444a6d 5e03310
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:20:21 2016 -0500
+
+    Merge pull request #35 from imaccallum/nikhil-dev
+    
+    Nikhil dev
+
+[33mcommit 5e0331068fa0de78e4824fdcc2f7b275ce1fe937[m
+Merge: 15585e2 1444a6d
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:19:48 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+    
+    # Conflicts:
+    #       src/entities/board/Tile.java
+
+[33mcommit 5fdf477a6e61d14dc38365e2c5ebd4564df37bf8[m
+Merge: 3a6631b 1444a6d
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 18:15:41 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 1444a6df938986a22af6ba42dbc2d6658e9ea963[m
+Merge: b0d2beb 3a6631b
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 18:14:07 2016 -0500
+
+    Merge pull request #34 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 3a6631beba9cc7b18e3cb705cdacbc28728bdb78[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 18:14:01 2016 -0500
+
+    this is how tiles should be
+
+[33mcommit e8cb5ac844e71077e9797334ba20c728239dc2e4[m
+Merge: 60e21a2 b0d2beb
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 18:09:31 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 15585e26ec9730591eadcd3eea820e6e081d0a47[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 18:09:22 2016 -0500
+
+    Added some exception handling and created lakescorer and tilescorer classes
+
+[33mcommit b0d2bebfdf56b4f68700aeb6b6abf535ee2046ac[m
+Merge: 5dca448 345f44e
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 18:04:30 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       src/entities/board/Tile.java
+
+[33mcommit 5dca4485ceb25dbf507f60b93fa5b78d0aea41ff[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 18:01:38 2016 -0500
+
+    Added enums for the corners and edges
+
+[33mcommit 32ec1eda213875a250118639e4a4f5bea542514f[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 17:53:00 2016 -0500
+
+    FIx
+
+[33mcommit 814a0991a5ceef04880f21738c365bfc05927f9e[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 17:49:13 2016 -0500
+
+    Once last time fixing git
+
+[33mcommit a2da8ce5eaca81eb5e49aa6fe4d1826e32e322c0[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 17:49:12 2016 -0500
+
+    Added scorer classes and built logic for den scorer and updated tile to allow for returning corner tiles
+
+[33mcommit 345f44ef531f09dd2285b997ee05f1358740f928[m
+Merge: 4459b2b 60e21a2
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:48:46 2016 -0500
+
+    Merge pull request #33 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 60e21a2115197c68bf380d086056210138fe1fef[m
+Merge: a575699 4459b2b
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:48:36 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit a575699d413a4886417aca7002bfc559924fa09a[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:48:28 2016 -0500
+
+    tile changed from using orientation to just rotating the array
+
+[33mcommit d7a024eed56d9014448f80335a54e33a5b5392f0[m
+Merge: 178a351 4459b2b
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 17:21:35 2016 -0500
+
+    Fizing git
+
+[33mcommit 4459b2bbba2a9a188ad3a6c2d52c9b3662f65c82[m
+Merge: c7528d6 93aea63
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 17:17:14 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit c7528d68eb75d27be755c75f614a24e7e6ebb149[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 17:16:41 2016 -0500
+
+    Added new game manager tile iteration system
+
+[33mcommit 6afc2b4022ae139d9d802ea0c87cee04d88e896e[m
+Merge: 534237e 93aea63
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 17:10:52 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit 178a3512c178f7d9fb5c341844f9151517cea2a4[m
+Merge: 8ad2fc1 e1bc480
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 17:10:40 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+    
+    # Conflicts:
+    #       src/entities/board/Node.java
+    #       src/game/GameManager.java
+
+[33mcommit 93aea639a2c66180f7714ddb7397af6470cb8804[m
+Merge: 483f0d2 b9d0dca
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 17:09:19 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       src/entities/board/Tile.java
+
+[33mcommit 483f0d2cac308e09c2f311fca8b467ddf91e470d[m
+Merge: e1bc480 8ad2fc1
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 17:08:42 2016 -0500
+
+    merged dat shit
+
+[33mcommit b9d0dcafe32a54273f510848dcc45196f460e87b[m
+Merge: e1bc480 6347f07
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:07:04 2016 -0500
+
+    Merge pull request #31 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 6347f076753576f8c63ee9a1020d80ee30752144[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:06:57 2016 -0500
+
+    added functions for tile adding
+
+[33mcommit 12b069dc036c0738da83a3812498694e08ff972f[m
+Merge: e7ec9eb e1bc480
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 17:04:29 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit e1bc480eefdd662eb89773686d05e274bcd9c2ea[m
+Merge: f47e3af f6a2ccd
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 17:04:13 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit f47e3af240a1013015653121c572d8529374dee8[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 17:03:48 2016 -0500
+
+    Working on GameManager
+
+[33mcommit 8ad2fc150449f5e7b18cdbb5d31f29555b3da0ab[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 16:59:07 2016 -0500
+
+    Changed Folder Structure
+
+[33mcommit f6a2ccdf9272c08bc367304523a24c2d45510bdd[m
+Merge: 11bdb9c e7ec9eb
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:48:37 2016 -0500
+
+    Merge pull request #29 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit e7ec9eb753bef8d133bc49c39b26d6a764a01d92[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:48:30 2016 -0500
+
+    removed tiger from node
+
+[33mcommit 1511cccf81a7bd591129962291d90e8c2d34784c[m
+Merge: 3b626e9 11bdb9c
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 16:45:37 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 534237e7638ecb4fd6529fcbb4c02300af58f26d[m
+Merge: 5a2a664 11bdb9c
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 16:45:19 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit 186eae0b78a6357e354e128e6479356c0bd55ede[m
+Merge: 20d91c3 11bdb9c
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:43:47 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 11bdb9c2973f5f6d9efd58b48ac96c84a9d2802f[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 16:43:34 2016 -0500
+
+    Fixed node
+
+[33mcommit 3b626e940d9bd1d1e377697466a86c999214689e[m
+Merge: ee49b61 d3b172f
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 16:40:09 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 20d91c3d4994bec53964bd89c002e7db71ef85e8[m
+Merge: ecfd990 d3b172f
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:40:04 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit d3b172f23645ff534ad0945614e6adfcd1f9fb8e[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 16:39:52 2016 -0500
+
+    Update Tile.java
+
+[33mcommit 7d144fcfd62c0811b18b3b0949bbbefdca427ed7[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 16:38:56 2016 -0500
+
+    Update Node.java
+
+[33mcommit 87d2700c5666db6c77413260db4f21016ff145a0[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 16:38:23 2016 -0500
+
+    Update Node.java
+
+[33mcommit ef621c4c817ea3a754e72e9d317873f2a5a60c65[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 16:37:22 2016 -0500
+
+    Update Node.java
+
+[33mcommit ecfd9907f9efb5bd0db232cb616062ca10e1d56c[m
+Merge: 8c1de08 c027f30
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:36:00 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit c027f30da146d700a7fd3a98d6dd702a5c5457da[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 16:31:42 2016 -0500
+
+    Added connection mechanisms and feshed out Region a bit
+
+[33mcommit 8c1de087eef753b2a9eb5cad22903d049e94c454[m
+Merge: aeffcfc 50472a7
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 16:13:56 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit ee49b61b7839216a49dbbd899db5addb616a8c02[m
+Merge: 5675b40 50472a7
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 16:09:14 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 50472a722de55d5355535990ca7508b1d7482acb[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 16:02:50 2016 -0500
+
+    Added isConnected
+
+[33mcommit d19bae97378efde8d3bb414b2889074be0a66f37[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:44:59 2016 -0500
+
+    Fixing issues with TileSection
+
+[33mcommit 6905241aa379af8e874e2dab4dd4ca79e038b4aa[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 15:39:35 2016 -0500
+
+    Update TileSection.java
+
+[33mcommit 4d0a3f5e2504707d0b382fe35897fd7d37e2bf9a[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:34:08 2016 -0500
+
+    Fleshing out Tile more
+
+[33mcommit aeffcfc6173061f3a87696a70474d566e31b9fcd[m
+Merge: 7a01340 d3fd9ca
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 15:20:54 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit d3fd9ca4e047a1b8d6d8617bf58b44bb519348a2[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:20:28 2016 -0500
+
+    Adding Tile Section
+
+[33mcommit 881ac1a75474ea9fcbbc99c858ca374bb2788e6b[m
+Merge: 06620bb 214a01e
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:18:56 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 06620bbe06160f3c94b12893e498dddc38af92e2[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:18:17 2016 -0500
+
+    Changed to Enum
+
+[33mcommit 214a01e8bc6aa5142b38d727fbefccb98ce4dfa5[m
+Merge: cf3df2d 7a01340
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 15:18:00 2016 -0500
+
+    Merge pull request #28 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 7a013409335ec6a9ad83a90025b61f9f493e0671[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 15:17:53 2016 -0500
+
+    tile updated
+
+[33mcommit 41e767c05e36439ce537e6842ad9a9111039e928[m
+Merge: db29cd8 cf3df2d
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 15:17:22 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+    
+    # Conflicts:
+    #       src/entities/board/Tile.java
+
+[33mcommit cf3df2d2a02e9ad480075e7ffb994a7bb0ae5421[m
+Merge: 67e49ac f38d83b
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:01:55 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 67e49acfb1e9aec8a4422d11ee91a3d599265ab5[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 13 15:01:36 2016 -0500
+
+    Changed node to Enum
+
+[33mcommit 5a2a664d45439dd9d9309d0968021ce815b0a9eb[m
+Merge: f9b6d2c e9abb39
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Sun Nov 13 14:59:37 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit f38d83b188f9271829a58ab8627bdea0aadfb638[m
+Merge: 2807bdd caef8fa
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Sun Nov 13 14:57:34 2016 -0500
+
+    Merge pull request #27 from imaccallum/Diego
+    
+    Diego
+
+[33mcommit caef8fab47e61e4c0aaf969b521ef6e7f6d2f691[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 14:56:00 2016 -0500
+
+    Deans Changes to GameManager
+
+[33mcommit db29cd8459aa8d3900ad7bbe7fa3449980d890de[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Sun Nov 13 14:54:28 2016 -0500
+
+    minor change on tile
+
+[33mcommit 2807bdd089f488ac8dd1b8ebbf6f842b89137021[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 14:49:13 2016 -0500
+
+    Update TileFactory.java
+
+[33mcommit e126c556a44edf91c43e1f3caad890db6683d4cd[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 14:45:25 2016 -0500
+
+    Update TileFactory.java
+
+[33mcommit ace4e17946ea1b99c3813ed2104a56b5b5468a04[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 13 14:44:00 2016 -0500
+
+    Update TileFactory.java
+
+[33mcommit 864d1349ba765f28dca4b153458fc78d097efb55[m
+Merge: e9abb39 5675b40
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Sun Nov 13 14:10:53 2016 -0500
+
+    Merge pull request #25 from imaccallum/Diego
+    
+    Diego
+
+[33mcommit 5675b40ad4ec669e613f355cab7f23786824533b[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 14:08:32 2016 -0500
+
+    Switched back to Subclassing the Node
+
+[33mcommit 67ea270cc4aa5e9f7719a51ef6191d1affea2901[m
+Merge: a5b7741 e9abb39
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 13 13:32:56 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit e9abb3998b163e21c31cd78d64c79b07ef6d06b3[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Fri Nov 11 14:10:49 2016 -0500
+
+    Refactored node to composition instead of inheritance, added getters and setters to region
+
+[33mcommit bf6cf33e75d5f443f3d92815b1257c04c29b8745[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Fri Nov 11 13:44:47 2016 -0500
+
+    Removed Jungle contructor that wont work, cleaned up bad coding practices
+
+[33mcommit 22c8d84260dd7f1e7421c0f2afbf7cb10471d93b[m
+Merge: 9bc99f5 4462be4
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:34:41 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 4462be4099de4aebcd3ba792e356de6db6102638[m
+Merge: a8e7eb7 9bc99f5
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:34:31 2016 -0500
+
+    Merge pull request #24 from imaccallum/Ian's-branch
+    
+    more tile stuff
+
+[33mcommit a8e7eb72a4c947709c2f4b509f0f629c3477742e[m
+Merge: 73366e0 12c0923
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Thu Nov 10 16:34:19 2016 -0500
+
+    Merge pull request #23 from imaccallum/Diego
+    
+    Diego
+
+[33mcommit 9bc99f553d0ae2ef980341b86fc93b678778b896[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:34:17 2016 -0500
+
+    more tile stuff
+
+[33mcommit 73366e0d88e80835eb467b779bf52a5bb3f52d5e[m
+Merge: 6b3af7f 18e973f
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Thu Nov 10 16:34:09 2016 -0500
+
+    Merge pull request #22 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 12c0923fe57a51c77afa63c8435752f202e72241[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 16:32:06 2016 -0500
+
+    Renamed Jungle and Trail
+    Changed Node and Region Class
+
+[33mcommit 8532210148e31d03bb31b4463845cc35dd88f05c[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 16:27:36 2016 -0500
+
+    Renamed Jungle and Trail
+    Changed Node and Region Class
+
+[33mcommit 18e973fa7d57833a6ee426bb5fdb61c5d3147927[m
+Merge: 28af8a2 6b3af7f
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:18:31 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+    
+    # Conflicts:
+    #       src/entities/board/Farm.java
+    #       src/entities/board/Tile.java
+
+[33mcommit 28af8a26a15d4651ba062333739a24289f6f26a2[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:16:16 2016 -0500
+
+    work
+
+[33mcommit b278430b988549dccbc33278b9f781d141294f91[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:11:21 2016 -0500
+
+    tile updated
+
+[33mcommit a5b7741e771a4147b75ad44ea91bf3475c7f29f0[m
+Merge: 9a62fb6 6b3af7f
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 16:09:30 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 3e56c693c6a559a5950551543b253ad415f8e080[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:06:17 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+    
+    # Conflicts:
+    #       src/entities/board/Farm.java
+    #       src/entities/board/Tile.java
+
+[33mcommit 5f58e6922d3257df844bb7f14f6b5b11fffdb95e[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:02:13 2016 -0500
+
+    updated tile
+
+[33mcommit 6b3af7fc3959fd7d3fa06eaa0648b830f3dca5ff[m
+Merge: 2d78883 2c59152
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 16:01:28 2016 -0500
+
+    Merge pull request #20 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 2d78883ce6905ee7491a80d651d553f137e8509e[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Thu Nov 10 16:00:41 2016 -0500
+
+    more refactoring
+
+[33mcommit e5eacac3b78cbe0f02d430dfe34719261815141b[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Thu Nov 10 15:48:03 2016 -0500
+
+    added subclasses for node and moved some code around
+
+[33mcommit d214cd94e7ca43e22af349dee877095941752438[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Thu Nov 10 15:42:50 2016 -0500
+
+    Update Tile.java
+
+[33mcommit 77ff1eb5b8486c683ddf52c4458c30cdbd730b93[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Thu Nov 10 15:42:30 2016 -0500
+
+    Update Tile.java
+
+[33mcommit 9a62fb60916145fddf8dbeb2b8a39c92120b1feb[m
+Merge: 9131156 3e49db8
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 15:41:13 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 2c591521d0508fd2549e7edcf5c0143ac06a460e[m
+Merge: d927621 3e49db8
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:40:23 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 3e49db8214afc2d70c3c5b8f795514a3e08300bd[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Thu Nov 10 15:40:01 2016 -0500
+
+    Refactored code within src
+
+[33mcommit d927621ecfc779b2bbd2c65595b5592bbaaf6cea[m
+Merge: 8232493 055c2a9
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:30:36 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 91311562ec8cdfdc492ceedaa2c85adaca656080[m
+Merge: d944019 055c2a9
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 15:28:56 2016 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/master' into Diego
+
+[33mcommit 055c2a9fc21dc68396b927763f5b4e5a6b86cba2[m
+Merge: 26d56e8 d944019
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Thu Nov 10 15:27:40 2016 -0500
+
+    Merge pull request #19 from imaccallum/Diego
+    
+    Diego
+
+[33mcommit 82324939d0aa499e9253c3b9e5e1ef6537d1bb5f[m
+Merge: a63ceb8 26d56e8
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:27:29 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit d94401984292f31f55dc3060fbf9a79bd73f7738[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Thu Nov 10 15:22:59 2016 -0500
+
+    Changed Node Class
+
+[33mcommit 26d56e858f089dcc561b6c6f8e7827d7577b47ff[m
+Merge: b73f143 a63ceb8
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:22:18 2016 -0500
+
+    Merge pull request #18 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit a63ceb8f5fa1cffb6f0265e82157b4a61c93ecd7[m
+Merge: eb9cf8c b73f143
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:21:59 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit eb9cf8c66bcba9778cfabe1a8def32ea24bd84b8[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 15:21:46 2016 -0500
+
+    added tile functions
+
+[33mcommit f9b6d2cada24f6a7e6818bc2670489bc4aec022c[m
+Merge: 36cf3e5 0eb39c8
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Thu Nov 10 15:06:50 2016 -0500
+
+    Merge branch 'master' into nikhil-dev
+
+[33mcommit b73f143d655b841b78beb39c523a469458eebd3e[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Thu Nov 10 15:05:22 2016 -0500
+
+    Add files via upload
+
+[33mcommit 2ffbc9f4b58131955c64a96dc8275fcb17966540[m
+Merge: 0a5b9ca 0eb39c8
+Author: Diego Abizaid <daar95@gmail.com>
+Date:   Thu Nov 10 14:05:10 2016 -0500
+
+    Merge pull request #17 from imaccallum/master
+    
+    Get Master Files
+
+[33mcommit f08e51fbb452fb37314e23e260642f64f9057da2[m
+Merge: 689cfec 0eb39c8
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 13:56:52 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 0eb39c8e77d62d631308701d1e7928469a017439[m
+Merge: 79897f5 689cfec
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 13:52:46 2016 -0500
+
+    Merge pull request #16 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 689cfec89df213edb9dd9841592f691193a9fca5[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 13:52:30 2016 -0500
+
+    made game port class
+
+[33mcommit 9017bc57f738b9d457452823c590923ee7e6f44c[m
+Merge: 87972d8 79897f5
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 12:31:10 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 79897f5a7a0bccf31965cccf55015b9e77268162[m
+Author: Dean Schaefer <soccerace99@gmail.com>
+Date:   Thu Nov 10 12:28:10 2016 -0500
+
+    Pushing new implementation
+
+[33mcommit ab4fa8908200de65dcc57d96b069742cbe1c3a45[m
+Author: Dean Schaefer <soccerace99@gmail.com>
+Date:   Thu Nov 10 11:30:05 2016 -0500
+
+    Added git quick reference
+
+[33mcommit b1ef64e2c411e0b6a8dc0c7f096b9679105e309b[m
+Author: Dean Schaefer <Dean Schaefer>
+Date:   Wed Nov 9 23:55:58 2016 -0500
+
+    Implemented base classes for my board design
+
+[33mcommit 87972d88055ad4bbe5a404b11d61030ceea2718a[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 12:26:16 2016 -0500
+
+    basic factory functionality
+
+[33mcommit 59865462c80655f59252ee8a7ce18ad404b3d3ca[m
+Merge: 6b6a22f 0a5b9ca
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 12:25:56 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 0a5b9ca31c56f4811e205ed579ee96e2aa8bd845[m
+Merge: 5f4c18d 8737319
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 11:44:01 2016 -0500
+
+    Merge pull request #15 from imaccallum/Ian's-branch
+    
+    Ian's branch
+
+[33mcommit 6b6a22fd0b978016280e532bd913455c67cca19a[m
+Merge: 8737319 5f4c18d
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 11:41:03 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 873731978c56a82eef9826699e0dc38ff14571d9[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Thu Nov 10 11:40:52 2016 -0500
+
+    created tile factory
+
+[33mcommit 5f4c18d8b8f9e0d3f02120ec4f247b8885c81f68[m
+Author: Dean Schaefer <Dean Schaefer>
+Date:   Wed Nov 9 23:50:23 2016 -0500
+
+    Added PDFs of Use-Case diagrams
+
+[33mcommit 82f0a62d4e0733f4b9ad6ec8b02bc76b74eaff4e[m
+Author: Dean Schaefer <Dean Schaefer>
+Date:   Wed Nov 9 23:46:32 2016 -0500
+
+    Uploaded use case diagrams
+
+[33mcommit 4f57d7a0039ffebee7a5719e80cb620e789e0250[m
+Merge: 8ee3ee4 36cf3e5
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Tue Nov 8 09:39:10 2016 -0500
+
+    Merge pull request #14 from imaccallum/nikhil-dev
+    
+    Nikhil dev
+
+[33mcommit 36cf3e5d2b90d152f85cfa88e622feb587743e5a[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Tue Nov 8 09:24:23 2016 -0500
+
+    Added tile coordinate, game controller, and edited some other classes
+
+[33mcommit 9d3c13af9873d940f5044e1715fd538fcf31688b[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Tue Nov 8 08:26:14 2016 -0500
+
+    Created player class and fixed some compilation errors
+
+[33mcommit f200ba218004fc415890bcb4dedb8c7ca5052bae[m
+Merge: abbfebb 8ee3ee4
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Mon Nov 7 23:37:01 2016 -0500
+
+    Merge branch 'master' into Ian's-branch
+
+[33mcommit 8ee3ee4129a6dd306239a93f7c53a43e02afe578[m
+Merge: 9095dd3 6d24932
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 7 23:04:44 2016 -0500
+
+    Merge pull request #13 from imaccallum/nikhil-dev
+    
+    Nikhil dev
+
+[33mcommit 6d249327a42a2a875eed1f06667bc9d1112b5ed8[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 7 23:03:28 2016 -0500
+
+    Region stuff
+
+[33mcommit 90e4b3ad42c29664c562f99ec6a3f731637ac368[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 7 22:52:19 2016 -0500
+
+    added region stuff and cleaned repo
+
+[33mcommit 9095dd36d4fc722ded475efe1e5e37757718dba1[m
+Merge: f4e7b78 78995a4
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Mon Nov 7 20:18:40 2016 -0500
+
+    Merge pull request #12 from imaccallum/robau_branch
+    
+    Added the Tile, TileSection, TerrainType, Follower, and Region classes
+
+[33mcommit 78995a4c16ad897e23074909e90e060d59993201[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 7 15:18:39 2016 -0500
+
+    Added the Tile, TileSection, TerrainType, Follower, and Region classes
+
+[33mcommit f4e7b78f6f7e1b77a79dd11765155f676090a5b4[m
+Merge: a6dc1e8 abbfebb
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 7 12:47:21 2016 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit a6dc1e8b41aab1ca60453805e38d1634b6ffb0c2[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Mon Nov 7 12:41:54 2016 -0500
+
+    Edited UML
+
+[33mcommit abbfebbf2c6b9a8d743be97f36348915fe367010[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 6 23:35:05 2016 -0500
+
+    Add files via upload
+
+[33mcommit 30b7386f23730d7a5889f80f57f77e67fc908bdf[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 6 23:34:06 2016 -0500
+
+    Add files via upload
+
+[33mcommit 696b07f3ecadcdad4f78b75ee58bdbcaed3d7368[m
+Author: trevorfortner <trevorfortner1@gmail.com>
+Date:   Sun Nov 6 23:26:57 2016 -0500
+
+    Add files via upload
+
+[33mcommit 2217a4fd9c31a6629545f7be23ff58c040e259a3[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Sun Nov 6 23:19:53 2016 -0500
+
+    Created General Activity Diagram
+
+[33mcommit 46d66fa5ddbfbff657bc6e81614ed5f7dcbcf041[m
+Author: Alexander Robau <aerobau@gmail.com>
+Date:   Sun Nov 6 11:59:49 2016 -0500
+
+    Added UML
+
+[33mcommit ddb77bb94e07be902c4291c495746c455249521d[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Fri Nov 4 14:17:27 2016 -0400
+
+    add umlet
+
+[33mcommit 41561c610e566332d051dfd5f08537543c930568[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Fri Nov 4 13:48:06 2016 -0400
+
+    added design folder with usecases and DCI
+
+[33mcommit 68e04b52f58c0403a8ff789f5d36c607ec29959f[m
+Author: Nikhil Thota <nt92@ufl.edu>
+Date:   Fri Nov 4 13:01:45 2016 -0400
+
+    added resources and use cases
+
+[33mcommit 66db2c171b72e6074c274a1bdc078a3be6b1f9a9[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Fri Nov 4 12:49:13 2016 -0400
+
+    Project Structure
+
+[33mcommit ca49ff0e4fd2172ab8a6880dd07030fc5fab8744[m
+Author: dabizaid <daar95@gmail.com>
+Date:   Fri Nov 4 12:45:17 2016 -0400
+
+    Project Structure
+
+[33mcommit d9739393f8290bb8570eb5bb138b3f7dda21b53b[m
+Author: Ian MacCallum <imaccallum@ufl.edu>
+Date:   Mon Oct 31 13:19:55 2016 -0400
+
+    Initial commit
