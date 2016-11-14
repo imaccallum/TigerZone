@@ -7,7 +7,7 @@ public class Player {
 
     public Player(String name){
         this.name = name;
-        remainingTigers = 6;
+        remainingTigers = 7;
         score = 0;
     }
 
