@@ -70,7 +70,7 @@ public class GameManager {
         }
     }
 
-    private Tile getTile(Point point) {
+    private Tile getTile(Point point) throws BadPlacementException {
         Tile currentTile = center;
         int x = point.x;
         int y = point.y;
@@ -179,7 +179,7 @@ public class GameManager {
             second.getTileSection().getRegion().addTileSection(first.getTileSection());
         }
         else {
-            Region newRegion = new Region();
+            Region newRegion = new Region(first.getTerrain());
             newRegion.addTileSection(first.getTileSection());
             newRegion.addTileSection(second.getTileSection());
             regions.add(newRegion);
