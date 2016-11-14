@@ -1,6 +1,5 @@
 package entities.overlay;
 
-import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
@@ -8,7 +7,6 @@ import game.scoring.DenScorer;
 import game.scoring.LakeScorer;
 import game.scoring.Scorer;
 import game.scoring.TrailScorer;
-import javafx.util.Pair;
 
 import java.util.*;
 
@@ -20,7 +18,6 @@ public class Region {
     private List<TileSection> tileSections;
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
-    private Scorer scorer;
     private Terrain terrain;
 
     public Region(Terrain terrain){
@@ -38,13 +35,6 @@ public class Region {
 
     public boolean containsTileSection(TileSection section){
         return tileSections.contains(section);
-    }
-
-    public int calculatePointValue(){
-        if(isFinished()){
-            //Do calculations
-        }
-        return 0;
     }
 
     public List<Region> getAdjacentRegions(){
@@ -96,7 +86,7 @@ public class Region {
     }
 
     public Player getDominantPlayer() {
-        return null;
+        return null;  // TODO create function
     }
 
     public Terrain getTerrain() {

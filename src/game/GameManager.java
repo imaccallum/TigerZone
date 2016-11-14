@@ -1,9 +1,6 @@
 package game;
 
-import entities.board.Node;
-import entities.board.CornerLocation;
-import entities.board.EdgeLocation;
-import entities.board.Tile;
+import entities.board.*;
 import entities.overlay.Region;
 import entities.player.Player;
 
@@ -107,8 +104,8 @@ public class GameManager {
                 }
             }
 
-            if (!iterated) {
-                throw new BadPlacementException("Index given is out of bounds");
+            if (currentTile == null) {
+                return null;
             }
         }
         return currentTile;
@@ -135,13 +132,15 @@ public class GameManager {
         Node rightEdge = leftTile.getEdge(EdgeLocation.RIGHT);
         attemptNodeConnection(leftEdge, rightEdge);
 
-        Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
-        Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
-        attemptNodeConnection(topLeftCorner, topRightCorner);
+        if (leftEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
+            Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
+            Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
+            attemptNodeConnection(topLeftCorner, topRightCorner);
 
-        Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
-        Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
-        attemptNodeConnection(bottomLeftCorner, bottomRightCorner);
+            Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
+            Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
+            attemptNodeConnection(bottomLeftCorner, bottomRightCorner);
+        }
     }
 
     private void attemptVerticalConnection(Tile bottomTile, Tile topTile) throws BadPlacementException {
@@ -149,13 +148,15 @@ public class GameManager {
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
         attemptNodeConnection(topEdge, bottomEdge);
 
-        Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
-        Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
-        attemptNodeConnection(topRightCorner, bottomRightCorner);
+        if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
+            Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
+            Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
+            attemptNodeConnection(topRightCorner, bottomRightCorner);
 
-        Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
-        Node topleftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
-        attemptNodeConnection(topleftCorner, bottomLeftCorner);
+            Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
+            Node topleftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
+            attemptNodeConnection(topleftCorner, bottomLeftCorner);
+        }
     }
 
     private void attemptNodeConnection(Node first, Node second) throws BadPlacementException {
