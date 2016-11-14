@@ -1,27 +1,38 @@
 package entities.board;
 
 import entities.board.Node;
+import entities.overlay.TileSection;
 import game.BadPlacementException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Tile {
 
     //			Edge[0]
-    //		Corner[3]	Corner[0]
+    //		Corner[0]	Corner[1]
     //	Edge[3]		Center		Edge[1]
-    //		Corner[2]	Corner[1]
+    //		Corner[3]	Corner[2]
     //			Edge[2]
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private boolean hasPenant;
-
+    private boolean hasDeer;
+    private boolean hasBuffalo;
+    private boolean hasBoar;
+    private List<TileSection> tileSections;
 
     public Tile() {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
         adjacentTiles = new Tile[COUNT];
+        tileSections = new ArrayList<>();
+        hasDeer = false;
+        hasBoar = false;
+        hasBuffalo = false;
     }
 
     public Tile[] getAdjacentTiles() {
@@ -111,11 +122,35 @@ public class Tile {
         return (i + 2) % COUNT;
     }
 
-    public boolean hasPenant() {
-        return hasPenant;
-    }
-
     public void setCenter(Node center) {
         this.center = center;
+    }
+
+    public void addTileSections(TileSection... sections){
+        tileSections.addAll(Arrays.asList(sections));
+    }
+
+    public boolean hasDeer() {
+        return hasDeer;
+    }
+
+    public boolean hasBuffalo() {
+        return hasBuffalo;
+    }
+
+    public boolean hasBoar() {
+        return hasBoar;
+    }
+
+    public void setHasDeer(boolean hasDeer) {
+        this.hasDeer = hasDeer;
+    }
+
+    public void setHasBuffalo(boolean hasBuffalo) {
+        this.hasBuffalo = hasBuffalo;
+    }
+
+    public void setHasBoar(boolean hasBoar) {
+        this.hasBoar = hasBoar;
     }
 }
