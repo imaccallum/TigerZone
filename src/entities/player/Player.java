@@ -7,7 +7,7 @@ public class Player {
 
     public Player(String name){
         this.name = name;
-        remainingFollowers = 6;
+        remainingFollowers = 7;
         score = 0;
     }
 
@@ -21,6 +21,10 @@ public class Player {
 
     public int getRemainingFollowers() {
         return remainingFollowers;
+    }
+
+    public void incrementRemainingFollowers(){
+        remainingFollowers++;
     }
 
     public void addToScore(int scoreToAdd) {

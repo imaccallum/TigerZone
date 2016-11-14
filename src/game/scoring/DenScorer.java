@@ -7,6 +7,7 @@ public class DenScorer extends Scorer {
     @Override
     public int score(Region region) {
         // If there's a completed den, return a full 9 points
+        super.returnMeeples(region);
         return 9;
     }
 
