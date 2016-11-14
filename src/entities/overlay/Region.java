@@ -97,8 +97,22 @@ public class Region {
         return !tigers.isEmpty();
     }
 
-    public Player getDominantPlayer() {
-        return null;  // TODO create function
+    public List<Player> getDominantPlayers() {
+        List<Player> dominantList = new ArrayList<>();
+        HashMap<Player, Integer> tigerCount = new HashMap<>();
+        for(Tiger t : tigers){
+            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
+            tigerCount.put(t.getOwningPlayer(), count);
+        }
+
+        int max = Collections.max(tigerCount.values());
+
+        for(Player p : tigerCount.keySet()){
+            if(tigerCount.get(p) == max)
+                dominantList.add(p);
+        }
+
+        return dominantList;
     }
 
     public Terrain getTerrain() {
