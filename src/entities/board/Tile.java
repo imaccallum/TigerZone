@@ -1,12 +1,7 @@
 package entities.board;
 
 import entities.board.Node;
-import entities.overlay.TileSection;
 import game.BadPlacementException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Tile {
 
@@ -20,15 +15,13 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private List<TileSection> tileSections;
-
     private boolean hasPenant;
+
 
     public Tile() {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
         adjacentTiles = new Tile[COUNT];
-        tileSections = new ArrayList<>();
     }
 
     public Tile[] getAdjacentTiles() {
@@ -38,50 +31,33 @@ public class Tile {
     public Tile[] getCornerTiles() {
         Tile[] cornerTiles = new Tile[4];
 
-        if(adjacentTiles[0] != null){
+        if (adjacentTiles[0] != null) {
             cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
             cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
         }
 
-        if(adjacentTiles[1] != null){
+        if (adjacentTiles[1] != null) {
             cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
             cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
         }
 
-        if(adjacentTiles[2] != null){
+        if (adjacentTiles[2] != null) {
             cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
             cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
         }
-
-        if(adjacentTiles[3] != null){
-            cornerTiles[3] = adjacentTiles[3].getAdjacentTiles()[2];
-            cornerTiles[0] = adjacentTiles[3].getAdjacentTiles()[0];
-        }
-
         return cornerTiles;
     }
 
-    public boolean hasTerrain(Terrain terrain){
-        for(Node n : edges){
-            if(n.getTileSection().getTerrain() == terrain)
-                return true;
-        }
-        for(Node n : corners){
-            if(n.getTileSection().getTerrain() == terrain)
-                return true;
-        }
-
-        return false;
+    public Tile getTile(int index) {
+        return adjacentTiles[index];
     }
 
-    public Tile getTile(int index) { return adjacentTiles[index]; }
-
-    public Node getCorner(int index) {
-        return corners[index];
+    public Node getCorner(CornerLocation index) {
+        return corners[index.ordinal()];
     }
 
-    public Node getEdge(int index) {
-        return edges[index];
+    public Node getEdge(EdgeLocation index) {
+        return edges[index.ordinal()];
     }
 
     public Node getCenter(int index) {
@@ -98,22 +74,17 @@ public class Tile {
             tempEdges[index] = edges[i];
             tempCorners[index] = corners[i];
         }
-
         edges = tempEdges;
         corners = tempCorners;
     }
 
-    private void setTile(Tile t, int index) throws BadPlacementException {
-        if (index < 0 || index >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[index] = t;
+    private void setTile(Tile t, int i) throws BadPlacementException {
+        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
+        adjacentTiles[i] = t;
     }
 
     public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
-    }
-
-    public void setRightTile(Tile t) throws BadPlacementException {
-        setTile(t, 1);
     }
 
     public void setBottomTile(Tile t) throws BadPlacementException {
@@ -124,19 +95,27 @@ public class Tile {
         setTile(t, 3);
     }
 
+    public void setRightTile(Tile t) throws BadPlacementException {
+        setTile(t, 1);
+    }
+
     public void setEdge(Node node, int i){
         edges[i] = node;
     }
-
+    
     public void setCorner(Node node, int i){
         corners[i] = node;
     }
 
-    public void setCenter(Node node){
-        center = node;
+    private int inverse(int i) {
+        return (i + 2) % COUNT;
     }
 
-    public void addTileSections(TileSection... sections){
-        tileSections.addAll(Arrays.asList(sections));
+    public boolean hasPenant() {
+        return hasPenant;
+    }
+
+    public void setCenter(Node center) {
+        this.center = center;
     }
 }
