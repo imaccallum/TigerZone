@@ -15,7 +15,6 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private int orientation; // 0 = 0, 1 = 90, 2 = 180, 3 = 270 degrees]
 
 
     public Tile() {
@@ -46,22 +45,20 @@ public class Tile {
             cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
         }
 
-    public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
+    public Tile getTile(int index) {
+        return adjacentTiles[index];
+    }
 
     public Node getCorner(CornerLocation index) {
-        return corners[adjustedIndex(index.ordinal())];
+        return corners[index.ordinal()];
     }
 
     public Node getEdge(EdgeLocation index) {
-        return edges[adjustedIndex(index.ordinal())];
+        return edges[index.ordinal()];
     }
 
     public Node getCenter(int index) {
         return center;
-    }
-
-    public void setOrientation(int orientation) {
-        this.orientation = orientation % COUNT;
     }
 
     public void rotateClockwise(int numberOfRotations) {
@@ -80,8 +77,7 @@ public class Tile {
 
     private void setTile(Tile t, int i) throws BadPlacementException {
         if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[adjustedIndex(i)] = t;
-        t.getAdjacentTiles()[inverse(i)] = this;
+        adjacentTiles[i] = t;
     }
 
     public void setTopTile(Tile t) throws BadPlacementException {
@@ -106,11 +102,6 @@ public class Tile {
     
     public void setcorner(Node node, int i){
         corners[i] = node;
-    }
-
-    // Helpers
-    private int adjustedIndex(int i) {
-        return (i + orientation) % COUNT;
     }
 
     private int inverse(int i) {
