@@ -107,6 +107,7 @@ public class GameManager {
                 }
             }
         }
+        return currentTile;
     }
 
     private Tile iterateUp(Tile current) {
