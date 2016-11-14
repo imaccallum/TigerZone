@@ -61,7 +61,6 @@ public class Region {
             }
             this.addTileSection(tileSection);
         }
-        region = null;
     }
 
     public boolean isFinished() {
@@ -83,6 +82,10 @@ public class Region {
             }
         }
         return false;
+    }
+
+    public boolean hasTigers() {
+        return !tigers.isEmpty();
     }
 
     public Player getDominantPlayer() {

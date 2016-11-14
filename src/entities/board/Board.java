@@ -11,12 +11,15 @@ public class Board {
     private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
     private Tile center;					// The map of tiles
     private List<Point> openTiles;		    // A list of all current open tile positions
-    private List<Region> regions;
+    private Map<UUID, Region> regions;
+    private List<Tiger> tigers;
 
     public Board(Stack<Tile> stack) {
         tileStack = stack;
         center = tileStack.pop();
         openTiles = new ArrayList<>();
+        regions = new HashMap<>();
+        tigers = new ArrayList<>();
     }
 
     public void insert(Tile tile, int x, int y) throws BadPlacementException {
@@ -44,6 +47,15 @@ public class Board {
             attemptVerticalConnection(bottomTile, tile);
             bottomTile.setTopTile(tile);
         }
+    }
+
+    public void placeTiger(UUID regionId, Tiger tiger) throws BadPlacementException {
+        Region region = regions.get(regionId);
+        if (region.hasTigers()) {
+            throw new BadPlacementException("Tried to place a tiger on a region that already has one.");
+        }
+        region.addTiger(tiger);
+        tigers.add(tiger);
     }
 
     private Tile getTile(Point point) {
@@ -156,7 +168,7 @@ public class Board {
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
             first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
-            regions.remove(second.getTileSection().getRegion());
+            regions.remove(second.getTileSection().getRegion().getRegionId());
         }
         else if (first.getTileSection().getRegion() != null) {
             first.getTileSection().getRegion().addTileSection(second.getTileSection());
@@ -168,7 +180,7 @@ public class Board {
             Region newRegion = new Region(first.getTerrain());
             newRegion.addTileSection(first.getTileSection());
             newRegion.addTileSection(second.getTileSection());
-            regions.add(newRegion);
+            regions.put(newRegion.getRegionId(), newRegion);
         }
     }
 }
