@@ -11,9 +11,9 @@ import java.util.List;
 public class Tile {
 
     //			Edge[0]
-    //		Corner[3]	Corner[0]
+    //		Corner[0]	Corner[1]
     //	Edge[3]		Center		Edge[1]
-    //		Corner[2]	Corner[1]
+    //		Corner[3]	Corner[2]
     //			Edge[2]
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;

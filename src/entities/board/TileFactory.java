@@ -44,14 +44,14 @@ public class TileFactory {
         // Create Nodes counterclockwise
         Node e_zero = new Node();
         Node e_one = new Node();
-        Node c_one = new Node();
-        Node e_two = new Node();
         Node c_two = new Node();
+        Node e_two = new Node();
+        Node c_three = new Node();
         Node e_three = new Node();
         Node center = new Node();
 
         // Add nodes to the respective Sections
-        jungle.addNodes(e_zero, e_one, c_one, c_two, e_three);
+        jungle.addNodes(e_zero, e_one, c_two, c_three, e_three);
         den.addNodes(center);
         trail.addNodes(e_two);
 
@@ -60,8 +60,10 @@ public class TileFactory {
         tile.setEdge(e_one, 1);
         tile.setEdge(e_two, 2);
         tile.setEdge(e_three, 3);
-        tile.setCorner(c_one, 1);
+
         tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
         tile.setCenter(center);
 
         // Add the sections to the tile
@@ -103,7 +105,6 @@ public class TileFactory {
         Node e_one = new Node();
         Node e_two = new Node();
         Node e_three = new Node();
-        Node center = new Node();
 
         lake.addNodes(e_zero, e_one, e_two, e_three);
 
@@ -111,7 +112,6 @@ public class TileFactory {
         tile.setEdge(e_one, 1);
         tile.setEdge(e_two, 2);
         tile.setEdge(e_three, 3);
-        tile.setCenter(center);
 
         tile.addTileSections(lake);
 
@@ -119,28 +119,145 @@ public class TileFactory {
     }
 
     private Tile makeTileD() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle.addNodes(c_zero, e_three, c_three);
+        trail.addNodes(e_zero, e_two);
+        jungle2.addNodes(c_one, c_two);
+        lake.addNodes(e_one);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle, trail, jungle2, lake);
+
+        return tile;
     }
 
     private Tile makeTileE() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+
+        jungle.addNodes(c_zero, e_three, e_two, e_one, c_one);
+        lake.addNodes(e_zero);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+
+        tile.addTileSections(jungle, lake);
+
+        return tile;
     }
 
     private Tile makeTileF() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle.addNodes(e_zero);
+        jungle2.addNodes(e_two);
+        lake.addNodes(e_one, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle, jungle2, lake);
+
+        return tile;
     }
 
     private Tile makeTileG() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle.addNodes(e_three);
+        jungle2.addNodes(e_one);
+        lake.addNodes(e_zero, e_two);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle, jungle2, lake);
+
+        return tile;
     }
 
     private Tile makeTileH() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection lake2 = new TileSection(Terrain.LAKE);
+
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle.addNodes(e_zero, e_two);
+        lake.addNodes(e_one);
+        lake2.addNodes(e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle, lake, lake2);
+
+        return tile;
     }
 
     private Tile makeTileI() {
