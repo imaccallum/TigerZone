@@ -28,6 +28,24 @@ public class Tile {
         return adjacentTiles;
     }
 
+    public Tile[] getCornerTiles() {
+        Tile[] cornerTiles = new Tile[4];
+
+        if(adjacentTiles[0] != null){
+            cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
+            cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
+        }
+
+        if(adjacentTiles[1] != null){
+            cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
+            cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
+        }
+
+        if(adjacentTiles[2] != null){
+            cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
+            cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
+        }
+
     public Tile getTile(int index) { return adjacentTiles[adjustedIndex(index)]; }
 
     public Node getCorner(CornerLocation index) {
