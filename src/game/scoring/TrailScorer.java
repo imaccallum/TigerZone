@@ -15,6 +15,9 @@ public class TrailScorer extends Scorer {
             score += 1;
         }
 
+        region.setTotalPrey();
+        score += region.getTotalPrey();
+
         super.returnMeeples(region);
 
         return score;
@@ -22,6 +25,17 @@ public class TrailScorer extends Scorer {
 
     @Override
     public int scoreAtEnd(Region region) {
-        return score(region);
+        List<TileSection> tileSections = region.getTileSections();
+        int score = 0;
+
+        for(TileSection ts : tileSections){
+            score += 1;
+        }
+
+        score += region.getTigerList().size();
+
+        super.returnMeeples(region);
+
+        return score;
     }
 }
