@@ -96,7 +96,7 @@ public class Region {
     }
 
     public Player getDominantPlayer() {
-
+        return null;
     }
 
     public Terrain getTerrain() {
@@ -110,6 +110,8 @@ public class Region {
             case LAKE: return new LakeScorer();
             case JUNGLE: return new LakeScorer();
         }
+
+        return null;
     }
 }
 
