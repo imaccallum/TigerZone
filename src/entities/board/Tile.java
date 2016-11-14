@@ -47,7 +47,17 @@ public class Tile {
     }
 
     public void rotateClockwise(int numberOfRotations) {
-        setOrientation((orientation + numberOfRotations) % COUNT);
+
+        Node[] tempEdges = new Node[COUNT];
+        Node[] tempCorners = new Node[COUNT];
+
+        for (int i = 0; i < COUNT; i++) {
+            int index = (i + numberOfRotations) % COUNT;
+            tempEdges[index] = edges[i];
+            tempCorners[index] = corners[i];
+        }
+        edges = tempEdges;
+        corners = tempCorners;
     }
 
     private void setTile(Tile t, int i) throws BadPlacementException {
@@ -56,19 +66,19 @@ public class Tile {
         t.getAdjacentTiles()[inverse(i)] = this;
     }
 
-    public void setTopTile(Tile t) {
+    public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
     }
 
-    public void setBottomTile(Tile t) {
+    public void setBottomTile(Tile t) throws BadPlacementException {
         setTile(t, 2);
     }
 
-    public void setLeftTile(Tile t) {
+    public void setLeftTile(Tile t) throws BadPlacementException {
         setTile(t, 3);
     }
 
-    public void setRightTile(Tile t) {
+    public void setRightTile(Tile t) throws BadPlacementException {
         setTile(t, 1);
     }
 
