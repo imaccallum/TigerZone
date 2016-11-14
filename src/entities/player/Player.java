@@ -2,24 +2,17 @@ package entities.player;
 
 public class Player {
     private String name;
-    private int playerNum;
     private int score;
     private int remainingFollowers;
 
-    public Player(String name, int playerNum){
+    public Player(String name){
         this.name = name;
-        this.playerNum = playerNum;
-        remainingFollowers = 6;
+        remainingFollowers = 7;
         score = 0;
     }
 
-
     public String getName() {
         return name;
-    }
-
-    public int getPlayerNum() {
-        return playerNum;
     }
 
     public int getScore() {
@@ -28,5 +21,13 @@ public class Player {
 
     public int getRemainingFollowers() {
         return remainingFollowers;
+    }
+
+    public void incrementRemainingFollowers(){
+        remainingFollowers++;
+    }
+
+    public void addToScore(int scoreToAdd) {
+        score += scoreToAdd;
     }
 }
