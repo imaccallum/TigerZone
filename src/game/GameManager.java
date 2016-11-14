@@ -6,6 +6,7 @@ import entities.board.CornerLocation;
 import entities.board.EdgeLocation;
 import entities.board.Node;
 import entities.board.Tile;
+import entities.overlay.Region;
 import entities.player.Player;
 
 import java.awt.Point;
