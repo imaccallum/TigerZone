@@ -8,10 +8,8 @@ public class Node {
     private TileSection tileSection;
     private Terrain terrain;
 
-    public Node(TileSection tileSection, Terrain terrain) {
+    public Node() {
         this.connectedNode = null;
-        this.tileSection = tileSection;
-        this.terrain = terrain;
     }
 
     public TileSection getTileSection() {
