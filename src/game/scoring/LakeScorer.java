@@ -11,13 +11,12 @@ public class LakeScorer extends Scorer {
         List<TileSection> tileSections = region.getTileSections();
         int score = 0;
 
-        region.setTotalPrey();
-        int multiplier = 1 + region.getTotalPrey();
+        region.setUniquePrey();
+        int multiplier = 1 + region.getUniquePrey();
 
         for(TileSection ts : tileSections){
             score += 2;
         }
-
         super.returnMeeples(region);
 
         return score * multiplier;
@@ -28,8 +27,8 @@ public class LakeScorer extends Scorer {
         List<TileSection> tileSections = region.getTileSections();
         int score = 0;
 
-        region.setTotalPrey();
-        int multiplier = 1 + region.getTotalPrey();
+        region.setUniquePrey();
+        int multiplier = 1 + region.getUniquePrey();
 
         for(TileSection ts : tileSections){
             score += 1;
