@@ -50,7 +50,7 @@ public class Tile {
         setOrientation((orientation + numberOfRotations) % COUNT);
     }
 
-    private void setTile(Tile t, int i) {
+    private void setTile(Tile t, int i) throws BadPlacementException {
         if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
         adjacentTiles[adjustedIndex(i)] = t;
         t.getAdjacentTiles()[inverse(i)] = this;
