@@ -6,10 +6,12 @@ import entities.overlay.TileSection;
 public class Node {
     private Node connectedNode;
     private TileSection tileSection;
+    private Terrain terrain;
 
     public Node(TileSection tileSection, Terrain terrain) {
         this.connectedNode = null;
         this.tileSection = tileSection;
+        this.terrain = terrain;
     }
 
     public TileSection getTileSection() {
@@ -30,5 +32,9 @@ public class Node {
 
     public boolean isConnected() {
         return connectedNode != null;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
     }
 }
