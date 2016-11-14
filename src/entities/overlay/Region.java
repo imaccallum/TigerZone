@@ -54,6 +54,10 @@ public class Region {
         tigers.add(t);
     }
 
+    public List<Tiger> getTigerList(){
+        return tigers;
+    }
+
     public void combineWithRegion(Region region) {
         for (TileSection tileSection : region.tileSections) {
             if (tileSection.getTiger() != null) {

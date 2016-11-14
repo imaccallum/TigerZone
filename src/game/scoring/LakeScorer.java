@@ -18,6 +18,8 @@ public class LakeScorer extends Scorer {
                 score += 2;
         }
 
+        super.returnMeeples(region);
+
         return score;
     }
 

@@ -15,6 +15,8 @@ public class TrailScorer extends Scorer {
             score += 1;
         }
 
+        super.returnMeeples(region);
+
         return score;
     }
 
