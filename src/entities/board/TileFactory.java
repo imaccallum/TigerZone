@@ -35,27 +35,87 @@ public class TileFactory {
     }
 
     private Tile makeTileA() {
-        Tile t = new Tile();
+        // Initialize the Tile and Sections with respective terrain types
+        Tile tile = new Tile();
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         TileSection den = new TileSection(Terrain.DEN);
         TileSection trail = new TileSection(Terrain.TRAIL);
 
-        Node e_zero = new Node(jungle);
-        //since the node arrays are private, probably need to add some sort of set() function in Tile to update those arrays
-        //make sure to account for connections (use node.setConnection(Node node)), regions (use node.setRegion(Region region); this is just creating the tiles, no need to worry about linking them yet)
-        //in all of these, make sure to pass a reference to t when making the nodes for the tile
-        //we'll add a reference to Tile in node so that we can use that in Region to check if it's complete
-        return t;
+        // Create Nodes counterclockwise
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node c_one = new Node();
+        Node e_two = new Node();
+        Node c_two = new Node();
+        Node e_three = new Node();
+        Node center = new Node();
+
+        // Add nodes to the respective Sections
+        jungle.addNodes(e_zero, e_one, c_one, c_two, e_three);
+        den.addNodes(center);
+        trail.addNodes(e_two);
+
+        // Set the sections up in the tile
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCenter(center);
+
+        // Add the sections to the tile
+        tile.addTileSections(jungle, den, trail);
+
+        return tile;
     }
 
     private Tile makeTileB() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection den = new TileSection(Terrain.DEN);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+        Node center = new Node();
+
+        jungle.addNodes(e_zero, e_one, e_two, e_three);
+        den.addNodes(center);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+        tile.setCenter(center);
+
+        tile.addTileSections(jungle, den);
+
+        return tile;
     }
 
     private Tile makeTileC() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+        Node center = new Node();
+
+        lake.addNodes(e_zero, e_one, e_two, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+        tile.setCenter(center);
+
+        tile.addTileSections(lake);
+
+        return tile;
     }
 
     private Tile makeTileD() {

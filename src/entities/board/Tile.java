@@ -47,8 +47,15 @@ public class Tile {
     }
 
     public void rotateClockwise(int numberOfRotations) {
-        setOrientation((orientation + numberOfRotations) % COUNT);
-    }
+
+        Node[] tempEdges = new Node[COUNT];
+        Node[] tempCorners = new Node[COUNT];
+
+        for (int i = 0; i < COUNT; i++) {
+            int index = (i + numberOfRotations) % COUNT;
+            tempEdges[index] = edges[i];
+            tempCorners[index] = corners[i];
+        }
 
     private void setTile(Tile t, int i) throws BadPlacementException {
         if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
