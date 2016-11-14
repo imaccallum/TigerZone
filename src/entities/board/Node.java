@@ -1,6 +1,5 @@
 package entities.board;
 
-import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 public class Node {
