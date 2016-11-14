@@ -30,6 +30,9 @@ public class TileFactory {
             case 'v': return makeTileV();
             case 'w': return makeTileW();
             case 'x': return makeTileX();
+            case 'y': return makeTileY();
+            case 'z': return makeTileZ();
+            case '0': return makeTile0();
             default: throw new RuntimeException("Invalid tile identifier");
         }
     }
@@ -38,35 +41,26 @@ public class TileFactory {
         // Initialize the Tile and Sections with respective terrain types
         Tile tile = new Tile();
         TileSection jungle = new TileSection(Terrain.JUNGLE);
-        TileSection den = new TileSection(Terrain.DEN);
-        TileSection trail = new TileSection(Terrain.TRAIL);
 
         // Create Nodes counterclockwise
         Node e_zero = new Node();
         Node e_one = new Node();
-        Node c_one = new Node();
         Node e_two = new Node();
-        Node c_two = new Node();
         Node e_three = new Node();
-        Node center = new Node();
 
         // Add nodes to the respective Sections
-        jungle.addNodes(e_zero, e_one, c_one, c_two, e_three);
-        den.addNodes(center);
-        trail.addNodes(e_two);
+        jungle.addNodes(e_zero, e_one, e_two, e_three);
 
-        // Set the sections up in the tile
+        // Fill the Node arrays in the Tile
         tile.setEdge(e_zero, 0);
         tile.setEdge(e_one, 1);
         tile.setEdge(e_two, 2);
         tile.setEdge(e_three, 3);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCenter(center);
 
         // Add the sections to the tile
-        tile.addTileSections(jungle, den, trail);
+        tile.addTileSections(jungle);
 
+        //this is where setting prey boolean would go if there is one
         return tile;
     }
 
@@ -97,13 +91,199 @@ public class TileFactory {
 
     private Tile makeTileC() {
         Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection den = new TileSection(Terrain.DEN);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node c_two = new Node();
+        Node e_two = new Node();
+        Node c_three = new Node();
+        Node e_three = new Node();
+        Node center = new Node();
+
+        jungle.addNodes(e_zero, e_one, c_two, c_three, e_three);
+        den.addNodes(center);
+        trail.addNodes(e_two);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.setCenter(center);
+
+        tile.addTileSections(jungle, den, trail);
+
+        return tile;
+    }
+
+    private Tile makeTileD() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle3 = new TileSection(Terrain.JUNGLE);
+        TileSection trail0 = new TileSection(Terrain.TRAIL);
+        TileSection trail1 = new TileSection(Terrain.TRAIL);
+        TileSection trail2 = new TileSection(Terrain.TRAIL);
+        TileSection trail3 = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one);
+        jungle2.addNodes(c_two);
+        jungle3.addNodes(c_three);
+        trail0.addNodes(e_zero);
+        trail1.addNodes(e_one);
+        trail2.addNodes(e_two);
+        trail3.addNodes(e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, jungle2, jungle3, trail0, trail1, trail2, trail3);
+
+        return tile;
+    }
+
+    private Tile makeTileE() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_three, c_three);
+        jungle1.addNodes(c_one, e_one, c_two);
+        trail.addNodes(e_zero, e_two);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, trail);
+
+        return tile;
+    }
+
+    private Tile makeTileF() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_zero, c_one, e_one, c_two);
+        jungle1.addNodes(c_three);
+        trail.addNodes(e_two, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, trail);
+        return tile;
+    }
+
+    private Tile makeTileG() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+        TileSection trail0 = new TileSection(Terrain.TRAIL);
+        TileSection trail1 = new TileSection(Terrain.TRAIL);
+        TileSection trail2 = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, e_one, c_two);
+        jungle2.addNodes(c_three);
+        trail0.addNodes(e_zero);
+        trail1.addNodes(e_two);
+        trail2.addNodes(e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, jungle2, trail0, trail1, trail2);
+        return tile;
+    }
+
+    private Tile makeTileH() {
+        Tile tile = new Tile();
         TileSection lake = new TileSection(Terrain.LAKE);
 
         Node e_zero = new Node();
         Node e_one = new Node();
         Node e_two = new Node();
         Node e_three = new Node();
-        Node center = new Node();
 
         lake.addNodes(e_zero, e_one, e_two, e_three);
 
@@ -111,115 +291,657 @@ public class TileFactory {
         tile.setEdge(e_one, 1);
         tile.setEdge(e_two, 2);
         tile.setEdge(e_three, 3);
-        tile.setCenter(center);
 
         tile.addTileSections(lake);
 
         return tile;
     }
 
-    private Tile makeTileD() {
-        Tile t = new Tile();
-        return t;
-    }
-
-    private Tile makeTileE() {
-        Tile t = new Tile();
-        return t;
-    }
-
-    private Tile makeTileF() {
-        Tile t = new Tile();
-        return t;
-    }
-
-    private Tile makeTileG() {
-        Tile t = new Tile();
-        return t;
-    }
-
-    private Tile makeTileH() {
-        Tile t = new Tile();
-        return t;
-    }
-
     private Tile makeTileI() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+
+        lake.addNodes(e_one, e_two, e_three);
+        jungle.addNodes(c_zero, e_zero, c_one);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+
+        tile.addTileSections(lake, jungle);
+
+        return tile;
     }
 
     private Tile makeTileJ() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        lake.addNodes(e_zero, e_one);
+        jungle.addNodes(c_zero, c_two, e_two, c_three, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(lake, jungle);
+        return tile;
 
     }
 
     private Tile makeTileK() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle0.addNodes(e_zero);
+        jungle1.addNodes(e_two);
+        lake.addNodes(e_one, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, lake);
+
+        return tile;
     }
 
     private Tile makeTileL() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection lake2 = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle.addNodes(e_one, e_three);
+        lake.addNodes(e_zero);
+        lake2.addNodes(e_two);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle, lake, lake2);
+
+        return tile;
     }
 
     private Tile makeTileM() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+
+        jungle.addNodes(c_zero, e_three, e_two, e_one, c_one);
+        lake.addNodes(e_zero);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+
+        tile.addTileSections(jungle, lake);
+
+        return tile;
     }
 
     private Tile makeTileN() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle = new TileSection(Terrain.JUNGLE);
+        TileSection lake0 = new TileSection(Terrain.LAKE);
+        TileSection lake1 = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        jungle.addNodes(e_zero, e_three);
+        lake0.addNodes(e_one);
+        lake1.addNodes(e_two);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.addTileSections(jungle, lake0, lake1);
+        return tile;
     }
 
     private Tile makeTileO() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_two, e_two, c_three);
+        lake.addNodes(e_one);
+        trail.addNodes(e_zero, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, lake, trail);
+        return tile;
     }
 
     private Tile makeTileP() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_two, e_two, c_three);
+        lake.addNodes(e_one);
+        trail.addNodes(e_zero, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, lake, trail);
+
+        tile.setHasBoar(true);
+        return tile;
     }
 
     private Tile makeTileQ() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_zero, c_one);
+        jungle1.addNodes(c_three);
+        lake.addNodes(e_one);
+        trail.addNodes(e_two, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, lake, trail);
+        return tile;
     }
+
     private Tile makeTileR() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_zero, c_one);
+        jungle1.addNodes(c_three);
+        lake.addNodes(e_one);
+        trail.addNodes(e_two, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, lake, trail);
+
+        tile.setHasBuffalo(true);
+        return tile;
     }
 
     private Tile makeTileS() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_three, c_three);
+        trail.addNodes(e_zero, e_two);
+        jungle1.addNodes(c_one, c_two);
+        lake.addNodes(e_one);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, trail, jungle1, lake);
+
+        return tile;
     }
 
     private Tile makeTileT() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_three, c_three);
+        trail.addNodes(e_zero, e_two);
+        jungle1.addNodes(c_one, c_two);
+        lake.addNodes(e_one);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, trail, jungle1, lake);
+
+        tile.setHasDeer(true);
+        return tile;
     }
 
     private Tile makeTileU() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one);
+        trail.addNodes(e_zero);
+        lake.addNodes(e_one, e_two, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+
+        tile.addTileSections(jungle0, jungle1, trail, lake);
+        return tile;
     }
 
     private Tile makeTileV() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail0 = new TileSection(Terrain.TRAIL);
+        TileSection trail1 = new TileSection(Terrain.TRAIL);
+        TileSection trail2 = new TileSection(Terrain.TRAIL);
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        lake.addNodes(e_one);
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_two);
+        jungle2.addNodes(c_three);
+        trail0.addNodes(e_zero);
+        trail1.addNodes(e_two);
+        trail2.addNodes(e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
+        return tile;
     }
 
     private Tile makeTileW() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail0 = new TileSection(Terrain.TRAIL);
+        TileSection trail1 = new TileSection(Terrain.TRAIL);
+        TileSection trail2 = new TileSection(Terrain.TRAIL);
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle2 = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        lake.addNodes(e_one);
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_two);
+        jungle2.addNodes(c_three);
+        trail0.addNodes(e_zero);
+        trail1.addNodes(e_two);
+        trail2.addNodes(e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
+
+        tile.setHasBoar(true);
+        return tile;
     }
 
     private Tile makeTileX() {
-        Tile t = new Tile();
-        return t;
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_three = new Node();
+
+        lake.addNodes(e_one, e_two);
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_three);
+        trail.addNodes(e_zero, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(lake, trail, jungle0, jungle1);
+        return tile;
+    }
+
+    private Tile makeTileY() {
+        Tile tile = new Tile();
+        TileSection lake = new TileSection(Terrain.LAKE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_three = new Node();
+
+        lake.addNodes(e_one, e_two);
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one, c_three);
+        trail.addNodes(e_zero, e_three);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(lake, trail, jungle0, jungle1);
+
+        tile.setHasBuffalo(true);
+        return tile;
+    }
+
+    private Tile makeTileZ() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_three, c_three);
+        jungle1.addNodes(c_one, e_one, c_two);
+        trail.addNodes(e_two);
+        lake.addNodes(e_zero);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, trail, lake);
+        return tile;
+    }
+
+    private Tile makeTile0() {
+        Tile tile = new Tile();
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+        Node c_two = new Node();
+        Node c_three = new Node();
+
+        jungle0.addNodes(c_zero, e_three, c_three);
+        jungle1.addNodes(c_one, e_one, c_two);
+        trail.addNodes(e_two);
+        lake.addNodes(e_zero);
+
+        tile.setEdge(e_zero, 0);
+        tile.setEdge(e_one, 1);
+        tile.setEdge(e_two, 2);
+        tile.setEdge(e_three, 3);
+
+        tile.setCorner(c_zero, 0);
+        tile.setCorner(c_one, 1);
+        tile.setCorner(c_two, 2);
+        tile.setCorner(c_three, 3);
+
+        tile.addTileSections(jungle0, jungle1, trail, lake);
+
+        tile.setHasDeer(true);
+        return tile;
     }
 }
