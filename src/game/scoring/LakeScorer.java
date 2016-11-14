@@ -10,6 +10,7 @@ public class LakeScorer extends Scorer {
     public int score(Region region) {
         List<TileSection> tileSections = region.getTileSections();
         int score = 0;
+
         region.setUniquePrey();
         int multiplier = 1 + region.getUniquePrey();
 
