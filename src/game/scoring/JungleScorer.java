@@ -21,6 +21,8 @@ public class JungleScorer extends Scorer {
         for(Region r : regions){
             if(r.getTerrain() == Terrain.LAKE && r.isFinished())
                 score += 3;
+            if(r.getTerrain() == Terrain.DEN && r.isFinished())
+                score += 5;
         }
 
         return score;

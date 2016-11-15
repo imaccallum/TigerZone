@@ -10,15 +10,15 @@ public class LakeScorer extends Scorer {
     public int score(Region region) {
         List<TileSection> tileSections = region.getTileSections();
         int score = 0;
+        region.setUniquePrey();
+        int multiplier = 1 + region.getUniquePrey();
 
         for(TileSection ts : tileSections){
-            if(ts.getTile().hasPenant())
-                score += 4;
-            else
-                score += 2;
+            score += 2;
         }
+        super.returnMeeples(region);
 
-        return score;
+        return score * multiplier;
     }
 
     @Override
@@ -26,13 +26,15 @@ public class LakeScorer extends Scorer {
         List<TileSection> tileSections = region.getTileSections();
         int score = 0;
 
+        region.setUniquePrey();
+        int multiplier = 1 + region.getUniquePrey();
+
         for(TileSection ts : tileSections){
-            if(ts.getTile().hasPenant())
-                score += 2;
-            else
-                score += 1;
+            score += 1;
         }
 
-        return score;
+        super.returnMeeples(region);
+
+        return score * multiplier;
     }
 }

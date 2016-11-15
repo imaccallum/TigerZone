@@ -20,7 +20,9 @@ public class Tile {
     private Node[] corners;
     private Node center;
     private Tile[] adjacentTiles; // Adjacent tiles
-    private boolean hasPenant;
+    private boolean hasDeer;
+    private boolean hasBuffalo;
+    private boolean hasBoar;
     private List<TileSection> tileSections;
 
     public Tile() {
@@ -28,6 +30,9 @@ public class Tile {
         corners = new Node[COUNT];
         adjacentTiles = new Tile[COUNT];
         tileSections = new ArrayList<>();
+        hasDeer = false;
+        hasBoar = false;
+        hasBuffalo = false;
     }
 
     public Tile[] getAdjacentTiles() {
@@ -117,15 +122,35 @@ public class Tile {
         return (i + 2) % COUNT;
     }
 
-    public boolean hasPenant() {
-        return hasPenant;
-    }
-
     public void setCenter(Node center) {
         this.center = center;
     }
 
     public void addTileSections(TileSection... sections){
         tileSections.addAll(Arrays.asList(sections));
+    }
+
+    public boolean hasDeer() {
+        return hasDeer;
+    }
+
+    public boolean hasBuffalo() {
+        return hasBuffalo;
+    }
+
+    public boolean hasBoar() {
+        return hasBoar;
+    }
+
+    public void setHasDeer(boolean hasDeer) {
+        this.hasDeer = hasDeer;
+    }
+
+    public void setHasBuffalo(boolean hasBuffalo) {
+        this.hasBuffalo = hasBuffalo;
+    }
+
+    public void setHasBoar(boolean hasBoar) {
+        this.hasBoar = hasBoar;
     }
 }
