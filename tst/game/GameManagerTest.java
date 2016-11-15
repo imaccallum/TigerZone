@@ -17,7 +17,9 @@ import static org.junit.Assert.*;
 /**
  * Created by ianmaccallum on 11/13/16.
  */
+
 public class GameManagerTest {
+
     private GameManager gameManager;
 
     @Before
@@ -32,7 +34,33 @@ public class GameManagerTest {
 
     public Stack<Tile> setupDeck() {
 
-        Character[] myarray = {'a', 'b', 'c', 'd'};
+        Character[] myarray = {'a',
+                'b', 'b', 'b', 'b',
+                'c', 'c',
+                'd',
+                'e','e','e','e','e','e','e','e',
+                'f','f','f','f','f','f','f','f','f',
+                'g','g','g','g',
+                'h',
+                'i','i','i','i',
+                'j','j','j','j','j',
+                'k','k','k',
+                'l','l','l',
+                'm','m','m','m','m',
+                'n','n',
+                'o',
+                'p','p',
+                'q',
+                'r','r',
+                's','s','s',       // WEIRD # FORMAT 1 OR 3?
+                't','t',
+                'u','u','u',
+                'v',
+                'w','w',
+                'x','x','x',
+                'y','y',
+                'z',
+                '0','0'};
         List<Character> charList = Arrays.asList(myarray);
         Collections.shuffle(charList);
 
