@@ -1,6 +1,7 @@
 package entities.board;
 
 import entities.overlay.Region;
+import entities.player.Player;
 import game.BadPlacementException;
 
 import java.awt.*;
