@@ -19,13 +19,11 @@ public class TileSection {
     private Tile tile;
     private Region region;
     private Tiger tiger;
-    private int pointMultiplier;
 
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
         nodes = new ArrayList<>();
-        this.pointMultiplier = 1;
     }
 
     public void addNodes(Node... nodesToAdd) {
@@ -88,14 +86,6 @@ public class TileSection {
 
     public void setRegion(Region region) {
         this.region = region;
-    }
-
-    public int getPointMultiplier() {
-        return pointMultiplier;
-    }
-
-    public void setPointMultiplier(int pointMultiplier) {
-        this.pointMultiplier = pointMultiplier;
     }
 
     public Tiger getTiger() {

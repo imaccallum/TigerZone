@@ -105,7 +105,7 @@ public class Board {
     }
 
 
-    public java.util.List<Point> getTileOptions() {
+    public List<Point> getTileOptions() {
         return openTiles;
     }
 
@@ -167,17 +167,25 @@ public class Board {
         }
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
             regions.remove(second.getTileSection().getRegion().getRegionId());
         }
         else if (first.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             first.getTileSection().getRegion().addTileSection(second.getTileSection());
         }
         else if (second.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             second.getTileSection().getRegion().addTileSection(first.getTileSection());
         }
         else {
-            Region newRegion = new Region(first.getTerrain());
+            Region newRegion = new Region(first.getTileSection().getTerrain());
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             newRegion.addTileSection(first.getTileSection());
             newRegion.addTileSection(second.getTileSection());
             regions.put(newRegion.getRegionId(), newRegion);
