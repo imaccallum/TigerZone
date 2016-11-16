@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>516</x>
-      <y>312</y>
+      <x>774</x>
+      <y>402</y>
       <w>282</w>
       <h>216</h>
     </coordinates>
@@ -39,14 +39,14 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>978</x>
-      <y>408</y>
+      <x>1236</x>
+      <y>498</y>
       <w>168</w>
       <h>174</h>
     </coordinates>
     <panel_attributes>TileSection
 --
-- node: List&lt;Node&gt;
+- nodes: List&lt;Node&gt;
 - terrain : Terrain
 - tile: Tile
 - tiger: Tiger
@@ -69,8 +69,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>516</x>
-      <y>546</y>
+      <x>774</x>
+      <y>636</y>
       <w>282</w>
       <h>132</h>
     </coordinates>
@@ -94,8 +94,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>792</x>
-      <y>372</y>
+      <x>1050</x>
+      <y>462</y>
       <w>198</w>
       <h>54</h>
     </coordinates>
@@ -105,8 +105,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>792</x>
-      <y>408</y>
+      <x>1050</x>
+      <y>498</y>
       <w>156</w>
       <h>180</h>
     </coordinates>
@@ -116,10 +116,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>78</x>
-      <y>300</y>
-      <w>306</w>
-      <h>144</h>
+      <x>228</x>
+      <y>390</y>
+      <w>414</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>Board
 --
@@ -127,10 +127,10 @@
 - regions: Map&lt;UUID, Region&gt;
 - tileStack: Stack&lt;Tile&gt;
 - openTileLocations: List&lt;Point&gt;
-- List&lt;TileSections&gt;
-- dens: List&lt;Den&gt;
+- possibleTileSectionTigerPlacements: List&lt;TileSections&gt;
+- dens: List&lt;TigerDen&gt;
 --
-+ insert(tile: Tile, location: Point) : void {throws BadPlacementException}
++ insert(tile: Tile, locationAndRotation: LocationAndRotation) : void throws
 + findValidTilePlacements(tile: Tile) : List&lt;LocationAndOrientation&gt; 
 + getTile(tileLocation: Point) : Tile
 + resetPossibleTigerPlacements() : void
@@ -142,8 +142,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>378</x>
-      <y>312</y>
+      <x>636</x>
+      <y>402</y>
       <w>150</w>
       <h>18</h>
     </coordinates>
@@ -153,8 +153,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>378</x>
-      <y>324</y>
+      <x>636</x>
+      <y>414</y>
       <w>150</w>
       <h>240</h>
     </coordinates>
@@ -164,8 +164,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>216</y>
+      <x>948</x>
+      <y>306</y>
       <w>108</w>
       <h>66</h>
     </coordinates>
@@ -182,8 +182,8 @@ BOTTOM_RIGHT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>516</x>
-      <y>216</y>
+      <x>774</x>
+      <y>306</y>
       <w>108</w>
       <h>66</h>
     </coordinates>
@@ -200,8 +200,8 @@ LEFT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>996</x>
-      <y>258</y>
+      <x>1254</x>
+      <y>348</y>
       <w>126</w>
       <h>42</h>
     </coordinates>
@@ -214,18 +214,18 @@ LEFT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>516</x>
-      <y>702</y>
+      <x>774</x>
+      <y>792</y>
       <w>282</w>
       <h>90</h>
     </coordinates>
-    <panel_attributes>Den
+    <panel_attributes>TigerDen
 --
 - centralTileLocation : Point
-- tileLocationsRequired : List&lt;Point&gt;
+- tileLocationsRequired : Map&lt;Point, Boolean&gt;
 - tiger: Tiger
 --
-+ DenRegion(centralPoint: Point)
++ TigerDen(centralPoint: Point, board: Board)
 + isComplete() : boolean
 --
 + getCentralTileLocation() : Point
@@ -237,12 +237,45 @@ LEFT
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>378</x>
-      <y>354</y>
+      <x>636</x>
+      <y>444</y>
       <w>150</w>
       <h>366</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;70.0;10.0;70.0;590.0;230.0;590.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>42</x>
+      <y>684</y>
+      <w>306</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>notify all players about status of game (score, forfeits, tigers left)
+advance turn
+notify a player that its their turn
+give them valid tile placements and orientations
+give them all tiles in the stack
+wait for tile placement (hand control to player controller)
+game manager receives player's move
+check for tiger placements
+notify player of tiger placements
+receive possible tiger placement
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1500</x>
+      <y>132</y>
+      <w>60</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>/AbstractClass/
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

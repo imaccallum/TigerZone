@@ -17,6 +17,7 @@ public class Board {
     private List<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<TileSection> possibleTigerPlacementLocations;
+    private List<TigerDen> tigerDens;
 
     public Board(Stack<Tile> stack) {
         int boardSize = stack.size() * 2;
@@ -79,7 +80,7 @@ public class Board {
 
         tile.getTileSections().forEach(this::checkIfCanPlaceTiger);
         if (tile.hasDen()) {
-            TigerDen den = new TigerDen(location, this);
+            tigerDens.add(new TigerDen(location, this));
         }
     }
 

@@ -18,7 +18,6 @@ public class GameManager {
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
-    // *TODO RegionLinker regionLinker;
 
     private Board board;
 

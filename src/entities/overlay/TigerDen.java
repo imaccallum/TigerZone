@@ -15,21 +15,21 @@ public class TigerDen {
 
     public TigerDen(Point centerTileLocation, Board board) {
         this.centerTileLocation = centerTileLocation;
-        Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1)
+        Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
         requiredTileLocations.put(right, board.getTile(right) != null);
-        Point left = new Point(centerTileLocation.x, centerTileLocation.y - 1)
+        Point left = new Point(centerTileLocation.x, centerTileLocation.y - 1);
         requiredTileLocations.put(left, board.getTile(left) != null);
-        Point above = new Point(centerTileLocation.x + 1, centerTileLocation.y)
+        Point above = new Point(centerTileLocation.x + 1, centerTileLocation.y);
         requiredTileLocations.put(above, board.getTile(above) != null);
-        Point below = new Point(centerTileLocation.x - 1, centerTileLocation.y)
+        Point below = new Point(centerTileLocation.x - 1, centerTileLocation.y);
         requiredTileLocations.put(below, board.getTile(below) != null);
-        Point aboveRight = new Point(centerTileLocation.x + 1, centerTileLocation.y + 1)
+        Point aboveRight = new Point(centerTileLocation.x + 1, centerTileLocation.y + 1);
         requiredTileLocations.put(aboveRight, board.getTile(aboveRight) != null);
-        Point aboveLeft = new Point(centerTileLocation.x + 1, centerTileLocation.y - 1)
+        Point aboveLeft = new Point(centerTileLocation.x + 1, centerTileLocation.y - 1);
         requiredTileLocations.put(aboveLeft, board.getTile(aboveLeft) != null);
-        Point belowRight = new Point(centerTileLocation.x - 1, centerTileLocation.y + 1)
+        Point belowRight = new Point(centerTileLocation.x - 1, centerTileLocation.y + 1);
         requiredTileLocations.put(belowRight, board.getTile(belowRight) != null);
-        Point belowLeft = new Point(centerTileLocation.x - 1, centerTileLocation.y - 1)
+        Point belowLeft = new Point(centerTileLocation.x - 1, centerTileLocation.y - 1);
         requiredTileLocations.put(belowLeft, board.getTile(belowLeft) != null);
     }
 
