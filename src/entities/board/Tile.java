@@ -194,4 +194,8 @@ public class Tile {
     public Point getLocation() {
         return location;
     }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
+    }
 }
