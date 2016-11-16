@@ -26,7 +26,7 @@ public class GameManagerTest {
         Player p0 = new Player("Player 0");
         Player p1 = new Player("Player 1");
 
-        GameManager gm = new GameManager(deck, p0, p1);
+        gameManager = new GameManager(deck, p0, p1);
     }
 
     public Stack<Tile> setupDeck() {
@@ -70,6 +70,11 @@ public class GameManagerTest {
         }
 
         return deck;
+    }
+
+    @Test
+    public void checkOpenTilesUpdatedWhenInsertingTile(){
+//        gameManager
     }
 
 }
