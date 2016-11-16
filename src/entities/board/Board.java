@@ -38,42 +38,42 @@ public class Board {
         openTiles.add(new Point(40,39));
     }
 
-    public void insert(Tile tile, int x, int y) throws BadPlacementException {
-        Tile leftTile = getTile(new Point(x, y - 1));
-        Tile rightTile = getTile(new Point(x, y + 1));
-        Tile bottomTile = getTile(new Point(x + 1, y));
-        Tile topTile = getTile(new Point(x - 1, y));
+    public void insert(Tile tile, int i, int j) throws BadPlacementException {
+        Tile leftTile = getTile(new Point(i, j - 1));
+        Tile rightTile = getTile(new Point(i, j + 1));
+        Tile bottomTile = getTile(new Point(i + 1, j));
+        Tile topTile = getTile(new Point(i - 1, j));
         if (leftTile == null && rightTile == null && topTile == null && bottomTile == null) {
             throw new BadPlacementException("Index given is out of bounds");
         }
 
-        board[x][y] = tile;
-        openTiles.remove(new Point(x, y));
+        board[i][j] = tile;
+        openTiles.remove(new Point(i, j));
 
         // Else statements to add open tiles next to the tile being placed if currently null
         if (leftTile != null) {
             attemptLateralConnection(tile, leftTile);
             leftTile.setRightTile(tile);
         } else {
-            openTiles.add(new Point(x, y - 1));
+            openTiles.add(new Point(i, j - 1));
         }
         if (rightTile != null) {
             attemptLateralConnection(rightTile, tile);
             rightTile.setLeftTile(tile);
         } else {
-            openTiles.add(new Point(x, y + 1));
+            openTiles.add(new Point(i, j + 1));
         }
         if (topTile != null) {
             attemptVerticalConnection(tile, topTile);
             topTile.setBottomTile(tile);
         } else {
-            openTiles.add(new Point(x - 1, y));
+            openTiles.add(new Point(i - 1, j));
         }
         if (bottomTile != null) {
             attemptVerticalConnection(bottomTile, tile);
             bottomTile.setTopTile(tile);
         } else {
-            openTiles.add(new Point(x + 1, y));
+            openTiles.add(new Point(i + 1, j));
         }
     }
 
@@ -223,21 +223,21 @@ public class Board {
         return openTiles;
     }
 
-    private Tile iterateUp(Tile current) {
-        return current.getTile(0);
-    }
-
-    private Tile iterateDown(Tile current) {
-        return current.getTile(2);
-    }
-
-    private Tile iterateRight(Tile current) {
-        return current.getTile(1);
-    }
-
-    private Tile iterateLeft(Tile current) {
-        return current.getTile(3);
-    }
+//    private Tile iterateUp(Tile current) {
+//        return current.getTile(0);
+//    }
+//
+//    private Tile iterateDown(Tile current) {
+//        return current.getTile(2);
+//    }
+//
+//    private Tile iterateRight(Tile current) {
+//        return current.getTile(1);
+//    }
+//
+//    private Tile iterateLeft(Tile current) {
+//        return current.getTile(3);
+//    }
 
     private void attemptLateralConnection(Tile rightTile, Tile leftTile) throws BadPlacementException {
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
