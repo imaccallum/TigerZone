@@ -1,6 +1,7 @@
 package entities.board;
 
 import entities.overlay.Region;
+import entities.overlay.TileSection;
 import game.BadPlacementException;
 import game.OpenTileLocation;
 
@@ -10,20 +11,17 @@ import java.util.List;
 
 public class Board {
 
-    private Tile[][] board;
+    private Tile[][] boardMatrix;
     private Stack<Tile> tileStack;
-
     private List<Point> openTileLocations;
     private Map<UUID, Region> regions;
-    private List<Tiger> tigers;
 
     public Board(Stack<Tile> stack) {
         int boardSize = stack.size() * 2;
-        board = new Tile[boardSize][boardSize];
+        boardMatrix = new Tile[boardSize][boardSize];
         tileStack = stack;
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
-        tigers = new ArrayList<>();
         setTileForPoint(stack.pop(), new Point(39, 39));
         openTileLocations.add(new Point(39, 40));
         openTileLocations.add(new Point(38, 39));
@@ -40,7 +38,7 @@ public class Board {
             throw new BadPlacementException("Index given is out of bounds");
         }
 
-        board[row][col] = tile;
+        boardMatrix[row][col] = tile;
         openTileLocations.remove(new Point(row, col));
 
         // Else statements to add open tiles next to the tile being placed if currently null
@@ -66,21 +64,28 @@ public class Board {
         }
     }
 
-    public void placeTiger(UUID regionId, Tiger tiger) throws BadPlacementException {
-        Region region = regions.get(regionId);
-        if (region.hasTigers()) {
-            throw new BadPlacementException("Tried to place a tiger on a region that already has one.");
+    // Checks to see if a tiger can be placed
+    public boolean canPlaceTiger(TileSection section) {
+        Region region = section.getRegion();
+        if (region.containsTigers()) {
+            return false;
         }
-        region.addTiger(tiger);
-        tigers.add(tiger);
+        else {
+            return true;
+        }
+    }
+
+    // Places the tiger at a given tile section
+    public void placeTiger(TileSection section, Tiger tiger) {
+        section.setTiger(tiger);
     }
 
     public Tile getTile(Point p){
-        return board[p.x][p.y];
+        return boardMatrix[p.x][p.y];
     }
 
-    public Tile[][] getBoard() {
-        return board;
+    public Tile[][] getBoardMatrix() {
+        return boardMatrix;
     }
 
     public List<OpenTileLocation> returnValidPlacements(Tile tile) {
@@ -89,10 +94,10 @@ public class Board {
             for (Point p : openTileLocations) {   // for each open tile
                 int row = p.x;
                 int col = p.y;
-                Tile top = board[row - 1][col];
-                Tile right = board[row][col + 1];
-                Tile bottom = board[row + 1][col];
-                Tile left = board[row][col - 1];
+                Tile top = boardMatrix[row - 1][col];
+                Tile right = boardMatrix[row][col + 1];
+                Tile bottom = boardMatrix[row + 1][col];
+                Tile left = boardMatrix[row][col - 1];
 
                 System.out.println("For openTile " + p + ": ");
                 System.out.println("    Top = " + (top != null));
@@ -255,6 +260,6 @@ public class Board {
     }
 
     private void setTileForPoint(Tile tile, Point point) {
-        board[point.x][point.y] = tile;
+        boardMatrix[point.x][point.y] = tile;
     }
 }

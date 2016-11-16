@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>258</x>
-      <y>252</y>
+      <x>390</x>
+      <y>138</y>
       <w>282</w>
       <h>210</h>
     </coordinates>
@@ -38,8 +38,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>636</x>
-      <y>498</y>
+      <x>852</x>
+      <y>234</y>
       <w>168</w>
       <h>174</h>
     </coordinates>
@@ -68,10 +68,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>690</x>
-      <y>252</y>
-      <w>150</w>
-      <h>48</h>
+      <x>480</x>
+      <y>372</y>
+      <w>192</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>Region
 --
@@ -89,6 +89,139 @@
 + getRegionId() : UUID
 + getTileSections() : List&lt;TileSection&gt; : void
 + getTerrain() : Terrain</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>666</x>
+      <y>198</y>
+      <w>198</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0;240.0;70.0;310.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>666</x>
+      <y>234</y>
+      <w>156</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;280.0;240.0;280.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>126</y>
+      <w>126</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+- boardMatrix: Tile[][]
+- tileStack: Stack&lt;Tile&gt;
+- openTileLocations: List&lt;Point&gt;
+- regions: Map&lt;UUID, Region&gt;
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>138</y>
+      <w>282</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>150</y>
+      <w>372</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0;310.0;380.0;600.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>564</x>
+      <y>42</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+CornerLocation
+--
+TOP_LEFT
+TOP_RIGHT
+BOTTOM_LEFT
+BOTTOM_RIGHT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>390</x>
+      <y>42</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+EdgeLocation
+--
+TOP
+RIGHT
+BOTTOM
+LEFT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>84</y>
+      <w>126</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Tiger
+--
+- owningPlayer: Player
+- </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>498</x>
+      <y>546</y>
+      <w>126</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>DenRegion
+--
+- centralTileLocation : Point
+- tileLocationsRequired : List&lt;Point&gt;
+--
++ DenRegion(centralPoint: Point, requiredTileLocations: Point)
+--
++ getCentralTileLocation() : Point
++ getRequiredTileLocations() : list&lt;Point&gt;
+</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
