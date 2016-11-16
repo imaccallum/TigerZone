@@ -5,6 +5,7 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.Region;
 import entities.player.Player;
+import exceptions.BadPlacementException;
 
 import java.awt.*;
 import java.io.IOException;
