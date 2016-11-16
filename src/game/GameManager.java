@@ -28,6 +28,7 @@ public class GameManager {
         board = new Board(stack);
     }
 
+    /*
     public void completeRegion(Region region){
         List<Player> playersToGetScore = region.getDominantPlayers();
         int score = region.getScorer().score(region);
@@ -35,6 +36,7 @@ public class GameManager {
             p.addToScore(score);
         }
     }
+    */
 
     public Board getBoard() {
         return board;
@@ -97,10 +99,12 @@ public class GameManager {
         {
             Tile t = deck.pop();
      //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
-            List<Point>  tileOptions = gm.getBoard().findValidTilePlacements(t);
+            List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
-                System.out.println("Inserted @ " + tileOptions.get(0));
-                gm.getBoard().insert(t, tileOptions.get(0).x, tileOptions.get(0).y);
+                LocationAndOrientation optimalPlacement = tileOptions.get(0);
+                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                t.rotateClockwise(optimalPlacement.getOrientation());
+                gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
