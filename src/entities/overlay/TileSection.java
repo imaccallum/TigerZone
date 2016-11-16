@@ -14,18 +14,16 @@ import java.util.List;
 // Also keeps track of the tile it is on and the region it is a part of in the game's overlay.
 // Has the ability to have a tiger placed on it.
 public class TileSection {
+
     private List<Node> nodes;
     private Terrain terrain;
     private Tile tile;
     private Region region;
     private Tiger tiger;
-    private int pointMultiplier;
-
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
         nodes = new ArrayList<>();
-        this.pointMultiplier = 1;
     }
 
     public void addNodes(Node... nodesToAdd) {
@@ -43,31 +41,30 @@ public class TileSection {
         return nodes.contains(node);
     }
 
-    public boolean hasTiger() {
-        return tiger != null;
-    }
-
     public boolean hasOpenConnection() {
         if (terrain == Terrain.DEN) {
             Tile[] adjacentTiles = tile.getAdjacentTiles();
+            if(adjacentTiles == null){
+                return true;
+            }
             if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
                 adjacentTiles[2] == null || adjacentTiles[3] == null) {
-                return false;
+                return true;
             }
 
-            Tile leftTile = adjacentTiles[0];
-            Tile rightTile = adjacentTiles[2];
-            if (leftTile.getAdjacentTiles()[1] == null || leftTile.getAdjacentTiles()[3] == null ||
-                rightTile.getAdjacentTiles()[1] == null || rightTile.getAdjacentTiles()[3] == null) {
-                return false;
+            Tile leftTile = adjacentTiles[1];
+            Tile rightTile = adjacentTiles[3];
+            if (leftTile.getAdjacentTiles()[0] == null || leftTile.getAdjacentTiles()[2] == null ||
+                rightTile.getAdjacentTiles()[0] == null || rightTile.getAdjacentTiles()[2] == null) {
+                return true;
             }
         } else {
-            for (Node node : nodes) {
-                if (!node.isConnected()) {
-                    return false;
+            for (Node edgenode : tile.getEdges()) {
+                if (!edgenode.isConnected()) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
         return false;
     }
@@ -90,12 +87,12 @@ public class TileSection {
         this.region = region;
     }
 
-    public int getPointMultiplier() {
-        return pointMultiplier;
+    public List<Node> getNodes() {
+        return nodes;
     }
 
-    public void setPointMultiplier(int pointMultiplier) {
-        this.pointMultiplier = pointMultiplier;
+    public String toString(){
+        return "" + this.hashCode();
     }
 
     public Tiger getTiger() {
@@ -104,9 +101,5 @@ public class TileSection {
 
     public void setTiger(Tiger tiger) {
         this.tiger = tiger;
-    }
-
-    public List<Node> getNodes() {
-        return nodes;
     }
 }

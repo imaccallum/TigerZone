@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PlayerNotifier {
     void notifyTigerPlacementOptions(List<TileSection> tileSections);
-    void notifyScore
+    void notifyEndTurnStatus(EndTurnStatus status);
 }

@@ -1,12 +1,11 @@
 package entities.board;
 
-import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 public class Node {
+
     private Node connectedNode;
     private TileSection tileSection;
-    private Terrain terrain;
 
     public Node() {
         this.connectedNode = null;
@@ -30,9 +29,5 @@ public class Node {
 
     public boolean isConnected() {
         return connectedNode != null;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
     }
 }

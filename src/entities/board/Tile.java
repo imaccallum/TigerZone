@@ -1,73 +1,48 @@
 package entities.board;
 
-import entities.board.Node;
 import entities.overlay.TileSection;
-import game.BadPlacementException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Tile {
 
-    //			Edge[0]
+    //			    Edge[0]
     //		Corner[0]	Corner[1]
     //	Edge[3]		Center		Edge[1]
     //		Corner[3]	Corner[2]
-    //			Edge[2]
+    //			    Edge[2]
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
     private Node center;
-    private Tile[] adjacentTiles; // Adjacent tiles
-    private boolean hasPenant;
+    private PreyAnimal preyAnimal;
+    private Point location;
     private List<TileSection> tileSections;
 
     public Tile() {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
-        adjacentTiles = new Tile[COUNT];
         tileSections = new ArrayList<>();
+        preyAnimal = null;
     }
 
-    public Tile[] getAdjacentTiles() {
-        return adjacentTiles;
+    public Node getCorner(CornerLocation location) {
+        return corners[location.ordinal()];
     }
 
-    public Tile[] getCornerTiles() {
-        Tile[] cornerTiles = new Tile[4];
-
-        if (adjacentTiles[0] != null) {
-            cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
-            cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
-        }
-
-        if (adjacentTiles[1] != null) {
-            cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
-            cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
-        }
-
-        if (adjacentTiles[2] != null) {
-            cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
-            cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
-        }
-        return cornerTiles;
+    public Node getEdge(EdgeLocation location) {
+        return edges[location.ordinal()];
     }
 
-    public Tile getTile(int index) {
-        return adjacentTiles[index];
-    }
-
-    public Node getCorner(CornerLocation index) {
-        return corners[index.ordinal()];
-    }
-
-    public Node getEdge(EdgeLocation index) {
-        return edges[index.ordinal()];
-    }
-
-    public Node getCenter(int index) {
+    public Node getCenter() {
         return center;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
     }
 
     public void rotateClockwise(int numberOfRotations) {
@@ -84,27 +59,6 @@ public class Tile {
         corners = tempCorners;
     }
 
-    private void setTile(Tile t, int i) throws BadPlacementException {
-        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[i] = t;
-    }
-
-    public void setTopTile(Tile t) throws BadPlacementException {
-        setTile(t, 0);
-    }
-
-    public void setBottomTile(Tile t) throws BadPlacementException {
-        setTile(t, 2);
-    }
-
-    public void setLeftTile(Tile t) throws BadPlacementException {
-        setTile(t, 3);
-    }
-
-    public void setRightTile(Tile t) throws BadPlacementException {
-        setTile(t, 1);
-    }
-
     public void setEdge(Node node, int i){
         edges[i] = node;
     }
@@ -113,19 +67,46 @@ public class Tile {
         corners[i] = node;
     }
 
-    private int inverse(int i) {
-        return (i + 2) % COUNT;
-    }
-
-    public boolean hasPenant() {
-        return hasPenant;
-    }
-
     public void setCenter(Node center) {
         this.center = center;
     }
 
-    public void addTileSections(TileSection... sections){
+    public void addTileSections(TileSection... sections) {
+        for (TileSection tileSection: sections){
+            tileSection.setTile(this);
+        }
         tileSections.addAll(Arrays.asList(sections));
+    }
+
+    public Node[] getEdges(){
+        return edges;
+    }
+
+    public boolean hasDeer() {
+        return preyAnimal == PreyAnimal.DEER;
+    }
+
+    public boolean hasBuffalo() {
+        return preyAnimal == PreyAnimal.BUFFALO;
+    }
+
+    public boolean hasBoar() {
+        return preyAnimal == PreyAnimal.BOAR;
+    }
+
+    public void setPreyAnimal(PreyAnimal preyAnimal) {
+        this.preyAnimal = preyAnimal;
+    }
+
+    public String toString(){
+        return "Tile: " + this.hashCode() + "\n" + "TileSections: " + tileSections;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public Point getLocation() {
+        return location;
     }
 }

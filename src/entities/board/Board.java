@@ -2,173 +2,259 @@ package entities.board;
 
 import entities.overlay.Region;
 import game.BadPlacementException;
+import game.OpenTileLocation;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Board {
-    private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
-    private Tile center;					// The map of tiles
-    private List<Point> openTiles;		    // A list of all current open tile positions
-    private List<Region> regions;
+
+    private Tile[][] board;
+    private Stack<Tile> tileStack;
+
+    private List<Point> openTileLocations;
+    private Map<UUID, Region> regions;
+    private List<Tiger> tigers;
 
     public Board(Stack<Tile> stack) {
+        int boardSize = stack.size() * 2;
+        board = new Tile[boardSize][boardSize];
         tileStack = stack;
-        center = tileStack.pop();
-        openTiles = new ArrayList<>();
+        openTileLocations = new ArrayList<>();
+        regions = new HashMap<>();
+        tigers = new ArrayList<>();
+        setTileForPoint(stack.pop(), new Point(39, 39));
+        openTileLocations.add(new Point(39, 40));
+        openTileLocations.add(new Point(38, 39));
+        openTileLocations.add(new Point(40, 39));
+        openTileLocations.add(new Point(39, 38));
     }
 
-    public void insert(Tile tile, int x, int y) throws BadPlacementException {
-        Tile leftTile = getTile(new Point(x + 1, y));
-        Tile rightTile = getTile(new Point(x - 1, y));
-        Tile bottomTile = getTile(new Point(x, y - 1));
-        Tile topTile = getTile(new Point(x, y + 1));
+    public void insert(Tile tile, int row, int col) throws BadPlacementException {
+        Tile leftTile = getTile(new Point(row, col - 1));
+        Tile rightTile = getTile(new Point(row, col + 1));
+        Tile bottomTile = getTile(new Point(row + 1, col));
+        Tile topTile = getTile(new Point(row - 1, col));
         if (leftTile == null && rightTile == null && topTile == null && bottomTile == null) {
             throw new BadPlacementException("Index given is out of bounds");
         }
 
+        board[row][col] = tile;
+        openTileLocations.remove(new Point(row, col));
+
+        // Else statements to add open tiles next to the tile being placed if currently null
         if (leftTile != null) {
-            attemptLateralConnection(tile, leftTile);
-            leftTile.setRightTile(tile);
+            connectLaterally(tile, leftTile);
+        } else {
+            openTileLocations.add(new Point(row, col - 1));
         }
         if (rightTile != null) {
-            attemptLateralConnection(rightTile, tile);
-            rightTile.setLeftTile(tile);
+            connectLaterally(rightTile, tile);
+        } else {
+            openTileLocations.add(new Point(row, col + 1));
         }
         if (topTile != null) {
-            attemptVerticalConnection(tile, topTile);
-            topTile.setBottomTile(tile);
+            connectVertically(tile, topTile);
+        } else {
+            openTileLocations.add(new Point(row - 1, col));
         }
         if (bottomTile != null) {
-            attemptVerticalConnection(bottomTile, tile);
-            bottomTile.setTopTile(tile);
+            connectVertically(bottomTile, tile);
+        } else {
+            openTileLocations.add(new Point(row + 1, col));
         }
     }
 
-    private Tile getTile(Point point) {
-        Tile currentTile = center;
-        int x = point.x;
-        int y = point.y;
-        while (x != 0 && y != 0) {
-            boolean iterated = false;
-            if (x < 0) {
-                Tile nextTile = iterateRight(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    ++x;
-                }
-            }
-            if (!iterated && x > 0) {
-                Tile nextTile = iterateLeft(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    --x;
-                }
-            }
-            if (!iterated && y < 0) {
-                Tile nextTile = iterateDown(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    ++y;
-                }
-            }
-            if (!iterated) {
-                Tile nextTile = iterateUp(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    --y;
-                }
-            }
-
-            if (currentTile == null) {
-                return null;
-            }
+    public void placeTiger(UUID regionId, Tiger tiger) throws BadPlacementException {
+        Region region = regions.get(regionId);
+        if (region.hasTigers()) {
+            throw new BadPlacementException("Tried to place a tiger on a region that already has one.");
         }
-        return currentTile;
+        region.addTiger(tiger);
+        tigers.add(tiger);
     }
 
-
-    public java.util.List<Point> getTileOptions() {
-        return openTiles;
+    public Tile getTile(Point p){
+        return board[p.x][p.y];
     }
 
-    private Tile iterateUp(Tile current) {
-        return current.getTile(0);
+    public Tile[][] getBoard() {
+        return board;
     }
 
-    private Tile iterateDown(Tile current) {
-        return current.getTile(2);
+    public List<OpenTileLocation> returnValidPlacements(Tile tile) {
+        List<OpenTileLocation> validPlacements = new ArrayList<>();
+        for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation) {
+            for (Point p : openTileLocations) {   // for each open tile
+                int row = p.x;
+                int col = p.y;
+                Tile top = board[row - 1][col];
+                Tile right = board[row][col + 1];
+                Tile bottom = board[row + 1][col];
+                Tile left = board[row][col - 1];
+
+                System.out.println("For openTile " + p + ": ");
+                System.out.println("    Top = " + (top != null));
+                System.out.println("    Right = " + (right != null));
+                System.out.println("    Bottom = " + (bottom != null));
+                System.out.println("    Left = " + (left != null));
+
+
+                if (top != null && !verticalConnectionIsValid(tile, top)) {
+                    System.out.println("Vertical connection to top tile is invalid.");
+                    continue;
+                }
+                if (right != null && !lateralConnectionIsValid(right, tile)) {
+                    System.out.println("Lateral connection to right tile is invalid.");
+                    continue;
+                }
+                if (bottom != null && !verticalConnectionIsValid(bottom, tile)) {
+                    System.out.println("Vertical connection to bottom tile is invalid.");
+                    continue;
+                }
+                if (left != null && !lateralConnectionIsValid(tile, left)) {
+                    System.out.println("Lateral connection to left tile is invalid.");
+                    continue;
+                }
+
+                System.out.println("Adding point " + p +
+                        " with tile orientation " + tileOrientation +
+                        " to valid tile placements.");
+                OpenTileLocation validTileLocation = new OpenTileLocation(new Point(p.x, p.y), tileOrientation);
+                validPlacements.add(validTileLocation);
+            }
+            // By placing this at the end the tile is rotated 4 times and thus comes back to original position
+            tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
+        }
+        return validPlacements;
     }
 
-    private Tile iterateRight(Tile current) {
-        return current.getTile(1);
+    public Stack<Tile> getTileStack(){
+        return tileStack;
     }
 
-    private Tile iterateLeft(Tile current) {
-        return current.getTile(3);
+    public List<Point> getTileOptions() {
+        return openTileLocations;
     }
 
-    private void attemptLateralConnection(Tile rightTile, Tile leftTile) throws BadPlacementException {
+    private boolean lateralConnectionIsValid(Tile rightTile, Tile leftTile) {
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
         Node rightEdge = leftTile.getEdge(EdgeLocation.RIGHT);
-        attemptNodeConnection(leftEdge, rightEdge);
+        boolean result = nodeConnectionIsValid(leftEdge, rightEdge);
 
         if (leftEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
             Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
-            attemptNodeConnection(topLeftCorner, topRightCorner);
+            result = result && nodeConnectionIsValid(topLeftCorner, topRightCorner);
 
             Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
-            attemptNodeConnection(bottomLeftCorner, bottomRightCorner);
+            result = result && nodeConnectionIsValid(bottomLeftCorner, bottomRightCorner);
+        }
+
+        return result;
+    }
+
+    private void connectLaterally(Tile rightTile, Tile leftTile) throws BadPlacementException {
+        Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
+        Node rightEdge = leftTile.getEdge(EdgeLocation.RIGHT);
+        connectNodes(leftEdge, rightEdge);
+
+        if (leftEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
+            Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
+            Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
+            connectNodes(topLeftCorner, topRightCorner);
+
+            Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
+            Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
+            connectNodes(bottomLeftCorner, bottomRightCorner);
         }
     }
 
-    private void attemptVerticalConnection(Tile bottomTile, Tile topTile) throws BadPlacementException {
+    private boolean verticalConnectionIsValid(Tile bottomTile, Tile topTile) {
         Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
-        attemptNodeConnection(topEdge, bottomEdge);
+        boolean result = nodeConnectionIsValid(topEdge, bottomEdge);
 
         if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
             Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
-            attemptNodeConnection(topRightCorner, bottomRightCorner);
+            result = result && nodeConnectionIsValid(topRightCorner, bottomRightCorner);
 
             Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node topleftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
-            attemptNodeConnection(topleftCorner, bottomLeftCorner);
+            result = result && nodeConnectionIsValid(topleftCorner, bottomLeftCorner);
+        }
+
+        return result;
+    }
+
+    private void connectVertically(Tile bottomTile, Tile topTile) throws BadPlacementException {
+        Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
+        Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
+        connectNodes(topEdge, bottomEdge);
+
+        if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
+            Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
+            Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
+            connectNodes(topRightCorner, bottomRightCorner);
+
+            Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
+            Node topleftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
+            connectNodes(topleftCorner, bottomLeftCorner);
         }
     }
 
-    private void attemptNodeConnection(Node first, Node second) throws BadPlacementException {
+    private boolean nodeConnectionIsValid(Node first, Node second) {
+        if ((first == null && second != null) || (first != null && second == null) ||
+            first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    private void connectNodes(Node first, Node second) throws BadPlacementException {
         if ((first == null && second != null) || (first != null && second == null)) {
             throw new BadPlacementException("One corner is null and another is not");
         }
 
         if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
-            throw new BadPlacementException("Nodes have a mismatch of terrain.");
+            throw new BadPlacementException("Nodes have a mismatch of terrain: " +
+                    first.getTileSection().getTerrain() +
+                    " != " +
+                    second.getTileSection().getTerrain());
         }
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
-            regions.remove(second.getTileSection().getRegion());
+            regions.remove(second.getTileSection().getRegion().getRegionId());
         }
         else if (first.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             first.getTileSection().getRegion().addTileSection(second.getTileSection());
         }
         else if (second.getTileSection().getRegion() != null) {
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             second.getTileSection().getRegion().addTileSection(first.getTileSection());
         }
         else {
-            Region newRegion = new Region(first.getTerrain());
+            Region newRegion = new Region(first.getTileSection().getTerrain());
+            first.setConnectedNode(second);
+            second.setConnectedNode(first);
             newRegion.addTileSection(first.getTileSection());
             newRegion.addTileSection(second.getTileSection());
-            regions.add(newRegion);
+            regions.put(newRegion.getRegionId(), newRegion);
         }
+    }
+
+    private void setTileForPoint(Tile tile, Point point) {
+        board[point.x][point.y] = tile;
     }
 }
