@@ -1,6 +1,7 @@
 package entities.board;
 
 import entities.overlay.Region;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 import exceptions.BadPlacementException;
 import game.LocationAndOrientation;
@@ -77,6 +78,9 @@ public class Board {
         }
 
         tile.getTileSections().forEach(this::checkIfCanPlaceTiger);
+        if (tile.hasDen()) {
+            TigerDen den = new TigerDen(location, this);
+        }
     }
 
     public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {

@@ -4,6 +4,7 @@ import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.board.Tile;
+import exceptions.TigerAlreadyPlacedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +46,13 @@ public class TileSection {
         return false;
     }
 
+    public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
+        if (this.tiger != null) {
+            throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
+        }
+        this.tiger = tiger;
+    }
+
 
 
     // MARK: Getters and setters
@@ -74,9 +82,5 @@ public class TileSection {
 
     public Tiger getTiger() {
         return tiger;
-    }
-
-    public void setTiger(Tiger tiger) {
-        this.tiger = tiger;
     }
 }

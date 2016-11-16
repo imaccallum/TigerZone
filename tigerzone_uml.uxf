@@ -119,7 +119,7 @@
       <x>78</x>
       <y>300</y>
       <w>306</w>
-      <h>150</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>Board
 --
@@ -226,6 +226,7 @@ LEFT
 - tiger: Tiger
 --
 + DenRegion(centralPoint: Point)
++ isComplete() : boolean
 --
 + getCentralTileLocation() : Point
 + getRequiredTileLocations() : List&lt;Point&gt;
