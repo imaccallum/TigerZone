@@ -19,6 +19,7 @@ public class TileSection {
     private Terrain terrain;
     private Tile tile;
     private Region region;
+    private Tiger tiger;
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
@@ -92,5 +93,13 @@ public class TileSection {
 
     public String toString(){
         return "" + this.hashCode();
+    }
+
+    public Tiger getTiger() {
+        return tiger;
+    }
+
+    public void setTiger(Tiger tiger) {
+        this.tiger = tiger;
     }
 }
