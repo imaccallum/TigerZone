@@ -18,7 +18,6 @@ public class TileSection {
     private Terrain terrain;
     private Tile tile;
     private Region region;
-    private Tiger tiger;
 
 
     public TileSection(Terrain terrain) {
@@ -39,10 +38,6 @@ public class TileSection {
 
     public boolean contains(Node node) {
         return nodes.contains(node);
-    }
-
-    public boolean hasTiger() {
-        return tiger != null;
     }
 
     public boolean hasOpenConnection() {
@@ -86,14 +81,6 @@ public class TileSection {
 
     public void setRegion(Region region) {
         this.region = region;
-    }
-
-    public Tiger getTiger() {
-        return tiger;
-    }
-
-    public void setTiger(Tiger tiger) {
-        this.tiger = tiger;
     }
 
     public List<Node> getNodes() {
