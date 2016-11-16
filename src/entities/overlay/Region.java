@@ -1,14 +1,13 @@
 package entities.overlay;
 
-import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
+import entities.board.Tile;
 import entities.player.Player;
 import game.scoring.DenScorer;
 import game.scoring.LakeScorer;
 import game.scoring.Scorer;
 import game.scoring.TrailScorer;
-import javafx.util.Pair;
 
 import java.util.*;
 
@@ -18,38 +17,36 @@ import java.util.*;
 public class Region {
     private UUID regionId;
     private List<TileSection> tileSections;
+    private HashSet<Tile> tiles;
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
-    private Scorer scorer;
     private Terrain terrain;
+    private Scorer scorer;
+    private int uniquePrey = 0;
+    private int totalPrey = 0;
 
     public Region(Terrain terrain){
+        this.terrain = terrain;
+        scorer = getScorer();
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
         adjacentRegions = new ArrayList<>();
-        this.terrain = terrain;
+        tiles = new HashSet<>();
     }
 
     public void addTileSection(TileSection tileSection){
         tileSection.setRegion(this);
         tileSections.add(tileSection);
+        tiles.add(tileSection.getTile());
     }
 
     public boolean containsTileSection(TileSection section){
         return tileSections.contains(section);
     }
 
-    public int calculatePointValue(){
-        if(isFinished()){
-            //Do calculations
-        }
-        return 0;
-    }
-
     public List<Region> getAdjacentRegions(){
-        //Return the adjacent regions
-        return null;
+        return adjacentRegions;
     }
 
     public List<TileSection> getTileSections(){
@@ -60,17 +57,19 @@ public class Region {
         return regionId;
     }
 
-    public void addTiger(Tiger t){
-        tigers.add(t);
+    public void addTiger(Tiger...tiger){
+        tigers.addAll(Arrays.asList(tiger));
+    }
+
+    public List<Tiger> getTigerList(){
+        return tigers;
     }
 
     public void combineWithRegion(Region region) {
         for (TileSection tileSection : region.tileSections) {
-            if (tileSection.getTiger() != null) {
-                this.addTiger(tileSection.getTiger());
-            }
             this.addTileSection(tileSection);
         }
+        addTiger(region.getTigerList().toArray(new Tiger[region.getTigerList().size()]));
         region = null;
     }
 
@@ -95,8 +94,26 @@ public class Region {
         return false;
     }
 
-    public Player getDominantPlayer() {
-        return null;
+    public boolean hasTigers() {
+        return !tigers.isEmpty();
+    }
+
+    public List<Player> getDominantPlayers() {
+        List<Player> dominantList = new ArrayList<>();
+        HashMap<Player, Integer> tigerCount = new HashMap<>();
+        for(Tiger t : tigers){
+            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
+            tigerCount.put(t.getOwningPlayer(), count + 1);
+        }
+
+        int max = Collections.max(tigerCount.values());
+
+        for(Player p : tigerCount.keySet()){
+            if(tigerCount.get(p) == max)
+                dominantList.add(p);
+        }
+
+        return dominantList;
     }
 
     public Terrain getTerrain() {
@@ -112,6 +129,42 @@ public class Region {
         }
 
         return null;
+    }
+
+    public int getUniquePrey() {
+        return uniquePrey;
+    }
+
+    public int getTotalPrey() {
+        return totalPrey;
+    }
+
+    public void setUniquePrey() {
+        for(Tile t : tiles){
+            if(t.hasBoar()) {
+                uniquePrey++;
+                break;
+            }
+        }
+        for(Tile t : tiles){
+            if(t.hasBuffalo()) {
+                uniquePrey++;
+                break;
+            }
+        }
+        for(Tile t : tiles){
+            if(t.hasDeer()) {
+                uniquePrey++;
+                break;
+            }
+        }
+    }
+
+    public void setTotalPrey() {
+        for(Tile t : tiles){
+            if(t.hasBoar() || t.hasDeer() || t.hasBuffalo())
+                totalPrey++;
+        }
     }
 }
 

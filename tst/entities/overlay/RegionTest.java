@@ -1,133 +1,54 @@
 package entities.overlay;
 
-import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
-import exceptions.IncompatibleTerrainException;
-import game.scoring.JungleScorer;
-import game.scoring.LakeScorer;
-import game.scoring.TrailScorer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 public class RegionTest {
-    private TileSection testTileSectionA;
-    private TileSection testTileSectionB;
-    private TileSection testTileSectionC;
     private Region testRegionA;
     private Region testRegionB;
     private Region testRegionC;
     private Tiger diegoTiger;
+    private Tiger trevorTiger0;
     private Tiger trevorTiger;
+    private Player Diego;
+    private Player Trevor;
 
     @Before
     public void setup() {
-        testTileSectionA = new TileSection(Terrain.JUNGLE);
-        testTileSectionB = new TileSection(Terrain.JUNGLE);
-        testTileSectionC = new TileSection(Terrain.LAKE);
         testRegionA = new Region(Terrain.JUNGLE);
         testRegionB = new Region(Terrain.JUNGLE);
         testRegionC = new Region(Terrain.LAKE);
-        Player diego = new Player("Diego");
-        Player trevor = new Player("Trevor");
-        diegoTiger = new Tiger(diego);
-        trevorTiger = new Tiger(trevor);
+        Diego = new Player("Diego");
+        Trevor = new Player("Trevor");
+        diegoTiger = new Tiger(Diego);
+        trevorTiger0 = new Tiger(Trevor);
+        trevorTiger = new Tiger(Trevor);
+
+
     }
 
     @Test
-    public void testAddTileSectionShouldAddATileSection() throws IncompatibleTerrainException {
-        testRegionA.addTileSection(testTileSectionA);
-        Assert.assertEquals(testRegionA.getTileSections().get(0), testTileSectionA);
-    }
-
-    @Test (expected = IncompatibleTerrainException.class)
-    public void testAddIncompatibleTerrainThrowsException() throws IncompatibleTerrainException {
-        testRegionC.addTileSection(testTileSectionA);
-    }
-
-
-    @Test // Should not throw
-    public void testCombineRegionShouldHaveAllTigers() throws Exception {
-        testTileSectionA.placeTiger(diegoTiger);
-        testTileSectionB.placeTiger(trevorTiger);
-        testRegionA.addTileSection(testTileSectionA);
-        testRegionB.addTileSection(testTileSectionB);
+    public void testCombineRegionShouldHaveCorrectNumberOfTigers(){
+        testRegionA.addTiger(diegoTiger);
         testRegionB.combineWithRegion(testRegionA);
-        Assert.assertTrue(testRegionB.getAllTigers().contains(diegoTiger));
-        Assert.assertTrue(testRegionB.getAllTigers().contains(trevorTiger));
+        Assert.assertTrue(testRegionB.getTigerList().contains(diegoTiger));
     }
 
     @Test
-    public void testCombineRegionShouldHaveAllTileSections() throws IncompatibleTerrainException {
-        testRegionA.addTileSection(testTileSectionA);
-        testRegionB.addTileSection(testTileSectionB);
-        testRegionA.combineWithRegion(testRegionB);
-        Assert.assertTrue(testRegionA.getTileSections().contains(testTileSectionA));
-        Assert.assertTrue(testRegionA.getTileSections().contains(testTileSectionB));
-    }
-
-    @Test (expected = IncompatibleTerrainException.class)
-    public void testCombineIncompatibleRegionsShouldThrowException() throws IncompatibleTerrainException {
-        testRegionA.addTileSection(testTileSectionA);
-        testRegionC.addTileSection(testTileSectionC);
-        testRegionA.combineWithRegion(testRegionC);
+    public void testisDisputedShouldReturnTrueIfRegionIsShared(){
+        testRegionB.addTiger(diegoTiger);
+        Assert.assertFalse(testRegionA.isDisputed());
+        testRegionB.addTiger(trevorTiger);
+        Assert.assertTrue(testRegionB.isDisputed());
     }
 
     @Test
-    public void testCompleteAndIncompleteRegionsShouldReturnTrueIfCompleteFalseIfNot()
-            throws IncompatibleTerrainException {
-        Region testCompletedRegion = createCompletedRegion();
-        Assert.assertTrue(testCompletedRegion.isFinished());
-        testTileSectionA.addNodes(new Node());
-        testRegionA.addTileSection(testTileSectionA);
-        Assert.assertFalse(testRegionA.isFinished());
-    }
-
-    @Test // Should not throw
-    public void testContainsTigersReturnsTrueIfTigersArePresentInRegion() throws Exception {
-        testTileSectionA.placeTiger(diegoTiger);
-        testRegionA.addTileSection(testTileSectionA);
-        Assert.assertTrue(testRegionA.containsTigers());
-        testRegionB.addTileSection(testTileSectionB);
-        Assert.assertFalse(testRegionB.containsTigers());
-    }
-
-    @Test
-    public void testGetScorerReturnsCorrectScorerClass() {
-        Region jungle = new Region(Terrain.JUNGLE);
-        Region lake = new Region(Terrain.LAKE);
-        Region trail = new Region(Terrain.TRAIL);
-        Assert.assertTrue(jungle.getScorer().getClass()== JungleScorer.class);
-        Assert.assertTrue(lake.getScorer().getClass() == LakeScorer.class);
-        Assert.assertTrue(trail.getScorer().getClass() == TrailScorer.class);
-    }
-
-    @Test
-    public void testGetAllTigersContainsAllTigersInRegion() throws Exception {
-        testTileSectionA.placeTiger(diegoTiger);
-        testTileSectionB.placeTiger(trevorTiger);
-        testRegionA.addTileSection(testTileSectionA);
-        testRegionA.addTileSection(testTileSectionB);
-        Assert.assertTrue(testRegionA.getAllTigers()
-                .containsAll(Arrays.asList(diegoTiger, trevorTiger)));
-    }
-
-    private Region createCompletedRegion() throws IncompatibleTerrainException {
-        Region region = new Region(Terrain.TRAIL);
-        Node node1 = new Node();
-        Node node2 = new Node();
-        node1.setConnectedNode(node2);
-        node2.setConnectedNode(node1);
-        TileSection tileSection1 = new TileSection(Terrain.TRAIL);
-        TileSection tileSection2 = new TileSection(Terrain.TRAIL);
-        tileSection1.addNodes(node1);
-        tileSection2.addNodes(node2);
-        region.addTileSection(tileSection1);
-        region.addTileSection(tileSection2);
-        return region;
+    public void testgetDominantPlayersShouldReturnPlayerWithMostTigers(){
+        testRegionA.addTiger(diegoTiger, trevorTiger0, trevorTiger);
+        Assert.assertEquals(testRegionA.getDominantPlayers().get(0), Trevor);
     }
 }

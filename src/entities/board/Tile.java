@@ -79,9 +79,10 @@ public class Tile {
 
         Node[] tempEdges = new Node[COUNT];
         Node[] tempCorners = new Node[COUNT];
+        int index;
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (i + numberOfRotations) % COUNT;
+            index = (i + numberOfRotations) % COUNT;
             tempEdges[index] = edges[i];
             tempCorners[index] = corners[i];
         }
@@ -152,5 +153,9 @@ public class Tile {
 
     public void setHasBoar(boolean hasBoar) {
         this.hasBoar = hasBoar;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
     }
 }
