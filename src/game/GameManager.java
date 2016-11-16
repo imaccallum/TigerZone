@@ -6,8 +6,10 @@ import entities.board.TileFactory;
 import entities.overlay.Region;
 import entities.player.Player;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class GameManager {
 
@@ -34,7 +36,13 @@ public class GameManager {
         }
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public static void main(String[] args) throws IOException, BadPlacementException {
+
+        //region deckArray
         Character[] myarray = {'a',
                 'b', 'b', 'b', 'b',
                 'c', 'c',
@@ -62,6 +70,8 @@ public class GameManager {
                 'y','y',
                 'z',
                 '0','0'};
+        //endregion
+
         List<Character> charList = Arrays.asList(myarray);
         Collections.shuffle(charList);
 
@@ -76,14 +86,29 @@ public class GameManager {
         Player p0 = new Player("Player 0");
         Player p1 = new Player("Player 1");
 
-        TileFactory tf = new TileFactory();
-        Tile t1 = tf.makeTile('a');
-        Tile t2 = tf.makeTile('a');
-
         GameManager gm = new GameManager(deck, p0, p1);
-        gm.board.insert(t2, 40, 41);
+
+
+//        TileFactory tf = new TileFactory();
+//        Tile t1 = tf.makeTile('a');
+//        Tile t2 = tf.makeTile('a');
+
+        while(!deck.empty())
+        {
+            Tile t = deck.pop();
+     //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
+            List<Point>  tileOptions = gm.getBoard().returnValidPlacements(t);
+            if(tileOptions.size() > 0) {
+                System.out.println("Inserted @ " + tileOptions.get(0));
+                gm.getBoard().insert(t, tileOptions.get(0).x, tileOptions.get(0).y);
+            } else {
+                System.out.println("No valid moves, discarding tile.");
+            }
+        }
+
+//        gm.board.insert(t2, 40, 41);
 //        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
 //        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-        System.out.println(gm.board.getTileOptions());
+//        System.out.println(gm.board.getTileOptions());
     }
 }

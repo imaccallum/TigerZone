@@ -14,12 +14,12 @@ import java.util.List;
 // Also keeps track of the tile it is on and the region it is a part of in the game's overlay.
 // Has the ability to have a tiger placed on it.
 public class TileSection {
+
     private List<Node> nodes;
     private Terrain terrain;
     private Tile tile;
     private Region region;
     private Tiger tiger;
-
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;

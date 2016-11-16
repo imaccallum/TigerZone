@@ -9,9 +9,11 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
+
     private Tile[][] board = new Tile[80][80];
     private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
     public Tile center;					// The map of tiles
+
     private List<Point> openTiles;		    // A list of all current open tile positions
     private Map<UUID, Region> regions;
     private List<Tiger> tigers;
@@ -88,21 +90,80 @@ public class Board {
         return board[p.x][p.y];
     }
 
-    public List<Point> returnValidPlacements(Tile tile){
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public List<Point> returnValidPlacements(Tile tile) {
         List<Point> validPlacements = new ArrayList<>();
 
-        for(Point p : openTiles){
+        for(Point p : openTiles) {   // for each open tile
             Tile top = board[p.x][p.y-1];
             Tile right = board[p.x+1][p.y];
-            Tile bottom = board[p.x+1][p.y+1];
+            Tile bottom = board[p.x][p.y+1];
             Tile left = board[p.x-1][p.y];
-            if(top != null){
-                Node bottomEdge = top.getEdge(EdgeLocation.BOTTOM);
+
+            System.out.println("For openTile " + p + ": ");
+            System.out.println("    Top = " + (top != null));
+            System.out.println("    Right = " + (right != null));
+            System.out.println("    Bottom = " + (bottom != null));
+            System.out.println("    Left = " + (left != null));
+
+
+            if(top != null) {
+                Node adjEdge = top.getEdge(EdgeLocation.BOTTOM);
                 Node topEdge = tile.getEdge(EdgeLocation.TOP);
-                if(bottomEdge.getTileSection().getTerrain() == topEdge.getTileSection().getTerrain() &&
-                        ){
+
+                System.out.println("topEdge = " + topEdge.getTileSection().getTerrain());
+                System.out.println("adj@Bottom = " + adjEdge.getTileSection().getTerrain());
+
+                //If adj edge is incompatible, go to next open tile
+                if(adjEdge.getTileSection().getTerrain() != topEdge.getTileSection().getTerrain()){
+                    System.out.println("Aborted " + p );
+                    continue;
                 }
             }
+            if(right != null) {
+                Node adjEdge = right.getEdge(EdgeLocation.LEFT);
+                Node rightEdge = tile.getEdge(EdgeLocation.RIGHT);
+
+                System.out.println("rightEdge = " + rightEdge.getTileSection().getTerrain());
+                System.out.println("adj@Left = " + adjEdge.getTileSection().getTerrain());
+
+                //If adj edge is incompatible, go to next open tile
+                if(adjEdge.getTileSection().getTerrain() != rightEdge.getTileSection().getTerrain()){
+                    System.out.println("Aborted " + p );
+                    continue;
+                }
+            }
+            if(bottom != null) {
+                Node adjEdge = bottom.getEdge(EdgeLocation.TOP);
+                Node bottomEdge = tile.getEdge(EdgeLocation.BOTTOM);
+
+                System.out.println("bottomEdge = " + bottomEdge.getTileSection().getTerrain());
+                System.out.println("adj@Top = " + adjEdge.getTileSection().getTerrain());
+
+                //If adj edge is incompatible, go to next open tile
+                if(adjEdge.getTileSection().getTerrain() != bottomEdge.getTileSection().getTerrain()){
+                    System.out.println("Aborted " + p );
+                    continue;
+                }
+            }
+            if(left != null) {
+                Node adjEdge = left.getEdge(EdgeLocation.RIGHT);
+                Node leftEdge = tile.getEdge(EdgeLocation.LEFT);
+
+                System.out.println("leftEdge = " + leftEdge.getTileSection().getTerrain());
+                System.out.println("adj@Right = " + adjEdge.getTileSection().getTerrain());
+
+                //If adj edge is incompatible, go to next open tile
+                if(adjEdge.getTileSection().getTerrain() != leftEdge.getTileSection().getTerrain()){
+                    System.out.println("Aborted " + p );
+                    continue;
+                }
+            }
+            System.out.println("Added " + p);
+            validPlacements.add(p);
         }
 
         return validPlacements;
@@ -216,7 +277,7 @@ public class Board {
         }
 
         if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
-            throw new BadPlacementException("Nodes have a mismatch of terrain.");
+            throw new BadPlacementException("Nodes have a mismatch of terrain: " + first.getTileSection().getTerrain() + " != " + second.getTileSection().getTerrain());
         }
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
