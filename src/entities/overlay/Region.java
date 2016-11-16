@@ -21,13 +21,11 @@ public class Region {
     private List<Tiger> tigers;
     private List<Region> adjacentRegions;
     private Terrain terrain;
-    private Scorer scorer;
     private int uniquePrey = 0;
     private int totalPrey = 0;
 
     public Region(Terrain terrain){
         this.terrain = terrain;
-        scorer = getScorer();
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
