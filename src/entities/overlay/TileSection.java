@@ -33,43 +33,44 @@ public class TileSection {
         nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
+    public String toString(){
+        return "" + this.hashCode();
+    }
+
+//    public boolean hasOpenConnection() {
+//        if (terrain == Terrain.DEN) {
+//            Tile[] adjacentTiles = tile.getAdjacentTiles();
+//            if(adjacentTiles == null){
+//                return true;
+//            }
+//            if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
+//                adjacentTiles[2] == null || adjacentTiles[3] == null) {
+//                return true;
+//            }
+//
+//            Tile leftTile = adjacentTiles[1];
+//            Tile rightTile = adjacentTiles[3];
+//            if (leftTile.getAdjacentTiles()[0] == null || leftTile.getAdjacentTiles()[2] == null ||
+//                rightTile.getAdjacentTiles()[0] == null || rightTile.getAdjacentTiles()[2] == null) {
+//                return true;
+//            }
+//        } else {
+//            for (Node edgenode : tile.getEdges()) {
+//                if (!edgenode.isConnected()) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//        return false;
+//    }
+
+
+
+    // MARK: Getters and setters
     public Terrain getTerrain() {
         return terrain;
     }
-
-    public boolean contains(Node node) {
-        return nodes.contains(node);
-    }
-
-    public boolean hasOpenConnection() {
-        if (terrain == Terrain.DEN) {
-            Tile[] adjacentTiles = tile.getAdjacentTiles();
-            if(adjacentTiles == null){
-                return true;
-            }
-            if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
-                adjacentTiles[2] == null || adjacentTiles[3] == null) {
-                return true;
-            }
-
-            Tile leftTile = adjacentTiles[1];
-            Tile rightTile = adjacentTiles[3];
-            if (leftTile.getAdjacentTiles()[0] == null || leftTile.getAdjacentTiles()[2] == null ||
-                rightTile.getAdjacentTiles()[0] == null || rightTile.getAdjacentTiles()[2] == null) {
-                return true;
-            }
-        } else {
-            for (Node edgenode : tile.getEdges()) {
-                if (!edgenode.isConnected()) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
-
-    // MARK: Getters and setters
 
     public Tile getTile() {
         return tile;
@@ -89,10 +90,6 @@ public class TileSection {
 
     public List<Node> getNodes() {
         return nodes;
-    }
-
-    public String toString(){
-        return "" + this.hashCode();
     }
 
     public Tiger getTiger() {
