@@ -26,12 +26,12 @@ public class Region {
     private int totalPrey = 0;
 
     public Region(Terrain terrain){
-        scorer = getScorer();
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
         adjacentRegions = new ArrayList<>();
         this.terrain = terrain;
+        scorer = getScorer();
         tiles = new HashSet<>();
     }
 

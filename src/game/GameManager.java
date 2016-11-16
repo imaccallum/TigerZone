@@ -76,11 +76,14 @@ public class GameManager {
         Player p0 = new Player("Player 0");
         Player p1 = new Player("Player 1");
 
+        TileFactory tf = new TileFactory();
+        Tile t1 = tf.makeTile('a');
+        Tile t2 = tf.makeTile('a');
+
         GameManager gm = new GameManager(deck, p0, p1);
-        gm.board.insert(gm.board.getTileStack().pop(), 40, 41);
+        gm.board.insert(t2, 40, 41);
 //        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
 //        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
         System.out.println(gm.board.getTileOptions());
     }
-
 }

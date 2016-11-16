@@ -11,7 +11,7 @@ import java.util.List;
 public class Board {
     private Tile[][] board = new Tile[80][80];
     private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
-    private Tile center;					// The map of tiles
+    public Tile center;					// The map of tiles
     private List<Point> openTiles;		    // A list of all current open tile positions
     private Map<UUID, Region> regions;
     private List<Tiger> tigers;
@@ -25,7 +25,8 @@ public class Board {
     }
 
     public void initBoard(){
-        this.center = tileStack.pop();
+        TileFactory tf = new TileFactory();
+        this.center = tf.makeTile('a');
         Point center = new Point(40,40);
         center.setLocation(center);
         board[40][40] = this.center;
