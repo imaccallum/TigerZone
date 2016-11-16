@@ -39,10 +39,10 @@ public class Board {
     }
 
     public void insert(Tile tile, int x, int y) throws BadPlacementException {
-        Tile leftTile = getTile(new Point(x + 1, y));
-        Tile rightTile = getTile(new Point(x - 1, y));
-        Tile bottomTile = getTile(new Point(x, y - 1));
-        Tile topTile = getTile(new Point(x, y + 1));
+        Tile leftTile = getTile(new Point(x, y - 1));
+        Tile rightTile = getTile(new Point(x, y + 1));
+        Tile bottomTile = getTile(new Point(x + 1, y));
+        Tile topTile = getTile(new Point(x - 1, y));
         if (leftTile == null && rightTile == null && topTile == null && bottomTile == null) {
             throw new BadPlacementException("Index given is out of bounds");
         }
@@ -55,25 +55,25 @@ public class Board {
             attemptLateralConnection(tile, leftTile);
             leftTile.setRightTile(tile);
         } else {
-            openTiles.add(new Point(x + 1, y));
+            openTiles.add(new Point(x, y - 1));
         }
         if (rightTile != null) {
             attemptLateralConnection(rightTile, tile);
             rightTile.setLeftTile(tile);
         } else {
-            openTiles.add(new Point(x - 1, y));
+            openTiles.add(new Point(x, y + 1));
         }
         if (topTile != null) {
             attemptVerticalConnection(tile, topTile);
             topTile.setBottomTile(tile);
         } else {
-            openTiles.add(new Point(x, y + 1));
+            openTiles.add(new Point(x - 1, y));
         }
         if (bottomTile != null) {
             attemptVerticalConnection(bottomTile, tile);
             bottomTile.setTopTile(tile);
         } else {
-            openTiles.add(new Point(x, y - 1));
+            openTiles.add(new Point(x + 1, y));
         }
     }
 
