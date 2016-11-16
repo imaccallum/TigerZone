@@ -77,6 +77,10 @@ public class Tile {
         return center;
     }
 
+    public List<TileSection> getTileSections(){
+        return tileSections;
+    }
+
     public void rotateClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
@@ -98,18 +102,26 @@ public class Tile {
 
     public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
+        this.getEdge(EdgeLocation.TOP).setConnectedNode(t.getEdge(EdgeLocation.BOTTOM));
+        t.getEdge(EdgeLocation.BOTTOM).setConnectedNode(this.getEdge(EdgeLocation.TOP));
     }
 
     public void setBottomTile(Tile t) throws BadPlacementException {
         setTile(t, 2);
+        this.getEdge(EdgeLocation.BOTTOM).setConnectedNode(t.getEdge(EdgeLocation.TOP));
+        t.getEdge(EdgeLocation.TOP).setConnectedNode(this.getEdge(EdgeLocation.BOTTOM));
     }
 
     public void setLeftTile(Tile t) throws BadPlacementException {
         setTile(t, 3);
+        this.getEdge(EdgeLocation.LEFT).setConnectedNode(t.getEdge(EdgeLocation.RIGHT));
+        t.getEdge(EdgeLocation.RIGHT).setConnectedNode(this.getEdge(EdgeLocation.LEFT));
     }
 
     public void setRightTile(Tile t) throws BadPlacementException {
         setTile(t, 1);
+        this.getEdge(EdgeLocation.RIGHT).setConnectedNode(t.getEdge(EdgeLocation.LEFT));
+        t.getEdge(EdgeLocation.LEFT).setConnectedNode(this.getEdge(EdgeLocation.RIGHT));
     }
 
     public void setEdge(Node node, int i){
@@ -129,7 +141,15 @@ public class Tile {
     }
 
     public void addTileSections(TileSection... sections){
+        for (TileSection tileSection: sections){
+            tileSection.setTile(this);
+        }
         tileSections.addAll(Arrays.asList(sections));
+
+    }
+
+    public Node[] getEdges(){
+        return edges;
     }
 
     public boolean hasDeer() {

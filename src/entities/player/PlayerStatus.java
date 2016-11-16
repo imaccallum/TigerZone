@@ -1,6 +1,6 @@
 package entities.player;
 
-public class PlayerStatus {
+public class PlayerStatus { //but seriously, what's the point of this class
     private Player player;
     private int score;
     private int remainingTigers;
