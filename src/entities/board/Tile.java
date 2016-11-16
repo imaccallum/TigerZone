@@ -98,30 +98,37 @@ public class Tile {
     private void setTile(Tile t, int i) throws BadPlacementException {
         if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
         adjacentTiles[i] = t;
+        this.getEdge(EdgeLocation.values()[i]).setConnectedNode(t.getEdge(EdgeLocation.values()[(i+2)%4]));
+        t.getEdge(EdgeLocation.values()[(i+2)%4]).setConnectedNode(this.getEdge(EdgeLocation.values()[i]));
+        //example: setTop => setTile(t,0);
+                // this.getEdge(EdgeLocation.values()[0])    EdgeLocation.values() returns an array of ordinals, so 0 is TOP
+                // (0+2)%4 = 2
+                // t.getEdge(EdgeLocation.values()[2])    EdgeLocation.values() returns an array of ordinals, so 2 is BOTTOM
+                // link the top node in this Tile with the bottom node in the one being connected, and vice versa
+        if(t.getCorner(CornerLocation.values()[(i+2)%4])!=null && this.getCorner(CornerLocation.values()[(i+1)%4])!=null){
+            this.getCorner(CornerLocation.values()[(i+1)%4]).setConnectedNode(t.getCorner(CornerLocation.values()[(i+2)%4]));
+            t.getCorner(CornerLocation.values()[(i+2)%4]).setConnectedNode(this.getCorner(CornerLocation.values()[(i+1)%4]));
+        }
+        if(t.getCorner(CornerLocation.values()[(i+3)%4])!=null && this.getCorner(CornerLocation.values()[i])!=null){
+            this.getCorner(CornerLocation.values()[(i+3)%4]).setConnectedNode(t.getCorner(CornerLocation.values()[i]));
+            t.getCorner(CornerLocation.values()[i]).setConnectedNode(this.getCorner(CornerLocation.values()[(i+3)%4]));
+        }
     }
 
     public void setTopTile(Tile t) throws BadPlacementException {
         setTile(t, 0);
-        this.getEdge(EdgeLocation.TOP).setConnectedNode(t.getEdge(EdgeLocation.BOTTOM));
-        t.getEdge(EdgeLocation.BOTTOM).setConnectedNode(this.getEdge(EdgeLocation.TOP));
     }
 
     public void setBottomTile(Tile t) throws BadPlacementException {
         setTile(t, 2);
-        this.getEdge(EdgeLocation.BOTTOM).setConnectedNode(t.getEdge(EdgeLocation.TOP));
-        t.getEdge(EdgeLocation.TOP).setConnectedNode(this.getEdge(EdgeLocation.BOTTOM));
     }
 
     public void setLeftTile(Tile t) throws BadPlacementException {
         setTile(t, 3);
-        this.getEdge(EdgeLocation.LEFT).setConnectedNode(t.getEdge(EdgeLocation.RIGHT));
-        t.getEdge(EdgeLocation.RIGHT).setConnectedNode(this.getEdge(EdgeLocation.LEFT));
     }
 
     public void setRightTile(Tile t) throws BadPlacementException {
         setTile(t, 1);
-        this.getEdge(EdgeLocation.RIGHT).setConnectedNode(t.getEdge(EdgeLocation.LEFT));
-        t.getEdge(EdgeLocation.LEFT).setConnectedNode(this.getEdge(EdgeLocation.RIGHT));
     }
 
     public void setEdge(Node node, int i){

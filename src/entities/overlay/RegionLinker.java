@@ -1,5 +1,7 @@
 package entities.overlay;
 
+import entities.board.Tiger;
+
 import java.util.ArrayList;
 
 public class RegionLinker {
@@ -14,12 +16,7 @@ public class RegionLinker {
     }
 
     public void linkRegions(Region region1, Region region2){
-        for (TileSection tileSection : region2.getTileSections()) {
-            if (tileSection.getTiger() != null) {
-                region1.addTiger(tileSection.getTiger());
-            }
-            region1.addTileSection(tileSection);
-        }
+        region1.addTiger(region2.getTigerList().toArray(new Tiger[region2.getTigerList().size()]));
         regions.remove(region2);
     }
 

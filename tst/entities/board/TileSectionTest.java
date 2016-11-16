@@ -9,16 +9,20 @@ import org.junit.Test;
 import java.util.List;
 
 public class TileSectionTest {
-    private Tile testTile;
+    private Tile testTileR;  //tile R, to test other aspects
     private List<TileSection> tileSections;
-    private Tile testTile2;
+    private Tile testTileB; //tile B (den and field all around, to test Den
+    private Tile testTileD; //Tile D (four way crossroad), to test corner connections
+    private Tile testTileD2;    //Tile D again
 
     @Before
     public void setup() {
         TileFactory f = new TileFactory();
-        testTile = f.makeTile('r');
-        tileSections = testTile.getTileSections();
-        testTile2 = f.makeTile('b');
+        testTileR = f.makeTile('r');
+        tileSections = testTileR.getTileSections();
+        testTileB = f.makeTile('b');
+        testTileD = f.makeTile('d');
+        testTileD2 = f.makeTile('d');
     }
 
     @Test
@@ -39,7 +43,7 @@ public class TileSectionTest {
     @Test
     public void testHasOpenConnection() throws BadPlacementException {
         Assert.assertTrue(tileSections.get(0).hasOpenConnection());
-        Assert.assertTrue(testTile2.getTileSections().get(1).hasOpenConnection());
+        Assert.assertTrue(testTileB.getTileSections().get(1).hasOpenConnection());
 
         Tile leftTile = new Tile();
         leftTile.setEdge(new Node(), 0);
@@ -68,18 +72,25 @@ public class TileSectionTest {
         Tile bottomTile = new Tile();
         bottomTile.setEdge(new Node(), 0);
 
-        testTile2.setLeftTile(leftTile);
-        testTile2.setRightTile(rightTile);
-        testTile2.setTopTile(topTile);
-        testTile2.setBottomTile(bottomTile);
+        testTileB.setLeftTile(leftTile);
+        testTileB.setRightTile(rightTile);
+        testTileB.setTopTile(topTile);
+        testTileB.setBottomTile(bottomTile);
 
-        Assert.assertFalse(testTile2.getTileSections().get(1).hasOpenConnection());
+        Assert.assertFalse(testTileB.getTileSections().get(1).hasOpenConnection());
 
-        testTile.setLeftTile(leftTile);
-        testTile.setRightTile(rightTile);
-        testTile.setTopTile(topTile);
-        testTile.setBottomTile(bottomTile);
+        testTileR.setLeftTile(leftTile);
+        testTileR.setRightTile(rightTile);
+        testTileR.setTopTile(topTile);
+        testTileR.setBottomTile(bottomTile);
 
-        Assert.assertFalse(testTile.getTileSections().get(0).hasOpenConnection());
+        Assert.assertFalse(testTileR.getTileSections().get(0).hasOpenConnection());
+
+        testTileD.setLeftTile(testTileD2);
+        testTileD.setRightTile(testTileD2);
+        testTileD.setTopTile(testTileD2);
+        testTileD.setBottomTile(testTileD2);
+
+        Assert.assertFalse(testTileD.getTileSections().get(0).hasOpenConnection());
     }
 }
