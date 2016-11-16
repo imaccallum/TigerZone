@@ -43,24 +43,27 @@ public class TileSection {
     public boolean hasOpenConnection() {
         if (terrain == Terrain.DEN) {
             Tile[] adjacentTiles = tile.getAdjacentTiles();
+            if(adjacentTiles == null){
+                return true;
+            }
             if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
                 adjacentTiles[2] == null || adjacentTiles[3] == null) {
-                return false;
+                return true;
             }
 
-            Tile leftTile = adjacentTiles[0];
-            Tile rightTile = adjacentTiles[2];
-            if (leftTile.getAdjacentTiles()[1] == null || leftTile.getAdjacentTiles()[3] == null ||
-                rightTile.getAdjacentTiles()[1] == null || rightTile.getAdjacentTiles()[3] == null) {
-                return false;
+            Tile leftTile = adjacentTiles[1];
+            Tile rightTile = adjacentTiles[3];
+            if (leftTile.getAdjacentTiles()[0] == null || leftTile.getAdjacentTiles()[2] == null ||
+                rightTile.getAdjacentTiles()[0] == null || rightTile.getAdjacentTiles()[2] == null) {
+                return true;
             }
         } else {
-            for (Node node : nodes) {
-                if (!node.isConnected()) {
-                    return false;
+            for (Node edgenode : tile.getEdges()) {
+                if (!edgenode.isConnected()) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
         return false;
     }
