@@ -86,4 +86,8 @@ public class TileSection {
     public List<Node> getNodes() {
         return nodes;
     }
+
+    public String toString(){
+        return "" + this.hashCode();
+    }
 }

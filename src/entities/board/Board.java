@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.List;
 
 public class Board {
+    private Tile[][] board = new Tile[80][80];
     private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
     private Tile center;					// The map of tiles
     private List<Point> openTiles;		    // A list of all current open tile positions
@@ -17,10 +18,21 @@ public class Board {
 
     public Board(Stack<Tile> stack) {
         tileStack = stack;
-        center = tileStack.pop();
         openTiles = new ArrayList<>();
         regions = new HashMap<>();
         tigers = new ArrayList<>();
+        initBoard();
+    }
+
+    public void initBoard(){
+        this.center = tileStack.pop();
+        Point center = new Point(40,40);
+        center.setLocation(center);
+        board[40][40] = this.center;
+        openTiles.add(new Point(40,41));
+        openTiles.add(new Point(39,40));
+        openTiles.add(new Point(40,41));
+        openTiles.add(new Point(40,39));
     }
 
     public void insert(Tile tile, int x, int y) throws BadPlacementException {
@@ -32,21 +44,30 @@ public class Board {
             throw new BadPlacementException("Index given is out of bounds");
         }
 
+        // Else statements to add open tiles next to the tile being placed if currently null
         if (leftTile != null) {
             attemptLateralConnection(tile, leftTile);
             leftTile.setRightTile(tile);
+        } else {
+            openTiles.add(new Point(x + 1, y));
         }
         if (rightTile != null) {
             attemptLateralConnection(rightTile, tile);
             rightTile.setLeftTile(tile);
+        } else {
+            openTiles.add(new Point(x - 1, y));
         }
         if (topTile != null) {
             attemptVerticalConnection(tile, topTile);
             topTile.setBottomTile(tile);
+        } else {
+            openTiles.add(new Point(x, y + 1));
         }
         if (bottomTile != null) {
             attemptVerticalConnection(bottomTile, tile);
             bottomTile.setTopTile(tile);
+        } else {
+            openTiles.add(new Point(x, y - 1));
         }
     }
 
@@ -59,52 +80,59 @@ public class Board {
         tigers.add(tiger);
     }
 
-    private Tile getTile(Point point) {
-        Tile currentTile = center;
-        int x = point.x;
-        int y = point.y;
-        while (x != 0 && y != 0) {
-            boolean iterated = false;
-            if (x < 0) {
-                Tile nextTile = iterateRight(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    ++x;
-                }
-            }
-            if (!iterated && x > 0) {
-                Tile nextTile = iterateLeft(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    --x;
-                }
-            }
-            if (!iterated && y < 0) {
-                Tile nextTile = iterateDown(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    ++y;
-                }
-            }
-            if (!iterated) {
-                Tile nextTile = iterateUp(currentTile);
-                if (nextTile != null) {
-                    currentTile = nextTile;
-                    iterated = true;
-                    --y;
-                }
-            }
-
-            if (currentTile == null) {
-                return null;
-            }
-        }
-        return currentTile;
+    public Tile getTile(Point p){
+        return board[p.x][p.y];
     }
 
+//    private Tile getTile(Point point) {
+//        Tile currentTile = center;
+//        int x = point.x;
+//        int y = point.y;
+//        while (x != 0 && y != 0) {
+//            boolean iterated = false;
+//            if (x < 0) {
+//                Tile nextTile = iterateRight(currentTile);
+//                if (nextTile != null) {
+//                    currentTile = nextTile;
+//                    iterated = true;
+//                    ++x;
+//                }
+//            }
+//            if (!iterated && x > 0) {
+//                Tile nextTile = iterateLeft(currentTile);
+//                if (nextTile != null) {
+//                    currentTile = nextTile;
+//                    iterated = true;
+//                    --x;
+//                }
+//            }
+//            if (!iterated && y < 0) {
+//                Tile nextTile = iterateDown(currentTile);
+//                if (nextTile != null) {
+//                    currentTile = nextTile;
+//                    iterated = true;
+//                    ++y;
+//                }
+//            }
+//            if (!iterated) {
+//                Tile nextTile = iterateUp(currentTile);
+//                if (nextTile != null) {
+//                    currentTile = nextTile;
+//                    iterated = true;
+//                    --y;
+//                }
+//            }
+//
+//            if (currentTile == null) {
+//                return null;
+//            }
+//        }
+//        return currentTile;
+//    }
+
+    public Stack<Tile> getTileStack(){
+        return tileStack;
+    }
 
     public List<Point> getTileOptions() {
         return openTiles;

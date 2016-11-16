@@ -3,6 +3,7 @@ package entities.board;
 import entities.overlay.TileSection;
 
 public class Node {
+
     private Node connectedNode;
     private TileSection tileSection;
 

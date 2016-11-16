@@ -4,6 +4,7 @@ import entities.board.Node;
 import entities.overlay.TileSection;
 import game.BadPlacementException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Tile {
     private boolean hasDeer;
     private boolean hasBuffalo;
     private boolean hasBoar;
+    private Point location;
     private List<TileSection> tileSections;
 
     public Tile() {
@@ -79,10 +81,9 @@ public class Tile {
 
         Node[] tempEdges = new Node[COUNT];
         Node[] tempCorners = new Node[COUNT];
-        int index;
 
         for (int i = 0; i < COUNT; i++) {
-            index = (i + numberOfRotations) % COUNT;
+            int index = (i + numberOfRotations) % COUNT;
             tempEdges[index] = edges[i];
             tempCorners[index] = corners[i];
         }
@@ -155,7 +156,22 @@ public class Tile {
         this.hasBoar = hasBoar;
     }
 
-    public List<TileSection> getTileSections(){
-        return tileSections;
+    public String toString(){
+        String str = "Tile: " + this.hashCode() +
+                "\nTileSections: " + tileSections +
+                "\nAdjacent Tiles: ";
+        for(Tile t: adjacentTiles){
+            if(t != null)
+                str += t.hashCode() + ", ";
+        }
+        return str;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public Point getLocation() {
+        return location;
     }
 }
