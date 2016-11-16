@@ -26,12 +26,12 @@ public class Region {
     private int totalPrey = 0;
 
     public Region(Terrain terrain){
+        this.terrain = terrain;
+        scorer = getScorer();
         regionId = UUID.randomUUID();
         tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
         adjacentRegions = new ArrayList<>();
-        this.terrain = terrain;
-        scorer = getScorer();
         tiles = new HashSet<>();
     }
 
@@ -57,8 +57,8 @@ public class Region {
         return regionId;
     }
 
-    public void addTiger(Tiger t){
-        tigers.add(t);
+    public void addTiger(Tiger...tiger){
+        tigers.addAll(Arrays.asList(tiger));
     }
 
     public List<Tiger> getTigerList(){
@@ -67,11 +67,10 @@ public class Region {
 
     public void combineWithRegion(Region region) {
         for (TileSection tileSection : region.tileSections) {
-            if (tileSection.getTiger() != null) {
-                this.addTiger(tileSection.getTiger());
-            }
             this.addTileSection(tileSection);
         }
+        addTiger(region.getTigerList().toArray(new Tiger[region.getTigerList().size()]));
+        region = null;
     }
 
     public boolean isFinished() {
@@ -104,7 +103,7 @@ public class Region {
         HashMap<Player, Integer> tigerCount = new HashMap<>();
         for(Tiger t : tigers){
             int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
-            tigerCount.put(t.getOwningPlayer(), count);
+            tigerCount.put(t.getOwningPlayer(), count + 1);
         }
 
         int max = Collections.max(tigerCount.values());
