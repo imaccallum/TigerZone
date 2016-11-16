@@ -1,7 +1,7 @@
 package entities.board;
 
 import entities.overlay.TileSection;
-import game.BadPlacementException;
+import exceptions.BadPlacementException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

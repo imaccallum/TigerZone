@@ -2,7 +2,7 @@ package entities.board;
 
 import entities.overlay.Region;
 import entities.overlay.TileSection;
-import game.BadPlacementException;
+import exceptions.BadPlacementException;
 import game.LocationAndOrientation;
 
 import java.awt.*;
@@ -79,15 +79,6 @@ public class Board {
         tile.getTileSections().forEach(this::checkIfCanPlaceTiger);
     }
 
-    // Places the tiger at a given tile section
-    public void placeTiger(TileSection tileSection, Tiger tiger) {
-        tileSection.setTiger(tiger);
-    }
-
-    public Tile getTile(Point tileLocation) {
-        return boardMatrix[tileLocation.x][tileLocation.y];
-    }
-
     public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation) {
@@ -136,6 +127,10 @@ public class Board {
         return validPlacements;
     }
 
+    public Tile getTile(Point tileLocation) {
+        return boardMatrix[tileLocation.x][tileLocation.y];
+    }
+
     public void resetPossibleTigerPlacements() {
         possibleTigerPlacementLocations.clear();
     }
@@ -144,7 +139,7 @@ public class Board {
         return tileStack;
     }
 
-    public List<TileSection> getPossibleTigerPlacements() {
+    public List<TileSection> getPossibleTileSectionTigerPlacements() {
         return possibleTigerPlacementLocations;
     }
 
