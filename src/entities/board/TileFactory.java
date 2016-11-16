@@ -551,7 +551,7 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_zero, e_zero, c_one);
+        jungle0.addNodes(c_zero, e_zero, c_one, c_two);
         jungle1.addNodes(c_three);
         lake.addNodes(e_one);
         trail.addNodes(e_two, e_three);
@@ -587,7 +587,7 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_zero, e_zero, c_one);
+        jungle0.addNodes(c_zero, e_zero, c_one, c_two);
         jungle1.addNodes(c_three);
         lake.addNodes(e_one);
         trail.addNodes(e_two, e_three);
