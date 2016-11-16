@@ -23,6 +23,7 @@ public class Board {
         tileStack = stack;
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
+        possibleTigerPlacementLocations = new ArrayList<>();
 
         // Put the first tile down and set all of the open tile locations
         setTileForPoint(stack.pop(), new Point(39, 39));
@@ -83,15 +84,11 @@ public class Board {
         tileSection.setTiger(tiger);
     }
 
-    public Tile getTile(Point point) {
-        return boardMatrix[point.x][point.y];
+    public Tile getTile(Point tileLocation) {
+        return boardMatrix[tileLocation.x][tileLocation.y];
     }
 
-    public Tile[][] getBoardMatrix() {
-        return boardMatrix;
-    }
-
-    public List<LocationAndOrientation> findValidPlacements(Tile tile) {
+    public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation) {
             for (Point openTileLocation : openTileLocations) {   // for each open tile
@@ -139,16 +136,16 @@ public class Board {
         return validPlacements;
     }
 
+    public void resetPossibleTigerPlacements() {
+        possibleTigerPlacementLocations.clear();
+    }
+
     public Stack<Tile> getTileStack() {
         return tileStack;
     }
 
     public List<TileSection> getPossibleTigerPlacements() {
         return possibleTigerPlacementLocations;
-    }
-
-    public void resetPossibleTigerPlacements() {
-        possibleTigerPlacementLocations.clear();
     }
 
     private boolean lateralConnectionIsValid(Tile rightTile, Tile leftTile) {

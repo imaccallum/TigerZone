@@ -97,7 +97,7 @@ public class GameManager {
         {
             Tile t = deck.pop();
      //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
-            List<Point>  tileOptions = gm.getBoard().findValidPlacements(t);
+            List<Point>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 System.out.println("Inserted @ " + tileOptions.get(0));
                 gm.getBoard().insert(t, tileOptions.get(0).x, tileOptions.get(0).y);

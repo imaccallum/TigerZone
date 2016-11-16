@@ -117,8 +117,8 @@
     <coordinates>
       <x>6</x>
       <y>150</y>
-      <w>174</w>
-      <h>96</h>
+      <w>306</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>Board
 --
@@ -127,34 +127,37 @@
 - tileStack: Stack&lt;Tile&gt;
 - openTileLocations: List&lt;Point&gt;
 --
++ findValidTilePlacements(tile: Tile) : List&lt;LocationAndOrientation&gt; 
 + insert(tile: Tile, location: Point) : void {throws BadPlacementException}
 + placeTiger(tileSection: TileSection , tiger: Tiger) : void
 + getTile(location: Point) : Tile
-
-</panel_attributes>
++ resetPossibleTigerPlacements() : void
+--
++ getTileStack() : Stack&lt;Tile&gt;
++ getPossibleTigerPlacements() : List&lt;TileSection&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
+      <x>306</x>
       <y>162</y>
-      <w>282</w>
+      <w>150</w>
       <h>18</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>174</x>
+      <x>306</x>
       <y>174</y>
-      <w>372</w>
+      <w>240</w>
       <h>240</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;310.0;10.0;310.0;380.0;600.0;380.0</additional_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0;90.0;380.0;380.0;380.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
