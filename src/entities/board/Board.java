@@ -1,8 +1,8 @@
 package entities.board;
 
 import entities.overlay.Region;
-import entities.player.Player;
 import game.BadPlacementException;
+import game.OpenTileLocation;
 
 import java.awt.*;
 import java.util.*;
@@ -11,31 +11,22 @@ import java.util.List;
 public class Board {
 
     private Tile[][] board = new Tile[80][80];
-    private Stack<Tile> tileStack;			// The stack of tiles given [empty(), peek(), pop(), push(), search()]
-    public Tile center;					// The map of tiles
+    private Stack<Tile> tileStack;
 
-    private List<Point> openTiles;		    // A list of all current open tile positions
+    private List<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<Tiger> tigers;
 
     public Board(Stack<Tile> stack) {
         tileStack = stack;
-        openTiles = new ArrayList<>();
+        openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
         tigers = new ArrayList<>();
-        initBoard();
-    }
-
-    public void initBoard(){
-        TileFactory tf = new TileFactory();
-        this.center = tf.makeTile('a');
-        Point center = new Point(40,40);
-        center.setLocation(center);
-        board[40][40] = this.center;
-        openTiles.add(new Point(40,41));
-        openTiles.add(new Point(39,40));
-        openTiles.add(new Point(41,40));
-        openTiles.add(new Point(40,39));
+        setTileForPoint(stack.pop(), new Point(49, 49));
+        openTileLocations.add(new Point(39, 40));
+        openTileLocations.add(new Point(38, 39));
+        openTileLocations.add(new Point(40, 39));
+        openTileLocations.add(new Point(39, 38));
     }
 
     public void insert(Tile tile, int i, int j) throws BadPlacementException {
@@ -48,32 +39,32 @@ public class Board {
         }
 
         board[i][j] = tile;
-        openTiles.remove(new Point(i, j));
+        openTileLocations.remove(new Point(i, j));
 
         // Else statements to add open tiles next to the tile being placed if currently null
         if (leftTile != null) {
             attemptLateralConnection(tile, leftTile);
             leftTile.setRightTile(tile);
         } else {
-            openTiles.add(new Point(i, j - 1));
+            openTileLocations.add(new Point(i, j - 1));
         }
         if (rightTile != null) {
             attemptLateralConnection(rightTile, tile);
             rightTile.setLeftTile(tile);
         } else {
-            openTiles.add(new Point(i, j + 1));
+            openTileLocations.add(new Point(i, j + 1));
         }
         if (topTile != null) {
             attemptVerticalConnection(tile, topTile);
             topTile.setBottomTile(tile);
         } else {
-            openTiles.add(new Point(i - 1, j));
+            openTileLocations.add(new Point(i - 1, j));
         }
         if (bottomTile != null) {
             attemptVerticalConnection(bottomTile, tile);
             bottomTile.setTopTile(tile);
         } else {
-            openTiles.add(new Point(i + 1, j));
+            openTileLocations.add(new Point(i + 1, j));
         }
     }
 
@@ -97,7 +88,7 @@ public class Board {
     public List<Point> returnValidPlacements(Tile tile) {
         List<Point> validPlacements = new ArrayList<>();
 
-        for(Point p : openTiles) {   // for each open tile
+        for(Point p : openTileLocations) {   // for each open tile
             Tile top = board[p.x-1][p.y];
             Tile right = board[p.x][p.y+1];
             Tile bottom = board[p.x+1][p.y];
@@ -169,75 +160,13 @@ public class Board {
         return validPlacements;
     }
 
-//    private Tile getTile(Point point) {
-//        Tile currentTile = center;
-//        int x = point.x;
-//        int y = point.y;
-//        while (x != 0 && y != 0) {
-//            boolean iterated = false;
-//            if (x < 0) {
-//                Tile nextTile = iterateRight(currentTile);
-//                if (nextTile != null) {
-//                    currentTile = nextTile;
-//                    iterated = true;
-//                    ++x;
-//                }
-//            }
-//            if (!iterated && x > 0) {
-//                Tile nextTile = iterateLeft(currentTile);
-//                if (nextTile != null) {
-//                    currentTile = nextTile;
-//                    iterated = true;
-//                    --x;
-//                }
-//            }
-//            if (!iterated && y < 0) {
-//                Tile nextTile = iterateDown(currentTile);
-//                if (nextTile != null) {
-//                    currentTile = nextTile;
-//                    iterated = true;
-//                    ++y;
-//                }
-//            }
-//            if (!iterated) {
-//                Tile nextTile = iterateUp(currentTile);
-//                if (nextTile != null) {
-//                    currentTile = nextTile;
-//                    iterated = true;
-//                    --y;
-//                }
-//            }
-//
-//            if (currentTile == null) {
-//                return null;
-//            }
-//        }
-//        return currentTile;
-//    }
-
     public Stack<Tile> getTileStack(){
         return tileStack;
     }
 
     public List<Point> getTileOptions() {
-        return openTiles;
+        return openTileLocations;
     }
-
-//    private Tile iterateUp(Tile current) {
-//        return current.getTile(0);
-//    }
-//
-//    private Tile iterateDown(Tile current) {
-//        return current.getTile(2);
-//    }
-//
-//    private Tile iterateRight(Tile current) {
-//        return current.getTile(1);
-//    }
-//
-//    private Tile iterateLeft(Tile current) {
-//        return current.getTile(3);
-//    }
 
     private void attemptLateralConnection(Tile rightTile, Tile leftTile) throws BadPlacementException {
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
@@ -277,7 +206,10 @@ public class Board {
         }
 
         if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
-            throw new BadPlacementException("Nodes have a mismatch of terrain: " + first.getTileSection().getTerrain() + " != " + second.getTileSection().getTerrain());
+            throw new BadPlacementException("Nodes have a mismatch of terrain: " +
+                    first.getTileSection().getTerrain() +
+                    " != " +
+                    second.getTileSection().getTerrain());
         }
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
@@ -304,5 +236,9 @@ public class Board {
             newRegion.addTileSection(second.getTileSection());
             regions.put(newRegion.getRegionId(), newRegion);
         }
+    }
+
+    private void setTileForPoint(Tile tile, Point point) {
+        board[point.x][point.y] = tile;
     }
 }
