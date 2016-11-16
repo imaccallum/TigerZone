@@ -98,10 +98,10 @@ public class Board {
         List<Point> validPlacements = new ArrayList<>();
 
         for(Point p : openTiles) {   // for each open tile
-            Tile top = board[p.x][p.y-1];
-            Tile right = board[p.x+1][p.y];
-            Tile bottom = board[p.x][p.y+1];
-            Tile left = board[p.x-1][p.y];
+            Tile top = board[p.x-1][p.y];
+            Tile right = board[p.x][p.y+1];
+            Tile bottom = board[p.x+1][p.y];
+            Tile left = board[p.x][p.y-1];
 
             System.out.println("For openTile " + p + ": ");
             System.out.println("    Top = " + (top != null));
