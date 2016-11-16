@@ -178,8 +178,4 @@ public class Tile {
     public List<TileSection> getTileSections(){
         return tileSections;
     }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
-    }
 }
