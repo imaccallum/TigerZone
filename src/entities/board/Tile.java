@@ -95,4 +95,8 @@ public class Tile {
     public void setLocation(Point location) {
         this.location = location;
     }
+
+    public List<TileSection> getTileSections() {
+        return tileSections;
+    }
 }

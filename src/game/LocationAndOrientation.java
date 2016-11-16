@@ -2,11 +2,11 @@ package game;
 
 import java.awt.*;
 
-public class OpenTileLocation {
+public class LocationAndOrientation {
     private final Point location;
     private final int orientation;
 
-    public OpenTileLocation(Point location, int orientation) {
+    public LocationAndOrientation(Point location, int orientation) {
         this.location = location;
         this.orientation = orientation;
     }

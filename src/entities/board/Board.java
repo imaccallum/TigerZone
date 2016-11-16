@@ -3,7 +3,7 @@ package entities.board;
 import entities.overlay.Region;
 import entities.overlay.TileSection;
 import game.BadPlacementException;
-import game.OpenTileLocation;
+import game.LocationAndOrientation;
 
 import java.awt.*;
 import java.util.*;
@@ -15,6 +15,7 @@ public class Board {
     private Stack<Tile> tileStack;
     private List<Point> openTileLocations;
     private Map<UUID, Region> regions;
+    private List<TileSection> possibleTigerPlacementLocations;
 
     public Board(Stack<Tile> stack) {
         int boardSize = stack.size() * 2;
@@ -22,6 +23,8 @@ public class Board {
         tileStack = stack;
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
+
+        // Put the first tile down and set all of the open tile locations
         setTileForPoint(stack.pop(), new Point(39, 39));
         openTileLocations.add(new Point(39, 40));
         openTileLocations.add(new Point(38, 39));
@@ -29,19 +32,28 @@ public class Board {
         openTileLocations.add(new Point(39, 38));
     }
 
-    public void insert(Tile tile, int row, int col) throws BadPlacementException {
+    public void insert(Tile tile, Point location) throws BadPlacementException {
+        // For naming consistent with orientation of tile matrix, get x and y as row, col integers
+        int row = location.x;
+        int col = location.y;
+
+        // Get the surrounding tiles of the placement.
         Tile leftTile = getTile(new Point(row, col - 1));
         Tile rightTile = getTile(new Point(row, col + 1));
         Tile bottomTile = getTile(new Point(row + 1, col));
         Tile topTile = getTile(new Point(row - 1, col));
+
+        // If they are all null, we are trying to place a tile that will not be adjacent to any other tile and thus
+        // throw a bad tile placement exception.
         if (leftTile == null && rightTile == null && topTile == null && bottomTile == null) {
             throw new BadPlacementException("Index given is out of bounds");
         }
 
+        // Put the tile in the matrix, get ready to connect the tiles.
         boardMatrix[row][col] = tile;
         openTileLocations.remove(new Point(row, col));
 
-        // Else statements to add open tiles next to the tile being placed if currently null
+        // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
         if (leftTile != null) {
             connectLaterally(tile, leftTile);
         } else {
@@ -62,44 +74,35 @@ public class Board {
         } else {
             openTileLocations.add(new Point(row + 1, col));
         }
-    }
 
-    // Checks to see if a tiger can be placed
-    public boolean canPlaceTiger(TileSection section) {
-        Region region = section.getRegion();
-        if (region.containsTigers()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        tile.getTileSections().forEach(this::checkIfCanPlaceTiger);
     }
 
     // Places the tiger at a given tile section
-    public void placeTiger(TileSection section, Tiger tiger) {
-        section.setTiger(tiger);
+    public void placeTiger(TileSection tileSection, Tiger tiger) {
+        tileSection.setTiger(tiger);
     }
 
-    public Tile getTile(Point p){
-        return boardMatrix[p.x][p.y];
+    public Tile getTile(Point point) {
+        return boardMatrix[point.x][point.y];
     }
 
     public Tile[][] getBoardMatrix() {
         return boardMatrix;
     }
 
-    public List<OpenTileLocation> returnValidPlacements(Tile tile) {
-        List<OpenTileLocation> validPlacements = new ArrayList<>();
+    public List<LocationAndOrientation> findValidPlacements(Tile tile) {
+        List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation) {
-            for (Point p : openTileLocations) {   // for each open tile
-                int row = p.x;
-                int col = p.y;
+            for (Point openTileLocation : openTileLocations) {   // for each open tile
+                int row = openTileLocation.x;
+                int col = openTileLocation.y;
                 Tile top = boardMatrix[row - 1][col];
                 Tile right = boardMatrix[row][col + 1];
                 Tile bottom = boardMatrix[row + 1][col];
                 Tile left = boardMatrix[row][col - 1];
 
-                System.out.println("For openTile " + p + ": ");
+                System.out.println("For openTile " + openTileLocation + ": ");
                 System.out.println("    Top = " + (top != null));
                 System.out.println("    Right = " + (right != null));
                 System.out.println("    Bottom = " + (bottom != null));
@@ -123,11 +126,12 @@ public class Board {
                     continue;
                 }
 
-                System.out.println("Adding point " + p +
+                System.out.println("Adding point " + openTileLocation +
                         " with tile orientation " + tileOrientation +
                         " to valid tile placements.");
-                OpenTileLocation validTileLocation = new OpenTileLocation(new Point(p.x, p.y), tileOrientation);
-                validPlacements.add(validTileLocation);
+                Point current = new Point(openTileLocation.x, openTileLocation.y);
+                LocationAndOrientation locationAndOrientation = new LocationAndOrientation(current, tileOrientation);
+                validPlacements.add(locationAndOrientation);
             }
             // By placing this at the end the tile is rotated 4 times and thus comes back to original position
             tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
@@ -135,12 +139,16 @@ public class Board {
         return validPlacements;
     }
 
-    public Stack<Tile> getTileStack(){
+    public Stack<Tile> getTileStack() {
         return tileStack;
     }
 
-    public List<Point> getTileOptions() {
-        return openTileLocations;
+    public List<TileSection> getPossibleTigerPlacements() {
+        return possibleTigerPlacementLocations;
+    }
+
+    public void resetPossibleTigerPlacements() {
+        possibleTigerPlacementLocations.clear();
     }
 
     private boolean lateralConnectionIsValid(Tile rightTile, Tile leftTile) {
@@ -261,5 +269,22 @@ public class Board {
 
     private void setTileForPoint(Tile tile, Point point) {
         boardMatrix[point.x][point.y] = tile;
+    }
+
+    private void checkIfCanPlaceTiger(TileSection tileSection) {
+        if (canPlaceTiger(tileSection)) {
+            possibleTigerPlacementLocations.add(tileSection);
+        }
+    }
+
+    // Checks to see if a tiger can be placed
+    private boolean canPlaceTiger(TileSection section) {
+        Region region = section.getRegion();
+        if (region.containsTigers()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

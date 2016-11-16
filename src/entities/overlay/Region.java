@@ -64,8 +64,23 @@ public class Region {
         return null;
     }
 
-//
-//    public boolean isDisputed() {
+    // MARK: Getters and Setters
+
+    public UUID getRegionId() {
+        return regionId;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    // MARK: NEED TO IMPLEMENT ELSEWHERE TODO
+
+    //    public boolean isDisputed() {
 //        if (!tigers.isEmpty()) {
 //            Player player = tigers.get(0).getOwningPlayer();
 //            for (Tiger tiger : tigers) {
@@ -95,20 +110,5 @@ public class Region {
 //        return dominantList;
 //    }
 
-
-
-    // MARK: Getters and Setters
-
-    public UUID getRegionId() {
-        return regionId;
-    }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
 }
 
