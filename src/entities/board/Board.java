@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Board {
 
-    private Tile[][] board = new Tile[80][80];
+    private Tile[][] board;
     private Stack<Tile> tileStack;
 
     private List<Point> openTileLocations;
@@ -18,6 +18,8 @@ public class Board {
     private List<Tiger> tigers;
 
     public Board(Stack<Tile> stack) {
+        int boardSize = stack.size() * 2;
+        board = new Tile[boardSize][boardSize];
         tileStack = stack;
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
