@@ -32,7 +32,7 @@ public class Board {
         board[40][40] = this.center;
         openTiles.add(new Point(40,41));
         openTiles.add(new Point(39,40));
-        openTiles.add(new Point(40,41));
+        openTiles.add(new Point(41,40));
         openTiles.add(new Point(40,39));
     }
 
@@ -44,6 +44,9 @@ public class Board {
         if (leftTile == null && rightTile == null && topTile == null && bottomTile == null) {
             throw new BadPlacementException("Index given is out of bounds");
         }
+
+        board[x][y] = tile;
+        openTiles.remove(new Point(x, y));
 
         // Else statements to add open tiles next to the tile being placed if currently null
         if (leftTile != null) {
@@ -83,6 +86,26 @@ public class Board {
 
     public Tile getTile(Point p){
         return board[p.x][p.y];
+    }
+
+    public List<Point> returnValidPlacements(Tile tile){
+        List<Point> validPlacements = new ArrayList<>();
+
+        for(Point p : openTiles){
+            Tile top = board[p.x][p.y-1];
+            Tile right = board[p.x+1][p.y];
+            Tile bottom = board[p.x+1][p.y+1];
+            Tile left = board[p.x-1][p.y];
+            if(top != null){
+                Node bottomEdge = top.getEdge(EdgeLocation.BOTTOM);
+                Node topEdge = tile.getEdge(EdgeLocation.TOP);
+                if(bottomEdge.getTileSection().getTerrain() == topEdge.getTileSection().getTerrain() &&
+                        ){
+                }
+            }
+        }
+
+        return validPlacements;
     }
 
 //    private Tile getTile(Point point) {
