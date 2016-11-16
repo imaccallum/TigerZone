@@ -4,6 +4,7 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.player.Player;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,10 +14,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
-
-/**
- * Created by ianmaccallum on 11/13/16.
- */
 
 public class GameManagerTest {
 
@@ -74,4 +71,5 @@ public class GameManagerTest {
 
         return deck;
     }
+
 }
