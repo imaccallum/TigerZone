@@ -1,5 +1,6 @@
 package entities.overlay;
 
+import entities.board.PreyAnimal;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.board.Tile;
@@ -17,9 +18,6 @@ import java.util.*;
 public class Region {
     private UUID regionId;
     private List<TileSection> tileSections;
-    private HashSet<Tile> tiles;
-    private List<Tiger> tigers;
-    private List<Region> adjacentRegions;
     private Terrain terrain;
     private int uniquePrey = 0;
     private int totalPrey = 0;
@@ -27,49 +25,22 @@ public class Region {
     public Region(Terrain terrain){
         this.terrain = terrain;
         regionId = UUID.randomUUID();
-        tigers = new ArrayList<>();
         tileSections = new ArrayList<>();
-        adjacentRegions = new ArrayList<>();
-        tiles = new HashSet<>();
     }
+
 
     public void addTileSection(TileSection tileSection){
         tileSection.setRegion(this);
         tileSections.add(tileSection);
-        tiles.add(tileSection.getTile());
-    }
-
-    public boolean containsTileSection(TileSection section){
-        return tileSections.contains(section);
-    }
-
-    public List<Region> getAdjacentRegions(){
-        return adjacentRegions;
-    }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
-    }
-
-    public UUID getRegionId() {
-        return regionId;
-    }
-
-    public void addTiger(Tiger...tiger){
-        tigers.addAll(Arrays.asList(tiger));
-    }
-
-    public List<Tiger> getTigerList(){
-        return tigers;
     }
 
     public void combineWithRegion(Region region) {
         for (TileSection tileSection : region.tileSections) {
             this.addTileSection(tileSection);
         }
-        addTiger(region.getTigerList().toArray(new Tiger[region.getTigerList().size()]));
         region = null;
     }
+
 
     public boolean isFinished() {
         for (TileSection section : tileSections) {
@@ -78,44 +49,6 @@ public class Region {
             }
         }
         return true;
-    }
-
-    public boolean isDisputed() {
-        if (!tigers.isEmpty()) {
-            Player player = tigers.get(0).getOwningPlayer();
-            for (Tiger tiger : tigers) {
-                if (tiger.getOwningPlayer() != player) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean hasTigers() {
-        return !tigers.isEmpty();
-    }
-
-    public List<Player> getDominantPlayers() {
-        List<Player> dominantList = new ArrayList<>();
-        HashMap<Player, Integer> tigerCount = new HashMap<>();
-        for(Tiger t : tigers){
-            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
-            tigerCount.put(t.getOwningPlayer(), count + 1);
-        }
-
-        int max = Collections.max(tigerCount.values());
-
-        for(Player p : tigerCount.keySet()){
-            if(tigerCount.get(p) == max)
-                dominantList.add(p);
-        }
-
-        return dominantList;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
     }
 
     public Scorer getScorer() {
@@ -129,6 +62,56 @@ public class Region {
         return null;
     }
 
+//
+//    public boolean isDisputed() {
+//        if (!tigers.isEmpty()) {
+//            Player player = tigers.get(0).getOwningPlayer();
+//            for (Tiger tiger : tigers) {
+//                if (tiger.getOwningPlayer() != player) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public List<Player> getDominantPlayers() {
+//        List<Player> dominantList = new ArrayList<>();
+//        HashMap<Player, Integer> tigerCount = new HashMap<>();
+//        for(Tiger t : tigers){
+//            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
+//            tigerCount.put(t.getOwningPlayer(), count + 1);
+//        }
+//
+//        int max = Collections.max(tigerCount.values());
+//
+//        for(Player p : tigerCount.keySet()){
+//            if(tigerCount.get(p) == max)
+//                dominantList.add(p);
+//        }
+//
+//        return dominantList;
+//    }
+
+
+
+    // MARK: Getters and Setters
+    public UUID getRegionId() {
+        return regionId;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+
+
+
+
     public int getUniquePrey() {
         return uniquePrey;
     }
@@ -138,20 +121,23 @@ public class Region {
     }
 
     public void setUniquePrey() {
+
+        boolean hasBoar, hasBuffalo, hasDeer;
+
         for(Tile t : tiles){
-            if(t.hasBoar()) {
+            if(t.getPreyAnimal() == PreyAnimal.BOAR) {
+                uniquePrey++;
+                break;
+            } else if(t.getPreyAnimal() == PreyAnimal.BUFFALO) {
                 uniquePrey++;
                 break;
             }
+
         }
         for(Tile t : tiles){
-            if(t.hasBuffalo()) {
-                uniquePrey++;
-                break;
-            }
         }
         for(Tile t : tiles){
-            if(t.hasDeer()) {
+            if(t.getPreyAnimal() == ) {
                 uniquePrey++;
                 break;
             }

@@ -17,7 +17,7 @@ public class Tile {
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
-    private Node center;
+    private boolean hasDen;
     private PreyAnimal preyAnimal;
     private Point location;
     private List<TileSection> tileSections;
@@ -27,22 +27,6 @@ public class Tile {
         corners = new Node[COUNT];
         tileSections = new ArrayList<>();
         preyAnimal = null;
-    }
-
-    public Node getCorner(CornerLocation location) {
-        return corners[location.ordinal()];
-    }
-
-    public Node getEdge(EdgeLocation location) {
-        return edges[location.ordinal()];
-    }
-
-    public Node getCenter() {
-        return center;
-    }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
     }
 
     public void rotateClockwise(int numberOfRotations) {
@@ -59,18 +43,6 @@ public class Tile {
         corners = tempCorners;
     }
 
-    public void setEdge(Node node, int i){
-        edges[i] = node;
-    }
-    
-    public void setCorner(Node node, int i){
-        corners[i] = node;
-    }
-
-    public void setCenter(Node center) {
-        this.center = center;
-    }
-
     public void addTileSections(TileSection... sections) {
         for (TileSection tileSection: sections){
             tileSection.setTile(this);
@@ -78,35 +50,49 @@ public class Tile {
         tileSections.addAll(Arrays.asList(sections));
     }
 
-    public Node[] getEdges(){
-        return edges;
+    public String toString(){
+        return "Tile: " + this.hashCode() + "\n" + "TileSections: " + tileSections;
     }
 
-    public boolean hasDeer() {
-        return preyAnimal == PreyAnimal.DEER;
+
+    // Getters and Setters
+    public boolean hasDen() {
+        return hasDen;
     }
 
-    public boolean hasBuffalo() {
-        return preyAnimal == PreyAnimal.BUFFALO;
+    public void setHasDen(boolean hasDen) {
+        this.hasDen = hasDen;
     }
 
-    public boolean hasBoar() {
-        return preyAnimal == PreyAnimal.BOAR;
+    public Node getEdge(EdgeLocation location) {
+        return edges[location.ordinal()];
+    }
+
+    public void setEdge(Node node, EdgeLocation location){
+        edges[location.ordinal()] = node;
+    }
+
+    public Node getCorner(CornerLocation location) {
+        return corners[location.ordinal()];
+    }
+
+    public void setCorner(Node node, CornerLocation location){
+        corners[location.ordinal()] = node;
+    }
+
+    public PreyAnimal getPreyAnimal() {
+        return preyAnimal;
     }
 
     public void setPreyAnimal(PreyAnimal preyAnimal) {
         this.preyAnimal = preyAnimal;
     }
 
-    public String toString(){
-        return "Tile: " + this.hashCode() + "\n" + "TileSections: " + tileSections;
+    public Point getLocation() {
+        return location;
     }
 
     public void setLocation(Point location) {
         this.location = location;
-    }
-
-    public Point getLocation() {
-        return location;
     }
 }
