@@ -26,6 +26,7 @@ public class TileSection {
         nodes = new ArrayList<>();
     }
 
+    // HAS TEST
     public void addNodes(Node... nodesToAdd) {
         for (Node node: nodesToAdd) {
             node.setTileSection(this);
@@ -33,11 +34,16 @@ public class TileSection {
         nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
-    public String toString(){
+    // HAS TEST
+    public String toString() {
         return "" + this.hashCode();
     }
 
+    // HAS TEST
     public boolean hasOpenConnection() {
+        if (nodes.isEmpty()) {
+            System.err.println("Queried hasOpenConnections for tile section with no nodes!!");
+        }
         for (Node node : nodes) {
             if (!node.isConnected()) {
                 return true;
@@ -46,6 +52,7 @@ public class TileSection {
         return false;
     }
 
+    // HAS TEST
     public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
         if (this.tiger != null) {
             throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");

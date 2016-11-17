@@ -4,6 +4,7 @@ import entities.overlay.Region;
 import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 import exceptions.BadPlacementException;
+import exceptions.IncompatibleTerrainException;
 import game.LocationAndOrientation;
 
 import java.awt.*;
@@ -236,25 +237,41 @@ public class Board {
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
             first.setConnectedNode(second);
             second.setConnectedNode(first);
-            first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
+            try {
+                first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
+            } catch (IncompatibleTerrainException e) {
+                throw new BadPlacementException(e.getMessage());
+            }
             regions.remove(second.getTileSection().getRegion().getRegionId());
         }
         else if (first.getTileSection().getRegion() != null) {
             first.setConnectedNode(second);
             second.setConnectedNode(first);
-            first.getTileSection().getRegion().addTileSection(second.getTileSection());
+            try {
+                first.getTileSection().getRegion().addTileSection(second.getTileSection());
+            } catch (IncompatibleTerrainException e) {
+                throw new BadPlacementException(e.getMessage());
+            }
         }
         else if (second.getTileSection().getRegion() != null) {
             first.setConnectedNode(second);
             second.setConnectedNode(first);
-            second.getTileSection().getRegion().addTileSection(first.getTileSection());
+            try {
+                second.getTileSection().getRegion().addTileSection(first.getTileSection());
+            } catch (IncompatibleTerrainException e) {
+                throw new BadPlacementException(e.getMessage());
+            }
         }
         else {
             Region newRegion = new Region(first.getTileSection().getTerrain());
             first.setConnectedNode(second);
             second.setConnectedNode(first);
-            newRegion.addTileSection(first.getTileSection());
-            newRegion.addTileSection(second.getTileSection());
+            try {
+                newRegion.addTileSection(first.getTileSection());
+                newRegion.addTileSection(second.getTileSection());
+            } catch (IncompatibleTerrainException e) {
+                throw new BadPlacementException(e.getMessage());
+            }
             regions.put(newRegion.getRegionId(), newRegion);
         }
     }

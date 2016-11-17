@@ -582,7 +582,7 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_zero, e_zero, c_one, c_two);
+        jungle0.addNodes(c_zero, e_zero, c_two);
         jungle1.addNodes(c_three);
         lake.addNodes(e_one);
         trail.addNodes(e_two, e_three);
@@ -593,7 +593,6 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
        tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
