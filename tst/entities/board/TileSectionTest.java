@@ -1,7 +1,7 @@
 package entities.board;
 
 import entities.overlay.TileSection;
-import game.BadPlacementException;
+import exceptions.BadPlacementException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,16 +9,20 @@ import org.junit.Test;
 import java.util.List;
 
 public class TileSectionTest {
-    private Tile testTile;
+    private Tile testTileR;  //tile R, to test other aspects
     private List<TileSection> tileSections;
-    private Tile testTile2;
+    private Tile testTileB; //tile B (den and field all around, to test Den
+    private Tile testTileD; //Tile D (four way crossroad), to test corner connections
+    private Tile testTileD2;    //Tile D again
 
     @Before
     public void setup() {
         TileFactory f = new TileFactory();
-        testTile = f.makeTile('r');
-        tileSections = testTile.getTileSections();
-        testTile2 = f.makeTile('b');
+        testTileR = f.makeTile('r');
+        tileSections = testTileR.getTileSections();
+        testTileB = f.makeTile('b');
+        testTileD = f.makeTile('d');
+        testTileD2 = f.makeTile('d');
     }
 
     @Test
@@ -39,47 +43,14 @@ public class TileSectionTest {
     @Test
     public void testHasOpenConnection() throws BadPlacementException {
         Assert.assertTrue(tileSections.get(0).hasOpenConnection());
-        Assert.assertTrue(testTile2.getTileSections().get(1).hasOpenConnection());
-
-        Tile leftTile = new Tile();
-        leftTile.setEdge(new Node(), 0);
-        leftTile.setEdge(new Node(), 2);
-        leftTile.setEdge(new Node(), 1);
-        Tile leftTopTile = new Tile();
-        leftTopTile.setEdge(new Node(), 2);
-        leftTile.setTopTile(leftTopTile);
-        Tile leftBottomTile = new Tile();
-        leftBottomTile.setEdge(new Node(), 0);
-        leftTile.setBottomTile(leftBottomTile);
-
-        Tile rightTile = new Tile();
-        rightTile.setEdge(new Node(), 0);
-        rightTile.setEdge(new Node(), 2);
-        rightTile.setEdge(new Node(), 3);
-        Tile rightTopTile = new Tile();
-        rightTopTile.setEdge(new Node(), 2);
-        rightTile.setTopTile(rightTopTile);
-        Tile rightBottomTile = new Tile();
-        rightBottomTile.setEdge(new Node(), 0);
-        rightTile.setBottomTile(rightBottomTile);
-
-        Tile topTile = new Tile();
-        topTile.setEdge(new Node(), 2);
-        Tile bottomTile = new Tile();
-        bottomTile.setEdge(new Node(), 0);
-
-        testTile2.setLeftTile(leftTile);
-        testTile2.setRightTile(rightTile);
-        testTile2.setTopTile(topTile);
-        testTile2.setBottomTile(bottomTile);
-
-        Assert.assertFalse(testTile2.getTileSections().get(1).hasOpenConnection());
-
-        testTile.setLeftTile(leftTile);
-        testTile.setRightTile(rightTile);
-        testTile.setTopTile(topTile);
-        testTile.setBottomTile(bottomTile);
-
-        Assert.assertFalse(testTile.getTileSections().get(0).hasOpenConnection());
+        Assert.assertTrue(testTileB.getTileSections().get(1).hasOpenConnection());
+        TileSection section = new TileSection(Terrain.JUNGLE);
+        section.addNodes(new Node(), new Node(), new Node());
+        section.getNodes().get(0).setConnectedNode(new Node());
+        Assert.assertTrue(section.hasOpenConnection());
+        section.getNodes().get(1).setConnectedNode(new Node());
+        Assert.assertTrue(section.hasOpenConnection());
+        section.getNodes().get(2).setConnectedNode(new Node());
+        Assert.assertFalse(section.hasOpenConnection());
     }
 }

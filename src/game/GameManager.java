@@ -25,7 +25,7 @@ public class GameManager {
         for(Player player : players) {
             this.players.add(player);
         }
-        board = new Board(stack);
+        board = new Board(stack.size(), stack.pop());
     }
 
     public void completeRegion(Region region){
