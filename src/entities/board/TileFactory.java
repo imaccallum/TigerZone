@@ -52,10 +52,10 @@ public class TileFactory {
         jungle.addNodes(e_zero, e_one, e_two, e_three);
 
         // Fill the Node arrays in the Tile
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
         // Add the sections to the tile
         tile.addTileSections(jungle);
@@ -67,24 +67,22 @@ public class TileFactory {
     private Tile makeTileB() {
         Tile tile = new Tile();
         TileSection jungle = new TileSection(Terrain.JUNGLE);
-        TileSection den = new TileSection(Terrain.DEN);
+        tile.setHasDen(true);
 
         Node e_zero = new Node();
         Node e_one = new Node();
         Node e_two = new Node();
         Node e_three = new Node();
-        Node center = new Node();
+        
 
         jungle.addNodes(e_zero, e_one, e_two, e_three);
-        den.addNodes(center);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
-        tile.setCenter(center);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.addTileSections(jungle, den);
+        tile.addTileSections(jungle);
 
         return tile;
     }
@@ -92,7 +90,7 @@ public class TileFactory {
     private Tile makeTileC() {
         Tile tile = new Tile();
         TileSection jungle = new TileSection(Terrain.JUNGLE);
-        TileSection den = new TileSection(Terrain.DEN);
+        tile.setHasDen(true);
         TileSection trail = new TileSection(Terrain.TRAIL);
 
         Node e_zero = new Node();
@@ -101,23 +99,20 @@ public class TileFactory {
         Node e_two = new Node();
         Node c_three = new Node();
         Node e_three = new Node();
-        Node center = new Node();
+        
 
         jungle.addNodes(e_zero, e_one, c_two, c_three, e_three);
-        den.addNodes(center);
         trail.addNodes(e_two);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
-        tile.setCenter(center);
-
-        tile.addTileSections(jungle, den, trail);
+        tile.addTileSections(jungle, trail);
 
         return tile;
     }
@@ -152,15 +147,15 @@ public class TileFactory {
         trail2.addNodes(e_two);
         trail3.addNodes(e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, jungle2, jungle3, trail0, trail1, trail2, trail3);
 
@@ -187,15 +182,15 @@ public class TileFactory {
         jungle1.addNodes(c_one, e_one, c_two);
         trail.addNodes(e_zero, e_two);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail);
 
@@ -222,15 +217,15 @@ public class TileFactory {
         jungle1.addNodes(c_three);
         trail.addNodes(e_two, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail);
         return tile;
@@ -262,15 +257,15 @@ public class TileFactory {
         trail1.addNodes(e_two);
         trail2.addNodes(e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, jungle2, trail0, trail1, trail2);
         return tile;
@@ -287,10 +282,10 @@ public class TileFactory {
 
         lake.addNodes(e_zero, e_one, e_two, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(lake);
 
@@ -313,13 +308,13 @@ public class TileFactory {
         lake.addNodes(e_one, e_two, e_three);
         jungle.addNodes(c_zero, e_zero, c_one);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(lake, jungle);
 
@@ -343,14 +338,14 @@ public class TileFactory {
         lake.addNodes(e_zero, e_one);
         jungle.addNodes(c_zero, c_two, e_two, c_three, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, jungle);
         return tile;
@@ -372,10 +367,10 @@ public class TileFactory {
         jungle1.addNodes(e_two);
         lake.addNodes(e_one, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake);
 
@@ -397,10 +392,10 @@ public class TileFactory {
         lake.addNodes(e_zero);
         lake2.addNodes(e_two);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle, lake, lake2);
 
@@ -423,13 +418,13 @@ public class TileFactory {
         jungle.addNodes(c_zero, e_three, e_two, e_one, c_one);
         lake.addNodes(e_zero);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(jungle, lake);
 
@@ -451,10 +446,10 @@ public class TileFactory {
         lake0.addNodes(e_one);
         lake1.addNodes(e_two);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle, lake0, lake1);
         return tile;
@@ -482,15 +477,15 @@ public class TileFactory {
         lake.addNodes(e_one);
         trail.addNodes(e_zero, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
         return tile;
@@ -518,19 +513,19 @@ public class TileFactory {
         lake.addNodes(e_one);
         trail.addNodes(e_zero, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
 
-        tile.setHasBoar(true);
+        tile.setPreyAnimal(PreyAnimal.BOAR);
         return tile;
     }
 
@@ -556,15 +551,15 @@ public class TileFactory {
         lake.addNodes(e_one);
         trail.addNodes(e_two, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
         return tile;
@@ -592,19 +587,19 @@ public class TileFactory {
         lake.addNodes(e_one);
         trail.addNodes(e_two, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
 
-        tile.setHasBuffalo(true);
+        tile.setPreyAnimal(PreyAnimal.BUFFALO);
         return tile;
     }
 
@@ -630,15 +625,15 @@ public class TileFactory {
         jungle1.addNodes(c_one, c_two);
         lake.addNodes(e_one);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, trail, jungle1, lake);
 
@@ -667,19 +662,19 @@ public class TileFactory {
         jungle1.addNodes(c_one, c_two);
         lake.addNodes(e_one);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, trail, jungle1, lake);
 
-        tile.setHasDeer(true);
+        tile.setPreyAnimal(PreyAnimal.DEER);
         return tile;
     }
 
@@ -703,13 +698,13 @@ public class TileFactory {
         trail.addNodes(e_zero);
         lake.addNodes(e_one, e_two, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
         return tile;
@@ -743,15 +738,15 @@ public class TileFactory {
         trail1.addNodes(e_two);
         trail2.addNodes(e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
         return tile;
@@ -785,19 +780,19 @@ public class TileFactory {
         trail1.addNodes(e_two);
         trail2.addNodes(e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
 
-        tile.setHasBoar(true);
+        tile.setPreyAnimal(PreyAnimal.BOAR);
         return tile;
     }
 
@@ -822,14 +817,14 @@ public class TileFactory {
         jungle1.addNodes(c_one, c_three);
         trail.addNodes(e_zero, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail, jungle0, jungle1);
         return tile;
@@ -856,18 +851,18 @@ public class TileFactory {
         jungle1.addNodes(c_one, c_three);
         trail.addNodes(e_zero, e_three);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail, jungle0, jungle1);
 
-        tile.setHasBuffalo(true);
+        tile.setPreyAnimal(PreyAnimal.BUFFALO);
         return tile;
     }
 
@@ -893,15 +888,15 @@ public class TileFactory {
         trail.addNodes(e_two);
         lake.addNodes(e_zero);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
         return tile;
@@ -929,19 +924,19 @@ public class TileFactory {
         trail.addNodes(e_two);
         lake.addNodes(e_zero);
 
-        tile.setEdge(e_zero, 0);
-        tile.setEdge(e_one, 1);
-        tile.setEdge(e_two, 2);
-        tile.setEdge(e_three, 3);
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, 0);
-        tile.setCorner(c_one, 1);
-        tile.setCorner(c_two, 2);
-        tile.setCorner(c_three, 3);
+        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+        tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
+        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
 
-        tile.setHasDeer(true);
+        tile.setPreyAnimal(PreyAnimal.DEER);
         return tile;
     }
 }
