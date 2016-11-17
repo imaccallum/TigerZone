@@ -21,12 +21,14 @@ public class Tile {
     private PreyAnimal preyAnimal;
     private Point location;
     private List<TileSection> tileSections;
+    public char type;
 
-    public Tile() {
+    public Tile(char t) {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
         tileSections = new ArrayList<>();
         preyAnimal = null;
+        this.type = t;
     }
 
     // HAS TESTS
