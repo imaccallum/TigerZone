@@ -75,11 +75,14 @@ public class TileTest {
         int jungles = 0, lakes = 0, trail = 0;
         for (TileSection t: testTile.getTileSections()) {
             switch (t.getTerrain()){
-                case JUNGLE: jungles++;
+                case JUNGLE:
+                    jungles++;
                     break;
-                case LAKE: lakes++;
+                case LAKE:
+                    lakes++;
                     break;
-                case TRAIL: trail++;
+                case TRAIL:
+                    trail++;
                     break;
             }
         }
