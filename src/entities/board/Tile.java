@@ -29,6 +29,7 @@ public class Tile {
         preyAnimal = null;
     }
 
+    // HAS TESTS
     public void rotateClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
@@ -43,6 +44,7 @@ public class Tile {
         corners = tempCorners;
     }
 
+    // HAS TEST
     public void addTileSections(TileSection... sections) {
         for (TileSection tileSection: sections){
             tileSection.setTile(this);
@@ -55,7 +57,8 @@ public class Tile {
     }
 
 
-    // Getters and Setters
+    // MARK: Getters and Setters
+
     public boolean hasDen() {
         return hasDen;
     }
