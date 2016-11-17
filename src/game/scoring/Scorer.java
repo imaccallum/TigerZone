@@ -10,7 +10,7 @@ public abstract class Scorer {
     public abstract int score(Region region);
     public abstract int scoreAtEnd(Region region);
     public void returnMeeples(Region region){
-        List<Tiger> tigerList = region.getTigerList();
+        List<Tiger> tigerList = region.getAllTigers();
 
         for(Tiger t : tigerList){
             t.getOwningPlayer().incrementRemainingFollowers();

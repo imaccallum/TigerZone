@@ -11,6 +11,7 @@ import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -19,28 +20,22 @@ public class Region {
     private UUID regionId;
     private List<TileSection> tileSections;
     private Terrain terrain;
-    private int uniquePrey = 0;
-    private int totalPrey = 0;
 
-    public Region(Terrain terrain){
+    public Region(Terrain terrain) {
         this.terrain = terrain;
         regionId = UUID.randomUUID();
         tileSections = new ArrayList<>();
     }
 
 
-    public void addTileSection(TileSection tileSection){
+    public void addTileSection(TileSection tileSection) {
         tileSection.setRegion(this);
         tileSections.add(tileSection);
     }
 
     public void combineWithRegion(Region region) {
-        for (TileSection tileSection : region.tileSections) {
-            this.addTileSection(tileSection);
-        }
-        region = null;
+        region.tileSections.forEach(this::addTileSection);
     }
-
 
     public boolean isFinished() {
         for (TileSection section : tileSections) {
@@ -51,9 +46,17 @@ public class Region {
         return true;
     }
 
+    public boolean containsTigers() {
+        for (TileSection section : tileSections) {
+            if (section.getTiger() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Scorer getScorer() {
         switch (terrain) {
-            case DEN: return new DenScorer();
             case TRAIL: return new TrailScorer();
             case LAKE: return new LakeScorer();
             case JUNGLE: return new LakeScorer();
@@ -62,8 +65,30 @@ public class Region {
         return null;
     }
 
-//
-//    public boolean isDisputed() {
+    // MARK: Getters and Setters
+
+    public UUID getRegionId() {
+        return regionId;
+    }
+
+    public List<TileSection> getTileSections(){
+        return tileSections;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public List<Tiger> getAllTigers() {
+        List<Tiger> tigers = new ArrayList<>();
+        tigers.addAll(tileSections.stream().filter(section -> section.getTiger() != null)
+                .map(TileSection::getTiger).collect(Collectors.toList()));
+        return tigers;
+    }
+
+    // MARK: NEED TO IMPLEMENT ELSEWHERE TODO
+
+    //    public boolean isDisputed() {
 //        if (!tigers.isEmpty()) {
 //            Player player = tigers.get(0).getOwningPlayer();
 //            for (Tiger tiger : tigers) {
@@ -93,62 +118,5 @@ public class Region {
 //        return dominantList;
 //    }
 
-
-
-    // MARK: Getters and Setters
-    public UUID getRegionId() {
-        return regionId;
-    }
-
-    public List<TileSection> getTileSections(){
-        return tileSections;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-
-
-
-
-    public int getUniquePrey() {
-        return uniquePrey;
-    }
-
-    public int getTotalPrey() {
-        return totalPrey;
-    }
-
-    public void setUniquePrey() {
-
-        boolean hasBoar, hasBuffalo, hasDeer;
-
-        for(Tile t : tiles){
-            if(t.getPreyAnimal() == PreyAnimal.BOAR) {
-                uniquePrey++;
-                break;
-            } else if(t.getPreyAnimal() == PreyAnimal.BUFFALO) {
-                uniquePrey++;
-                break;
-            }
-
-        }
-        for(Tile t : tiles){
-        }
-        for(Tile t : tiles){
-            if(t.getPreyAnimal() == ) {
-                uniquePrey++;
-                break;
-            }
-        }
-    }
-
-    public void setTotalPrey() {
-        for(Tile t : tiles){
-            if(t.hasBoar() || t.hasDeer() || t.hasBuffalo())
-                totalPrey++;
-        }
-    }
 }
 
