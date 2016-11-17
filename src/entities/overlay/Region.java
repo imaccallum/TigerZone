@@ -11,6 +11,7 @@ import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -76,6 +77,13 @@ public class Region {
 
     public Terrain getTerrain() {
         return terrain;
+    }
+
+    public List<Tiger> getAllTigers() {
+        List<Tiger> tigers = new ArrayList<>();
+        tigers.addAll(tileSections.stream().filter(section -> section.getTiger() != null)
+                .map(TileSection::getTiger).collect(Collectors.toList()));
+        return tigers;
     }
 
     // MARK: NEED TO IMPLEMENT ELSEWHERE TODO

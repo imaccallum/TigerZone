@@ -44,53 +44,13 @@ public class TileSectionTest {
     public void testHasOpenConnection() throws BadPlacementException {
         Assert.assertTrue(tileSections.get(0).hasOpenConnection());
         Assert.assertTrue(testTileB.getTileSections().get(1).hasOpenConnection());
-
-        Tile leftTile = new Tile();
-        leftTile.setEdge(new Node(), 0);
-        leftTile.setEdge(new Node(), 2);
-        leftTile.setEdge(new Node(), 1);
-        Tile leftTopTile = new Tile();
-        leftTopTile.setEdge(new Node(), 2);
-        leftTile.setTopTile(leftTopTile);
-        Tile leftBottomTile = new Tile();
-        leftBottomTile.setEdge(new Node(), 0);
-        leftTile.setBottomTile(leftBottomTile);
-
-        Tile rightTile = new Tile();
-        rightTile.setEdge(new Node(), 0);
-        rightTile.setEdge(new Node(), 2);
-        rightTile.setEdge(new Node(), 3);
-        Tile rightTopTile = new Tile();
-        rightTopTile.setEdge(new Node(), 2);
-        rightTile.setTopTile(rightTopTile);
-        Tile rightBottomTile = new Tile();
-        rightBottomTile.setEdge(new Node(), 0);
-        rightTile.setBottomTile(rightBottomTile);
-
-        Tile topTile = new Tile();
-        topTile.setEdge(new Node(), 2);
-        Tile bottomTile = new Tile();
-        bottomTile.setEdge(new Node(), 0);
-
-        testTileB.setLeftTile(leftTile);
-        testTileB.setRightTile(rightTile);
-        testTileB.setTopTile(topTile);
-        testTileB.setBottomTile(bottomTile);
-
-        Assert.assertFalse(testTileB.getTileSections().get(1).hasOpenConnection());
-
-        testTileR.setLeftTile(leftTile);
-        testTileR.setRightTile(rightTile);
-        testTileR.setTopTile(topTile);
-        testTileR.setBottomTile(bottomTile);
-
-        Assert.assertFalse(testTileR.getTileSections().get(0).hasOpenConnection());
-
-        testTileD.setLeftTile(testTileD2);
-        testTileD.setRightTile(testTileD2);
-        testTileD.setTopTile(testTileD2);
-        testTileD.setBottomTile(testTileD2);
-
-        Assert.assertFalse(testTileD.getTileSections().get(0).hasOpenConnection());
+        TileSection section = new TileSection(Terrain.JUNGLE);
+        section.addNodes(new Node(), new Node(), new Node());
+        section.getNodes().get(0).setConnectedNode(new Node());
+        Assert.assertTrue(section.hasOpenConnection());
+        section.getNodes().get(1).setConnectedNode(new Node());
+        Assert.assertTrue(section.hasOpenConnection());
+        section.getNodes().get(2).setConnectedNode(new Node());
+        Assert.assertFalse(section.hasOpenConnection());
     }
 }
