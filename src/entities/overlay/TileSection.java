@@ -4,6 +4,7 @@ import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.board.Tile;
+import exceptions.TigerAlreadyPlacedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,13 +19,14 @@ public class TileSection {
     private Terrain terrain;
     private Tile tile;
     private Region region;
-
+    private Tiger tiger;
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
         nodes = new ArrayList<>();
     }
 
+    // HAS TEST
     public void addNodes(Node... nodesToAdd) {
         for (Node node: nodesToAdd) {
             node.setTileSection(this);
@@ -32,40 +34,38 @@ public class TileSection {
         nodes.addAll(Arrays.asList(nodesToAdd));
     }
 
-    public Terrain getTerrain() {
-        return terrain;
+    // HAS TEST
+    public String toString() {
+        return "" + this.hashCode();
     }
 
-    public boolean contains(Node node) {
-        return nodes.contains(node);
-    }
-
+    // HAS TEST
     public boolean hasOpenConnection() {
-        if (terrain == Terrain.DEN) {
-            Tile[] adjacentTiles = tile.getAdjacentTiles();
-            if (adjacentTiles[0] == null || adjacentTiles[1] == null ||
-                adjacentTiles[2] == null || adjacentTiles[3] == null) {
-                return false;
+        if (nodes.isEmpty()) {
+            System.err.println("Queried hasOpenConnections for tile section with no nodes!!");
+        }
+        for (Node node : nodes) {
+            if (!node.isConnected()) {
+                return true;
             }
-
-            Tile leftTile = adjacentTiles[0];
-            Tile rightTile = adjacentTiles[2];
-            if (leftTile.getAdjacentTiles()[1] == null || leftTile.getAdjacentTiles()[3] == null ||
-                rightTile.getAdjacentTiles()[1] == null || rightTile.getAdjacentTiles()[3] == null) {
-                return false;
-            }
-        } else {
-            for (Node node : nodes) {
-                if (!node.isConnected()) {
-                    return false;
-                }
-            }
-            return true;
         }
         return false;
     }
 
+    // HAS TEST
+    public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
+        if (this.tiger != null) {
+            throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
+        }
+        this.tiger = tiger;
+    }
+
+
+
     // MARK: Getters and setters
+    public Terrain getTerrain() {
+        return terrain;
+    }
 
     public Tile getTile() {
         return tile;
@@ -87,7 +87,7 @@ public class TileSection {
         return nodes;
     }
 
-    public String toString(){
-        return "" + this.hashCode();
+    public Tiger getTiger() {
+        return tiger;
     }
 }
