@@ -71,7 +71,7 @@ public class Tile {
         return edges[location.ordinal()];
     }
 
-    public void setEdge(Node node, EdgeLocation location){
+    public void setEdge(Node node, EdgeLocation location) {
         edges[location.ordinal()] = node;
     }
 
@@ -79,7 +79,7 @@ public class Tile {
         return corners[location.ordinal()];
     }
 
-    public void setCorner(Node node, CornerLocation location){
+    public void setCorner(Node node, CornerLocation location) {
         corners[location.ordinal()] = node;
     }
 
