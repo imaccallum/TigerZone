@@ -11,6 +11,8 @@ public class Node {
         this.connectedNode = null;
     }
 
+    // Getters and Setters
+
     public TileSection getTileSection() {
         return tileSection;
     }
