@@ -14,17 +14,17 @@ import java.util.List;
 
 public class GameManager {
 
-    private List<Player> players = new ArrayList<>();
+    private Player p1;
+    private Player p2;
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
 
     private Board board;
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
+    public GameManager(Stack<Tile> stack, Player p1, Player p2) {
+        this.p1 = p1;
+        this.p2 = p2;
         board = new Board(stack.size(), stack.pop());
     }
 
@@ -74,13 +74,14 @@ public class GameManager {
                 '0','0'};
         //endregion
 
+        Character[] testDeck = {'b', 'a', 'a'};
         List<Character> charList = Arrays.asList(myarray);
-        Collections.shuffle(charList);
+        //Collections.shuffle(charList);
 
         TileFactory f = new TileFactory();
         Stack<Tile> deck = new Stack<>();
 
-        for (Character c: charList) {
+        for (Character c: testDeck) {
             Tile t = f.makeTile(c);
             deck.push(t);
         }

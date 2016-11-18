@@ -25,10 +25,11 @@ public class Board {
         boardMatrix = new Tile[stackSize * 2][stackSize * 2];
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
+        tigerDens = new ArrayList<>();
 
         System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
-        setTileForPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
+        setTileAtPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
         openTileLocations.add(new Point(stackSize - 1, stackSize));
         openTileLocations.add(new Point(stackSize - 2, stackSize - 1));
         openTileLocations.add(new Point(stackSize, stackSize - 1));
@@ -53,7 +54,7 @@ public class Board {
         }
 
         // Put the tile in the matrix, get ready to connect the tiles.
-        boardMatrix[row][col] = tile;
+        setTileAtPoint(tile, location);
         openTileLocations.remove(new Point(row, col));
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
@@ -277,7 +278,7 @@ public class Board {
         }
     }
 
-    private void setTileForPoint(Tile tile, Point point) {
+    private void setTileAtPoint(Tile tile, Point point) {
         boardMatrix[point.x][point.y] = tile;
     }
 
