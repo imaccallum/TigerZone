@@ -74,14 +74,14 @@ public class GameManager {
                 '0','0'};
         //endregion
 
-        Character[] testDeck = {'b', 'a', 'a'};
+//        Character[] testDeck = {'b', 'a', 'a'};
         List<Character> charList = Arrays.asList(myarray);
-        //Collections.shuffle(charList);
+        Collections.shuffle(charList);
 
         TileFactory f = new TileFactory();
         Stack<Tile> deck = new Stack<>();
 
-        for (Character c: testDeck) {
+        for (Character c: charList) {
             Tile t = f.makeTile(c);
             deck.push(t);
         }
@@ -103,7 +103,7 @@ public class GameManager {
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 LocationAndOrientation optimalPlacement = tileOptions.get(0);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+//                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateClockwise(optimalPlacement.getOrientation());
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
