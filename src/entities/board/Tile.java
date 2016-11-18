@@ -14,6 +14,7 @@ public class Tile {
     //	Edge[3]		Center		Edge[1]
     //		Corner[3]	Corner[2]
     //			    Edge[2]
+
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
