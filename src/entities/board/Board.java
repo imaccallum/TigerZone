@@ -26,6 +26,7 @@ public class Board {
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
 
+        System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
         setTileForPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
         openTileLocations.add(new Point(stackSize - 1, stackSize));
@@ -87,22 +88,22 @@ public class Board {
     public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (Point openTileLocation : openTileLocations) {   // for each open tile
-            for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation) {
+            int row = openTileLocation.x;
+            int col = openTileLocation.y;
+            Tile top = boardMatrix[row - 1][col];
+            Tile right = boardMatrix[row][col + 1];
+            Tile bottom = boardMatrix[row + 1][col];
+            Tile left = boardMatrix[row][col - 1];
+
+            System.out.println("For openTile " + openTileLocation + ": ");
+            System.out.println("    Top = " + (top != null));
+            System.out.println("    Right = " + (right != null));
+            System.out.println("    Bottom = " + (bottom != null));
+            System.out.println("    Left = " + (left != null));
+
+            for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
-                tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
-                int row = openTileLocation.x;
-                int col = openTileLocation.y;
-                Tile top = boardMatrix[row - 1][col];
-                Tile right = boardMatrix[row][col + 1];
-                Tile bottom = boardMatrix[row + 1][col];
-                Tile left = boardMatrix[row][col - 1];
-
-                System.out.println("For openTile " + openTileLocation + ": ");
-                System.out.println("    Top = " + (top != null));
-                System.out.println("    Right = " + (right != null));
-                System.out.println("    Bottom = " + (bottom != null));
-                System.out.println("    Left = " + (left != null));
-
+//                tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
 
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
                     System.out.println("Vertical connection to top tile is invalid.");
