@@ -593,7 +593,7 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_zero, CornerLocation.TOP_RIGHT);
+       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
        tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
