@@ -25,7 +25,7 @@ public class GameManager {
         for(Player player : players) {
             this.players.add(player);
         }
-        board = new Board(stack);
+        board = new Board(stack.size(), stack.pop());
     }
 
     /*
@@ -98,7 +98,7 @@ public class GameManager {
         while(!deck.empty())
         {
             Tile t = deck.pop();
-     //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
+            System.out.println(t.type);
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 LocationAndOrientation optimalPlacement = tileOptions.get(0);
@@ -109,10 +109,5 @@ public class GameManager {
                 System.out.println("No valid moves, discarding tile.");
             }
         }
-
-//        gm.board.insert(t2, 40, 41);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        System.out.println(gm.board.getTileOptions());
     }
 }

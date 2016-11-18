@@ -1,16 +1,15 @@
 package entities.overlay;
 
-import entities.board.PreyAnimal;
 import entities.board.Terrain;
 import entities.board.Tiger;
-import entities.board.Tile;
-import entities.player.Player;
-import game.scoring.DenScorer;
+import exceptions.IncompatibleTerrainException;
+import game.scoring.JungleScorer;
 import game.scoring.LakeScorer;
 import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -26,17 +25,27 @@ public class Region {
         tileSections = new ArrayList<>();
     }
 
-
-    public void addTileSection(TileSection tileSection) {
+    // HAS TESTS
+    public void addTileSection(TileSection tileSection) throws IncompatibleTerrainException {
+        if (tileSection.getTerrain() != terrain) {
+            throw new IncompatibleTerrainException("Tried adding a TileSection to a Region with different terrain.");
+        }
         tileSection.setRegion(this);
         tileSections.add(tileSection);
     }
 
-    public void combineWithRegion(Region region) {
-        region.tileSections.forEach(this::addTileSection);
+    // HAS TESTS
+    public void combineWithRegion(Region region) throws IncompatibleTerrainException {
+        for (TileSection section  : region.tileSections) {
+            addTileSection(section);
+        }
     }
 
+    // HAS TESTS
     public boolean isFinished() {
+        if (tileSections.isEmpty()) {
+            System.err.println("Queried isFinished for region with no tile sections!!");
+        }
         for (TileSection section : tileSections) {
             if (section.hasOpenConnection()) {
                 return false;
@@ -45,6 +54,7 @@ public class Region {
         return true;
     }
 
+    // HAS TEST
     public boolean containsTigers() {
         for (TileSection section : tileSections) {
             if (section.getTiger() != null) {
@@ -54,14 +64,22 @@ public class Region {
         return false;
     }
 
+    // HAS TEST
     public Scorer getScorer() {
         switch (terrain) {
             case TRAIL: return new TrailScorer();
             case LAKE: return new LakeScorer();
-            case JUNGLE: return new LakeScorer();
+            case JUNGLE: return new JungleScorer();
         }
 
         return null;
+    }
+
+    public List<Tiger> getAllTigers() {
+        List<Tiger> tigers = new ArrayList<>();
+        tigers.addAll(tileSections.stream().filter(section -> section.getTiger() != null)
+                .map(TileSection::getTiger).collect(Collectors.toList()));
+        return tigers;
     }
 
     // MARK: Getters and Setters

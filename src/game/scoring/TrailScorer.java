@@ -8,34 +8,36 @@ import java.util.List;
 public class TrailScorer extends Scorer {
     @Override
     public int score(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
-
-        for(TileSection ts : tileSections){
-            score += 1;
-        }
-
-        region.setTotalPrey();
-        score += region.getTotalPrey();
-
-        super.returnMeeples(region);
-
-        return score;
+//        List<TileSection> tileSections = region.getTileSections();
+//        int score = 0;
+//
+//        for(TileSection ts : tileSections){
+//            score += 1;
+//        }
+//
+//        region.setTotalPrey();
+//        score += region.getTotalPrey();
+//
+//        super.returnMeeples(region);
+//
+//        return score;
+        return 0;
     }
 
     @Override
     public int scoreAtEnd(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
-
-        for(TileSection ts : tileSections){
-            score += 1;
-        }
-
-        score += region.getTigerList().size();
-
-        super.returnMeeples(region);
-
-        return score;
+//        List<TileSection> tileSections = region.getTileSections();
+//        int score = 0;
+//
+//        for(TileSection ts : tileSections){
+//            score += 1;
+//        }
+//
+//        score += region.getTigerList().size();
+//
+//        super.returnMeeples(region);
+//
+//        return score;
+        return 0;
     }
 }
