@@ -6,6 +6,7 @@ import entities.board.Tiger;
 import exceptions.TigerAlreadyPlacedException;
 
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TigerDen {
@@ -14,6 +15,7 @@ public class TigerDen {
     private Map<Point, Boolean> requiredTileLocations;
 
     public TigerDen(Point centerTileLocation, Board board) {
+        requiredTileLocations = new HashMap<>();
         this.centerTileLocation = centerTileLocation;
         Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
         requiredTileLocations.put(right, board.getTile(right) != null);
