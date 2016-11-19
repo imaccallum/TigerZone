@@ -5,26 +5,33 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.Region;
 import entities.player.Player;
-import exceptions.BadPlacementException;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
 public class GameManager {
 
-    private List<Player> players = new ArrayList<>();
+    private Player p1;
+    private Player p2;
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
+    // *TODO RegionLinker regionLinker;
 
     private Board board;
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
+    public GameManager(Stack<Tile> stack, Player p1, Player p2) {
+        this.p1 = p1;
+        this.p2 = p2;
         board = new Board(stack.size(), stack.pop());
     }
 
@@ -42,7 +49,7 @@ public class GameManager {
         return board;
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException {
+    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException {
 
         //region deckArray
         Character[] myarray = {'a',
@@ -74,6 +81,7 @@ public class GameManager {
                 '0','0'};
         //endregion
 
+//        Character[] testDeck = {'b', 'a', 'a'};
         List<Character> charList = Arrays.asList(myarray);
         Collections.shuffle(charList);
 
@@ -94,20 +102,28 @@ public class GameManager {
 //        TileFactory tf = new TileFactory();
 //        Tile t1 = tf.makeTile('a');
 //        Tile t2 = tf.makeTile('a');
+//        System.out.println(t2);
+
+
 
         while(!deck.empty())
         {
             Tile t = deck.pop();
-            System.out.println(t.type);
+    //        System.out.println(t);
+
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 LocationAndOrientation optimalPlacement = tileOptions.get(0);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+//                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateClockwise(optimalPlacement.getOrientation());
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
-                System.out.println("No valid moves, discarding tile.");
+   //             System.out.println("No valid moves, discarding tile.");
             }
+            gm.getBoard().log();
+   //         System.out.println("------------------------");
+
         }
+
     }
 }
