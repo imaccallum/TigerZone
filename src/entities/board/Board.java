@@ -32,10 +32,11 @@ public class Board {
         boardSize = stackSize * 2;
         openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
+        tigerDens = new ArrayList<>();
 
         System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
-        setTileForPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
+        setTileAtPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
         openTileLocations.add(new Point(stackSize - 1, stackSize));
         openTileLocations.add(new Point(stackSize - 2, stackSize - 1));
         openTileLocations.add(new Point(stackSize, stackSize - 1));
@@ -61,7 +62,7 @@ public class Board {
         }
 
         // Put the tile in the matrix, get ready to connect the tiles.
-        boardMatrix[row][col] = tile;
+        setTileAtPoint(tile, location);
         numTiles++;
         openTileLocations.remove(new Point(row, col));
 
@@ -104,36 +105,36 @@ public class Board {
             Tile bottom = boardMatrix[row + 1][col];
             Tile left = boardMatrix[row][col - 1];
 
-     //       System.out.println("For openTile " + openTileLocation + ": ");
-     //       System.out.println("    Top = " + (top != null));
-     //       System.out.println("    Right = " + (right != null));
-     //       System.out.println("    Bottom = " + (bottom != null));
-     //       System.out.println("    Left = " + (left != null));
+//            System.out.println("For openTile " + openTileLocation + ": ");
+//            System.out.println("    Top = " + (top != null));
+//            System.out.println("    Right = " + (right != null));
+//            System.out.println("    Bottom = " + (bottom != null));
+//            System.out.println("    Left = " + (left != null));
 
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
 //                tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
 
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
-      //              System.out.println("Vertical connection to top tile is invalid.");
+//                    System.out.println("Vertical connection to top tile is invalid.");
                     continue;
                 }
                 if (right != null && !lateralConnectionIsValid(right, tile)) {
-     //               System.out.println("Lateral connection to right tile is invalid.");
+//                    System.out.println("Lateral connection to right tile is invalid.");
                     continue;
                 }
                 if (bottom != null && !verticalConnectionIsValid(bottom, tile)) {
-      //              System.out.println("Vertical connection to bottom tile is invalid.");
+//                    System.out.println("Vertical connection to bottom tile is invalid.");
                     continue;
                 }
                 if (left != null && !lateralConnectionIsValid(tile, left)) {
-      //              System.out.println("Lateral connection to left tile is invalid.");
+//                    System.out.println("Lateral connection to left tile is invalid.");
                     continue;
                 }
 
-      //          System.out.println("Adding point " + openTileLocation +
-      //                  " with tile orientation " + tileOrientation +
-      //                  " to valid tile placements.");
+//                System.out.println("Adding point " + openTileLocation +
+//                        " with tile orientation " + tileOrientation +
+//                        " to valid tile placements.");
                 Point current = new Point(openTileLocation.x, openTileLocation.y);
                 LocationAndOrientation locationAndOrientation = new LocationAndOrientation(current, tileOrientation);
                 validPlacements.add(locationAndOrientation);
@@ -244,7 +245,8 @@ public class Board {
                     second.getTileSection().getTerrain());
         }
 
-        if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null) {
+        if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null &&
+                first.getTileSection().getRegion().getRegionId() !=  second.getTileSection().getRegion().getRegionId()) {
             first.setConnectedNode(second);
             second.setConnectedNode(first);
             try {
@@ -252,7 +254,7 @@ public class Board {
             } catch (IncompatibleTerrainException e) {
                 throw new BadPlacementException(e.getMessage());
             }
-            regions.remove(second.getTileSection().getRegion().getRegionId());
+            regions.remove(first.getTileSection().getRegion().getRegionId());
         }
         else if (first.getTileSection().getRegion() != null) {
             first.setConnectedNode(second);
@@ -286,7 +288,7 @@ public class Board {
         }
     }
 
-    private void setTileForPoint(Tile tile, Point point) {
+    private void setTileAtPoint(Tile tile, Point point) {
         boardMatrix[point.x][point.y] = tile;
     }
 
@@ -299,21 +301,6 @@ public class Board {
         else {
             return true;
         }
-    }
-
-
-    public void log2() throws IOException {
-        String output = "";
-
-        for (int row = 0; row < boardSize; row++) {          // for each row
-            for (int col = 0; col < boardSize; col++) {
-                if(boardMatrix[row][col] != null) {         // where there is a tile
-                    output += (boardMatrix[row][col].toString());
-                }
-            }
-        }
-
-        System.out.println(output);
     }
 
     public void log() throws IOException {

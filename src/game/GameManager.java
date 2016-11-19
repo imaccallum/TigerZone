@@ -20,7 +20,8 @@ import java.util.List;
 
 public class GameManager {
 
-    private List<Player> players = new ArrayList<>();
+    private Player p1;
+    private Player p2;
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
@@ -28,10 +29,9 @@ public class GameManager {
 
     private Board board;
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
+    public GameManager(Stack<Tile> stack, Player p1, Player p2) {
+        this.p1 = p1;
+        this.p2 = p2;
         board = new Board(stack.size(), stack.pop());
     }
 
@@ -81,6 +81,7 @@ public class GameManager {
                 '0','0'};
         //endregion
 
+//        Character[] testDeck = {'b', 'a', 'a'};
         List<Character> charList = Arrays.asList(myarray);
         Collections.shuffle(charList);
 
@@ -113,7 +114,7 @@ public class GameManager {
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 LocationAndOrientation optimalPlacement = tileOptions.get(0);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+//                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateClockwise(optimalPlacement.getOrientation());
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
