@@ -7,7 +7,14 @@ import entities.overlay.Region;
 import entities.player.Player;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -42,7 +49,7 @@ public class GameManager {
         return board;
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException {
+    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException {
 
         //region deckArray
         Character[] myarray = {'a',
@@ -94,11 +101,15 @@ public class GameManager {
 //        TileFactory tf = new TileFactory();
 //        Tile t1 = tf.makeTile('a');
 //        Tile t2 = tf.makeTile('a');
+//        System.out.println(t2);
+
+
 
         while(!deck.empty())
         {
             Tile t = deck.pop();
-            System.out.println(t.type);
+    //        System.out.println(t);
+
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 LocationAndOrientation optimalPlacement = tileOptions.get(0);
@@ -106,8 +117,12 @@ public class GameManager {
                 t.rotateClockwise(optimalPlacement.getOrientation());
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
-                System.out.println("No valid moves, discarding tile.");
+   //             System.out.println("No valid moves, discarding tile.");
             }
+            gm.getBoard().log();
+   //         System.out.println("------------------------");
+
         }
+
     }
 }
