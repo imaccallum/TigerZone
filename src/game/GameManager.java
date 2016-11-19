@@ -113,14 +113,16 @@ public class GameManager {
 
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
-                LocationAndOrientation optimalPlacement = tileOptions.get(0);
-//                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                int random = (int) (Math.random() * tileOptions.size());
+                LocationAndOrientation optimalPlacement = tileOptions.get(random);
+                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateClockwise(optimalPlacement.getOrientation());
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
-   //             System.out.println("No valid moves, discarding tile.");
+                System.out.println("No valid moves, discarding tile.");
             }
-            gm.getBoard().log();
+            if(deck.size() == 0)
+                gm.getBoard().log();
    //         System.out.println("------------------------");
 
         }
