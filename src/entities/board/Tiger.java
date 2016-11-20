@@ -8,6 +8,7 @@ public class Tiger {
 
     public Tiger(Player player) {
         this.player = player;
+        player.decrementRemainingTigers();
     }
 
     public Player getOwningPlayer() {

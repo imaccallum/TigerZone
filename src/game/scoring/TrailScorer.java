@@ -18,7 +18,7 @@ public class TrailScorer extends Scorer {
 //        region.setTotalPrey();
 //        score += region.getTotalPrey();
 //
-//        super.returnMeeples(region);
+//        super.returnTigers(region);
 //
 //        return score;
         return 0;
@@ -35,7 +35,7 @@ public class TrailScorer extends Scorer {
 //
 //        score += region.getTigerList().size();
 //
-//        super.returnMeeples(region);
+//        super.returnTigers(region);
 //
 //        return score;
         return 0;

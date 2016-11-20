@@ -1,10 +1,12 @@
 package game;
 
 import entities.board.Board;
+import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.Region;
 import entities.player.Player;
+import exceptions.TigerAlreadyPlacedException;
 
 import java.awt.*;
 import java.io.*;
@@ -49,7 +51,7 @@ public class GameManager {
         return board;
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException {
+    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException, TigerAlreadyPlacedException {
 
         //region deckArray
         Character[] myarray = {'a',
@@ -117,6 +119,9 @@ public class GameManager {
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
                 System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateClockwise(optimalPlacement.getOrientation());
+                if(Math.random() > .9 && p1.hasRemainingTigers()){
+                    t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
+                }
                 gm.getBoard().insert(t, optimalPlacement.getLocation());
             } else {
                 System.out.println("No valid moves, discarding tile.");

@@ -69,29 +69,45 @@ public class Tile {
 
 
         if(corners[0] != null) {
-            one +=  spacing(corners[0].getTileSection().getTerrain().toString()) +  spacing(edges[0].getTileSection().getTerrain().toString());
+            one +=  spacing((corners[0].hasTiger() ? corners[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[0].getTileSection().getTerrain().toString())) +
+                    spacing((edges[0].hasTiger() ? edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                            edges[0].getTileSection().getTerrain().toString()));
         } else {
-            one += spacing("X") + spacing(edges[0].getTileSection().getTerrain().toString());
+            one += spacing("X") + spacing((edges[0].hasTiger() ? edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
         }
         if(corners[1] != null) {
-           one += spacing(corners[1].getTileSection().getTerrain().toString()) + "|\n";
+           one += spacing((corners[1].hasTiger() ? corners[1].getTileSection().getTerrain().toString().toLowerCase() :
+                   corners[1].getTileSection().getTerrain().toString())) + "|\n";
         } else {
             one += spacing("X") + "|\n";
         }
 
         if(hasDen)
-            two += spacing(edges[3].getTileSection().getTerrain().toString()) + spacing("True") + spacing(edges[1].getTileSection().getTerrain().toString()) + "|\n";
+            two += spacing((edges[3].hasTiger() ? edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[3].getTileSection().getTerrain().toString())) + spacing("True") +
+                    spacing((edges[1].hasTiger() ? edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                            edges[1].getTileSection().getTerrain().toString())) + "|\n";
         else
-            two += spacing(edges[3].getTileSection().getTerrain().toString())+ spacing("False") + spacing(edges[1].getTileSection().getTerrain().toString()) + "|\n";
+            two += spacing((edges[3].hasTiger() ? edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[3].getTileSection().getTerrain().toString())) + spacing("False") +
+                    spacing((edges[1].hasTiger() ? edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                            edges[1].getTileSection().getTerrain().toString())) + "|\n";
 
 
         if(corners[2] != null) {
-            three +=  spacing(corners[2].getTileSection().getTerrain().toString()) +  spacing(edges[2].getTileSection().getTerrain().toString());
+            three +=  spacing((corners[2].hasTiger() ? corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString())) +
+                    spacing((edges[2].hasTiger() ? edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                            edges[2].getTileSection().getTerrain().toString()));
         } else {
-            three += spacing("X") + spacing(edges[2].getTileSection().getTerrain().toString());
+            three += spacing("X") + spacing((edges[2].hasTiger() ? edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[2].getTileSection().getTerrain().toString()));
         }
         if(corners[3] != null) {
-            three += spacing(corners[3].getTileSection().getTerrain().toString()) + "|\n";
+            three += spacing((corners[3].hasTiger() ? corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString())) + "|\n";
         } else {
             three += spacing("X") +"|\n";
         }

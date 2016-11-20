@@ -16,7 +16,7 @@ public class LakeScorer extends Scorer {
 //        for(TileSection tileSection : tileSections){
 //            score += 2;
 //        }
-//        super.returnMeeples(region);
+//        super.returnTigers(region);
 //
 //        return score * multiplier;
         return 0;
@@ -34,7 +34,7 @@ public class LakeScorer extends Scorer {
 //            score += 1;
 //        }
 //
-//        super.returnMeeples(region);
+//        super.returnTigers(region);
 //
 //        return score * multiplier;
         return 0;

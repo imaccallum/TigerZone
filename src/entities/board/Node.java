@@ -45,4 +45,8 @@ public class Node {
     public Tiger getTiger(){
         return tiger;
     }
+
+    public boolean hasTiger(){
+        return getTiger() != null;
+    }
 }

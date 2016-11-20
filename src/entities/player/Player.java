@@ -3,11 +3,11 @@ package entities.player;
 public class Player {
     private String name;
     private int score;
-    private int remainingFollowers;
+    private int remainingTigers;
 
     public Player(String name){
         this.name = name;
-        remainingFollowers = 7;
+        remainingTigers = 7;
         score = 0;
     }
 
@@ -19,12 +19,20 @@ public class Player {
         return score;
     }
 
-    public int getRemainingFollowers() {
-        return remainingFollowers;
+    public int getRemainingTigers() {
+        return remainingTigers;
     }
 
-    public void incrementRemainingFollowers(){
-        remainingFollowers++;
+    public void incrementRemainingTigers(){
+        remainingTigers++;
+    }
+
+    public void decrementRemainingTigers(){
+        remainingTigers--;
+    }
+
+    public boolean hasRemainingTigers(){
+        return getRemainingTigers() > 0;
     }
 
     public void addToScore(int scoreToAdd) {
