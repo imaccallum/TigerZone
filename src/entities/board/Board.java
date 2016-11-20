@@ -111,9 +111,9 @@ public class Board {
 //            System.out.println("    Bottom = " + (bottom != null));
 //            System.out.println("    Left = " + (left != null));
 
-            for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateClockwise(1)) {
+            for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
-//                tile.rotateClockwise(1);  // Rotate the tile 1 to check next orientation
+//                tile.rotateCounterClockwise(1);  // Rotate the tile 1 to check next orientation
 
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
 //                    System.out.println("Vertical connection to top tile is invalid.");

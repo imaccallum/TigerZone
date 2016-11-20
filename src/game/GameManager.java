@@ -4,19 +4,10 @@ import entities.board.Board;
 import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
-import entities.overlay.Region;
 import entities.player.Player;
 import exceptions.TigerAlreadyPlacedException;
 
-import java.awt.*;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -100,14 +91,6 @@ public class GameManager {
 
         GameManager gm = new GameManager(deck, p0, p1);
 
-
-//        TileFactory tf = new TileFactory();
-//        Tile t1 = tf.makeTile('a');
-//        Tile t2 = tf.makeTile('a');
-//        System.out.println(t2);
-
-
-
         while(!deck.empty())
         {
             Tile t = deck.pop();
@@ -118,7 +101,7 @@ public class GameManager {
                 int random = (int) (Math.random() * tileOptions.size());
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
                 System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
-                t.rotateClockwise(optimalPlacement.getOrientation());
+                t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
                     t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
                 }
@@ -126,7 +109,7 @@ public class GameManager {
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
-            if(deck.size() == 0)
+//            if(deck.size() == 0)
                 gm.getBoard().log();
    //         System.out.println("------------------------");
 

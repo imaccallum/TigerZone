@@ -33,13 +33,14 @@ public class Tile {
     }
 
     // HAS TESTS
-    public void rotateClockwise(int numberOfRotations) {
+    public void rotateCounterClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
         Node[] tempCorners = new Node[COUNT];
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (i + numberOfRotations) % COUNT;
+            int index = (((i - numberOfRotations) % COUNT) < 0) ?
+                    ((i - numberOfRotations) % COUNT) + COUNT : (i - numberOfRotations) % COUNT;
             tempEdges[index] = edges[i];
             tempCorners[index] = corners[i];
         }
