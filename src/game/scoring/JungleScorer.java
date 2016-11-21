@@ -1,7 +1,10 @@
 package game.scoring;
 
+import entities.board.Board;
 import entities.board.Terrain;
+import entities.board.Tile;
 import entities.overlay.Region;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 
 import java.util.List;
@@ -14,17 +17,19 @@ public class JungleScorer extends Scorer {
 
     @Override
     public int scoreAtEnd(Region region) {
-//        List<Region> regions = region.getAdjacentRegions();
-//
-//        int score = 0;
-//        for(Region r : regions){
-//            if(r.getTerrain() == Terrain.LAKE && r.isFinished())
-//                score += 3;
-//            if(r.getTerrain() == Terrain.DEN && r.isFinished())
-//                score += 5;
-//        }
-//
-//        return score;
-        return 0;
+        int score = 0;
+
+        for(TileSection tileSection : region.getTileSections()){
+            Tile tile = tileSection.getTile();
+            for(TileSection tileTileSection : tile.getTileSections()){
+                Region tileRegion = tileTileSection.getRegion();
+                if(tileRegion.getTerrain() == Terrain.LAKE && tileRegion.isFinished())
+                    score += 3;
+            }
+            if(tile.hasDen()){
+                //Do scoring for TigerDen
+            }
+        }
+        return score;
     }
 }

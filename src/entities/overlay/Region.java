@@ -10,7 +10,6 @@ import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while

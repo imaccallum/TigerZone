@@ -45,7 +45,11 @@ public class Player {
         return remainingCrocodiles;
     }
 
-    public void setRemainingCrocodiles(int remainingCrocodiles) {
-        this.remainingCrocodiles = remainingCrocodiles;
+    public void incrementRemainingCrocodiles(){
+        remainingCrocodiles++;
+    }
+
+    public void decrementRemainingCrocodiles(){
+        remainingCrocodiles--;
     }
 }

@@ -7,6 +7,7 @@ import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.TigerAlreadyPlacedException;
 
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
