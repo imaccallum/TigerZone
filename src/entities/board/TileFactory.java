@@ -33,6 +33,7 @@ public class TileFactory {
             case 'y': return makeTileY();
             case 'z': return makeTileZ();
             case '0': return makeTile0();
+            case '1': return makeTile1();
             default: throw new RuntimeException("Invalid tile identifier");
         }
     }
@@ -933,6 +934,39 @@ public class TileFactory {
         tile.addTileSections(jungle0, jungle1, trail, lake);
 
         tile.setPreyAnimal(PreyAnimal.DEER);
+        return tile;
+    }
+
+    private Tile makeTile1() {
+        Tile tile = new Tile((char)1);
+        TileSection jungle0 = new TileSection(Terrain.JUNGLE);
+        TileSection trail = new TileSection(Terrain.TRAIL);
+        TileSection jungle1 = new TileSection(Terrain.JUNGLE);
+        TileSection lake = new TileSection(Terrain.LAKE);
+
+        Node e_zero = new Node();
+        Node e_one = new Node();
+        Node e_two = new Node();
+        Node e_three = new Node();
+
+        Node c_zero = new Node();
+        Node c_one = new Node();
+
+        jungle0.addNodes(c_zero);
+        jungle1.addNodes(c_one);
+        trail.addNodes(e_zero);
+        lake.addNodes(e_one, e_two, e_three);
+
+        tile.setEdge(e_zero, EdgeLocation.TOP);
+        tile.setEdge(e_one, EdgeLocation.RIGHT);
+        tile.setEdge(e_two, EdgeLocation.BOTTOM);
+        tile.setEdge(e_three, EdgeLocation.LEFT);
+
+        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
+        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
+
+        tile.addTileSections(jungle0, jungle1, trail, lake);
+        tile.setHasCrocodile(true);
         return tile;
     }
 }

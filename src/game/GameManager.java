@@ -65,13 +65,14 @@ public class GameManager {
                 'r','r',
                 's','s','s',       // WEIRD # FORMAT 1 OR 3?
                 't','t',
-                'u','u','u',
+                'u',
                 'v',
                 'w','w',
                 'x','x','x',
                 'y','y',
                 'z',
-                '0','0'};
+                '0','0',
+                '1', '1'};
         //endregion
 
 //        Character[] testDeck = {'b', 'a', 'a'};
@@ -109,7 +110,7 @@ public class GameManager {
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
-//            if(deck.size() == 0)
+            if(deck.size() == 0)
                 gm.getBoard().log();
    //         System.out.println("------------------------");
 

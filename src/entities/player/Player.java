@@ -4,10 +4,12 @@ public class Player {
     private String name;
     private int score;
     private int remainingTigers;
+    private int remainingCrocodiles;
 
     public Player(String name){
         this.name = name;
         remainingTigers = 7;
+        remainingCrocodiles = 2;
         score = 0;
     }
 
@@ -37,5 +39,13 @@ public class Player {
 
     public void addToScore(int scoreToAdd) {
         score += scoreToAdd;
+    }
+
+    public int getRemainingCrocodiles() {
+        return remainingCrocodiles;
+    }
+
+    public void setRemainingCrocodiles(int remainingCrocodiles) {
+        this.remainingCrocodiles = remainingCrocodiles;
     }
 }

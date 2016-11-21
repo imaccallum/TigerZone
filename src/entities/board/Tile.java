@@ -23,6 +23,7 @@ public class Tile {
     private Point location;
     private List<TileSection> tileSections;
     public char type;
+    private boolean hasCrocodile;
 
     public Tile(char t) {
         edges = new Node[COUNT];
@@ -177,5 +178,13 @@ public class Tile {
 
     public List<TileSection> getTileSections() {
         return tileSections;
+    }
+
+    public boolean isHasCrocodile() {
+        return hasCrocodile;
+    }
+
+    public void setHasCrocodile(boolean hasCrocodile) {
+        this.hasCrocodile = hasCrocodile;
     }
 }
