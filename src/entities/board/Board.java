@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Board {
 
     private Tile[][] boardMatrix;
-    private HashSet<Point> openTileLocations;
+    private List<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<TigerDen> tigerDens;
     private Tile lastTilePlaced;
@@ -30,13 +30,14 @@ public class Board {
     public Board(int stackSize, Tile firstTile) {
         boardMatrix = new Tile[stackSize * 2][stackSize * 2];
         boardSize = stackSize * 2;
-        openTileLocations = new HashSet<>();
+        openTileLocations = new ArrayList<>();
         regions = new HashMap<>();
         tigerDens = new ArrayList<>();
 
-        System.out.println(firstTile.type);
+//        System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
         setTileAtPoint(firstTile, new Point(stackSize - 1, stackSize - 1));
+        lastTilePlaced = firstTile;
         openTileLocations.add(new Point(stackSize - 1, stackSize));
         openTileLocations.add(new Point(stackSize - 2, stackSize - 1));
         openTileLocations.add(new Point(stackSize, stackSize - 1));
@@ -44,16 +45,17 @@ public class Board {
         numTiles = 1;
     }
 
+    // HAS TESTS
     public void insert(Tile tile, Point location) throws BadPlacementException {
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
-        int row = location.x;
-        int col = location.y;
+        int row = location.y;
+        int col = location.x;
 
         // Get the surrounding tiles of the placement.
-        Tile leftTile = getTile(new Point(row, col - 1));
-        Tile rightTile = getTile(new Point(row, col + 1));
-        Tile bottomTile = getTile(new Point(row + 1, col));
-        Tile topTile = getTile(new Point(row - 1, col));
+        Tile leftTile = getTile(new Point(col-1, row));
+        Tile rightTile = getTile(new Point(col+1, row));
+        Tile bottomTile = getTile(new Point(col, row+1));
+        Tile topTile = getTile(new Point(col, row-1));
 
         // If they are all null, we are trying to place a tile that will not be adjacent to any other tile and thus
         // throw a bad tile placement exception.
@@ -62,30 +64,30 @@ public class Board {
         }
 
         // Put the tile in the matrix, get ready to connect the tiles.
-        openTileLocations.remove(new Point(row, col));
         setTileAtPoint(tile, location);
         numTiles++;
+        openTileLocations.remove(location);
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
         if (leftTile != null) {
             connectLaterally(tile, leftTile);
         } else {
-            openTileLocations.add(new Point(row, col - 1));
+            openTileLocations.add(new Point(col-1, row));
         }
         if (rightTile != null) {
             connectLaterally(rightTile, tile);
         } else {
-            openTileLocations.add(new Point(row, col + 1));
+            openTileLocations.add(new Point(col+1, row));
         }
         if (topTile != null) {
             connectVertically(tile, topTile);
         } else {
-            openTileLocations.add(new Point(row - 1, col));
+            openTileLocations.add(new Point(col, row-1));
         }
         if (bottomTile != null) {
             connectVertically(bottomTile, tile);
         } else {
-            openTileLocations.add(new Point(row + 1, col));
+            openTileLocations.add(new Point(col, row+1));
         }
 
         if (tile.hasDen()) {
@@ -95,15 +97,16 @@ public class Board {
         lastTilePlaced = tile;
     }
 
-    public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
+    // HAS TEST
+    public List<LocationAndOrientation>findValidTilePlacements(Tile tile) {
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (Point openTileLocation : openTileLocations) {   // for each open tile
-            int row = openTileLocation.x;
-            int col = openTileLocation.y;
-            Tile top = boardMatrix[row - 1][col];
-            Tile right = boardMatrix[row][col + 1];
-            Tile bottom = boardMatrix[row + 1][col];
+            int col = openTileLocation.x;
+            int row = openTileLocation.y;
             Tile left = boardMatrix[row][col - 1];
+            Tile right = boardMatrix[row][col + 1];
+            Tile top = boardMatrix[row - 1][col];
+            Tile bottom = boardMatrix[row + 1][col];
 
 //            System.out.println("For openTile " + openTileLocation + ": ");
 //            System.out.println("    Top = " + (top != null));
@@ -143,10 +146,24 @@ public class Board {
         return validPlacements;
     }
 
+    // HAS TESTS
     public Tile getTile(Point tileLocation) {
-        return boardMatrix[tileLocation.x][tileLocation.y];
+        return boardMatrix[tileLocation.y][tileLocation.x];
     }
 
+    public int getNumTiles(){
+        return numTiles;
+    }
+
+    public List<Point> getOpenTileLocations(){
+        return openTileLocations;
+    }
+
+    public Tile getLastPlacedTile(){
+        return lastTilePlaced;
+    }
+
+    // HAS TEST
     public List<TileSection> getPossibleTileSectionTigerPlacements() {
         List<TileSection> tigerPlacementPossibilities = new ArrayList<>();
         List<TileSection> lastTileSections = lastTilePlaced.getTileSections();
@@ -289,7 +306,7 @@ public class Board {
     }
 
     private void setTileAtPoint(Tile tile, Point point) {
-        boardMatrix[point.x][point.y] = tile;
+        boardMatrix[point.y][point.x] = tile;
     }
 
     // Checks to see if a tiger can be placed
@@ -298,9 +315,7 @@ public class Board {
         if (region.containsTigers()) {
             return false;
         }
-        else {
-            return true;
-        }
+        return true;
     }
 
     public void log() throws IOException {
@@ -343,7 +358,7 @@ public class Board {
                     numLogged++;
 
 
-                } else if(numLogged < numTiles) {
+                } else if(numLogged < getNumTiles()) {
                     String[] temp = {
                             "                                ",
                             "                                ",
@@ -379,4 +394,5 @@ public class Board {
         }
 
     }
+
 }
