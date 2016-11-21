@@ -16,6 +16,6 @@ public abstract class Scorer {
             t.getOwningPlayer().incrementRemainingTigers();
         }
 
-        tigerList.clear();
+        region.getAllTigers().clear();
     }
 }

@@ -1,42 +1,76 @@
 package game.scoring;
 
+import entities.board.PreyAnimal;
+import entities.board.Tiger;
+import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TileSection;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class LakeScorer extends Scorer {
     @Override
     public int score(Region region) {
-//        List<TileSection> tileSections = region.getTileSections();
-//        int score = 0;
-//        region.setUniquePrey();
-//        int multiplier = 1 + region.getUniquePrey();
-//
-//        for(TileSection tileSection : tileSections){
-//            score += 2;
-//        }
-//        super.returnTigers(region);
-//
-//        return score * multiplier;
-        return 0;
+        List<TileSection> tileSections = region.getTileSections();
+
+        HashSet<Tile> regionTiles = new HashSet<>();
+
+        for(TileSection tileSection : tileSections){
+            regionTiles.add(tileSection.getTile());
+        }
+
+        int score = tileSections.size()*2, multiplier = 1;
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.BOAR)
+                multiplier++;
+        }
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.DEER)
+                multiplier++;
+        }
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO)
+                multiplier++;
+        }
+
+        super.returnTigers(region);
+
+        return score * multiplier;
     }
 
     @Override
     public int scoreAtEnd(Region region) {
-//        List<TileSection> tileSections = region.getTileSections();
-//        int score = 0;
-//
-//        region.setUniquePrey();
-//        int multiplier = 1 + region.getUniquePrey();
-//
-//        for(TileSection ts : tileSections){
-//            score += 1;
-//        }
-//
-//        super.returnTigers(region);
-//
-//        return score * multiplier;
-        return 0;
+        List<TileSection> tileSections = region.getTileSections();
+
+        HashSet<Tile> regionTiles = new HashSet<>();
+
+        for(TileSection tileSection : tileSections){
+            regionTiles.add(tileSection.getTile());
+        }
+
+        int score = tileSections.size(), multiplier = 1;
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.BOAR)
+                multiplier++;
+        }
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.DEER)
+                multiplier++;
+        }
+
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO)
+                multiplier++;
+        }
+
+        super.returnTigers(region);
+
+        return score * multiplier;
     }
 }
