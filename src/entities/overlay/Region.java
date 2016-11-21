@@ -1,5 +1,6 @@
 package entities.overlay;
 
+import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
 import exceptions.IncompatibleTerrainException;
@@ -9,7 +10,6 @@ import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type
 // As tiles are placed on the board, new regions are generated and tilesections are added to specific regions, while
@@ -57,8 +57,10 @@ public class Region {
     // HAS TEST
     public boolean containsTigers() {
         for (TileSection section : tileSections) {
-            if (section.getTiger() != null) {
-                return true;
+            for (Node node : section.getNodes()) {
+                if (node.getTiger() != null) {
+                    return true;
+                }
             }
         }
         return false;
@@ -77,8 +79,13 @@ public class Region {
 
     public List<Tiger> getAllTigers() {
         List<Tiger> tigers = new ArrayList<>();
-        tigers.addAll(tileSections.stream().filter(section -> section.getTiger() != null)
-                .map(TileSection::getTiger).collect(Collectors.toList()));
+        for (TileSection section : tileSections) {
+            for (Node node : section.getNodes()) {
+                if (node.getTiger() != null) {
+                    tigers.add(node.getTiger());
+                }
+            }
+        }
         return tigers;
     }
 

@@ -19,7 +19,6 @@ public class TileSection {
     private Terrain terrain;
     private Tile tile;
     private Region region;
-    private Tiger tiger;
 
     public TileSection(Terrain terrain) {
         this.terrain = terrain;
@@ -53,14 +52,6 @@ public class TileSection {
     }
 
     // HAS TEST
-    public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
-        if (this.tiger != null) {
-            throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
-        }
-        this.tiger = tiger;
-    }
-
-
 
     // MARK: Getters and setters
     public Terrain getTerrain() {
@@ -85,9 +76,5 @@ public class TileSection {
 
     public List<Node> getNodes() {
         return nodes;
-    }
-
-    public Tiger getTiger() {
-        return tiger;
     }
 }
