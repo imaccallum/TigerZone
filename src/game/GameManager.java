@@ -110,8 +110,9 @@ public class GameManager {
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
-            if(deck.size() == 0)
+            if(deck.size() == 0) {
                 gm.getBoard().log();
+            }
    //         System.out.println("------------------------");
 
         }
