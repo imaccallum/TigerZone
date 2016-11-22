@@ -1,156 +1,266 @@
 package entities.board;
 
-import entities.board.Node;
 import entities.overlay.TileSection;
-import game.BadPlacementException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Tile {
 
-    //			Edge[0]
+    //			    Edge[0]
     //		Corner[0]	Corner[1]
     //	Edge[3]		Center		Edge[1]
     //		Corner[3]	Corner[2]
-    //			Edge[2]
+    //			    Edge[2]
+
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
-    private Node center;
-    private Tile[] adjacentTiles; // Adjacent tiles
-    private boolean hasDeer;
-    private boolean hasBuffalo;
-    private boolean hasBoar;
+    private boolean hasDen;
+    private PreyAnimal preyAnimal;
+    private Point location;
     private List<TileSection> tileSections;
+    public String type;
+    private boolean hasCrocodile;
 
-    public Tile() {
+    public Tile(String s) {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
-        adjacentTiles = new Tile[COUNT];
         tileSections = new ArrayList<>();
-        hasDeer = false;
-        hasBoar = false;
-        hasBuffalo = false;
+        preyAnimal = null;
+        this.type = s;
     }
 
-    public Tile[] getAdjacentTiles() {
-        return adjacentTiles;
-    }
-
-    public Tile[] getCornerTiles() {
-        Tile[] cornerTiles = new Tile[4];
-
-        if (adjacentTiles[0] != null) {
-            cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
-            cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
-        }
-
-        if (adjacentTiles[1] != null) {
-            cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
-            cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
-        }
-
-        if (adjacentTiles[2] != null) {
-            cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
-            cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
-        }
-        return cornerTiles;
-    }
-
-    public Tile getTile(int index) {
-        return adjacentTiles[index];
-    }
-
-    public Node getCorner(CornerLocation index) {
-        return corners[index.ordinal()];
-    }
-
-    public Node getEdge(EdgeLocation index) {
-        return edges[index.ordinal()];
-    }
-
-    public Node getCenter(int index) {
-        return center;
-    }
-
-    public void rotateClockwise(int numberOfRotations) {
+    // HAS TESTS - Bookkeeping
+    public void rotateCounterClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
         Node[] tempCorners = new Node[COUNT];
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (i + numberOfRotations) % COUNT;
-            tempEdges[index] = edges[i];
-            tempCorners[index] = corners[i];
+            int newIndex = (i + COUNT - numberOfRotations) % COUNT;
+            tempEdges[newIndex] = edges[i];
+            tempCorners[newIndex] = corners[i];
         }
+
         edges = tempEdges;
         corners = tempCorners;
     }
 
-    private void setTile(Tile t, int i) throws BadPlacementException {
-        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[i] = t;
+    // HAS TEST - Bookkeeping
+    /**
+     * Add the given tile sections to the tile
+     * 
+     * @param tileSections,
+     * the comma separated list of tile sections to add.
+     */
+    public void addTileSections(TileSection... tileSections) {
+        for (TileSection tileSection: tileSections){
+            tileSection.setTile(this);
+        }
+        this.tileSections.addAll(Arrays.asList(tileSections));
     }
 
-    public void setTopTile(Tile t) throws BadPlacementException {
-        setTile(t, 0);
+    /**
+     * Create the string representing the tile
+     * Will print a lowercase terrain string if a tiger is placed in a location.
+     *
+     * @return
+     * The string representation of the tile.
+     */
+    public String toString(){
+
+        String bound = "|" + type + "--------------------" + type + "|\n";
+        String rowOne = rowOneToString();
+        String rowTwo = rowTwoToString();
+        String rowThree = rowThreeToString();
+
+        if (location != null) {
+            String locHeader = "|" + spacing("x: " + location.x) + spacing(" ") + spacing("y: " + location.y) + "|\n";
+            return bound + locHeader + rowOne + rowTwo + rowThree + bound;
+        }
+        else {
+            return bound + rowOne + rowTwo + rowThree + bound;
+        }
     }
 
-    public void setBottomTile(Tile t) throws BadPlacementException {
-        setTile(t, 2);
+    // MARK: Getters and Setters
+
+    // Is there a den in the tile
+    public boolean hasDen() {
+        return hasDen;
     }
 
-    public void setLeftTile(Tile t) throws BadPlacementException {
-        setTile(t, 3);
+    // Set if the tile has a den
+    public void setHasDen(boolean hasDen) {
+        this.hasDen = hasDen;
     }
 
-    public void setRightTile(Tile t) throws BadPlacementException {
-        setTile(t, 1);
+    // Get the edge at a given edge location
+    public Node getEdge(EdgeLocation location) {
+        return edges[location.ordinal()];
     }
 
-    public void setEdge(Node node, int i){
-        edges[i] = node;
-    }
-    
-    public void setCorner(Node node, int i){
-        corners[i] = node;
+    // Set the edge in a given edge location
+    public void setEdge(Node node, EdgeLocation location){
+        edges[location.ordinal()] = node;
     }
 
-    private int inverse(int i) {
-        return (i + 2) % COUNT;
+    // Get the coirner in a given corner location
+    public Node getCorner(CornerLocation location) {
+        return corners[location.ordinal()];
     }
 
-    public void setCenter(Node center) {
-        this.center = center;
+    // Set the corner in a given corner location
+    public void setCorner(Node node, CornerLocation location){
+        corners[location.ordinal()] = node;
     }
 
-    public void addTileSections(TileSection... sections){
-        tileSections.addAll(Arrays.asList(sections));
+    // Get the prey animal on the tile
+    public PreyAnimal getPreyAnimal() {
+        return preyAnimal;
     }
 
-    public boolean hasDeer() {
-        return hasDeer;
+    // Set the prey animal on a tile.
+    public void setPreyAnimal(PreyAnimal preyAnimal) {
+        this.preyAnimal = preyAnimal;
     }
 
-    public boolean hasBuffalo() {
-        return hasBuffalo;
+    // Get the location for a tile
+    public Point getLocation() {
+        return location;
     }
 
-    public boolean hasBoar() {
-        return hasBoar;
+    // Set the location for a tile
+    public void setLocation(Point location) {
+        this.location = location;
     }
 
-    public void setHasDeer(boolean hasDeer) {
-        this.hasDeer = hasDeer;
+    // Get the lost of tile sections on a tile.
+    public List<TileSection> getTileSections() {
+        return tileSections;
     }
 
-    public void setHasBuffalo(boolean hasBuffalo) {
-        this.hasBuffalo = hasBuffalo;
+    // Get whether the tile has a crocodile.
+    public boolean isHasCrocodile() {
+        return hasCrocodile;
     }
 
-    public void setHasBoar(boolean hasBoar) {
-        this.hasBoar = hasBoar;
+    // Set whether the tile has a crocodile.
+    public void setHasCrocodile(boolean hasCrocodile) {
+        this.hasCrocodile = hasCrocodile;
+    }
+
+    // MARK: Private methods
+
+    //
+    // Get the string spacing for given terrain
+    //
+    // @return
+    // The set of spaces for the given terrain
+    //
+    private String spacing(String input) {
+        String out = "";
+        int size = 10 - input.length();
+        for(int i = 0; i < 2; i++) {
+            for (int x = 0; x < size / 2; x++) {
+                out += " ";
+            }
+            if(i == 0) out += input;
+        }
+        if(out.length() == 9)
+            out += " ";
+
+        return out;
+    }
+
+    //
+    // Get the string that represents row one
+    //
+    // @return
+    // the string representing row one
+    //
+    private String rowOneToString() {
+        String rowOne = "|";
+        if(corners[0] != null) {
+            rowOne += spacing((corners[0].isTigerDisplayNode() ?
+                    corners[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[0].getTileSection().getTerrain().toString()));
+        } else {
+            rowOne += spacing("X");
+        }
+
+        rowOne += spacing((edges[0].isTigerDisplayNode() ?
+                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
+
+        if(corners[1] != null) {
+            rowOne += spacing((corners[1].isTigerDisplayNode() ?
+                    corners[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowOne += spacing("X") + "|\n";
+        }
+
+        return rowOne;
+    }
+
+    //
+    // Get the string that represents row two
+    //
+    // @return
+    // the string representing row two
+    //
+    private String rowTwoToString() {
+        String rowTwo = "|";
+        rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[3].getTileSection().getTerrain().toString()));
+
+        if(hasDen) {
+            rowTwo += spacing("True");
+        }
+        else {
+            rowTwo += spacing("False");
+        }
+        rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[1].getTileSection().getTerrain().toString())) +
+                "|\n";
+        return rowTwo;
+    }
+
+    //
+    // Get the string that represents row three
+    //
+    // @return
+    // the string representing row three
+    //
+    private String rowThreeToString() {
+        String rowThree = "|";
+        if(corners[3] != null) {
+            rowThree +=  spacing((corners[3].isTigerDisplayNode() ?
+                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString()));
+        } else {
+            rowThree += spacing("X");
+        }
+
+        rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[2].getTileSection().getTerrain().toString()));
+
+        if(corners[2] != null) {
+            rowThree += spacing((corners[2].isTigerDisplayNode() ?
+                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowThree += spacing("X") + "|\n";
+        }
+        return rowThree;
     }
 }

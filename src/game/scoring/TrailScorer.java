@@ -1,41 +1,40 @@
 package game.scoring;
 
+import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TileSection;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class TrailScorer extends Scorer {
     @Override
     public int score(Region region) {
         List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
+        HashSet<Tile> regionTiles = new HashSet<>();
 
-        for(TileSection ts : tileSections){
-            score += 1;
+        for(TileSection tileSection : tileSections){
+            regionTiles.add(tileSection.getTile());
         }
 
-        region.setTotalPrey();
-        score += region.getTotalPrey();
+        int predationScore = 0;
+        for(Tile tile : regionTiles){
+            if(tile.getPreyAnimal() != null)
+                predationScore++;
+            else if(tile.isHasCrocodile()){
+                predationScore--;
+            }
+        }
 
-        super.returnMeeples(region);
+        int score = regionTiles.size() + ((predationScore > 0) ? predationScore : 0);
+
+        super.returnTigers(region);
 
         return score;
     }
 
     @Override
     public int scoreAtEnd(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
-
-        for(TileSection ts : tileSections){
-            score += 1;
-        }
-
-        score += region.getTigerList().size();
-
-        super.returnMeeples(region);
-
-        return score;
+        return score(region);
     }
 }
