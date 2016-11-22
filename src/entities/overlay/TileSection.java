@@ -95,6 +95,7 @@ public class TileSection {
         if (this.tiger != null) {
             throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
         }
+        assert !nodes.isEmpty();
         this.tiger = tiger;
         this.tigerDisplayNode = nodes.get(0);
     }

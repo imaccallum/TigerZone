@@ -27,8 +27,11 @@ public class RegionTest {
     @Before
     public void setup() {
         testTileSectionA = new TileSection(Terrain.JUNGLE);
+        testTileSectionA.addNodes(new Node(), new Node());
         testTileSectionB = new TileSection(Terrain.JUNGLE);
+        testTileSectionB.addNodes(new Node(), new Node());
         testTileSectionC = new TileSection(Terrain.LAKE);
+        testTileSectionC.addNodes(new Node(), new Node());
         testRegionA = new Region(Terrain.JUNGLE);
         testRegionB = new Region(Terrain.JUNGLE);
         testRegionC = new Region(Terrain.LAKE);
@@ -88,8 +91,8 @@ public class RegionTest {
 
     @Test // Should not throw
     public void testContainsTigersReturnsTrueIfTigersArePresentInRegion() throws Exception {
-        testTileSectionA.placeTiger(diegoTiger);
         testRegionA.addTileSection(testTileSectionA);
+        testTileSectionA.placeTiger(diegoTiger);
         Assert.assertTrue(testRegionA.containsTigers());
         testRegionB.addTileSection(testTileSectionB);
         Assert.assertFalse(testRegionB.containsTigers());

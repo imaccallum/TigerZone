@@ -15,7 +15,7 @@ public class Node {
      * Get whether the tiger is being represented as the tiger display node for the tile section
      *
      * @return
-     *
+     * Returns the boolean representing this state.
      */
     public boolean isTigerDisplayNode() {
         return tileSection.getTigerDisplayNode().equals(this);

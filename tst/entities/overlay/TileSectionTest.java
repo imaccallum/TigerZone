@@ -67,6 +67,8 @@ public class TileSectionTest {
     }
 
     private TileSection defaultTileSection() {
-        return new TileSection(Terrain.JUNGLE);
+        TileSection tileSection = new TileSection(Terrain.JUNGLE);
+        tileSection.addNodes(new Node(), new Node());
+        return tileSection;
     }
 }
