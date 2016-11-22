@@ -18,7 +18,6 @@ public class GameManager {
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
-    // *TODO RegionLinker regionLinker;
 
     private Board board;
 
@@ -111,6 +110,7 @@ public class GameManager {
                 System.out.println("No valid moves, discarding tile.");
             }
             if(deck.size() == 0) {
+                System.out.println(gm.getBoard().toString());
                 gm.getBoard().log();
                 System.out.println(gm.getBoard().getFilledValues());
             }

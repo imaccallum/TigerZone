@@ -173,7 +173,6 @@ public class Board {
     }
 
     // HAS TESTS - bookkeeping
-
     /**
      * Gets a tile at a given point on the board.  Can return null.
      * @param tileLocation,
