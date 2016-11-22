@@ -1,12 +1,15 @@
 package entities.board;
 
+import entities.player.Player;
 import exceptions.BadPlacementException;
+import exceptions.TigerAlreadyPlacedException;
 import game.LocationAndOrientation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 public class BoardTest {
@@ -19,8 +22,8 @@ public class BoardTest {
     @Before
     public void setup(){
         factory = new TileFactory();
-        startingTile = factory.makeTile('s');
-        secondTile = factory.makeTile('r');
+        startingTile = factory.makeTile("TLTJ-");
+        secondTile = factory.makeTile("JLTTB");
         testBoard = new Board(77 , startingTile);
     }
 
@@ -65,41 +68,41 @@ public class BoardTest {
         List<LocationAndOrientation> locationsAndOrientations = testBoard.findValidTilePlacements(secondTile);
 
         boolean rOnTopOfS_rotate0 = false;
-        boolean rToTheRightOFS_rotate2 = false;
-        boolean rUnderS_rotate1 = false;
+        boolean rToTheRightOfS_rotate2 = false;
+        boolean rUnderS_rotate3 = false;
         boolean rUnderS_rotate2 =false;
-        boolean rToTheLeftOFS_rotate1 = false;
-        boolean rOnTopOfS_rotate3 = false;
+        boolean rToTheLeftOfS_rotate3 = false;
+        boolean rOnTopOfS_rotate1 = false;
 
         for (LocationAndOrientation position: locationsAndOrientations) {
             if (position.getLocation().x == 76 && position.getLocation().y == 75 && position.getOrientation() == 0){
                 rOnTopOfS_rotate0 = true;
             } else if (position.getLocation().x == 77 && position.getLocation().y == 76 && position.getOrientation() == 2){
-                rToTheRightOFS_rotate2 = true;
-            } else if (position.getLocation().x == 76 && position.getLocation().y == 77 && position.getOrientation() == 1){
-                rUnderS_rotate1 = true;
+                rToTheRightOfS_rotate2 = true;
+            } else if (position.getLocation().x == 76 && position.getLocation().y == 77 && position.getOrientation() == 3){
+                rUnderS_rotate3 = true;
             } else if (position.getLocation().x == 76 && position.getLocation().y == 77 && position.getOrientation() == 2){
                 rUnderS_rotate2 = true;
-            } else if (position.getLocation().x == 75 && position.getLocation().y == 76 && position.getOrientation() == 1){
-                rToTheLeftOFS_rotate1 = true;
-            } else if(position.getLocation().x == 76 && position.getLocation().y == 75 && position.getOrientation() == 3){
-                rOnTopOfS_rotate3 = true;
+            } else if (position.getLocation().x == 75 && position.getLocation().y == 76 && position.getOrientation() == 3){
+                rToTheLeftOfS_rotate3 = true;
+            } else if(position.getLocation().x == 76 && position.getLocation().y == 75 && position.getOrientation() == 1){
+                rOnTopOfS_rotate1 = true;
             }
 
         }
 
         Assert.assertTrue(rOnTopOfS_rotate0);
-        Assert.assertTrue(rToTheRightOFS_rotate2);
-        Assert.assertTrue(rUnderS_rotate1);
+        Assert.assertTrue(rToTheRightOfS_rotate2);
+        Assert.assertTrue(rUnderS_rotate3);
         Assert.assertTrue(rUnderS_rotate2);
-        Assert.assertTrue(rToTheLeftOFS_rotate1);
-        Assert.assertTrue(rOnTopOfS_rotate3);
+        Assert.assertTrue(rToTheLeftOfS_rotate3);
+        Assert.assertTrue(rOnTopOfS_rotate1);
     }
 
     @Test
     public void testFindValidTilePlacementsWhenThereAreNoneShouldReturnEmptyList(){
-        Tile tileA = factory.makeTile('a');
-        Tile tileB = factory.makeTile('h');
+        Tile tileA = factory.makeTile("JJJJ-");
+        Tile tileB = factory.makeTile("LLLL-");
 
         Board secondBoard = new Board(77, tileA);
         Assert.assertTrue(secondBoard.findValidTilePlacements(tileB).size() == 0);
@@ -118,5 +121,12 @@ public class BoardTest {
 //        Point point = new Point(76,75);
 //        testBoard.place(secondTile, point);
 //        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 5);
+    }
+
+    @Test // Should not throw
+    public void testCanPlaceTigerShouldReturnTrueIfTileSectionIsEmpty() throws TigerAlreadyPlacedException {
+//        Assert.assertTrue(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
+//        startingTile.getTileSections().get(0).placeTiger(new Tiger(new Player("Diego")));
+//        Assert.assertFalse(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
     }
 }

@@ -45,45 +45,45 @@ public class GameManager {
     public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException, TigerAlreadyPlacedException {
 
         //region deckArray
-        Character[] myarray = {'a',
-                'b', 'b', 'b', 'b',
-                'c', 'c',
-                'd',
-                'e','e','e','e','e','e','e','e',
-                'f','f','f','f','f','f','f','f','f',
-                'g','g','g','g',
-                'h',
-                'i','i','i','i',
-                'j','j','j','j','j',
-                'k','k','k',
-                'l','l','l',
-                'm','m','m','m','m',
-                'n','n',
-                'o',
-                'p','p',
-                'q',
-                'r','r',
-                's','s','s',       // WEIRD # FORMAT 1 OR 3?
-                't','t',
-                'u',
-                'v',
-                'w','w',
-                'x','x','x',
-                'y','y',
-                'z',
-                '0','0',
-                '1', '1'};
+        String[] myarray = {"JJJJ-",
+                "JJJJX", "JJJJX", "JJJJX", "JJJJX",
+                "JJTJX", "JJTJX",
+                "TTTT-",
+                "TJTJ-","TJTJ-","TJTJ-","TJTJ-","TJTJ-","TJTJ-","TJTJ-","TJTJ-",
+                "TJJT-","TJJT-","TJJT-","TJJT-","TJJT-","TJJT-","TJJT-","TJJT-","TJJT-",
+                "TJTT-","TJTT-","TJTT-","TJTT-",
+                "LLLL-",
+                "JLLL-","JLLL-","JLLL-","JLLL-",
+                "LLJJ-","LLJJ-","LLJJ-","LLJJ-","LLJJ-",
+                "JLJL-","JLJL-","JLJL-",
+                "LJLJ-","LJLJ-","LJLJ-",
+                "LJJJ-","LJJJ-","LJJJ-","LJJJ-","LJJJ-",
+                "JLLJ-","JLLJ-",
+                "TLJT-",
+                "TLJTP","TLJTP",
+                "JLTT-",
+                "JLTTB","JLTTB",
+                "TLTJ-","TLTJ-","TLTJ-",       // WEIRD # FORMAT 1 OR 3?
+                "TLTJD","TLTJD",
+                "TLLL-",
+                "TLTT-",
+                "TLTTP","TLTTP",
+                "TLLT-","TLLT-","TLLT-",
+                "TLLTB","TLLTB",
+                "LJTJ-",
+                "LJTJD","LJTJD",
+                "TLLLC", "TLLLC"};
         //endregion
 
 //        Character[] testDeck = {'b', 'a', 'a'};
-        List<Character> charList = Arrays.asList(myarray);
-        Collections.shuffle(charList);
+        List<String> stringList = Arrays.asList(myarray);
+        Collections.shuffle(stringList);
 
         TileFactory f = new TileFactory();
         Stack<Tile> deck = new Stack<>();
 
-        for (Character c: charList) {
-            Tile t = f.makeTile(c);
+        for (String s: stringList) {
+            Tile t = f.makeTile(s);
             deck.push(t);
         }
 

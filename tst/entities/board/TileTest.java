@@ -11,7 +11,7 @@ public class TileTest {
     @Before
     public void setup() {
         TileFactory factory = new TileFactory();
-        testTile = factory.makeTile('r');
+        testTile = factory.makeTile("JLTTB");
     }
 
     @Test
