@@ -77,7 +77,6 @@ public class Tile {
         String rowTwo = rowTwoToString();
         String rowThree = rowThreeToString();
 
-        // System.out.print(rowOne.length() + " " + rowTwo.length() + " " + rowThree.length() + "\n");
 
         return bound + rowOne + rowTwo + rowThree + bound;
     }
