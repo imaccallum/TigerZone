@@ -1,6 +1,8 @@
 package entities.board;
 
+import entities.overlay.Region;
 import entities.overlay.TileSection;
+import exceptions.IncompatibleTerrainException;
 
 public class TileFactory {
 
@@ -61,6 +63,13 @@ public class TileFactory {
         // Add the sections to the tile
         tile.addTileSections(jungle);
 
+        // Create all the regions and add the TileSections to them
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        try{
+            jungleRegion.addTileSection(jungle);
+        }
+        catch(IncompatibleTerrainException e){}
+
         //this is where setting prey boolean would go if there is one
         return tile;
     }
@@ -84,6 +93,12 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle);
+
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        try{
+            jungleRegion.addTileSection(jungle);
+        }
+        catch(IncompatibleTerrainException e){}
 
         return tile;
     }
@@ -114,6 +129,14 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle, trail);
+
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        try{
+            jungleRegion.addTileSection(jungle);
+            trailRegion.addTileSection(trail);
+        }
+        catch(IncompatibleTerrainException e){}
 
         return tile;
     }
@@ -160,6 +183,26 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, jungle1, jungle2, jungle3, trail0, trail1, trail2, trail3);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion0 = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region trailRegion1 = new Region(Terrain.TRAIL);
+        Region jungleRegion2 = new Region(Terrain.JUNGLE);
+        Region trailRegion2 = new Region(Terrain.TRAIL);
+        Region jungleRegion3 = new Region(Terrain.JUNGLE);
+        Region trailRegion3 = new Region(Terrain.TRAIL);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion0.addTileSection(trail0);
+            jungleRegion1.addTileSection(jungle1);
+            trailRegion1.addTileSection(trail1);
+            jungleRegion2.addTileSection(jungle2);
+            trailRegion2.addTileSection(trail2);
+            jungleRegion3.addTileSection(jungle3);
+            trailRegion3.addTileSection(trail3);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -195,6 +238,16 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, jungle1, trail);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -229,6 +282,17 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -269,6 +333,23 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, jungle2, trail0, trail1, trail2);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion0 = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region trailRegion1 = new Region(Terrain.TRAIL);
+        Region jungleRegion2 = new Region(Terrain.JUNGLE);
+        Region trailRegion2 = new Region(Terrain.TRAIL);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion0.addTileSection(trail0);
+            jungleRegion1.addTileSection(jungle1);
+            trailRegion1.addTileSection(trail1);
+            jungleRegion2.addTileSection(jungle2);
+            trailRegion2.addTileSection(trail2);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -289,6 +370,12 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(lake);
+
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
 
         return tile;
     }
@@ -318,6 +405,14 @@ public class TileFactory {
        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(lake, jungle);
+
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion.addTileSection(jungle);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
 
         return tile;
     }
@@ -349,6 +444,15 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, jungle);
+
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion.addTileSection(jungle);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
 
     }
@@ -375,6 +479,16 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, jungle1, lake);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -399,6 +513,16 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle, lake, lake2);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region lakeRegion0 = new Region(Terrain.LAKE);
+        Region lakeRegion1 = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle);
+            lakeRegion0.addTileSection(lake);
+            lakeRegion1.addTileSection(lake2);
+        }
+        catch(IncompatibleTerrainException e){}
 
         return tile;
     }
@@ -429,6 +553,14 @@ public class TileFactory {
 
         tile.addTileSections(jungle, lake);
 
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion.addTileSection(jungle);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -453,6 +585,17 @@ public class TileFactory {
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
         tile.addTileSections(jungle, lake0, lake1);
+
+        Region jungleRegion = new Region(Terrain.JUNGLE);
+        Region lakeRegion0 = new Region(Terrain.LAKE);
+        Region lakeRegion1 = new Region(Terrain.LAKE);
+        try{
+            jungleRegion.addTileSection(jungle);
+            lakeRegion0.addTileSection(lake0);
+            lakeRegion1.addTileSection(lake1);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -489,6 +632,19 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -526,6 +682,18 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         tile.setPreyAnimal(PreyAnimal.BOAR);
         return tile;
     }
@@ -561,6 +729,19 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -595,6 +776,18 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
 
         tile.setPreyAnimal(PreyAnimal.BUFFALO);
         return tile;
@@ -634,6 +827,18 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, trail, jungle1, lake);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -671,6 +876,18 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, trail, jungle1, lake);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         tile.setPreyAnimal(PreyAnimal.DEER);
         return tile;
     }
@@ -704,6 +921,19 @@ public class TileFactory {
        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -746,6 +976,25 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion0 = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region trailRegion1 = new Region(Terrain.TRAIL);
+        Region jungleRegion2 = new Region(Terrain.JUNGLE);
+        Region trailRegion2 = new Region(Terrain.TRAIL);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion0.addTileSection(trail0);
+            jungleRegion1.addTileSection(jungle1);
+            trailRegion1.addTileSection(trail1);
+            jungleRegion2.addTileSection(jungle2);
+            trailRegion2.addTileSection(trail2);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -789,6 +1038,24 @@ public class TileFactory {
 
         tile.addTileSections(lake, trail0, trail1, trail2, jungle0, jungle1, jungle2);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion0 = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region trailRegion1 = new Region(Terrain.TRAIL);
+        Region jungleRegion2 = new Region(Terrain.JUNGLE);
+        Region trailRegion2 = new Region(Terrain.TRAIL);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion0.addTileSection(trail0);
+            jungleRegion1.addTileSection(jungle1);
+            trailRegion1.addTileSection(trail1);
+            jungleRegion2.addTileSection(jungle2);
+            trailRegion2.addTileSection(trail2);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         tile.setPreyAnimal(PreyAnimal.BOAR);
         return tile;
     }
@@ -824,6 +1091,19 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail, jungle0, jungle1);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -858,6 +1138,18 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, trail, jungle0, jungle1);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
 
         tile.setPreyAnimal(PreyAnimal.BUFFALO);
         return tile;
@@ -896,6 +1188,19 @@ public class TileFactory {
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         return tile;
     }
 
@@ -933,6 +1238,18 @@ public class TileFactory {
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
 
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         tile.setPreyAnimal(PreyAnimal.DEER);
         return tile;
     }
@@ -966,6 +1283,19 @@ public class TileFactory {
         tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(jungle0, jungle1, trail, lake);
+
+        Region jungleRegion0 = new Region(Terrain.JUNGLE);
+        Region trailRegion = new Region(Terrain.TRAIL);
+        Region jungleRegion1 = new Region(Terrain.JUNGLE);
+        Region lakeRegion = new Region(Terrain.LAKE);
+        try{
+            jungleRegion0.addTileSection(jungle0);
+            trailRegion.addTileSection(trail);
+            jungleRegion1.addTileSection(jungle1);
+            lakeRegion.addTileSection(lake);
+        }
+        catch(IncompatibleTerrainException e){}
+
         tile.setHasCrocodile(true);
         return tile;
     }
