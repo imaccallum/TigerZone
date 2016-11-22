@@ -900,7 +900,7 @@ public class TileFactory {
     }
 
     private Tile makeTile0() {
-        Tile tile = new Tile((char)0);
+        Tile tile = new Tile('0');
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -938,7 +938,7 @@ public class TileFactory {
     }
 
     private Tile makeTile1() {
-        Tile tile = new Tile((char)1);
+        Tile tile = new Tile('1');
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
