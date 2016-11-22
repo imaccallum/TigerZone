@@ -86,6 +86,7 @@ public class Board {
         // Put the tile in the matrix, get ready to connect the tiles.
         setTileAtPoint(tile, location);
         numTiles++;
+//        openTileLocations.remove(new Point(col, row));
         openTileLocations.remove(location);
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
@@ -139,12 +140,6 @@ public class Board {
             Tile top = boardMatrix[row - 1][col];
             Tile bottom = boardMatrix[row + 1][col];
 
-//            System.out.println("For openTile " + openTileLocation + ": ");
-//            System.out.println("    Top = " + (top != null));
-//            System.out.println("    Right = " + (right != null));
-//            System.out.println("    Bottom = " + (bottom != null));
-//            System.out.println("    Left = " + (left != null));
-
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
 //                tile.rotateCounterClockwise(1);  // Rotate the tile 1 to check next orientation
@@ -175,6 +170,17 @@ public class Board {
             }
         }
         return validPlacements;
+    }
+
+    public int getFilledValues(){
+        int val = 0;
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++){
+                if(boardMatrix[i][j] != null)
+                    val++;
+            }
+        }
+        return val;
     }
 
     // HAS TESTS - bookkeeping
@@ -469,17 +475,17 @@ public class Board {
         String output = "";
 
         for(Point p: openTileLocations) {
-            if(p.x < rowStart) {
-                rowStart = p.x;
+            if(p.y < rowStart) {
+                rowStart = p.y;
             }
-            if(p.x > rowStop) {
-                rowStop = p.x;
+            if(p.y > rowStop) {
+                rowStop = p.y;
             }
-            if(p.y < colStart) {
-                colStart = p.y;
+            if(p.x < colStart) {
+                colStart = p.x;
             }
-            if(p.y > colStop) {
-                colStop = p.y;
+            if(p.x > colStop) {
+                colStop = p.x;
             }
         }
 
