@@ -18,7 +18,11 @@ public class Node {
      * Returns the boolean representing this state.
      */
     public boolean isTigerDisplayNode() {
-        return tileSection.getTigerDisplayNode().equals(this);
+        if (tileSection.hasTiger()) {
+            return tileSection.getTigerDisplayNode().equals(this);
+        } else {
+            return false;
+        }
     }
 
     // Getters and Setters

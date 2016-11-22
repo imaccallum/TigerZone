@@ -40,11 +40,11 @@ public class Tile {
         Node[] tempCorners = new Node[COUNT];
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (((i - numberOfRotations) % COUNT) < 0) ?
-                    ((i - numberOfRotations) % COUNT) + COUNT : (i - numberOfRotations) % COUNT;
-            tempEdges[index] = edges[i];
-            tempCorners[index] = corners[i];
+            int newIndex = (i + COUNT - numberOfRotations) % COUNT;
+            tempEdges[newIndex] = edges[i];
+            tempCorners[newIndex] = corners[i];
         }
+
         edges = tempEdges;
         corners = tempCorners;
     }
@@ -73,57 +73,12 @@ public class Tile {
     public String toString(){
 
         String bound = "|" + type + "--------------------" + type + "|\n";
-        String one = "|";
-        String two = "|";
-        String three = "|";
+        String rowOne = rowOneToString();
+        String rowTwo = rowTwoToString();
+        String rowThree = rowThreeToString();
 
 
-        if(corners[0] != null) {
-            one +=  spacing(corners[0].getTileSection().getTerrain().toString()) +  spacing(edges[0].getTileSection().getTerrain().toString());
-        } else {
-            one += spacing("X") + spacing(edges[0].getTileSection().getTerrain().toString());
-        }
-        if(corners[1] != null) {
-            one += spacing(corners[1].getTileSection().getTerrain().toString()) + "|\n";
-        } else {
-            one += spacing("X") + "|\n";
-        }
-
-        if(hasDen)
-            two += spacing(edges[3].getTileSection().getTerrain().toString()) + spacing("True") + spacing(edges[1].getTileSection().getTerrain().toString()) + "|\n";
-        else
-            two += spacing(edges[3].getTileSection().getTerrain().toString())+ spacing("False") + spacing(edges[1].getTileSection().getTerrain().toString()) + "|\n";
-
-
-        if(corners[2] != null) {
-            three +=  spacing(corners[2].getTileSection().getTerrain().toString()) +  spacing(edges[2].getTileSection().getTerrain().toString());
-        } else {
-            three += spacing("X") + spacing(edges[2].getTileSection().getTerrain().toString());
-        }
-        if(corners[3] != null) {
-            three += spacing(corners[3].getTileSection().getTerrain().toString()) + "|\n";
-        } else {
-            three += spacing("X") +"|\n";
-        }
-
-        //    System.out.print(one.length() + " " + two.length() + " " + three.length() + "\n");
-
-        return bound + one + two + three + bound;
-    }
-
-    private String spacing(String terrain) {
-        String out = "";
-        int size = 10 - terrain.length();
-        for(int i = 0; i < 2; i++) {
-            for (int x = 0; x < size / 2; x++) {
-                out += " ";
-            }
-            if(i == 0) out += terrain;
-        }
-        if(out.length() == 9)
-            out += " ";
-
-        return out;
+        return bound + rowOne + rowTwo + rowThree + bound;
     }
 
     // MARK: Getters and Setters
@@ -201,6 +156,20 @@ public class Tile {
     // @return
     // The set of spaces for the given terrain
     //
+    private String spacing(String terrain) {
+        String out = "";
+        int size = 10 - terrain.length();
+        for(int i = 0; i < 2; i++) {
+            for (int x = 0; x < size / 2; x++) {
+                out += " ";
+            }
+            if(i == 0) out += terrain;
+        }
+        if(out.length() == 9)
+            out += " ";
+
+        return out;
+    }
 
     //
     // Get the string that represents row one
@@ -208,5 +177,85 @@ public class Tile {
     // @return
     // the string representing row one
     //
+    private String rowOneToString() {
+        String rowOne = "|";
+        if(corners[0] != null) {
+            rowOne += spacing((corners[0].isTigerDisplayNode() ?
+                    corners[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[0].getTileSection().getTerrain().toString()));
+        } else {
+            rowOne += spacing("X");
+        }
 
+        rowOne += spacing((edges[0].isTigerDisplayNode() ?
+                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
+
+        if(corners[1] != null) {
+            rowOne += spacing((corners[1].isTigerDisplayNode() ?
+                    corners[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowOne += spacing("X") + "|\n";
+        }
+
+        return rowOne;
+    }
+
+    //
+    // Get the string that represents row two
+    //
+    // @return
+    // the string representing row two
+    //
+    private String rowTwoToString() {
+        String rowTwo = "|";
+        rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[3].getTileSection().getTerrain().toString()));
+
+        if(hasDen) {
+            rowTwo += spacing("True");
+        }
+        else {
+            rowTwo += spacing("False");
+        }
+        rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[1].getTileSection().getTerrain().toString())) +
+                "|\n";
+        return rowTwo;
+    }
+
+    //
+    // Get the string that represents row three
+    //
+    // @return
+    // the string representing row three
+    //
+    private String rowThreeToString() {
+        String rowThree = "|";
+        if(corners[3] != null) {
+            rowThree +=  spacing((corners[3].isTigerDisplayNode() ?
+                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString()));
+        } else {
+            rowThree += spacing("X");
+        }
+
+        rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[2].getTileSection().getTerrain().toString()));
+
+        if(corners[2] != null) {
+            rowThree += spacing((corners[2].isTigerDisplayNode() ?
+                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowThree += spacing("X") + "|\n";
+        }
+        return rowThree;
+    }
 }

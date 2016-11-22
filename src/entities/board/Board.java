@@ -86,7 +86,6 @@ public class Board {
         // Put the tile in the matrix, get ready to connect the tiles.
         setTileAtPoint(tile, location);
         numTiles++;
-//        openTileLocations.remove(new Point(col, row));
         openTileLocations.remove(location);
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
@@ -142,31 +141,26 @@ public class Board {
 
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
-//                tile.rotateCounterClockwise(1);  // Rotate the tile 1 to check next orientation
-
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
-//                    System.out.println("Vertical connection to top tile is invalid.");
                     continue;
                 }
                 if (right != null && !lateralConnectionIsValid(right, tile)) {
-//                    System.out.println("Lateral connection to right tile is invalid.");
                     continue;
                 }
                 if (bottom != null && !verticalConnectionIsValid(bottom, tile)) {
-//                    System.out.println("Vertical connection to bottom tile is invalid.");
                     continue;
                 }
                 if (left != null && !lateralConnectionIsValid(tile, left)) {
-//                    System.out.println("Lateral connection to left tile is invalid.");
                     continue;
                 }
 
-//                System.out.println("Adding point " + openTileLocation +
-//                        " with tile orientation " + tileOrientation +
-//                        " to valid tile placements.");
+                System.out.println("Adding point " + openTileLocation +
+                        " with tile orientation " + tileOrientation +
+                        " to valid tile placements.");
                 Point current = new Point(openTileLocation.x, openTileLocation.y);
                 LocationAndOrientation locationAndOrientation = new LocationAndOrientation(current, tileOrientation);
                 validPlacements.add(locationAndOrientation);
+                tile.rotateCounterClockwise(1);  // Rotate the tile 1 to check next orientation
             }
         }
         return validPlacements;
