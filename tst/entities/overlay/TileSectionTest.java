@@ -22,11 +22,11 @@ public class TileSectionTest {
 
     @Test
     public void testAddingNodesShouldHaveCorrectNumber() {
-        TileSection section = defaultTileSection();
+        TileSection section = new TileSection(Terrain.LAKE);
         section.addNodes(new Node(), new Node());
-        Assert.assertTrue(section.getNodes().size() == 2);
+        Assert.assertEquals(section.getNodes().size(), 2);
         section.addNodes(new Node());
-        Assert.assertTrue(section.getNodes().size() == 3);
+        Assert.assertEquals(section.getNodes().size(), 3);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class TileSectionTest {
 
     @Test
     public void testHasOpenConnectionShouldReturnTrueIfUnconnectedNodesExist() {
-        TileSection section = defaultTileSection();
+        TileSection section = new TileSection(Terrain.LAKE);
         section.addNodes(new Node(), new Node(), new Node());
         section.getNodes().get(0).setConnectedNode(new Node());
         Assert.assertTrue(section.hasOpenConnection());
