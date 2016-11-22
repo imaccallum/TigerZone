@@ -7,7 +7,6 @@ import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.TigerAlreadyPlacedException;
 
-import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -107,7 +106,7 @@ public class GameManager {
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
                     t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
                 }
-                gm.getBoard().insert(t, optimalPlacement.getLocation());
+                gm.getBoard().place(t, optimalPlacement.getLocation());
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }

@@ -26,13 +26,13 @@ public class BoardTest {
 
     @Test (expected = BadPlacementException.class)
     public void testInsertAtLocationWithNoTilesAroundShouldThrowException() throws BadPlacementException{
-        testBoard.insert(secondTile, new Point(80,80));
+        testBoard.place(secondTile, new Point(80,80));
     }
 
     @Test // Should not throw
     public void testInsertAtValidLocationShouldAddTileToListAndRemoveLocationFromOpenLocation() throws Exception{
         Point point = new Point(76,75);
-        testBoard.insert(secondTile, point);
+        testBoard.place(secondTile, point);
         Assert.assertEquals(testBoard.getTile(point), secondTile);
         Assert.assertEquals(testBoard.getNumTiles(), 2);
         Assert.assertFalse(testBoard.getOpenTileLocations().contains(point));
@@ -108,7 +108,7 @@ public class BoardTest {
     @Test // Should not throw
     public void testGetTileShouldReturnProperTileAtGivenCoordinates()throws Exception{
         Point point = new Point(76,75);
-        testBoard.insert(secondTile, point);
+        testBoard.place(secondTile, point);
         Assert.assertEquals(testBoard.getTile(point), secondTile);
     }
 
@@ -116,7 +116,7 @@ public class BoardTest {
     public void testGetPossibleTileSectionTigerPlacementsShouldReturnListWithTileSectionsYouCanPlaceATigerOn() throws Exception{
 //        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 4);
 //        Point point = new Point(76,75);
-//        testBoard.insert(secondTile, point);
+//        testBoard.place(secondTile, point);
 //        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 5);
     }
 }
