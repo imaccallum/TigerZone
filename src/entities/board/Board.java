@@ -86,7 +86,6 @@ public class Board {
         // Put the tile in the matrix, get ready to connect the tiles.
         setTileAtPoint(tile, location);
         numTiles++;
-//        openTileLocations.remove(new Point(col, row));
         openTileLocations.remove(location);
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
@@ -143,19 +142,15 @@ public class Board {
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
-//                    System.out.println("Vertical connection to top tile is invalid.");
                     continue;
                 }
                 if (right != null && !lateralConnectionIsValid(right, tile)) {
-//                    System.out.println("Lateral connection to right tile is invalid.");
                     continue;
                 }
                 if (bottom != null && !verticalConnectionIsValid(bottom, tile)) {
-//                    System.out.println("Vertical connection to bottom tile is invalid.");
                     continue;
                 }
                 if (left != null && !lateralConnectionIsValid(tile, left)) {
-//                    System.out.println("Lateral connection to left tile is invalid.");
                     continue;
                 }
 
