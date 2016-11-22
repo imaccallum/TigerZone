@@ -95,8 +95,20 @@ public class TileSection {
         if (this.tiger != null) {
             throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
         }
+        assert !nodes.isEmpty();
         this.tiger = tiger;
         this.tigerDisplayNode = nodes.get(0);
+    }
+
+    // HAS TEST - bookkeeping
+    /**
+     * Returns if the tile section has a tiger
+     *
+     * @return
+     * The boolean value associated with whether the tiger exists.
+     */
+    public boolean hasTiger(){
+        return getTiger() != null;
     }
 
     // MARK: Getters and setters

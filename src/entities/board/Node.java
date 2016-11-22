@@ -1,29 +1,30 @@
 package entities.board;
 
 import entities.overlay.TileSection;
-import exceptions.TigerAlreadyPlacedException;
 
 public class Node {
 
     private Node connectedNode;
     private TileSection tileSection;
-    private Tiger tiger;
 
     public Node() {
         this.connectedNode = null;
+    }
+
+    /**
+     * Get whether the tiger is being represented as the tiger display node for the tile section
+     *
+     * @return
+     * Returns the boolean representing this state.
+     */
+    public boolean isTigerDisplayNode() {
+        return tileSection.getTigerDisplayNode().equals(this);
     }
 
     // Getters and Setters
 
     public TileSection getTileSection() {
         return tileSection;
-    }
-
-    public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
-        if (this.tiger != null) {
-            throw new TigerAlreadyPlacedException("Attempted to place tiger on TileSection already containing tiger");
-        }
-        this.tiger = tiger;
     }
 
     public void setTileSection(TileSection tileSection) {
@@ -40,13 +41,5 @@ public class Node {
 
     public boolean isConnected() {
         return connectedNode != null;
-    }
-
-    public Tiger getTiger(){
-        return tiger;
-    }
-
-    public boolean hasTiger(){
-        return getTiger() != null;
     }
 }

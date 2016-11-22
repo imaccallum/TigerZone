@@ -38,7 +38,7 @@ public class Board {
     public Board(int numberOfTiles, Tile firstTile) {
         boardMatrix = new Tile[numberOfTiles * 2][numberOfTiles * 2];
         boardSize = numberOfTiles * 2;
-        openTileLocations = new ArrayList<>();
+        openTileLocations = new HashSet<>();
         regions = new HashMap<>();
         tigerDens = new ArrayList<>();
 
@@ -197,7 +197,7 @@ public class Board {
      * @return
      * Get the number of tiles that have been placed on the board
      */
-    public int getNumTiles(){
+    public int getNumTiles() {
         return numTiles;
     }
 
@@ -207,7 +207,7 @@ public class Board {
      * @return
      * The HashSet of Points
      */
-    public List<Point> getOpenTileLocations(){
+    public HashSet<Point> getOpenTileLocations() {
         return openTileLocations;
     }
 
@@ -217,7 +217,7 @@ public class Board {
      * @return
      * The last tile placed
      */
-    public Tile getLastPlacedTile(){
+    public Tile getLastPlacedTile() {
         return lastTilePlaced;
     }
 

@@ -27,8 +27,11 @@ public class RegionTest {
     @Before
     public void setup() {
         testTileSectionA = new TileSection(Terrain.JUNGLE);
+        testTileSectionA.addNodes(new Node(), new Node());
         testTileSectionB = new TileSection(Terrain.JUNGLE);
+        testTileSectionB.addNodes(new Node(), new Node());
         testTileSectionC = new TileSection(Terrain.LAKE);
+        testTileSectionC.addNodes(new Node(), new Node());
         testRegionA = new Region(Terrain.JUNGLE);
         testRegionB = new Region(Terrain.JUNGLE);
         testRegionC = new Region(Terrain.LAKE);
@@ -49,17 +52,16 @@ public class RegionTest {
         testRegionC.addTileSection(testTileSectionA);
     }
 
-
-//    @Test // Should not throw
-//    public void testCombineRegionShouldHaveAllTigers() throws Exception {
-//        testTileSectionA.placeTiger(diegoTiger);
-//        testTileSectionB.placeTiger(trevorTiger);
-//        testRegionA.addTileSection(testTileSectionA);
-//        testRegionB.addTileSection(testTileSectionB);
-//        testRegionB.combineWithRegion(testRegionA);
-//        Assert.assertTrue(testRegionB.getAllTigers().contains(diegoTiger));
-//        Assert.assertTrue(testRegionB.getAllTigers().contains(trevorTiger));
-//    }
+    @Test // Should not throw
+    public void testCombineRegionShouldHaveAllTigers() throws Exception {
+        testTileSectionA.placeTiger(diegoTiger);
+        testTileSectionB.placeTiger(trevorTiger);
+        testRegionA.addTileSection(testTileSectionA);
+        testRegionB.addTileSection(testTileSectionB);
+        testRegionB.combineWithRegion(testRegionA);
+        Assert.assertTrue(testRegionB.getAllTigers().contains(diegoTiger));
+        Assert.assertTrue(testRegionB.getAllTigers().contains(trevorTiger));
+    }
 
     @Test
     public void testCombineRegionShouldHaveAllTileSections() throws IncompatibleTerrainException {
@@ -87,14 +89,14 @@ public class RegionTest {
         Assert.assertFalse(testRegionA.isFinished());
     }
 
-//    @Test // Should not throw
-//    public void testContainsTigersReturnsTrueIfTigersArePresentInRegion() throws Exception {
-//        testTileSectionA.placeTiger(diegoTiger);
-//        testRegionA.addTileSection(testTileSectionA);
-//        Assert.assertTrue(testRegionA.containsTigers());
-//        testRegionB.addTileSection(testTileSectionB);
-//        Assert.assertFalse(testRegionB.containsTigers());
-//    }
+    @Test // Should not throw
+    public void testContainsTigersReturnsTrueIfTigersArePresentInRegion() throws Exception {
+        testRegionA.addTileSection(testTileSectionA);
+        testTileSectionA.placeTiger(diegoTiger);
+        Assert.assertTrue(testRegionA.containsTigers());
+        testRegionB.addTileSection(testTileSectionB);
+        Assert.assertFalse(testRegionB.containsTigers());
+    }
 
     @Test
     public void testGetScorerReturnsCorrectScorerClass() {
@@ -107,14 +109,14 @@ public class RegionTest {
     }
 
     @Test
-//    public void testGetAllTigersContainsAllTigersInRegion() throws Exception {
-//        testTileSectionA.placeTiger(diegoTiger);
-//        testTileSectionB.placeTiger(trevorTiger);
-//        testRegionA.addTileSection(testTileSectionA);
-//        testRegionA.addTileSection(testTileSectionB);
-//        Assert.assertTrue(testRegionA.getAllTigers()
-//                .containsAll(Arrays.asList(diegoTiger, trevorTiger)));
-//    }
+    public void testGetAllTigersContainsAllTigersInRegion() throws Exception {
+        testTileSectionA.placeTiger(diegoTiger);
+        testTileSectionB.placeTiger(trevorTiger);
+        testRegionA.addTileSection(testTileSectionA);
+        testRegionA.addTileSection(testTileSectionB);
+        Assert.assertTrue(testRegionA.getAllTigers()
+                .containsAll(Arrays.asList(diegoTiger, trevorTiger)));
+    }
 
     private Region createCompletedRegion() throws IncompatibleTerrainException {
         Region region = new Region(Terrain.TRAIL);
