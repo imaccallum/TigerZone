@@ -72,7 +72,7 @@ public class Tile {
      */
     public String toString(){
 
-        String bound = "|" + type + "----------------------------" + type + "|\n";
+        String bound = "|" + type + "--------------------" + type + "|\n";
         String rowOne = rowOneToString();
         String rowTwo = rowTwoToString();
         String rowThree = rowThreeToString();
