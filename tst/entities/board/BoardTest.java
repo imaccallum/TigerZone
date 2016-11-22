@@ -22,8 +22,8 @@ public class BoardTest {
     @Before
     public void setup(){
         factory = new TileFactory();
-        startingTile = factory.makeTile('s');
-        secondTile = factory.makeTile('r');
+        startingTile = factory.makeTile("TLTJ-");
+        secondTile = factory.makeTile("JLTTB");
         testBoard = new Board(77 , startingTile);
     }
 
@@ -101,8 +101,8 @@ public class BoardTest {
 
     @Test
     public void testFindValidTilePlacementsWhenThereAreNoneShouldReturnEmptyList(){
-        Tile tileA = factory.makeTile('a');
-        Tile tileB = factory.makeTile('h');
+        Tile tileA = factory.makeTile("JJJJ-");
+        Tile tileB = factory.makeTile("LLLL-");
 
         Board secondBoard = new Board(77, tileA);
         Assert.assertTrue(secondBoard.findValidTilePlacements(tileB).size() == 0);
