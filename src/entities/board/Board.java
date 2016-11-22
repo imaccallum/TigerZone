@@ -44,7 +44,7 @@ public class Board {
 
         // System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
-        setTileAtPoint(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
+        setTileAtLocation(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
         lastTilePlaced = firstTile;
         openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
         openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
@@ -84,7 +84,7 @@ public class Board {
         }
 
         // Put the tile in the matrix, get ready to connect the tiles.
-        setTileAtPoint(tile, location);
+        setTileAtLocation(tile, location);
         numTiles++;
         openTileLocations.remove(location);
 
@@ -272,6 +272,7 @@ public class Board {
                             "                                ",
                             "                                ",
                             "                                ",
+                            "                                ",
                             "                                "};
                     splits.addAll(Arrays.asList(temp));
                 }
@@ -279,10 +280,10 @@ public class Board {
             if (splits.size() != 0) {
                 int lineIndex = 0;
                 int count = 0;
-                while (lineIndex < 5) {    // for each line in the list
-                    output += splits.get(lineIndex + 5 * count);
+                while (lineIndex < 6) {    // for each line in the list
+                    output += splits.get(lineIndex + 6 * count);
                     count++;
-                    if (count * 5 >= splits.size()) {
+                    if (count * 6 >= splits.size()) {
                         count = 0;
                         lineIndex++;
                         output += "\n";
@@ -517,8 +518,9 @@ public class Board {
     }
 
     //
-    private void setTileAtPoint(Tile tile, Point point) {
-        boardMatrix[point.y][point.x] = tile;
+    private void setTileAtLocation(Tile tile, Point location) {
+        boardMatrix[location.y][location.x] = tile;
+        tile.setLocation(location);
     }
 
     // Checks to see if a tiger can be placed

@@ -77,8 +77,13 @@ public class Tile {
         String rowTwo = rowTwoToString();
         String rowThree = rowThreeToString();
 
-
-        return bound + rowOne + rowTwo + rowThree + bound;
+        if (location != null) {
+            String locHeader = "|" + spacing("x: " + location.x) + spacing(" ") + spacing("y: " + location.y) + "|\n";
+            return bound + locHeader + rowOne + rowTwo + rowThree + bound;
+        }
+        else {
+            return bound + rowOne + rowTwo + rowThree + bound;
+        }
     }
 
     // MARK: Getters and Setters
@@ -156,14 +161,14 @@ public class Tile {
     // @return
     // The set of spaces for the given terrain
     //
-    private String spacing(String terrain) {
+    private String spacing(String input) {
         String out = "";
-        int size = 10 - terrain.length();
+        int size = 10 - input.length();
         for(int i = 0; i < 2; i++) {
             for (int x = 0; x < size / 2; x++) {
                 out += " ";
             }
-            if(i == 0) out += terrain;
+            if(i == 0) out += input;
         }
         if(out.length() == 9)
             out += " ";
