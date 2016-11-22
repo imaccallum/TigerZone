@@ -40,11 +40,11 @@ public class Tile {
         Node[] tempCorners = new Node[COUNT];
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (((i - numberOfRotations) % COUNT) < 0) ?
-                    ((i - numberOfRotations) % COUNT) + COUNT : (i - numberOfRotations) % COUNT;
-            tempEdges[index] = edges[i];
-            tempCorners[index] = corners[i];
+            int newIndex = (i + COUNT - numberOfRotations) % COUNT;
+            tempEdges[newIndex] = edges[i];
+            tempCorners[newIndex] = corners[i];
         }
+
         edges = tempEdges;
         corners = tempCorners;
     }
@@ -181,18 +181,16 @@ public class Tile {
     private String rowOneToString() {
         String rowOne = "|";
         if(corners[0] != null) {
-            boolean isTigerDisplayNode = corners[0].getTileSection().getTigerDisplayNode().equals(corners[0]);
             rowOne += spacing((corners[0].isTigerDisplayNode() ?
                     corners[0].getTileSection().getTerrain().toString().toLowerCase() :
                     corners[0].getTileSection().getTerrain().toString()));
-            rowOne += spacing((isTigerDisplayNode ?
-                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[0].getTileSection().getTerrain().toString()));
         } else {
-            rowOne += spacing("X") + spacing((edges[0].isTigerDisplayNode() ?
+            rowOne += spacing("X");
+        }
+
+        rowOne += spacing((edges[0].isTigerDisplayNode() ?
                     edges[0].getTileSection().getTerrain().toString().toLowerCase() :
                     edges[0].getTileSection().getTerrain().toString()));
-        }
 
         if(corners[1] != null) {
             rowOne += spacing((corners[1].isTigerDisplayNode() ?
@@ -202,6 +200,7 @@ public class Tile {
         } else {
             rowOne += spacing("X") + "|\n";
         }
+
         return rowOne;
     }
 
@@ -213,26 +212,20 @@ public class Tile {
     //
     private String rowTwoToString() {
         String rowTwo = "|";
+        rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[3].getTileSection().getTerrain().toString()));
+
         if(hasDen) {
-            rowTwo += spacing((edges[3].isTigerDisplayNode() ?
-                    edges[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[3].getTileSection().getTerrain().toString()));
             rowTwo += spacing("True");
-            rowTwo += spacing((edges[1].isTigerDisplayNode() ?
-                    edges[1].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[1].getTileSection().getTerrain().toString())) +
-                    "|\n";
         }
         else {
-            rowTwo += spacing((edges[3].isTigerDisplayNode() ?
-                    edges[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[3].getTileSection().getTerrain().toString()));
             rowTwo += spacing("False");
-            rowTwo += spacing((edges[1].isTigerDisplayNode() ?
-                    edges[1].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[1].getTileSection().getTerrain().toString())) +
-                    "|\n";
         }
+        rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[1].getTileSection().getTerrain().toString())) +
+                "|\n";
         return rowTwo;
     }
 
@@ -244,23 +237,22 @@ public class Tile {
     //
     private String rowThreeToString() {
         String rowThree = "|";
-        if(corners[2] != null) {
-            rowThree +=  spacing((corners[2].isTigerDisplayNode() ?
-                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
-                    corners[2].getTileSection().getTerrain().toString()));
-            rowThree += spacing((edges[2].isTigerDisplayNode() ?
-                    edges[2].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[2].getTileSection().getTerrain().toString()));
+        if(corners[3] != null) {
+            rowThree +=  spacing((corners[3].isTigerDisplayNode() ?
+                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString()));
         } else {
             rowThree += spacing("X");
-            rowThree += spacing((edges[2].isTigerDisplayNode() ?
-                    edges[2].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[2].getTileSection().getTerrain().toString()));
         }
-        if(corners[3] != null) {
-            rowThree += spacing((corners[3].isTigerDisplayNode() ?
-                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    corners[3].getTileSection().getTerrain().toString())) +
+
+        rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[2].getTileSection().getTerrain().toString()));
+
+        if(corners[2] != null) {
+            rowThree += spacing((corners[2].isTigerDisplayNode() ?
+                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString())) +
                     "|\n";
         } else {
             rowThree += spacing("X") + "|\n";
