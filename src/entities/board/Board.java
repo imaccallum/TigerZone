@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Board {
 
     private Tile[][] boardMatrix;
-    private List<Point> openTileLocations;
+    private HashSet<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<TigerDen> tigerDens;
     private Tile lastTilePlaced;
@@ -205,7 +205,7 @@ public class Board {
      * Get the Open tile locations as a list of points
      *
      * @return
-     * The List of Points
+     * The HashSet of Points
      */
     public List<Point> getOpenTileLocations(){
         return openTileLocations;
@@ -445,7 +445,7 @@ public class Board {
         }
     }
 
-    // 
+    //
     private void setTileAtPoint(Tile tile, Point point) {
         boardMatrix[point.y][point.x] = tile;
     }

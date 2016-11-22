@@ -95,13 +95,13 @@ public class GameManager {
         while(!deck.empty())
         {
             Tile t = deck.pop();
-    //        System.out.println(t);
+//            System.out.println(t);
 
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 int random = (int) (Math.random() * tileOptions.size());
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                System.out.println("Inserted " + t.type + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
                     t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
