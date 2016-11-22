@@ -112,7 +112,7 @@ public class GameManager {
             if(deck.size() == 0) {
                 System.out.println(gm.getBoard().toString());
                 gm.getBoard().log();
-                System.out.println(gm.getBoard().getFilledValues());
+                System.out.println(gm.getBoard().getNumTiles());
             }
 
    //         System.out.println("------------------------");
