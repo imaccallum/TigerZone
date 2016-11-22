@@ -72,10 +72,10 @@ public class Board {
         int col = location.x;
 
         // Get the surrounding tiles of the placement.
-        Tile leftTile = boardMatrix[col - 1][row];
-        Tile rightTile = boardMatrix[col + 1][row];
-        Tile bottomTile = boardMatrix[col][row + 1];
-        Tile topTile = boardMatrix[col][row - 1];
+        Tile leftTile = boardMatrix[row][col-1];
+        Tile rightTile = boardMatrix[row][col+1];
+        Tile bottomTile = boardMatrix[row+1][col];
+        Tile topTile = boardMatrix[row-1][col];
 
         // If they are all null, we are trying to place a tile that will not be adjacent to any other tile and thus
         // throw a bad tile placement exception.
@@ -369,9 +369,7 @@ public class Board {
         else if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
             return false;
         }
-        else {
-            return true;
-        }
+        return true;
     }
 
     //
@@ -450,7 +448,7 @@ public class Board {
     }
 
     // Checks to see if a tiger can be placed
-    private boolean canPlaceTiger(TileSection section) {
+    public boolean canPlaceTiger(TileSection section) {
         Region region = section.getRegion();
         if (region.containsTigers()) {
             return false;

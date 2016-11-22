@@ -22,15 +22,15 @@ public class Tile {
     private PreyAnimal preyAnimal;
     private Point location;
     private List<TileSection> tileSections;
-    public char type;
+    public String type;
     private boolean hasCrocodile;
 
-    public Tile(char t) {
+    public Tile(String s) {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
         tileSections = new ArrayList<>();
         preyAnimal = null;
-        this.type = t;
+        this.type = s;
     }
 
     // HAS TESTS - Bookkeeping
