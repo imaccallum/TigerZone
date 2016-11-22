@@ -99,6 +99,17 @@ public class TileSection {
         this.tigerDisplayNode = nodes.get(0);
     }
 
+    // HAS TEST - bookkeeping
+    /**
+     * Returns if the tile section has a tiger
+     *
+     * @return
+     * The boolean value associated with whether the tiger exists.
+     */
+    public boolean hasTiger(){
+        return getTiger() != null;
+    }
+
     // MARK: Getters and setters
 
     // Get the terrain
