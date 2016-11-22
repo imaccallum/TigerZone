@@ -45,6 +45,12 @@ public class Board {
         // System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
         setTileAtLocation(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
+
+        // Add all of the regions of the first tile
+        for (TileSection tileSection: firstTile.getTileSections()) {
+            regions.put(tileSection.getRegion().getRegionId(), tileSection.getRegion());
+        }
+
         lastTilePlaced = firstTile;
         openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
         openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
@@ -87,6 +93,11 @@ public class Board {
         setTileAtLocation(tile, location);
         numTiles++;
         openTileLocations.remove(location);
+
+        // Add all of the regions to the list.
+        for (TileSection tileSection: tile.getTileSections()) {
+            regions.put(tileSection.getRegion().getRegionId(), tileSection.getRegion());
+        }
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
         if (leftTile != null) {
@@ -473,42 +484,6 @@ public class Board {
                 throw new BadPlacementException(e.getMessage());
             }
             regions.remove(first.getTileSection().getRegion().getRegionId());
-        }
-        else if (first.getTileSection().getRegion() != null) {
-            // Connect the nodes to each other
-            first.setConnectedNode(second);
-            second.setConnectedNode(first);
-
-            // If the first region exists, add the second tile section to the first region.
-            try {
-                first.getTileSection().getRegion().addTileSection(second.getTileSection());
-            } catch (IncompatibleTerrainException e) {
-                throw new BadPlacementException(e.getMessage());
-            }
-        }
-        else if (second.getTileSection().getRegion() != null) {
-            // Connect the nodes to each other
-            first.setConnectedNode(second);
-            second.setConnectedNode(first);
-
-            // If the second region exists, add the first tile section to the second region.
-            try {
-                second.getTileSection().getRegion().addTileSection(first.getTileSection());
-            } catch (IncompatibleTerrainException e) {
-                throw new BadPlacementException(e.getMessage());
-            }
-        }
-        else {
-            Region newRegion = new Region(first.getTileSection().getTerrain());
-            first.setConnectedNode(second);
-            second.setConnectedNode(first);
-            try {
-                newRegion.addTileSection(first.getTileSection());
-                newRegion.addTileSection(second.getTileSection());
-            } catch (IncompatibleTerrainException e) {
-                throw new BadPlacementException(e.getMessage());
-            }
-            regions.put(newRegion.getRegionId(), newRegion);
         }
     }
 

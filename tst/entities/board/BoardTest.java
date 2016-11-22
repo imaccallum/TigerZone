@@ -117,16 +117,16 @@ public class BoardTest {
 
     @Test // Should not throw
     public void testGetPossibleTileSectionTigerPlacementsShouldReturnListWithTileSectionsYouCanPlaceATigerOn() throws Exception{
-//        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 4);
-//        Point point = new Point(76,75);
-//        testBoard.place(secondTile, point);
-//        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 5);
+        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 4);
+        Point point = new Point(76,75);
+        testBoard.place(secondTile, point);
+        Assert.assertTrue(testBoard.getPossibleTileSectionTigerPlacements().size() == 4);
     }
 
     @Test // Should not throw
     public void testCanPlaceTigerShouldReturnTrueIfTileSectionIsEmpty() throws TigerAlreadyPlacedException {
-//        Assert.assertTrue(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
-//        startingTile.getTileSections().get(0).placeTiger(new Tiger(new Player("Diego")));
-//        Assert.assertFalse(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
+        Assert.assertTrue(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
+        startingTile.getTileSections().get(0).placeTiger(new Tiger(new Player("Diego")));
+        Assert.assertFalse(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
     }
 }
