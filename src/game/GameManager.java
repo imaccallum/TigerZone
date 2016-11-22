@@ -1,30 +1,30 @@
 package game;
 
 import entities.board.Board;
+import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
-import entities.overlay.Region;
 import entities.player.Player;
-import exceptions.BadPlacementException;
+import exceptions.TigerAlreadyPlacedException;
 
-import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
 public class GameManager {
 
-    private List<Player> players = new ArrayList<>();
+    private Player p1;
+    private Player p2;
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
+    // *TODO RegionLinker regionLinker;
 
     private Board board;
 
-    public GameManager(Stack<Tile> stack, Player... players) {
-        for(Player player : players) {
-            this.players.add(player);
-        }
+    public GameManager(Stack<Tile> stack, Player p1, Player p2) {
+        this.p1 = p1;
+        this.p2 = p2;
         board = new Board(stack.size(), stack.pop());
     }
 
@@ -42,7 +42,7 @@ public class GameManager {
         return board;
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException {
+    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException, TigerAlreadyPlacedException {
 
         //region deckArray
         Character[] myarray = {'a',
@@ -65,15 +65,17 @@ public class GameManager {
                 'r','r',
                 's','s','s',       // WEIRD # FORMAT 1 OR 3?
                 't','t',
-                'u','u','u',
+                'u',
                 'v',
                 'w','w',
                 'x','x','x',
                 'y','y',
                 'z',
-                '0','0'};
+                '0','0',
+                '1', '1'};
         //endregion
 
+//        Character[] testDeck = {'b', 'a', 'a'};
         List<Character> charList = Arrays.asList(myarray);
         Collections.shuffle(charList);
 
@@ -90,29 +92,29 @@ public class GameManager {
 
         GameManager gm = new GameManager(deck, p0, p1);
 
-
-//        TileFactory tf = new TileFactory();
-//        Tile t1 = tf.makeTile('a');
-//        Tile t2 = tf.makeTile('a');
-
         while(!deck.empty())
         {
             Tile t = deck.pop();
-            //       System.out.println(gm.board.getTileOptions().size() + " " + gm.board.getTileOptions());
+//            System.out.println(t);
+
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
-                LocationAndOrientation optimalPlacement = tileOptions.get(0);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
-                t.rotateClockwise(optimalPlacement.getOrientation());
-                gm.getBoard().insert(t, optimalPlacement.getLocation());
+                int random = (int) (Math.random() * tileOptions.size());
+                LocationAndOrientation optimalPlacement = tileOptions.get(random);
+                System.out.println("Inserted " + t.type + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                t.rotateCounterClockwise(optimalPlacement.getOrientation());
+                if(Math.random() > .9 && p1.hasRemainingTigers()){
+                    t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
+                }
+                gm.getBoard().place(t, optimalPlacement.getLocation());
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
+            if(deck.size() == 0)
+                gm.getBoard().log();
+   //         System.out.println("------------------------");
+
         }
 
-//        gm.board.insert(t2, 40, 41);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        gm.board.insert(gm.board.getTileStack().pop(), 0, 0);
-//        System.out.println(gm.board.getTileOptions());
     }
 }

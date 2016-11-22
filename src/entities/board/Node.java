@@ -11,6 +11,16 @@ public class Node {
         this.connectedNode = null;
     }
 
+    /**
+     * Get whether the tiger is being represented as the tiger display node for the tile section
+     *
+     * @return
+     *
+     */
+    public boolean isTigerDisplayNode() {
+        return tileSection.getTigerDisplayNode().equals(this);
+    }
+
     // Getters and Setters
 
     public TileSection getTileSection() {

@@ -49,7 +49,6 @@ public class RegionTest {
         testRegionC.addTileSection(testTileSectionA);
     }
 
-
     @Test // Should not throw
     public void testCombineRegionShouldHaveAllTigers() throws Exception {
         testTileSectionA.placeTiger(diegoTiger);

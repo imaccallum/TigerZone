@@ -15,6 +15,12 @@ import java.util.List;
 
 public class TileSectionTest {
     @Test
+    public void testCreatingATileSectionHasTheCorrectTerrain() {
+        TileSection section = new TileSection(Terrain.LAKE);
+        Assert.assertTrue(section.getTerrain() == Terrain.LAKE);
+    }
+
+    @Test
     public void testAddingNodesShouldHaveCorrectNumber() {
         TileSection section = defaultTileSection();
         section.addNodes(new Node(), new Node());
