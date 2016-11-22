@@ -67,8 +67,6 @@ public class BoardTest {
     public void testFindValidTilePlacementsShouldReturnAllValidPlacements(){
         List<LocationAndOrientation> locationsAndOrientations = testBoard.findValidTilePlacements(secondTile);
 
-        System.out.println(testBoard.toString());
-        System.out.println(secondTile.toString());
         boolean rOnTopOfS_rotate0 = false;
         boolean rToTheRightOfS_rotate2 = false;
         boolean rUnderS_rotate3 = false;

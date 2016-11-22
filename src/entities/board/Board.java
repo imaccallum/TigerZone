@@ -118,7 +118,6 @@ public class Board {
     }
 
     // HAS TEST - Bookkeeping
-
     /**
      * Finds the valid tile placements as a list of locations and orientations in location, orientation order
      *
@@ -154,13 +153,9 @@ public class Board {
                     continue;
                 }
 
-                System.out.println("Adding point " + openTileLocation +
-                        " with tile orientation " + tileOrientation +
-                        " to valid tile placements.");
                 Point current = new Point(openTileLocation.x, openTileLocation.y);
                 LocationAndOrientation locationAndOrientation = new LocationAndOrientation(current, tileOrientation);
                 validPlacements.add(locationAndOrientation);
-                tile.rotateCounterClockwise(1);  // Rotate the tile 1 to check next orientation
             }
         }
         return validPlacements;
