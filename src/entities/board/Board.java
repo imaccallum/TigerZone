@@ -44,7 +44,7 @@ public class Board {
 
         // System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
-        setTileAtPoint(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
+        setTileAtLocation(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
         lastTilePlaced = firstTile;
         openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
         openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
@@ -84,7 +84,7 @@ public class Board {
         }
 
         // Put the tile in the matrix, get ready to connect the tiles.
-        setTileAtPoint(tile, location);
+        setTileAtLocation(tile, location);
         numTiles++;
         openTileLocations.remove(location);
 
@@ -219,6 +219,80 @@ public class Board {
      */
     public Tile getLastPlacedTile() {
         return lastTilePlaced;
+    }
+
+    /**
+     * Get a string representation of the board and all the tiles on it
+     *
+     * @return
+     * A string representation of the board
+     */
+    public String toString() {
+        int rowStart = boardSize;
+        int rowStop = 0;
+        int colStart = boardSize;
+        int colStop = 0;
+
+        int numLogged = 0;
+        String output = "";
+
+        for (Point p : openTileLocations) {
+            if (p.y < rowStart) {
+                rowStart = p.y;
+            }
+            if (p.y > rowStop) {
+                rowStop = p.y;
+            }
+            if (p.x < colStart) {
+                colStart = p.x;
+            }
+            if (p.x > colStop) {
+                colStop = p.x;
+            }
+        }
+
+        for (int row = rowStart; row < rowStop; row++) {          // for each row
+            ArrayList<String> splits = new ArrayList<>();
+            for (int col = colStart; col < colStop; col++) {     // and each column
+                if (boardMatrix[row][col] != null) {         // where there is a tile
+
+                    String[] temp = (boardMatrix[row][col].toString().split("\n")); // seperate the lines
+
+                    for (int i = 0; i < temp.length; i++) {  // removes line breaks
+                        temp[i].replace("\n", "");
+                    }
+
+                    splits.addAll(Arrays.asList(temp));     // and store them in a list
+                    numLogged++;
+
+
+                } else if (numLogged < getNumTiles()) {
+                    String[] temp = {
+                            "                                ",
+                            "                                ",
+                            "                                ",
+                            "                                ",
+                            "                                ",
+                            "                                "};
+                    splits.addAll(Arrays.asList(temp));
+                }
+            }
+            if (splits.size() != 0) {
+                int lineIndex = 0;
+                int count = 0;
+                while (lineIndex < 6) {    // for each line in the list
+                    output += splits.get(lineIndex + 6 * count);
+                    count++;
+                    if (count * 6 >= splits.size()) {
+                        count = 0;
+                        lineIndex++;
+                        output += "\n";
+                    }
+                }
+            }
+        }
+
+        return output;
     }
 
     //
@@ -444,8 +518,9 @@ public class Board {
     }
 
     //
-    private void setTileAtPoint(Tile tile, Point point) {
-        boardMatrix[point.y][point.x] = tile;
+    private void setTileAtLocation(Tile tile, Point location) {
+        boardMatrix[location.y][location.x] = tile;
+        tile.setLocation(location);
     }
 
     // Checks to see if a tiger can be placed
@@ -457,79 +532,10 @@ public class Board {
         return true;
     }
 
-
-    // Create the log string for the board.
-    private String logString() {
-        int rowStart = boardSize;
-        int rowStop = 0;
-        int colStart = boardSize;
-        int colStop = 0;
-
-        int numLogged = 0;
-        String output = "";
-
-        for(Point p: openTileLocations) {
-            if(p.y < rowStart) {
-                rowStart = p.y;
-            }
-            if(p.y > rowStop) {
-                rowStop = p.y;
-            }
-            if(p.x < colStart) {
-                colStart = p.x;
-            }
-            if(p.x > colStop) {
-                colStop = p.x;
-            }
-        }
-
-        for(int row = rowStart; row < rowStop; row++) {          // for each row
-            ArrayList<String> splits = new ArrayList<>();
-            for (int col = colStart; col < colStop; col++) {     // and each column
-                if(boardMatrix[row][col] != null) {         // where there is a tile
-
-                    String[] temp = (boardMatrix[row][col].toString().split("\n")); // seperate the lines
-
-                    for(int i = 0; i < temp.length; i++) {  // removes line breaks
-                        temp[i].replace("\n", "");
-                    }
-
-                    splits.addAll(Arrays.asList(temp));     // and store them in a list
-                    numLogged++;
-
-
-                } else if(numLogged < getNumTiles()) {
-                    String[] temp = {
-                            "                                ",
-                            "                                ",
-                            "                                ",
-                            "                                ",
-                            "                                "};
-                    splits.addAll(Arrays.asList(temp));
-                }
-            }
-            if(splits.size() != 0) {
-                int lineIndex = 0;
-                int count = 0;
-                while (lineIndex < 5) {    // for each line in the list
-                    output += splits.get(lineIndex + 5 * count);
-                    count++;
-                    if (count * 5 >= splits.size()) {
-                        count = 0;
-                        lineIndex++;
-                        output += "\n";
-                    }
-                }
-            }
-        }
-
-        return output;
-    }
-
     // Log the state of the board to a file.
     public void log() throws IOException {
         // Get the output string for the board.
-        String output = logString();
+        String output = toString();
 
         // Create a destination for a file.
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH.mm");
