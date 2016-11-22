@@ -15,6 +15,12 @@ import java.util.List;
 
 public class TileSectionTest {
     @Test
+    public void testCreatingATileSectionHasTheCorrectTerrain() {
+        TileSection section = new TileSection(Terrain.LAKE);
+        Assert.assertTrue(section.getTerrain() == Terrain.LAKE);
+    }
+
+    @Test
     public void testAddingNodesShouldHaveCorrectNumber() {
         TileSection section = defaultTileSection();
         section.addNodes(new Node(), new Node());
@@ -43,24 +49,26 @@ public class TileSectionTest {
 
     }
 
-//    @Test
-//    public void testTigerPlacementShouldWorkWithOneTigerPlaced() throws TigerAlreadyPlacedException {
-//        TileSection tileSection = defaultTileSection();
-//        Tiger tiger = new Tiger(new Player(""));
-//        tileSection.placeTiger(tiger);
-//        Assert.assertEquals(tiger, tileSection.getTiger());
-//    }
+    @Test
+    public void testTigerPlacementShouldWorkWithOneTigerPlaced() throws TigerAlreadyPlacedException {
+        TileSection tileSection = defaultTileSection();
+        Tiger tiger = new Tiger(new Player(""));
+        tileSection.placeTiger(tiger);
+        Assert.assertEquals(tiger, tileSection.getTiger());
+    }
 
-//    @Test (expected = TigerAlreadyPlacedException.class)
-//    public void testPlaceTigerShouldThrowExceptionIfTigerAlreadyThere() throws TigerAlreadyPlacedException {
-//        Tiger tiger1 = new Tiger(new Player(""));
-//        Tiger tiger2 = new Tiger(new Player(""));
-//        TileSection section = defaultTileSection();
-//        section.placeTiger(tiger1);
-//        section.placeTiger(tiger2);
-//    }
+    @Test (expected = TigerAlreadyPlacedException.class)
+    public void testPlaceTigerShouldThrowExceptionIfTigerAlreadyThere() throws TigerAlreadyPlacedException {
+        Tiger tiger1 = new Tiger(new Player(""));
+        Tiger tiger2 = new Tiger(new Player(""));
+        TileSection section = defaultTileSection();
+        section.placeTiger(tiger1);
+        section.placeTiger(tiger2);
+    }
 
     private TileSection defaultTileSection() {
-        return new TileSection(Terrain.JUNGLE);
+        TileSection tileSection = new TileSection(Terrain.JUNGLE);
+        tileSection.addNodes(new Node(), new Node());
+        return tileSection;
     }
 }

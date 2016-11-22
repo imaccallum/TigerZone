@@ -33,7 +33,7 @@ public class Tile {
         this.type = t;
     }
 
-    // HAS TESTS
+    // HAS TESTS - Bookkeeping
     public void rotateCounterClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
@@ -49,76 +49,114 @@ public class Tile {
         corners = tempCorners;
     }
 
-    // HAS TEST
-    public void addTileSections(TileSection... sections) {
-        for (TileSection tileSection: sections){
+    // HAS TEST - Bookkeeping
+    /**
+     * Add the given tile sections to the tile
+     * 
+     * @param tileSections,
+     * the comma separated list of tile sections to add.
+     */
+    public void addTileSections(TileSection... tileSections) {
+        for (TileSection tileSection: tileSections){
             tileSection.setTile(this);
         }
-        tileSections.addAll(Arrays.asList(sections));
+        this.tileSections.addAll(Arrays.asList(tileSections));
     }
 
-    //			    Edge[0]
-    //		Corner[0]	Corner[1]
-    //	Edge[3]		Center		Edge[1]
-    //		Corner[3]	Corner[2]
-    //			    Edge[2]
+    /**
+     * Create the string representing the tile
+     * Will print a lowercase terrain string if a tiger is placed in a location.
+     *
+     * @return
+     * The string representation of the tile.
+     */
     public String toString(){
 
         String bound = "|" + type + "----------------------------" + type + "|\n";
-        String one = "|";
-        String two = "|";
-        String three = "|";
+        String rowOne = rowOneToString();
+        String rowTwo = rowTwoToString();
+        String rowThree = rowThreeToString();
 
+        // System.out.print(rowOne.length() + " " + rowTwo.length() + " " + rowThree.length() + "\n");
 
-        if(corners[0] != null) {
-            one +=  spacing((corners[0].hasTiger() ? corners[0].getTileSection().getTerrain().toString().toLowerCase() :
-                    corners[0].getTileSection().getTerrain().toString())) +
-                    spacing((edges[0].hasTiger() ? edges[0].getTileSection().getTerrain().toString().toLowerCase() :
-                            edges[0].getTileSection().getTerrain().toString()));
-        } else {
-            one += spacing("X") + spacing((edges[0].hasTiger() ? edges[0].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[0].getTileSection().getTerrain().toString()));
-        }
-        if(corners[1] != null) {
-           one += spacing((corners[1].hasTiger() ? corners[1].getTileSection().getTerrain().toString().toLowerCase() :
-                   corners[1].getTileSection().getTerrain().toString())) + "|\n";
-        } else {
-            one += spacing("X") + "|\n";
-        }
-
-        if(hasDen)
-            two += spacing((edges[3].hasTiger() ? edges[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[3].getTileSection().getTerrain().toString())) + spacing("True") +
-                    spacing((edges[1].hasTiger() ? edges[1].getTileSection().getTerrain().toString().toLowerCase() :
-                            edges[1].getTileSection().getTerrain().toString())) + "|\n";
-        else
-            two += spacing((edges[3].hasTiger() ? edges[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[3].getTileSection().getTerrain().toString())) + spacing("False") +
-                    spacing((edges[1].hasTiger() ? edges[1].getTileSection().getTerrain().toString().toLowerCase() :
-                            edges[1].getTileSection().getTerrain().toString())) + "|\n";
-
-
-        if(corners[2] != null) {
-            three +=  spacing((corners[2].hasTiger() ? corners[2].getTileSection().getTerrain().toString().toLowerCase() :
-                    corners[2].getTileSection().getTerrain().toString())) +
-                    spacing((edges[2].hasTiger() ? edges[2].getTileSection().getTerrain().toString().toLowerCase() :
-                            edges[2].getTileSection().getTerrain().toString()));
-        } else {
-            three += spacing("X") + spacing((edges[2].hasTiger() ? edges[2].getTileSection().getTerrain().toString().toLowerCase() :
-                    edges[2].getTileSection().getTerrain().toString()));
-        }
-        if(corners[3] != null) {
-            three += spacing((corners[3].hasTiger() ? corners[3].getTileSection().getTerrain().toString().toLowerCase() :
-                    corners[3].getTileSection().getTerrain().toString())) + "|\n";
-        } else {
-            three += spacing("X") +"|\n";
-        }
-
-    //    System.out.print(one.length() + " " + two.length() + " " + three.length() + "\n");
-
-        return bound + one + two + three + bound;
+        return bound + rowOne + rowTwo + rowThree + bound;
     }
 
+    // MARK: Getters and Setters
+
+    // Is there a den in the tile
+    public boolean hasDen() {
+        return hasDen;
+    }
+
+    // Set if the tile has a den
+    public void setHasDen(boolean hasDen) {
+        this.hasDen = hasDen;
+    }
+
+    // Get the edge at a given edge location
+    public Node getEdge(EdgeLocation location) {
+        return edges[location.ordinal()];
+    }
+
+    // Set the edge in a given edge location
+    public void setEdge(Node node, EdgeLocation location){
+        edges[location.ordinal()] = node;
+    }
+
+    // Get the coirner in a given corner location
+    public Node getCorner(CornerLocation location) {
+        return corners[location.ordinal()];
+    }
+
+    // Set the corner in a given corner location
+    public void setCorner(Node node, CornerLocation location){
+        corners[location.ordinal()] = node;
+    }
+
+    // Get the prey animal on the tile
+    public PreyAnimal getPreyAnimal() {
+        return preyAnimal;
+    }
+
+    // Set the prey animal on a tile.
+    public void setPreyAnimal(PreyAnimal preyAnimal) {
+        this.preyAnimal = preyAnimal;
+    }
+
+    // Get the location for a tile
+    public Point getLocation() {
+        return location;
+    }
+
+    // Set the location for a tile
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    // Get the lost of tile sections on a tile.
+    public List<TileSection> getTileSections() {
+        return tileSections;
+    }
+
+    // Get whether the tile has a crocodile.
+    public boolean isHasCrocodile() {
+        return hasCrocodile;
+    }
+
+    // Set whether the tile has a crocodile.
+    public void setHasCrocodile(boolean hasCrocodile) {
+        this.hasCrocodile = hasCrocodile;
+    }
+
+    // MARK: Private methods
+
+    //
+    // Get the string spacing for given terrain
+    //
+    // @return
+    // The set of spaces for the given terrain
+    //
     private String spacing(String terrain) {
         String out = "";
         int size = 10 - terrain.length();
@@ -134,57 +172,99 @@ public class Tile {
         return out;
     }
 
-    // MARK: Getters and Setters
+    //
+    // Get the string that represents row one
+    //
+    // @return
+    // the string representing row one
+    //
+    private String rowOneToString() {
+        String rowOne = "|";
+        if(corners[0] != null) {
+            boolean isTigerDisplayNode = corners[0].getTileSection().getTigerDisplayNode().equals(corners[0]);
+            rowOne += spacing((corners[0].isTigerDisplayNode() ?
+                    corners[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[0].getTileSection().getTerrain().toString()));
+            rowOne += spacing((isTigerDisplayNode ?
+                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
+        } else {
+            rowOne += spacing("X") + spacing((edges[0].isTigerDisplayNode() ?
+                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
+        }
 
-    public boolean hasDen() {
-        return hasDen;
+        if(corners[1] != null) {
+            rowOne += spacing((corners[1].isTigerDisplayNode() ?
+                    corners[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowOne += spacing("X") + "|\n";
+        }
+        return rowOne;
     }
 
-    public void setHasDen(boolean hasDen) {
-        this.hasDen = hasDen;
+    //
+    // Get the string that represents row two
+    //
+    // @return
+    // the string representing row two
+    //
+    private String rowTwoToString() {
+        String rowTwo = "|";
+        if(hasDen) {
+            rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                    edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[3].getTileSection().getTerrain().toString()));
+            rowTwo += spacing("True");
+            rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                    edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        }
+        else {
+            rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                    edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[3].getTileSection().getTerrain().toString()));
+            rowTwo += spacing("False");
+            rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                    edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        }
+        return rowTwo;
     }
 
-    public Node getEdge(EdgeLocation location) {
-        return edges[location.ordinal()];
-    }
-
-    public void setEdge(Node node, EdgeLocation location){
-        edges[location.ordinal()] = node;
-    }
-
-    public Node getCorner(CornerLocation location) {
-        return corners[location.ordinal()];
-    }
-
-    public void setCorner(Node node, CornerLocation location){
-        corners[location.ordinal()] = node;
-    }
-
-    public PreyAnimal getPreyAnimal() {
-        return preyAnimal;
-    }
-
-    public void setPreyAnimal(PreyAnimal preyAnimal) {
-        this.preyAnimal = preyAnimal;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
-    public List<TileSection> getTileSections() {
-        return tileSections;
-    }
-
-    public boolean isHasCrocodile() {
-        return hasCrocodile;
-    }
-
-    public void setHasCrocodile(boolean hasCrocodile) {
-        this.hasCrocodile = hasCrocodile;
+    //
+    // Get the string that represents row three
+    //
+    // @return
+    // the string representing row three
+    //
+    private String rowThreeToString() {
+        String rowThree = "|";
+        if(corners[2] != null) {
+            rowThree +=  spacing((corners[2].isTigerDisplayNode() ?
+                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString()));
+            rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                    edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[2].getTileSection().getTerrain().toString()));
+        } else {
+            rowThree += spacing("X");
+            rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                    edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[2].getTileSection().getTerrain().toString()));
+        }
+        if(corners[3] != null) {
+            rowThree += spacing((corners[3].isTigerDisplayNode() ?
+                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowThree += spacing("X") + "|\n";
+        }
+        return rowThree;
     }
 }

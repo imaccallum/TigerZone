@@ -7,7 +7,6 @@ import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.TigerAlreadyPlacedException;
 
-import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -96,18 +95,18 @@ public class GameManager {
         while(!deck.empty())
         {
             Tile t = deck.pop();
-    //        System.out.println(t);
+//            System.out.println(t);
 
             List<LocationAndOrientation>  tileOptions = gm.getBoard().findValidTilePlacements(t);
             if(tileOptions.size() > 0) {
                 int random = (int) (Math.random() * tileOptions.size());
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
-                System.out.println("Inserted @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                System.out.println("Inserted " + t.type + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
-                    t.getTileSections().get(0).getNodes().get(0).placeTiger(new Tiger(p1));
+                    t.getTileSections().get(0).placeTiger(new Tiger(p1));
                 }
-                gm.getBoard().insert(t, optimalPlacement.getLocation());
+                gm.getBoard().place(t, optimalPlacement.getLocation());
             } else {
                 System.out.println("No valid moves, discarding tile.");
             }
