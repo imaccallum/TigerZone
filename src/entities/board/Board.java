@@ -370,9 +370,7 @@ public class Board {
         else if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
             return false;
         }
-        else {
-            return true;
-        }
+        return true;
     }
 
     //
@@ -451,7 +449,7 @@ public class Board {
     }
 
     // Checks to see if a tiger can be placed
-    private boolean canPlaceTiger(TileSection section) {
+    public boolean canPlaceTiger(TileSection section) {
         Region region = section.getRegion();
         if (region.containsTigers()) {
             return false;
