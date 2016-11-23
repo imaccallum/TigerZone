@@ -1,5 +1,6 @@
 package entities.board;
 
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ public class Tile {
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
-    private boolean hasDen;
+    private TigerDen den;
     private PreyAnimal preyAnimal;
     private Point location;
     private List<TileSection> tileSections;
@@ -182,13 +183,13 @@ public class Tile {
     // MARK: Getters and Setters
 
     // Is there a den in the tile
-    public boolean hasDen() {
-        return hasDen;
+    public TigerDen getDen() {
+        return den;
     }
 
     // Set if the tile has a den
-    public void setHasDen(boolean hasDen) {
-        this.hasDen = hasDen;
+    public void setDen(TigerDen den) {
+        this.den = den;
     }
 
     // Get the edge at a given edge location
@@ -323,7 +324,7 @@ public class Tile {
                 edges[3].getTileSection().getTerrain().toString().toLowerCase() :
                 edges[3].getTileSection().getTerrain().toString()));
 
-        if(hasDen) {
+        if(den != null) {
             rowTwo += spacing("True");
         }
         else {
