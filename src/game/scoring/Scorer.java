@@ -9,13 +9,13 @@ import java.util.List;
 public abstract class Scorer {
     public abstract int score(Region region);
     public abstract int scoreAtEnd(Region region);
-    public void returnMeeples(Region region){
+    public void returnTigers(Region region){
         List<Tiger> tigerList = region.getAllTigers();
 
         for(Tiger t : tigerList){
-            t.getOwningPlayer().incrementRemainingFollowers();
+            t.getOwningPlayer().incrementRemainingTigers();
         }
 
-        tigerList.clear();
+        region.getAllTigers().clear();
     }
 }

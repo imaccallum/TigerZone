@@ -2,7 +2,7 @@
 
 Monday 10/31
 - There will be a limited total amount of time to play the entire game. Out of time => forfeit
-- The competition will be run on a server [networking via TCP sockets]
+- The competition will be run on a serverExample [networking via TCP sockets]
 - The AI will be playing two games at once: one where it goes first, the other where it goes second
 
 Wednesday 11/2
@@ -15,11 +15,11 @@ Tuesday 11/8
 - AI will know the entire order of the shuffled pile. It will know exactly which tiles are coming up.
 
 Wednesday 11/9
-What we'll know from the server
+What we'll know from the serverExample
 - Your turn to place tile and what the tile is
 - Your move must be received in <1 second
 - Move will include where the tile goes, orientation, and, if meeple placed, where
-- Move will be confirmed by the server (message of move sent to both players)
+- Move will be confirmed by the serverExample (message of move sent to both players)
 	- valid
 	- invalid: illegal tile placement => forfeit
 	- invalid: illegal meeple placement => forfeit

@@ -2,15 +2,16 @@ package entities.board;
 
 import entities.player.Player;
 
-// A follower that a owningPlayer can place in tile sections/regions to earn points.
+// A follower that a player can place in tile sections/regions to earn points.
 public class Tiger {
-    private final Player owningPlayer;
+    private Player player;
 
-    public Tiger(Player owningPlayer) {
-        this.owningPlayer = owningPlayer;
+    public Tiger(Player player) {
+        this.player = player;
+        player.decrementRemainingTigers();
     }
 
     public Player getOwningPlayer() {
-        return owningPlayer;
+        return player;
     }
 }

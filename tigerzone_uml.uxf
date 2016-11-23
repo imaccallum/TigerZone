@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>402</y>
+      <x>732</x>
+      <y>270</y>
       <w>282</w>
       <h>216</h>
     </coordinates>
@@ -39,8 +39,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1236</x>
-      <y>498</y>
+      <x>1194</x>
+      <y>366</y>
       <w>168</w>
       <h>174</h>
     </coordinates>
@@ -69,8 +69,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>636</y>
+      <x>732</x>
+      <y>504</y>
       <w>282</w>
       <h>132</h>
     </coordinates>
@@ -94,8 +94,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1050</x>
-      <y>462</y>
+      <x>1008</x>
+      <y>330</y>
       <w>198</w>
       <h>54</h>
     </coordinates>
@@ -105,8 +105,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1050</x>
-      <y>498</y>
+      <x>1008</x>
+      <y>366</y>
       <w>156</w>
       <h>180</h>
     </coordinates>
@@ -116,8 +116,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>228</x>
-      <y>390</y>
+      <x>186</x>
+      <y>258</y>
       <w>414</w>
       <h>150</h>
     </coordinates>
@@ -142,8 +142,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>402</y>
+      <x>594</x>
+      <y>270</y>
       <w>150</w>
       <h>18</h>
     </coordinates>
@@ -153,8 +153,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>414</y>
+      <x>594</x>
+      <y>282</y>
       <w>150</w>
       <h>240</h>
     </coordinates>
@@ -164,8 +164,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>948</x>
-      <y>306</y>
+      <x>906</x>
+      <y>174</y>
       <w>108</w>
       <h>66</h>
     </coordinates>
@@ -182,8 +182,8 @@ BOTTOM_RIGHT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>306</y>
+      <x>732</x>
+      <y>174</y>
       <w>108</w>
       <h>66</h>
     </coordinates>
@@ -200,8 +200,8 @@ LEFT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1254</x>
-      <y>348</y>
+      <x>1212</x>
+      <y>216</y>
       <w>126</w>
       <h>42</h>
     </coordinates>
@@ -214,8 +214,8 @@ LEFT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>774</x>
-      <y>792</y>
+      <x>732</x>
+      <y>660</y>
       <w>282</w>
       <h>90</h>
     </coordinates>
@@ -237,8 +237,8 @@ LEFT
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>636</x>
-      <y>444</y>
+      <x>594</x>
+      <y>312</y>
       <w>150</w>
       <h>366</h>
     </coordinates>
@@ -248,8 +248,8 @@ LEFT
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>42</x>
-      <y>684</y>
+      <x>0</x>
+      <y>552</y>
       <w>306</w>
       <h>102</h>
     </coordinates>
@@ -269,8 +269,8 @@ receive possible tiger placement
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1500</x>
-      <y>132</y>
+      <x>1458</x>
+      <y>0</y>
       <w>60</w>
       <h>18</h>
     </coordinates>
