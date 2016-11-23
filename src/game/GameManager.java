@@ -100,7 +100,7 @@ public class GameManager {
             if(tileOptions.size() > 0) {
                 int random = (int) (Math.random() * tileOptions.size());
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
-                System.out.println("Inserted " + t.type + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                System.out.println("Inserted " + t.getType() + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
                     t.getTileSections().get(0).placeTiger(new Tiger(p1));

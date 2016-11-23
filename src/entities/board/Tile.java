@@ -3,8 +3,7 @@ package entities.board;
 import entities.overlay.TileSection;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 public class Tile {
@@ -22,7 +21,7 @@ public class Tile {
     private PreyAnimal preyAnimal;
     private Point location;
     private List<TileSection> tileSections;
-    public String type;
+    private String type;
     private boolean hasCrocodile;
 
     public Tile(String s) {
@@ -84,6 +83,101 @@ public class Tile {
         else {
             return bound + rowOne + rowTwo + rowThree + bound;
         }
+    }
+
+    /**
+     * Gets the adjacent tile sections to the current tile section
+     *
+     * @param tileSection,
+     * the tile section we want to find adjacent tile sections to
+     *
+     * @return
+     * The list of tile sections that are adjacent to this tile section, returns empty list if there are none.
+     */
+    public List<TileSection> getAdjacentTileSectionsForTileSection(TileSection tileSection) {
+        if (!tileSections.contains(tileSection)) {
+            // The tile section is not on this tile, return empty list
+            return new ArrayList<>();
+        }
+
+        List<Node> tileSectionNodes = tileSection.getNodes();
+        List<Node> tileNodes = nodesClockwise();
+        List<Integer> clockwiseNodeLocations = new ArrayList<>();
+        for (int i = 0; i < tileNodes.size(); ++i) {
+            if (tileNodes.get(i) != null) {
+                // Null nodes aren't important for adjacency.
+                if (tileSectionNodes.contains(tileNodes.get(i))) {
+                    // Use positive numbers to indicate nodes that are part of the tile section
+                    clockwiseNodeLocations.add(i);
+                } else if (tileNodes.get(i) != null) {
+                    // Use negative numbers to represent others
+                    clockwiseNodeLocations.add(-i);
+                }
+            }
+        }
+
+        Set<Node> adjacentNodes = new HashSet<>();
+        for (int i = 1; i < clockwiseNodeLocations.size(); ++i) {
+            int current = clockwiseNodeLocations.get(i);
+            int prev = clockwiseNodeLocations.get(i - 1);
+            Node adjacentNode = null;
+            if (current < 0 && prev > 0) {
+                // The previous node is in the tile section, so the current is adjacent if it is not in it
+                adjacentNode = tileNodes.get(current * -1);
+            }
+            else if (current > 0 && prev < 0) {
+                // The current node is in the tile section, so the previous is adjacent if it is not in it
+                adjacentNode = tileNodes.get(prev * -1);
+            }
+
+            // Check for wrap around adjacency
+            if (i == clockwiseNodeLocations.size() - 1) {
+                if (clockwiseNodeLocations.get(0) > 0 && current < 0) {
+                    // First node is in the tile section and last node is not, last node adjacent
+                    adjacentNode = tileNodes.get(current * -1);
+                }
+                else if (clockwiseNodeLocations.get(0) < 0 && current > 0) {
+                    // Last node is in the tile section and first node is not, first node adjacent
+                    adjacentNode = tileNodes.get(clockwiseNodeLocations.get(0) * -1);
+                }
+            }
+
+            if (adjacentNode != null && !adjacentNodes.contains(adjacentNode)) {
+                adjacentNodes.add(adjacentNode);
+            }
+        }
+
+        // Create a list to return
+        List<TileSection> adjacentTileSections = new ArrayList<>();
+        for (Node adjacentNode : adjacentNodes) {
+            // For each adjacent node, add its tile section if the section is not in the array
+            TileSection adjacentTileSection = adjacentNode.getTileSection();
+            if (!adjacentTileSections.contains(adjacentTileSection)) {
+                adjacentTileSections.add(adjacentTileSection);
+            }
+        }
+
+        return adjacentTileSections;
+    }
+
+    /**
+     * Gets the nodes on the tile in a clockwise position, starting with the top left corner and going to the left edge.
+     *
+     * @return
+     * The list of nodes in the clockwise direction around the tile.
+     */
+    public List<Node> nodesClockwise() {
+        // Start at top left corner and end at left edge
+        List<Node> nodesClockwise = new ArrayList<>();
+        nodesClockwise.add(corners[0]);
+        nodesClockwise.add(edges[0]);
+        nodesClockwise.add(corners[1]);
+        nodesClockwise.add(edges[1]);
+        nodesClockwise.add(corners[2]);
+        nodesClockwise.add(edges[2]);
+        nodesClockwise.add(corners[3]);
+        nodesClockwise.add(edges[3]);
+        return nodesClockwise;
     }
 
     // MARK: Getters and Setters
@@ -151,6 +245,16 @@ public class Tile {
     // Set whether the tile has a crocodile.
     public void setHasCrocodile(boolean hasCrocodile) {
         this.hasCrocodile = hasCrocodile;
+    }
+
+    // Set the type
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    // Get the type
+    public String getType() {
+        return type;
     }
 
     // MARK: Private methods
