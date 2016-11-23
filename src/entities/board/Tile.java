@@ -69,8 +69,7 @@ public class Tile {
      * @return
      * The string representation of the tile.
      */
-    public String toString(){
-
+    public String toString() {
         String bound = "|" + type + "--------------------" + type + "|\n";
         String rowOne = rowOneToString();
         String rowTwo = rowTwoToString();
