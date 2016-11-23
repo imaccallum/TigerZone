@@ -280,7 +280,7 @@ public class TileFactory {
     // |TJJT---------------------TJJT-|
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |  TRAIL     False     JUNGLE  |
-    // |  JUNGLE    JUNGLE    JUNGLE  |
+    // |  JUNGLE    JUNGLE      X     |
     // |TJJT---------------------TJJT-|
     private Tile makeTileF() {
         Tile tile = new Tile( "TJJT-");
@@ -298,7 +298,7 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_three, e_two, c_one, e_one, c_two);
+        jungle0.addNodes(c_three, e_two, c_one, e_one);
         jungle1.addNodes(c_zero);
         trail.addNodes(e_zero, e_three);
 
@@ -423,7 +423,7 @@ public class TileFactory {
     }
 
     // |JLLL---------------------JLLL-|
-    // |  JUNGLE    JUNGLE    JUNGLE  |
+    // |    X       JUNGLE      X     |
     // |   LAKE     False      LAKE   |
     // |    X        LAKE       X     |
     // |JLLL---------------------JLLL-|
@@ -441,7 +441,7 @@ public class TileFactory {
         Node c_one = new Node();
 
         lake.addNodes(e_one, e_two, e_three);
-        jungle.addNodes(c_zero, e_zero, c_one);
+        jungle.addNodes(e_zero);
 
         tile.setEdge(e_zero, EdgeLocation.TOP);
         tile.setEdge(e_one, EdgeLocation.RIGHT);
@@ -465,9 +465,9 @@ public class TileFactory {
     }
 
     // |LLJJ---------------------LLJJ-|
-    // |  JUNGLE     LAKE       X     |
+    // |    X        LAKE       X     |
     // |  JUNGLE    False      LAKE   |
-    // |  JUNGLE    JUNGLE    JUNGLE  |
+    // |    X       JUNGLE      X     |
     // |LLJJ---------------------LLJJ-|
     private Tile makeTileJ() {
         Tile tile = new Tile( "LLJJ-");
@@ -484,7 +484,7 @@ public class TileFactory {
         Node c_three = new Node();
 
         lake.addNodes(e_zero, e_one);
-        jungle.addNodes(c_zero, c_two, e_two, c_three, e_three);
+        jungle.addNodes(e_two, e_three);
 
         tile.setEdge(e_zero, EdgeLocation.TOP);
         tile.setEdge(e_one, EdgeLocation.RIGHT);
@@ -590,7 +590,7 @@ public class TileFactory {
     }
 
     // |LJJJ---------------------LJJJ-|
-    // |  JUNGLE     LAKE     JUNGLE  |
+    // |    X       LAKE        X     |
     // |  JUNGLE    False     JUNGLE  |
     // |    X       JUNGLE      X     |
     // |LJJJ---------------------LJJJ-|
@@ -607,7 +607,7 @@ public class TileFactory {
         Node c_zero = new Node();
         Node c_one = new Node();
 
-        jungle.addNodes(c_zero, e_three, e_two, e_one, c_one);
+        jungle.addNodes(e_three, e_two, e_one);
         lake.addNodes(e_zero);
 
         tile.setEdge(e_zero, EdgeLocation.TOP);
@@ -674,7 +674,7 @@ public class TileFactory {
     // |TLJT---------------------TLJT-|
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |  TRAIL     False      LAKE   |
-    // |  JUNGLE    JUNGLE    JUNGLE  |
+    // |  JUNGLE    JUNGLE      X     |
     // |TLJT---------------------TLJT-|
     private Tile makeTileO() {
         Tile tile = new Tile("TLJT-");
@@ -694,7 +694,7 @@ public class TileFactory {
         Node c_three = new Node();
 
         jungle0.addNodes(c_zero);
-        jungle1.addNodes(c_one, c_two, e_two, c_three);
+        jungle1.addNodes(c_one, e_two, c_three);
         lake.addNodes(e_one);
         trail.addNodes(e_zero, e_three);
 
@@ -728,7 +728,7 @@ public class TileFactory {
     // |TLJTP--------------------TLJTP|
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |  TRAIL     False      LAKE   |
-    // |  JUNGLE    JUNGLE    JUNGLE  |
+    // |  JUNGLE    JUNGLE       X    |
     // |TLJTP--------------------TLJTP|
     private Tile makeTileP() {
         Tile tile = new Tile("TLJTP");
@@ -748,7 +748,7 @@ public class TileFactory {
         Node c_three = new Node();
 
         jungle0.addNodes(c_zero);
-        jungle1.addNodes(c_one, c_two, e_two, c_three);
+        jungle1.addNodes(c_one, e_two, c_three);
         lake.addNodes(e_one);
         trail.addNodes(e_zero, e_three);
 
@@ -1283,7 +1283,7 @@ public class TileFactory {
     }
 
     // |LJTJ---------------------LJTJ-|
-    // |  JUNGLE     LAKE     JUNGLE  |
+    // |     X       LAKE       X     |
     // |  JUNGLE    False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |LJTJ---------------------LJTJ-|
@@ -1304,8 +1304,8 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_zero, e_three, c_three);
-        jungle1.addNodes(c_one, e_one, c_two);
+        jungle0.addNodes(e_three, c_three);
+        jungle1.addNodes(e_one, c_two);
         trail.addNodes(e_two);
         lake.addNodes(e_zero);
 
@@ -1337,7 +1337,7 @@ public class TileFactory {
     }
 
     // |LJTJD--------------------LJTJD|
-    // |  JUNGLE     LAKE     JUNGLE  |
+    // |     X      LAKE         X    |
     // |  JUNGLE    False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |LJTJD--------------------LJTJD|
@@ -1358,8 +1358,8 @@ public class TileFactory {
         Node c_two = new Node();
         Node c_three = new Node();
 
-        jungle0.addNodes(c_zero, e_three, c_three);
-        jungle1.addNodes(c_one, e_one, c_two);
+        jungle0.addNodes(e_three, c_three);
+        jungle1.addNodes(e_one, c_two);
         trail.addNodes(e_two);
         lake.addNodes(e_zero);
 
