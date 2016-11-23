@@ -6,6 +6,7 @@ import entities.overlay.TileSection;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LakeScorer extends Scorer {
@@ -19,8 +20,8 @@ public class LakeScorer extends Scorer {
     public int score() {
         List<TileSection> tileSections = regionToScore.getTileSections();
 
-        HashSet<Tile> regionTiles = new HashSet<>();
-        HashSet<PreyAnimal> foundPreyAnimals = new HashSet<>();
+        Set<Tile> regionTiles = new HashSet<>();
+        Set<PreyAnimal> foundPreyAnimals = new HashSet<>();
 
         // Collect all of the unique tiles in the region
         regionTiles.addAll(tileSections.stream().map(TileSection::getTile).collect(Collectors.toList()));

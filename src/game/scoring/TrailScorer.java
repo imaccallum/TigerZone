@@ -1,7 +1,6 @@
 package game.scoring;
 
 import entities.board.Tile;
-import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 import java.util.HashSet;

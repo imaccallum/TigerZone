@@ -3,7 +3,6 @@ package game.scoring;
 import entities.board.Tiger;
 import entities.overlay.Region;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scorer {
