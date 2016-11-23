@@ -144,7 +144,7 @@ public class Tile {
     }
 
     // Get whether the tile has a crocodile.
-    public boolean isHasCrocodile() {
+    public boolean hasCrocodile() {
         return hasCrocodile;
     }
 

@@ -1,7 +1,6 @@
 package game.scoring;
 
 import entities.board.PreyAnimal;
-import entities.board.Tiger;
 import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TileSection;
@@ -23,18 +22,29 @@ public class LakeScorer extends Scorer {
         int score = tileSections.size()*2, multiplier = 1;
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BOAR)
+            if(tile.getPreyAnimal() == PreyAnimal.BOAR){
                 multiplier++;
+                break;
+            }
         }
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.DEER)
+            if(tile.getPreyAnimal() == PreyAnimal.DEER) {
                 multiplier++;
+                break;
+            }
         }
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO)
+            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO){
                 multiplier++;
+                break;
+            }
+        }
+        for (Tile tile: regionTiles) {
+            if (tile.hasCrocodile()){
+                multiplier--;
+            }
         }
 
         super.returnTigers(region);
@@ -55,22 +65,34 @@ public class LakeScorer extends Scorer {
         int score = tileSections.size(), multiplier = 1;
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BOAR)
+            if(tile.getPreyAnimal() == PreyAnimal.BOAR){
                 multiplier++;
+                break;
+            }
         }
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.DEER)
+            if(tile.getPreyAnimal() == PreyAnimal.DEER) {
                 multiplier++;
+                break;
+            }
         }
 
         for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO)
+            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO){
                 multiplier++;
+                break;
+            }
+        }
+
+        for (Tile tile: regionTiles) {
+            if (tile.hasCrocodile()){
+                multiplier--;
+            }
         }
 
         super.returnTigers(region);
 
-        return score * multiplier;
+        return score * (multiplier < 1 ? 1 : multiplier);
     }
 }
