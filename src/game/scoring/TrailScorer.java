@@ -21,7 +21,7 @@ public class TrailScorer extends Scorer {
         for(Tile tile : regionTiles){
             if(tile.getPreyAnimal() != null)
                 predationScore++;
-            else if(tile.isHasCrocodile()){
+            else if(tile.hasCrocodile()){
                 predationScore--;
             }
         }
