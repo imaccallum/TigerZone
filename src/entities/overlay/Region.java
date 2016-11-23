@@ -103,9 +103,9 @@ public class Region {
      */
     public Scorer getScorer() {
         switch (terrain) {
-            case TRAIL: return new TrailScorer();
-            case LAKE: return new LakeScorer();
-            case JUNGLE: return new JungleScorer();
+            case TRAIL: return new TrailScorer(this);
+            case LAKE: return new LakeScorer(this);
+            case JUNGLE: return new JungleScorer(this);
         }
 
         return null;
