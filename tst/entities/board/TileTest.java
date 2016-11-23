@@ -129,7 +129,6 @@ public class TileTest {
         if (testTile.getEdge(EdgeLocation.LEFT) != null) {
             Assert.assertEquals(clockwiseNodes.get(7), testTile.getEdge(EdgeLocation.LEFT));
         }
-        System.out.println(testTile.toString());
     }
 
     @Test
