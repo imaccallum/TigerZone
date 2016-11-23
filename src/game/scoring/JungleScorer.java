@@ -3,6 +3,7 @@ package game.scoring;
 import entities.board.Terrain;
 import entities.board.Tile;
 import entities.overlay.Region;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class JungleScorer extends Scorer {
         int score = 0;
         // To avoid repeated adjacent den bonueses or repeated adjacent lake bonuses, keep track of what we've counted
         Set<Region> adjacentLakes = new HashSet<>();
-        Set<Tile> denTiles = new HashSet<>();
+        Set<TigerDen> dens = new HashSet<>();
         for (TileSection tileSection : regionToScore.getTileSections()) {
             // For each tile section find adjacent tile sections
             Tile tile = tileSection.getTile();
@@ -49,9 +50,9 @@ public class JungleScorer extends Scorer {
                     score += jungleAdjacentLakeBonus;
                 }
             }
-            if (tile.hasDen() && !denTiles.contains(tile)) {
+            if (tile.getDen() != null && tile.getDen().isComplete() && !dens.contains(tile.getDen())) {
                 // Tile has a den and the tile has not been counted yet, add to score and counted den tiles
-                denTiles.add(tile);
+                dens.add(tile.getDen());
                 score += jungleAdjacentDenBonus;
             }
         }

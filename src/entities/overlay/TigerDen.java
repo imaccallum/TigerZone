@@ -17,17 +17,9 @@ public class TigerDen {
 
     /**
      * Construct a tiger den with a given center point and the board it is on
-     *
-     * @param centerTileLocation,
-     * the center point of the tiger den, will be the coordinate of the tile the tiger den is on
-     *
-     * @param board,
-     * the board that the tiger den is on, used to validate if it is complete
      */
-    public TigerDen(Point centerTileLocation, Board board) {
+    public TigerDen() {
         requiredTileLocations = new HashMap<>();
-        this.board = board;
-        this.centerTileLocation = centerTileLocation;
         updateRequiredLocations();
     }
 
@@ -76,27 +68,39 @@ public class TigerDen {
         return requiredTileLocations;
     }
 
+    // Set the center tile location
+    public void setCenterTileLocation(Point centerTileLocation) {
+        this.centerTileLocation = centerTileLocation;
+    }
+
+    // Set the board
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     // MARK: Private functions
 
     //
     // Update the required locations by checking the board again to see if the tiles have been placed
     //
     private void updateRequiredLocations() {
-        Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
-        requiredTileLocations.put(right, board.getTile(right) != null);
-        Point left = new Point(centerTileLocation.x, centerTileLocation.y - 1);
-        requiredTileLocations.put(left, board.getTile(left) != null);
-        Point above = new Point(centerTileLocation.x + 1, centerTileLocation.y);
-        requiredTileLocations.put(above, board.getTile(above) != null);
-        Point below = new Point(centerTileLocation.x - 1, centerTileLocation.y);
-        requiredTileLocations.put(below, board.getTile(below) != null);
-        Point aboveRight = new Point(centerTileLocation.x + 1, centerTileLocation.y + 1);
-        requiredTileLocations.put(aboveRight, board.getTile(aboveRight) != null);
-        Point aboveLeft = new Point(centerTileLocation.x + 1, centerTileLocation.y - 1);
-        requiredTileLocations.put(aboveLeft, board.getTile(aboveLeft) != null);
-        Point belowRight = new Point(centerTileLocation.x - 1, centerTileLocation.y + 1);
-        requiredTileLocations.put(belowRight, board.getTile(belowRight) != null);
-        Point belowLeft = new Point(centerTileLocation.x - 1, centerTileLocation.y - 1);
-        requiredTileLocations.put(belowLeft, board.getTile(belowLeft) != null);
+        if (centerTileLocation != null) {
+            Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
+            requiredTileLocations.put(right, board.getTile(right) != null);
+            Point left = new Point(centerTileLocation.x, centerTileLocation.y - 1);
+            requiredTileLocations.put(left, board.getTile(left) != null);
+            Point above = new Point(centerTileLocation.x + 1, centerTileLocation.y);
+            requiredTileLocations.put(above, board.getTile(above) != null);
+            Point below = new Point(centerTileLocation.x - 1, centerTileLocation.y);
+            requiredTileLocations.put(below, board.getTile(below) != null);
+            Point aboveRight = new Point(centerTileLocation.x + 1, centerTileLocation.y + 1);
+            requiredTileLocations.put(aboveRight, board.getTile(aboveRight) != null);
+            Point aboveLeft = new Point(centerTileLocation.x + 1, centerTileLocation.y - 1);
+            requiredTileLocations.put(aboveLeft, board.getTile(aboveLeft) != null);
+            Point belowRight = new Point(centerTileLocation.x - 1, centerTileLocation.y + 1);
+            requiredTileLocations.put(belowRight, board.getTile(belowRight) != null);
+            Point belowLeft = new Point(centerTileLocation.x - 1, centerTileLocation.y - 1);
+            requiredTileLocations.put(belowLeft, board.getTile(belowLeft) != null);
+        }
     }
 }

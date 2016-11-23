@@ -121,8 +121,11 @@ public class Board {
             openTileLocations.add(new Point(col, row+1));
         }
 
-        if (tile.hasDen()) {
-            tigerDens.add(new TigerDen(location, this));
+        if (tile.getDen() != null) {
+            TigerDen den = tile.getDen();
+            den.setCenterTileLocation(location);
+            den.setBoard(this);
+            tigerDens.add(den);
         }
 
         lastTilePlaced = tile;
