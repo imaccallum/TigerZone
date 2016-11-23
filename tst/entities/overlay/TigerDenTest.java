@@ -6,12 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TigerDenTest {
     private Tile mockTile;
@@ -58,17 +55,17 @@ public class TigerDenTest {
 
     private Board createCompleteDenMockBoard() {
         Board board = mock(Board.class);
-        // Setup surrounding points to return mock tiles
+        //Setup surrounding points to return mock tiles
         when(board.getTile(center)).thenReturn(mockTile);
         for (Point point : surroundingPoints) {
-            when(board.getTile(point)).thenReturn(mockTile);
+        //    when(board.getTile(point)).thenReturn(mockTile);
         }
         return board;
     }
 
     private Board createIncompleteDenMockBoard(Point removed) {
         Board board = createCompleteDenMockBoard();
-        // Setup to remove the one point wanted to be removed
+        //Setup to remove the one point wanted to be removed
         when(board.getTile(removed)).thenReturn(null);
         return board;
     }
