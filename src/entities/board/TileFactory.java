@@ -1,6 +1,7 @@
 package entities.board;
 
 import entities.overlay.Region;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 import exceptions.IncompatibleTerrainException;
 
@@ -87,7 +88,7 @@ public class TileFactory {
     private Tile makeTileB() {
         Tile tile = new Tile("JJJJX");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
-        tile.setHasDen(true);
+        tile.setDen(new TigerDen());
 
         Node e_zero = new Node();
         Node e_one = new Node();
@@ -121,7 +122,7 @@ public class TileFactory {
     private Tile makeTileC() {
         Tile tile = new Tile("JJTJX");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
-        tile.setHasDen(true);
+        tile.setDen(new TigerDen());
         TileSection trail = new TileSection(Terrain.TRAIL);
 
         Node e_zero = new Node();

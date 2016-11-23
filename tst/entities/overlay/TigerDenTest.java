@@ -39,7 +39,9 @@ public class TigerDenTest {
 
     @Test
     public void testCompletedDenShowsItIsCompleted() {
-        TigerDen den = new TigerDen(center, createCompleteDenMockBoard());
+        TigerDen den = new TigerDen();
+        den.setCenterTileLocation(center);
+        den.setBoard(createCompleteDenMockBoard());
         Assert.assertTrue(den.isComplete());
     }
 
@@ -47,7 +49,9 @@ public class TigerDenTest {
     public void testIncompleteDensShouldShowIncomplete() {
         for (Point surroundingPoint : surroundingPoints) {
             Board board = createIncompleteDenMockBoard(surroundingPoint);
-            TigerDen den = new TigerDen(center, board);
+            TigerDen den = new TigerDen();
+            den.setCenterTileLocation(center);
+            den.setBoard(board);
             Assert.assertFalse(den.isComplete());
         }
     }
