@@ -295,7 +295,6 @@ public class TileFactory {
 
         Node c_zero = new Node();
         Node c_one = new Node();
-        Node c_two = new Node();
         Node c_three = new Node();
 
         jungle0.addNodes(c_three, e_two, c_one, e_one);
@@ -309,7 +308,6 @@ public class TileFactory {
 
        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
-       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, trail);
@@ -437,9 +435,6 @@ public class TileFactory {
         Node e_two = new Node();
         Node e_three = new Node();
 
-        Node c_zero = new Node();
-        Node c_one = new Node();
-
         lake.addNodes(e_one, e_two, e_three);
         jungle.addNodes(e_zero);
 
@@ -447,9 +442,6 @@ public class TileFactory {
         tile.setEdge(e_one, EdgeLocation.RIGHT);
         tile.setEdge(e_two, EdgeLocation.BOTTOM);
         tile.setEdge(e_three, EdgeLocation.LEFT);
-
-       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(lake, jungle);
 
@@ -479,10 +471,6 @@ public class TileFactory {
         Node e_two = new Node();
         Node e_three = new Node();
 
-        Node c_zero = new Node();
-        Node c_two = new Node();
-        Node c_three = new Node();
-
         lake.addNodes(e_zero, e_one);
         jungle.addNodes(e_two, e_three);
 
@@ -490,10 +478,6 @@ public class TileFactory {
         tile.setEdge(e_one, EdgeLocation.RIGHT);
         tile.setEdge(e_two, EdgeLocation.BOTTOM);
         tile.setEdge(e_three, EdgeLocation.LEFT);
-
-       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
-       tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(lake, jungle);
 
@@ -604,9 +588,6 @@ public class TileFactory {
         Node e_two = new Node();
         Node e_three = new Node();
 
-        Node c_zero = new Node();
-        Node c_one = new Node();
-
         jungle.addNodes(e_three, e_two, e_one);
         lake.addNodes(e_zero);
 
@@ -614,9 +595,6 @@ public class TileFactory {
         tile.setEdge(e_one, EdgeLocation.RIGHT);
         tile.setEdge(e_two, EdgeLocation.BOTTOM);
         tile.setEdge(e_three, EdgeLocation.LEFT);
-
-       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
 
         tile.addTileSections(jungle, lake);
 
@@ -690,7 +668,6 @@ public class TileFactory {
 
         Node c_zero = new Node();
         Node c_one = new Node();
-        Node c_two = new Node();
         Node c_three = new Node();
 
         jungle0.addNodes(c_zero);
@@ -705,7 +682,6 @@ public class TileFactory {
 
        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
-       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
@@ -744,7 +720,6 @@ public class TileFactory {
 
         Node c_zero = new Node();
         Node c_one = new Node();
-        Node c_two = new Node();
         Node c_three = new Node();
 
         jungle0.addNodes(c_zero);
@@ -759,7 +734,6 @@ public class TileFactory {
 
        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
-       tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
         tile.addTileSections(jungle0, jungle1, lake, trail);
@@ -1299,8 +1273,6 @@ public class TileFactory {
         Node e_two = new Node();
         Node e_three = new Node();
 
-        Node c_zero = new Node();
-        Node c_one = new Node();
         Node c_two = new Node();
         Node c_three = new Node();
 
@@ -1314,8 +1286,6 @@ public class TileFactory {
         tile.setEdge(e_two, EdgeLocation.BOTTOM);
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
-       tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-       tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
        tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
        tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
@@ -1353,8 +1323,6 @@ public class TileFactory {
         Node e_two = new Node();
         Node e_three = new Node();
 
-        Node c_zero = new Node();
-        Node c_one = new Node();
         Node c_two = new Node();
         Node c_three = new Node();
 
@@ -1368,8 +1336,6 @@ public class TileFactory {
         tile.setEdge(e_two, EdgeLocation.BOTTOM);
         tile.setEdge(e_three, EdgeLocation.LEFT);
 
-        tile.setCorner(c_zero, CornerLocation.TOP_LEFT);
-        tile.setCorner(c_one, CornerLocation.TOP_RIGHT);
         tile.setCorner(c_two, CornerLocation.BOTTOM_RIGHT);
         tile.setCorner(c_three, CornerLocation.BOTTOM_LEFT);
 
