@@ -15,6 +15,15 @@ public class TigerDen {
     private Map<Point, Boolean> requiredTileLocations;
     private Board board;
 
+    /**
+     * Construct a tiger den with a given center point and the board it is on
+     *
+     * @param centerTileLocation,
+     * the center point of the tiger den, will be the coordinate of the tile the tiger den is on
+     *
+     * @param board,
+     * the board that the tiger den is on, used to validate if it is complete
+     */
     public TigerDen(Point centerTileLocation, Board board) {
         requiredTileLocations = new HashMap<>();
         this.board = board;
@@ -22,6 +31,14 @@ public class TigerDen {
         updateRequiredLocations();
     }
 
+    /**
+     * Places a tiger on the board
+     *
+     * @param tiger,
+     * The tiger to be placed in the den
+     *
+     * @throws TigerAlreadyPlacedException if there is already a tiger present in the den
+     */
     public void placeTiger(Tiger tiger) throws TigerAlreadyPlacedException {
         if (this.tiger != null) {
             throw new TigerAlreadyPlacedException("Attempted to place tiger in den that already has tiger");
@@ -31,14 +48,12 @@ public class TigerDen {
         }
     }
 
-    public Point getCenterTileLocation() {
-        return centerTileLocation;
-    }
-
-    public Map<Point, Boolean> getRequiredTigerLocations() {
-        return requiredTileLocations;
-    }
-
+    /**
+     * See whether or not the tiger den is complete, checks if the surrounding tiles are present
+     *
+     * @return
+     * The boolean representing this state
+     */
     public boolean isComplete() {
         boolean complete = true;
         // Ensure that all tiles have been placed in the required tiles
@@ -49,6 +64,23 @@ public class TigerDen {
         return complete;
     }
 
+    // MARK: Getters and Setters
+
+    // Get the center tile location of the den
+    public Point getCenterTileLocation() {
+        return centerTileLocation;
+    }
+
+    // Get the required tile locations to complete the den
+    public Map<Point, Boolean> getRequiredTileLocations() {
+        return requiredTileLocations;
+    }
+
+    // MARK: Private functions
+
+    //
+    // Update the required locations by checking the board again to see if the tiles have been placed
+    //
     private void updateRequiredLocations() {
         Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
         requiredTileLocations.put(right, board.getTile(right) != null);

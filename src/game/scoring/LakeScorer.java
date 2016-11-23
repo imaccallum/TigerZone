@@ -7,92 +7,53 @@ import entities.overlay.TileSection;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LakeScorer extends Scorer {
-    @Override
-    public int score(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-
-        HashSet<Tile> regionTiles = new HashSet<>();
-
-        for(TileSection tileSection : tileSections){
-            regionTiles.add(tileSection.getTile());
-        }
-
-        int score = tileSections.size()*2, multiplier = 1;
-
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BOAR){
-                multiplier++;
-                break;
-            }
-        }
-
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.DEER) {
-                multiplier++;
-                break;
-            }
-        }
-
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO){
-                multiplier++;
-                break;
-            }
-        }
-        for (Tile tile: regionTiles) {
-            if (tile.hasCrocodile()){
-                multiplier--;
-            }
-        }
-
-        super.returnTigers(region);
-
-        return score * multiplier;
+    /**
+     * Construct a scorer for a lake
+     *
+     * @param regionToScore,
+     * The lake region to be scored
+     */
+    public LakeScorer(Region regionToScore) {
+        this.regionToScore = regionToScore;
     }
 
+    /**
+     * Score the lake by getting all of the unique tiles, checking for prey animals, and accounting for crocodiles
+     *
+     * @return
+     * The score of the lake
+     */
     @Override
-    public int scoreAtEnd(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
+    public int score() {
+        List<TileSection> tileSections = regionToScore.getTileSections();
 
-        HashSet<Tile> regionTiles = new HashSet<>();
+        Set<Tile> regionTiles = new HashSet<>();
+        Set<PreyAnimal> foundPreyAnimals = new HashSet<>();
 
-        for(TileSection tileSection : tileSections){
-            regionTiles.add(tileSection.getTile());
-        }
+        // Collect all of the unique tiles in the region
+        regionTiles.addAll(tileSections.stream().map(TileSection::getTile).collect(Collectors.toList()));
 
-        int score = tileSections.size(), multiplier = 1;
+        int scorePerTile = regionToScore.isFinished() ? completeLakeScorePerTile : incompleteLakeScorePerTile;
+        int baseScore = scorePerTile * tileSections.size();
 
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BOAR){
-                multiplier++;
-                break;
+        // Add the prey animals to the found prey animals if there is one there and count the crocodiles
+        int numberOfCrocodiles = 0;
+        for (Tile tile : regionTiles) {
+            if (tile.hasCrocodile()) {
+                ++numberOfCrocodiles;
+            }
+            if (tile.getPreyAnimal() != null) {
+                foundPreyAnimals.add(tile.getPreyAnimal());
             }
         }
 
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.DEER) {
-                multiplier++;
-                break;
-            }
-        }
-
-        for(Tile tile : regionTiles){
-            if(tile.getPreyAnimal() == PreyAnimal.BUFFALO){
-                multiplier++;
-                break;
-            }
-        }
-
-        for (Tile tile: regionTiles) {
-            if (tile.hasCrocodile()){
-                multiplier--;
-            }
-        }
-
-        super.returnTigers(region);
-
-        return score * (multiplier < 1 ? 1 : multiplier);
+        super.returnTigers();
+        int uniquePreyAnimals = foundPreyAnimals.size() - numberOfCrocodiles;
+        int multiplier = uniquePreyAnimals > 0 ? uniquePreyAnimals : 1;
+        return baseScore * multiplier;
     }
 }
