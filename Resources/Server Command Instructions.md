@@ -7,7 +7,7 @@ Go into the directory with the server code
 
 Make sure your jdk has the correct path
 - For me, this meant putting this into the command prompt:
-- set path=%path%;C:\Java\jdk1.8.0_73\bin
+- set path=%path%;C:\Program Files\Java\jdk1.8.0_73\bin
 - You might have the same directory; you might have a different one. That's the specific path to get to the jdk bin file on my laptop.
 
 Compile the code using javac

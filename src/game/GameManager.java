@@ -115,7 +115,7 @@ public class GameManager {
                 System.out.println(gm.getBoard().getFilledValues());
             }
 
-   //         System.out.println("------------------------");
+            //         System.out.println("------------------------");
 
         }
 

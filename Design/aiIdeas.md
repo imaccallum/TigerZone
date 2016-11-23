@@ -1,5 +1,8 @@
 ## Ideas for the AI
 
+# First two turns of game
+- Try to place a Tiger on an region that's unclaimed, since it's very likely that they will expand (worth many points in end) or close quickly if it's a lake.
+
 # Placing Tigers
 - When placing a tile, iterate over all the possibilities, if by placing the tile on some of them, 
  can complete a Region, find the largest one that meets the criteria, complete it and place a Tiger on it.
@@ -21,7 +24,7 @@ closed Den and it is not claimed, place the Tile on that spot and use a Tiger.
 
 ### Notes:
 - All of these possible moves can be ranked into a highest reward system when iterating to optimize the best move 
-(Or the one that yields the highest score)
+(Or the one that yields the highest score) (I really think this is the best route - Trevor)
 - Counters could be kept to hold the reward system, and once we are done iterating. Retrieve the x and Y coordinates for the best move.
 - Some of the possible moves can be a affected by:
     - Number of Tigers left
