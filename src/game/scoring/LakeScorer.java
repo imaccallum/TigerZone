@@ -2,6 +2,7 @@ package game.scoring;
 
 import entities.board.PreyAnimal;
 import entities.board.Tile;
+import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 import java.util.HashSet;
@@ -10,6 +11,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LakeScorer extends Scorer {
+    /**
+     * Construct a scorer for a lake
+     *
+     * @param regionToScore,
+     * The lake region to be scored
+     */
+    public LakeScorer(Region regionToScore) {
+        this.regionToScore = regionToScore;
+    }
+
     /**
      * Score the lake by getting all of the unique tiles, checking for prey animals, and accounting for crocodiles
      *

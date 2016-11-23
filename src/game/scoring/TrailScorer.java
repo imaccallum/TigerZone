@@ -1,6 +1,7 @@
 package game.scoring;
 
 import entities.board.Tile;
+import entities.overlay.Region;
 import entities.overlay.TileSection;
 
 import java.util.HashSet;
@@ -9,6 +10,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TrailScorer extends Scorer {
+    /**
+     * Construct a scorer for a trail
+     *
+     * @param regionToScore,
+     * The trail region to be scored
+     */
+    public TrailScorer(Region regionToScore) {
+        this.regionToScore = regionToScore;
+    }
     /**
      * Score the game trail based on the number of tiles and the number of crocodiles and prey animals
      *
