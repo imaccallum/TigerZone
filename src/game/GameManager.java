@@ -18,7 +18,6 @@ public class GameManager {
     private int playerTurn;
 
     // *TODO PlayerNotifier notifier;
-    // *TODO RegionLinker regionLinker;
 
     private Board board;
 
@@ -101,7 +100,7 @@ public class GameManager {
             if(tileOptions.size() > 0) {
                 int random = (int) (Math.random() * tileOptions.size());
                 LocationAndOrientation optimalPlacement = tileOptions.get(random);
-                System.out.println("Inserted " + t.type + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+                System.out.println("Inserted " + t.getType() + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
                     t.getTileSections().get(0).placeTiger(new Tiger(p1));
@@ -111,11 +110,12 @@ public class GameManager {
                 System.out.println("No valid moves, discarding tile.");
             }
             if(deck.size() == 0) {
+                System.out.println(gm.getBoard().toString());
                 gm.getBoard().log();
-                System.out.println(gm.getBoard().getFilledValues());
+                System.out.println(gm.getBoard().getNumTiles());
             }
 
-   //         System.out.println("------------------------");
+            //         System.out.println("------------------------");
 
         }
 

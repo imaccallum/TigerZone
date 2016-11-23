@@ -39,7 +39,17 @@ public class TigerDen {
         return requiredTileLocations;
     }
 
-    public void updateRequiredLocations(){
+    public boolean isComplete() {
+        boolean complete = true;
+        // Ensure that all tiles have been placed in the required tiles
+        updateRequiredLocations();
+        for (Boolean tilePlaced : requiredTileLocations.values()) {
+            complete = complete && tilePlaced;
+        }
+        return complete;
+    }
+
+    private void updateRequiredLocations() {
         Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
         requiredTileLocations.put(right, board.getTile(right) != null);
         Point left = new Point(centerTileLocation.x, centerTileLocation.y - 1);
@@ -56,15 +66,5 @@ public class TigerDen {
         requiredTileLocations.put(belowRight, board.getTile(belowRight) != null);
         Point belowLeft = new Point(centerTileLocation.x - 1, centerTileLocation.y - 1);
         requiredTileLocations.put(belowLeft, board.getTile(belowLeft) != null);
-    }
-
-    public boolean isComplete() {
-        boolean complete = true;
-        // Ensure that all tiles have been placed in the required tiles
-        updateRequiredLocations();
-        for (Boolean tilePlaced : requiredTileLocations.values()) {
-            complete = complete && tilePlaced;
-        }
-        return complete;
     }
 }
