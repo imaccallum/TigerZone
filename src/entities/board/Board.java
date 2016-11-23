@@ -172,19 +172,7 @@ public class Board {
         return validPlacements;
     }
 
-    public int getFilledValues(){
-        int val = 0;
-        for(int i = 0; i < boardSize; i++){
-            for(int j = 0; j < boardSize; j++){
-                if(boardMatrix[i][j] != null)
-                    val++;
-            }
-        }
-        return val;
-    }
-
     // HAS TESTS - bookkeeping
-
     /**
      * Gets a tile at a given point on the board.  Can return null.
      * @param tileLocation,

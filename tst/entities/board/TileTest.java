@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 public class TileTest {
     private Tile testTile;
 
@@ -98,5 +100,52 @@ public class TileTest {
             numberOfNodes += tileSection.getNodes().size();
         }
         Assert.assertEquals(numberOfNodes, 7);
+    }
+
+    @Test
+    public void testClockwisenodeListShouldBeInCorrectOrder() {
+        List<Node> clockwiseNodes = testTile.nodesClockwise();
+        if (testTile.getCorner(CornerLocation.TOP_LEFT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(0), testTile.getCorner(CornerLocation.TOP_LEFT));
+        }
+        if (testTile.getEdge(EdgeLocation.TOP) != null) {
+            Assert.assertEquals(clockwiseNodes.get(1), testTile.getEdge(EdgeLocation.TOP));
+        }
+        if (testTile.getCorner(CornerLocation.TOP_RIGHT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(2), testTile.getCorner(CornerLocation.TOP_RIGHT));
+        }
+        if (testTile.getEdge(EdgeLocation.RIGHT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(3), testTile.getEdge(EdgeLocation.RIGHT));
+        }
+        if (testTile.getCorner(CornerLocation.BOTTOM_RIGHT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(4), testTile.getCorner(CornerLocation.BOTTOM_RIGHT));
+        }
+        if (testTile.getEdge(EdgeLocation.BOTTOM) != null) {
+            Assert.assertEquals(clockwiseNodes.get(5), testTile.getEdge(EdgeLocation.BOTTOM));
+        }
+        if (testTile.getCorner(CornerLocation.BOTTOM_LEFT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(6), testTile.getCorner(CornerLocation.BOTTOM_LEFT));
+        }
+        if (testTile.getEdge(EdgeLocation.LEFT) != null) {
+            Assert.assertEquals(clockwiseNodes.get(7), testTile.getEdge(EdgeLocation.LEFT));
+        }
+    }
+
+    @Test
+    public void testGettingAdjacentTileSectionsShouldReturnCorrectTileSections() {
+        //  |JLTTB--------------------JLTTB|
+        //  |  JUNGLE    JUNGLE      X     |
+        //  |  TRAIL     False      LAKE   |
+        //  |  JUNGLE    TRAIL     JUNGLE  |
+        //  |JLTTB--------------------JLTTB|
+        // Lets get the top node, we should get the Lake, and one trail as adjacent
+
+        TileSection jungle = testTile.getEdge(EdgeLocation.TOP).getTileSection();
+        Assert.assertEquals(jungle.getTerrain(), Terrain.JUNGLE);  // Make sure we got the right one
+        List<TileSection> tileSectionsAdjacent = testTile.getAdjacentTileSectionsForTileSection(jungle);
+        Assert.assertEquals(2, tileSectionsAdjacent.size());  // Two adjacent ones
+        TileSection lake = testTile.getEdge(EdgeLocation.RIGHT).getTileSection();
+        TileSection trail = testTile.getEdge(EdgeLocation.LEFT).getTileSection();
+        Assert.assertTrue(tileSectionsAdjacent.contains(lake) && tileSectionsAdjacent.contains(trail));
     }
 }
