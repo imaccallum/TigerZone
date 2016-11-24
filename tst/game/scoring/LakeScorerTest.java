@@ -75,7 +75,9 @@ public class LakeScorerTest {
         rightTile.rotateCounterClockwise(1);
     }
 
-    //TODO public void setupSixteenPointOpenLake() (will include three unique prey animals and four city tiles [4*(1+3)])
+    public void setupSixteenPointOpenLake(){
+        centerTile = factory.makeTile("JLLL-");
+    } //(will include three unique prey animals and four city tiles [4*(1+3)])
         // using Tile.setPreyAnimal(PreyAnimal.BOAR);
         // or DEER or BUFFALO
 
