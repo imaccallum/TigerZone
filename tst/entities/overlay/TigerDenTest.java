@@ -10,6 +10,9 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class TigerDenTest {
     private Tile mockTile;
     private Point center;
@@ -58,7 +61,7 @@ public class TigerDenTest {
         //Setup surrounding points to return mock tiles
         when(board.getTile(center)).thenReturn(mockTile);
         for (Point point : surroundingPoints) {
-        //    when(board.getTile(point)).thenReturn(mockTile);
+            when(board.getTile(point)).thenReturn(mockTile);
         }
         return board;
     }

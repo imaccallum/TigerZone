@@ -53,7 +53,7 @@ public class LakeScorer extends Scorer {
 
         super.returnTigers();
         int uniquePreyAnimals = foundPreyAnimals.size() - numberOfCrocodiles;
-        int multiplier = uniquePreyAnimals > 0 ? uniquePreyAnimals : 1;
-        return baseScore * multiplier;
+        int multiplier = uniquePreyAnimals > 0 ? (1+uniquePreyAnimals) : 1;
+        return baseScore * (multiplier);
     }
 }
