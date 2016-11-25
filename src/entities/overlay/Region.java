@@ -5,6 +5,7 @@ import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
 import exceptions.IncompatibleTerrainException;
+import game.messaging.info.RegionInfo;
 import game.scoring.JungleScorer;
 import game.scoring.LakeScorer;
 import game.scoring.Scorer;
@@ -179,6 +180,19 @@ public class Region {
         }
 
         return dominantList;
+    }
+
+    public RegionInfo getRegionInfo() {
+        int projectedScore = getScorer().scoreIfCompletedNow();
+        int countUnconnectedNodes = 0;
+        for (TileSection tileSection : tileSections) {
+            for (Node node : tileSection.getNodes()) {
+                if (!node.isConnected()) {
+                    ++countUnconnectedNodes;
+                }
+            }
+        }
+        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore);
     }
 
 }
