@@ -46,8 +46,6 @@ public class TrailScorer extends Scorer {
 
         int score = (regionTiles.size() * gameTrailScorePerTile) + ((predationScore > 0) ? predationScore : 0);
 
-        super.returnTigers();
-
         return score;
     }
 }
