@@ -1,10 +1,11 @@
 package game;
 
-import ai.AIManager;
+import ai.AIManager;  // TODO remove
 import entities.board.*;
 import entities.overlay.Region;
-import entities.overlay.TileSection;
+import entities.overlay.TigerDen;
 import entities.player.Player;
+import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
 import game.messaging.GameStatusMessage;
@@ -16,9 +17,7 @@ import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
-import game.scoring.Scorer;
 
-import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +52,9 @@ public class GameInteractor {
     }
     */
 
+    /**
+     * Plays the game, ending when the tile stack is empty.
+     */
     public void playGame() {
         int playerTurn = 0;
         while (!tileStack.isEmpty()) {
@@ -66,6 +68,14 @@ public class GameInteractor {
                 notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
             }
         }
+
+        board.regionsAsList().stream().filter(Region::containsTigers).forEach(region -> {
+            int score = region.getScorer().score();
+            List<String> dominantPlayerNames = region.getDominantPlayerNames();
+            for (String name : dominantPlayerNames) {
+                players.get(name).addToScore(score);
+            }
+        });
     }
 
     /**
@@ -78,9 +88,13 @@ public class GameInteractor {
      * The response to this request as a FollowerPlacementResponse
      */
     public FollowerPlacementResponse handleFollowerPlacementRequest(FollowerPlacementRequest request) {
-        if (request.isRegionPlacement()) {
+        if (!request.playerName.equals(playerTurn)) {
+            // Not the current players turn
+            return new FollowerPlacementResponse(false, false, false);
+        }
+        else if (request.isRegionPlacement()) {
             RegionTigerPlacement placement = request.regionTigerPlacement;
-            // Placeholder for push
+            // TODO Placeholder for push
             return new FollowerPlacementResponse(false, false, false);
         }
         else if (request.isTigerDenPlacement()) {
@@ -122,11 +136,44 @@ public class GameInteractor {
         }
     }
 
-    /*
     public TilePlacementResponse handleTilePlacementRequest(TilePlacementRequest request) {
+        if (!request.playerName.equals(playerTurn)) {
+            // Not the players turn
+            return new TilePlacementResponse(false, null, null, null, false);
+        }
+        else {
+            try {
+                board.place(request.tileToPlace, request.locationToPlaceAt);
+            }
+            catch (BadPlacementException exception) {
+                System.err.println(exception.getMessage());
+                return new TilePlacementResponse(false, null, null, null, false);
+            }
 
+            List<RegionTigerPlacement> regionTigerPlacements = new ArrayList<>();
+            request.tileToPlace.getTileSections().forEach(tileSection -> {
+                Region region = tileSection.getRegion();
+                RegionInfo regionInfo = region.getRegionInfo();
+                boolean regionJustFinished = region.isFinished();
+                regionTigerPlacements.add(new RegionTigerPlacement(regionInfo, regionJustFinished));
+            });
+
+            TigerDenTigerPlacement denPlacement = null;
+            if (request.tileToPlace.getDen() != null) {
+                TigerDen den = request.tileToPlace.getDen();
+                denPlacement = new TigerDenTigerPlacement(den.getCenterTileLocation(), den.getRequiredTileLocations());
+            }
+
+            List<Tiger> tigersThatCanBeStacked = players.get(request.playerName).getPlacedTigers().stream()
+                    .filter(tiger -> !tiger.isStacked())
+                    .collect(Collectors.toList());
+
+            boolean canPlaceCrocodile = false; // TODO request.tileToPlace.canPlaceCrocodile();
+
+            return new TilePlacementResponse(true, regionTigerPlacements, denPlacement,
+                                             tigersThatCanBeStacked, canPlaceCrocodile);
+        }
     }
-    */
 
     private boolean attemptTigerPlacementInDen(FollowerPlacementRequest request) {
         TigerDenTigerPlacement placement = request.denTigerPlacement;
@@ -148,7 +195,8 @@ public class GameInteractor {
                 board.getLastPlacedTile().getDen().placeTiger(tigerToPlace);
                 board.addPlacedTiger(tigerToPlace);
                 return true;
-            } catch(TigerAlreadyPlacedException exception) {
+            }
+            catch(TigerAlreadyPlacedException exception) {
                 System.err.println(exception.getMessage());
                 // Tiger already in den, placed nothing, invalid move
                 return false;
@@ -166,7 +214,8 @@ public class GameInteractor {
             board.stackTiger(tigerToStack);
             players.get(request.playerName).decrementRemainingTigers();
             return true;
-        } catch (StackingTigerException exception) {
+        }
+        catch (StackingTigerException exception) {
             System.err.println(exception.getMessage());
             return false;
         }
@@ -196,26 +245,12 @@ public class GameInteractor {
         List<Region> regions = board.regionsAsList();
         List<RegionInfo> openRegionsInfo = regions.stream()
                 .filter(region -> !region.isFinished())
-                .map(this::parseOpenRegionInfo)
+                .map(Region::getRegionInfo)
                 .collect(Collectors.toList());
         List<PlayerInfo> playersInfo = playerList.stream()
                 .map(Player::getPlayerInfo)
                 .collect(Collectors.toList());
         return new GameStatusMessage(openRegionsInfo, playersInfo);
-    }
-
-    private RegionInfo parseOpenRegionInfo(Region region) {
-        Scorer scorer = region.getScorer();
-        int projectedScore = scorer.scoreIfCompletedNow();
-        int countUnconnectedNodes = 0;
-        for (TileSection tileSection : region.getTileSections()) {
-            for (Node node : tileSection.getNodes()) {
-                if (!node.isConnected()) {
-                    ++countUnconnectedNodes;
-                }
-            }
-        }
-        return new RegionInfo(region.getRegionId(), countUnconnectedNodes, projectedScore);
     }
 
     public static void main(String[] args) throws Exception {
@@ -285,7 +320,8 @@ public class GameInteractor {
                     t.getTileSections().get(0).placeTiger(new Tiger(p1.getName(), false));
                 }
                 gm.board.place(t, optimalPlacement.getLocation());
-            } else {
+            }
+            else {
                 System.out.println("No valid moves, discarding tile.");
             }
             if(deck.size() == 0) {
