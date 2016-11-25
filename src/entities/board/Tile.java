@@ -11,7 +11,7 @@ public class Tile {
 
     //			    Edge[0]
     //		Corner[0]	Corner[1]
-    //	Edge[3]		Center		Edge[1]
+    //	Edge[3]		    		Edge[1]
     //		Corner[3]	Corner[2]
     //			    Edge[2]
 

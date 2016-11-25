@@ -1,13 +1,15 @@
 package entities.player;
 
 public class Player {
-    private String name;
+    private final String name;
+    private final PlayerNotifier notifier;
     private int score;
     private int remainingTigers;
     private int remainingCrocodiles;
 
-    public Player(String name){
+    public Player(String name, PlayerNotifier notifier){
         this.name = name;
+        this.notifier = notifier;
         remainingTigers = 7;
         remainingCrocodiles = 2;
         score = 0;
@@ -51,5 +53,9 @@ public class Player {
 
     public void decrementRemainingCrocodiles(){
         remainingCrocodiles--;
+    }
+
+    public PlayerNotifier getPlayerNotifier() {
+        return notifier;
     }
 }
