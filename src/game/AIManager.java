@@ -12,12 +12,12 @@ public class AIManager {
     private Board board;
     private Map<LocationAndOrientation, Integer> moves;
 
-    public AIManager(Board board){
+    public AIManager(Board board) {
         this.board = board;
         moves = new HashMap<>();
     }
 
-    public LocationAndOrientation getBestMove(){
+    public LocationAndOrientation getBestMove() {
         int maxScore = Collections.max(moves.values());
         for (Map.Entry<LocationAndOrientation, Integer> entry : moves.entrySet()) {
             if (entry.getValue() == maxScore) {
@@ -28,17 +28,17 @@ public class AIManager {
     }
 
     // Use function through the Board's findValidTilePlacements()
-    public void parseScoreForPossibleMove(LocationAndOrientation locationAndOrientation, Tile tile, Player player){
+    public void parseScoreForPossibleMove(LocationAndOrientation locationAndOrientation, Tile tile, Player player) {
         int score, tileScore, preyScore;
         score = tileScore = preyScore = 0;
 
         // Assumes you have inserted the tile and will delete it later on if the move is not optimal
-        for (TileSection tileSection: tile.getTileSections()){
+        for (TileSection tileSection: tile.getTileSections()) {
             Scorer scorer= tileSection.getRegion().getScorer();
             int regionScore = scorer.score();
 
-            if (tileSection.getRegion().getDominantPlayers().contains(player)){
-                if (tileSection.getRegion().getDominantPlayers().size() == 1){
+            if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
+                if (tileSection.getRegion().getDominantPlayerNames().size() == 1) {
                     tileScore += regionScore;
                 }
                 else {
@@ -54,7 +54,7 @@ public class AIManager {
         moves.put(locationAndOrientation, score);
     }
 
-    public void clearMoves(){
+    public void clearMoves() {
         moves.clear();
     }
 }

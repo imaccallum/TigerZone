@@ -1,10 +1,8 @@
 package entities.player;
 
-import entities.overlay.TileSection;
-
-import java.util.List;
+import game.messaging.GameStatusMessage;
 
 public interface PlayerNotifier {
-    void notifyTigerPlacementOptions(List<TileSection> tileSections);
-    void notifyEndTurnStatus(EndTurnStatus status);
+    void notifyGameStatus(GameStatusMessage message);
+    void notifyTurn();
 }
