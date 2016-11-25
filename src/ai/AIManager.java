@@ -98,7 +98,7 @@ public class AIManager implements PlayerNotifier {
             // DECIDE FOLLOWER PLACEMENT HERE
 
             // Find a tiger to stack
-            List<Tiger> placedTigers = aiPlayerInfo.placedTigers;
+            Set<Tiger> placedTigers = aiPlayerInfo.placedTigers;
 
             /*
             FollowerPlacementResponse followerPlacementResponse = gameInteractor.handleFollowerPlacementRequest(...);

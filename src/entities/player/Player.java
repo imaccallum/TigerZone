@@ -1,11 +1,19 @@
 package entities.player;
 
+import entities.board.Tiger;
+import game.messaging.info.PlayerInfo;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Player {
     private final String name;
     private final PlayerNotifier notifier;
     private int score;
     private int remainingTigers;
     private int remainingCrocodiles;
+    private Set<Tiger> placedTigers;
 
     public Player(String name, PlayerNotifier notifier){
         this.name = name;
@@ -13,6 +21,21 @@ public class Player {
         remainingTigers = 7;
         remainingCrocodiles = 2;
         score = 0;
+        placedTigers = new HashSet<>();
+    }
+
+    public void addPlacedTiger(Tiger tiger) {
+        placedTigers.add(tiger);
+    }
+
+    public void removePLacedTiger(Tiger tiger) {
+        placedTigers.remove(tiger);
+    }
+
+    public PlayerInfo getPlayerInfo() {
+        Set<Tiger> placedTigersCopy = new HashSet<>();
+        placedTigersCopy.addAll(placedTigers);
+        return new PlayerInfo(name, score, remainingTigers, remainingCrocodiles, placedTigersCopy);
     }
 
     public String getName() {
@@ -57,5 +80,9 @@ public class Player {
 
     public PlayerNotifier getPlayerNotifier() {
         return notifier;
+    }
+
+    public Set<Tiger> getPlacedTigers() {
+        return placedTigers;
     }
 }

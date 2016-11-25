@@ -1,27 +1,33 @@
 package game;
 
 import ai.AIManager;
-import entities.board.Board;
-import entities.board.Tiger;
-import entities.board.Tile;
-import entities.board.TileFactory;
+import entities.board.*;
+import entities.overlay.Region;
+import entities.overlay.TileSection;
 import entities.player.Player;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
+import game.messaging.GameStatusMessage;
+import game.messaging.info.PlayerInfo;
+import game.messaging.info.RegionInfo;
 import game.messaging.info.RegionTigerPlacement;
 import game.messaging.info.TigerDenTigerPlacement;
 import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
+import game.scoring.Scorer;
 
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameInteractor {
     private Map<String, Player> players;
+    private List<Player> playerList;
     private String playerTurn;
+    private Stack<Tile> tileStack;
 
     // *TODO PlayerNotifier notifier;
 
@@ -29,10 +35,12 @@ public class GameInteractor {
 
     public GameInteractor(Stack<Tile> stack) {
         board = new Board(stack.size(), stack.pop());
+        tileStack = stack;
     }
 
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
+        playerList.add(player);
     }
 
     /*
@@ -44,6 +52,21 @@ public class GameInteractor {
         }
     }
     */
+
+    public void playGame() {
+        int playerTurn = 0;
+        while (!tileStack.isEmpty()) {
+            Player player = playerList.get(playerTurn);
+            playerTurn = (playerTurn + 1) % playerList.size();
+            Tile tileToPlace = tileStack.pop();
+            List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tileToPlace);
+            player.getPlayerNotifier().startTurn(tileToPlace, validPlacements);
+            GameStatusMessage gameStatusMessage = createGameStatusMessage();
+            for (Player notifyingPlayer : playerList) {
+                notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
+            }
+        }
+    }
 
     /**
      * Handle the placement of a follower as described in a follower placement request
@@ -169,7 +192,33 @@ public class GameInteractor {
         */
     }
 
-    public static void main(String[] args) throws IOException, BadPlacementException, exceptions.BadPlacementException, TigerAlreadyPlacedException {
+    private GameStatusMessage createGameStatusMessage() {
+        List<Region> regions = board.regionsAsList();
+        List<RegionInfo> openRegionsInfo = regions.stream()
+                .filter(region -> !region.isFinished())
+                .map(this::parseOpenRegionInfo)
+                .collect(Collectors.toList());
+        List<PlayerInfo> playersInfo = playerList.stream()
+                .map(Player::getPlayerInfo)
+                .collect(Collectors.toList());
+        return new GameStatusMessage(openRegionsInfo, playersInfo);
+    }
+
+    private RegionInfo parseOpenRegionInfo(Region region) {
+        Scorer scorer = region.getScorer();
+        int projectedScore = scorer.scoreIfCompletedNow();
+        int countUnconnectedNodes = 0;
+        for (TileSection tileSection : region.getTileSections()) {
+            for (Node node : tileSection.getNodes()) {
+                if (!node.isConnected()) {
+                    ++countUnconnectedNodes;
+                }
+            }
+        }
+        return new RegionInfo(region.getRegionId(), countUnconnectedNodes, projectedScore);
+    }
+
+    public static void main(String[] args) throws Exception {
 
         //region deckArray
         String[] myarray = {"JJJJ-",

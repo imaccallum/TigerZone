@@ -2,7 +2,7 @@ package game.messaging.info;
 
 import entities.board.Tiger;
 
-import java.util.List;
+import java.util.Set;
 
 public class PlayerInfo {
     /**
@@ -28,7 +28,7 @@ public class PlayerInfo {
     /**
      * The tigers placed on the board for the player
      */
-    public final List<Tiger> placedTigers;
+    public final Set<Tiger> placedTigers;
 
     /**
      * Constructs the player info, all properties are final to protect data
@@ -49,7 +49,7 @@ public class PlayerInfo {
      * The placed tigers on the board for the player
      */
     public PlayerInfo(String playerName, int score, int remainingTigers, int remainingCrocodiles,
-                      List<Tiger> placedTigers) {
+                      Set<Tiger> placedTigers) {
         this.playerName = playerName;
         this.score = score;
         this.remainingTigers = remainingTigers;
