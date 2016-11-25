@@ -103,7 +103,7 @@ public class GameManager {
                 System.out.println("Inserted " + t.getType() + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
                 t.rotateCounterClockwise(optimalPlacement.getOrientation());
                 if(Math.random() > .9 && p1.hasRemainingTigers()){
-                    t.getTileSections().get(0).placeTiger(new Tiger(p1));
+                    t.getTileSections().get(0).placeTiger(new Tiger(p1.getName()));
                 }
                 gm.getBoard().place(t, optimalPlacement.getLocation());
             } else {

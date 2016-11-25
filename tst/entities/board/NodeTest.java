@@ -21,7 +21,7 @@ public class NodeTest {
         testNode3 = new Node();
         testTileSection1 = new TileSection(Terrain.LAKE);
         testTileSection2 = new TileSection(Terrain.JUNGLE);
-        diegoTiger = new Tiger(new Player("Diego"));
+        diegoTiger = new Tiger("Diego");
     }
 
     @Test // Should not throw

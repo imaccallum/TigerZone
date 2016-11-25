@@ -35,10 +35,8 @@ public class RegionTest {
         testRegionA = new Region(Terrain.JUNGLE);
         testRegionB = new Region(Terrain.JUNGLE);
         testRegionC = new Region(Terrain.LAKE);
-        Player diego = new Player("Diego");
-        Player trevor = new Player("Trevor");
-        diegoTiger = new Tiger(diego);
-        trevorTiger = new Tiger(trevor);
+        diegoTiger = new Tiger("diego");
+        trevorTiger = new Tiger("trevor");
     }
 
     @Test
