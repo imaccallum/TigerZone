@@ -533,4 +533,8 @@ public class Board {
             placedTigers.add(new Tiger(tigerToStack.getOwningPlayerName(), true));
         }
     }
+
+    public List<Region> regionsAsList() {
+        return new ArrayList<>(regions.values());
+    }
 }

@@ -32,13 +32,50 @@ public class LakeScorer extends Scorer {
         List<TileSection> tileSections = regionToScore.getTileSections();
 
         Set<Tile> regionTiles = new HashSet<>();
-        Set<PreyAnimal> foundPreyAnimals = new HashSet<>();
 
         // Collect all of the unique tiles in the region
         regionTiles.addAll(tileSections.stream().map(TileSection::getTile).collect(Collectors.toList()));
 
         int scorePerTile = regionToScore.isFinished() ? completeLakeScorePerTile : incompleteLakeScorePerTile;
-        int baseScore = scorePerTile * tileSections.size();
+        int baseScore = scorePerTile * regionTiles.size();
+
+
+        int multiplier = multiplier(regionTiles);
+        return baseScore * (multiplier);
+    }
+
+    /**
+     * The score of the lake if it were complete right now
+     *
+     * @return
+     * The score if completed now
+     */
+    @Override
+    public int scoreIfCompletedNow() {
+        List<TileSection> tileSections = regionToScore.getTileSections();
+
+        Set<Tile> regionTiles = new HashSet<>();
+
+        // Collect all of the unique tiles in the region
+        regionTiles.addAll(tileSections.stream().map(TileSection::getTile).collect(Collectors.toList()));
+        int baseScore = completeLakeScorePerTile * regionTiles.size();
+
+
+        int multiplier = multiplier(regionTiles);
+        return baseScore * (multiplier);
+    }
+
+    /**
+     * Get the multiplier for the pery animals
+     *
+     * @param regionTiles,
+     * The set of tiles in the region
+     *
+     * @return
+     * The integer multiplier associated with the lake
+     */
+    private int multiplier(Set<Tile> regionTiles) {
+        Set<PreyAnimal> foundPreyAnimals = new HashSet<>();
 
         // Add the prey animals to the found prey animals if there is one there and count the crocodiles
         int numberOfCrocodiles = 0;
@@ -52,7 +89,6 @@ public class LakeScorer extends Scorer {
         }
 
         int uniquePreyAnimals = foundPreyAnimals.size() - numberOfCrocodiles;
-        int multiplier = uniquePreyAnimals > 0 ? (1+uniquePreyAnimals) : 1;
-        return baseScore * (multiplier);
+        return uniquePreyAnimals > 0 ? (1 + uniquePreyAnimals) : 1;
     }
 }

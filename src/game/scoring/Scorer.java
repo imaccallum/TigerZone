@@ -20,4 +20,6 @@ public abstract class Scorer {
      * The score of the region
      */
     public abstract int score();
+
+    public abstract int scoreIfCompletedNow();
 }
