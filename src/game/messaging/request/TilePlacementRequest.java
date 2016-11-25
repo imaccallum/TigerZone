@@ -6,6 +6,11 @@ import java.awt.*;
 
 public class TilePlacementRequest {
     /**
+     * The name of the player making the request
+     */
+    public final String playerName;
+
+    /**
      * The tile to be placed on the board, must be oriented in the correct manner
      */
     public final Tile tileToPlace;
@@ -18,13 +23,17 @@ public class TilePlacementRequest {
     /**
      * Construct a tile placement request, all properties final to protect data
      *
+     * @param playerName,
+     * The name of the player making the request
+     *
      * @param tileToPlace,
      * The tile to be placed on the board, must not already be placed on the board.  Should be in final orientation.
      *
      * @param locationToPlaceAt,
      * Location to place the tile at, should be a valid location to place this tile on the board.
      */
-    public TilePlacementRequest(Tile tileToPlace, Point locationToPlaceAt) {
+    public TilePlacementRequest(String playerName, Tile tileToPlace, Point locationToPlaceAt) {
+        this.playerName = playerName;
         this.tileToPlace = tileToPlace;
         this.locationToPlaceAt = locationToPlaceAt;
     }

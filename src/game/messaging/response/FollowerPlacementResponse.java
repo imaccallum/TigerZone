@@ -2,7 +2,7 @@ package game.messaging.response;
 
 public class FollowerPlacementResponse {
     /**
-     * Whether or not a tiger was actually placed
+     * The tiger that was placed, can be null
      */
     public final boolean didPlaceTiger;
 

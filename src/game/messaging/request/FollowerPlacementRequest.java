@@ -6,6 +6,11 @@ import game.messaging.info.TigerDenTigerPlacement;
 
 public class FollowerPlacementRequest {
     /**
+     * The name of the player making the request
+     */
+    public final String playerName;
+
+    /**
      * The Region tiger placement representing where a tiger can be placed
      * Will be null if any other property is not
      */
@@ -30,8 +35,12 @@ public class FollowerPlacementRequest {
 
     /**
      * Construct a tiger placement request with niether placement, both placement properties will be null
+     *
+     * @param playerName,
+     * The name of the player making the request
      */
-    public FollowerPlacementRequest() {
+    public FollowerPlacementRequest(String playerName) {
+        this.playerName = playerName;
         this.regionTigerPlacement = null;
         this.denTigerPlacement = null;
         this.tigerToStack = null;
@@ -41,10 +50,14 @@ public class FollowerPlacementRequest {
     /**
      * Construct the FollowerPlacementRequest with a region tiger placement, sets other properties to null or false
      *
+     * @param playerName,
+     * The name of the player making the request
+     *
      * @param regionTigerPlacement,
      * The RegionTigerPlacement representing where the tiger will be placed
      */
-    public FollowerPlacementRequest(RegionTigerPlacement regionTigerPlacement) {
+    public FollowerPlacementRequest(String playerName, RegionTigerPlacement regionTigerPlacement) {
+        this.playerName = playerName;
         this.regionTigerPlacement = regionTigerPlacement;
         this.denTigerPlacement = null;
         this.tigerToStack = null;
@@ -54,10 +67,14 @@ public class FollowerPlacementRequest {
     /**
      * Construct a TigerPlacement request with a TigerDen placement, sets other properties to null or false
      *
+     * @param playerName,
+     * The name of the player making the request
+     *
      * @param denTigerPlacement,
      * The TigerDenTigerPlacement representing where the tiger will be placed
      */
-    public FollowerPlacementRequest(TigerDenTigerPlacement denTigerPlacement) {
+    public FollowerPlacementRequest(String playerName, TigerDenTigerPlacement denTigerPlacement) {
+        this.playerName = playerName;
         this.denTigerPlacement = denTigerPlacement;
         this.regionTigerPlacement = null;
         this.tigerToStack = null;
@@ -67,10 +84,14 @@ public class FollowerPlacementRequest {
     /**
      * Construct a TigerPlacement request with a tiger to stack, sets other properties to null or false
      *
+     * @param playerName,
+     * The name of the player making the request
+     *
      * @param tigerToStack,
      * The tiger that will be stacked
      */
-    public FollowerPlacementRequest(Tiger tigerToStack) {
+    public FollowerPlacementRequest(String playerName, Tiger tigerToStack) {
+        this.playerName = playerName;
         this.tigerToStack = tigerToStack;
         this.regionTigerPlacement = null;
         this.denTigerPlacement = null;
@@ -81,10 +102,14 @@ public class FollowerPlacementRequest {
      * Construct a TigerPlacement with a boolean representing whether or not a crocodile is to be placed, sets other
      * properties to null
      *
+     * @param playerName,
+     * The name of the player making the request
+     *
      * @param placeCrocodile,
      * Whether a crocodile should be placed, any value other than true here is a misuse of this API
      */
-    public FollowerPlacementRequest(boolean placeCrocodile) {
+    public FollowerPlacementRequest(String playerName, boolean placeCrocodile) {
+        this.playerName = playerName;
         this.placeCrocodile = placeCrocodile;
         this.regionTigerPlacement = null;
         this.denTigerPlacement = null;
