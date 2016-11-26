@@ -1,6 +1,6 @@
 package game;
 
-import ai.AIManager;  // TODO remove
+import ai.AIManager;  // TODO remove backwards dependencies
 import entities.board.*;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
@@ -23,18 +23,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameInteractor {
-    private Map<String, Player> players;
-    private List<Player> playerList;
     private String playerTurn;
     private Stack<Tile> tileStack;
-
-    // *TODO PlayerNotifier notifier;
+    private Map<String, Player> players;
+    private List<Player> playerList;
 
     private Board board;
 
     public GameInteractor(Stack<Tile> stack) {
         board = new Board(stack.size(), stack.pop());
         tileStack = stack;
+        players = new HashMap<>();
+        playerList = new ArrayList<>();
+        playerTurn = "";
     }
 
     public void addPlayer(Player player) {
@@ -42,24 +43,15 @@ public class GameInteractor {
         playerList.add(player);
     }
 
-    /*
-    public void completeRegion(Region region){
-        List<Player> playersToGetScore = region.getDominantPlayers();
-        int score = region.getScorer().score(region);
-        for(Player p : playersToGetScore){
-            p.addToScore(score);
-        }
-    }
-    */
-
     /**
      * Plays the game, ending when the tile stack is empty.
      */
     public void playGame() {
-        int playerTurn = 0;
+        int playerTurnNumber = 0;
         while (!tileStack.isEmpty()) {
-            Player player = playerList.get(playerTurn);
-            playerTurn = (playerTurn + 1) % playerList.size();
+            Player player = playerList.get(playerTurnNumber);
+            playerTurn = player.getName();
+            playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
             Tile tileToPlace = tileStack.pop();
             List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tileToPlace);
             player.getPlayerNotifier().startTurn(tileToPlace, validPlacements);
@@ -69,6 +61,7 @@ public class GameInteractor {
             }
         }
 
+        // Score the regions at the end
         board.regionsAsList().stream().filter(Region::containsTigers).forEach(region -> {
             int score = region.getScorer().score();
             List<String> dominantPlayerNames = region.getDominantPlayerNames();
