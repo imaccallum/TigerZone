@@ -1404,7 +1404,7 @@ public class TileFactory {
         }
         catch(IncompatibleTerrainException e){}
 
-        tile.setHasCrocodile(true);
+        tile.placeCrocodile();
         return tile;
     }
 }

@@ -295,6 +295,19 @@ public class Board {
         return output;
     }
 
+    /**
+     * Gets the region associated with a region id (UUID)
+     *
+     * @param regionId,
+     * The UUID associated with the region
+     *
+     * @return
+     * The region for that id
+     */
+    public Region regionForId(UUID regionId) {
+        return regions.get(regionId);
+    }
+
     //
     // Get the possible tile sections where a tile can be placed
     //
