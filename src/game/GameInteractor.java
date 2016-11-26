@@ -4,6 +4,7 @@ import ai.AIManager;  // TODO remove backwards dependencies
 import entities.board.*;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
+import entities.overlay.TileSection;
 import entities.player.Player;
 import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
@@ -54,7 +55,20 @@ public class GameInteractor {
             playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
             Tile tileToPlace = tileStack.pop();
             List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tileToPlace);
-            player.getPlayerNotifier().startTurn(tileToPlace, validPlacements);
+
+            if (validPlacements.isEmpty()) {
+                // As consolation, allow player to stack tigers
+                List<Tiger> tigersThatCanBeStacked = players.get(playerTurn).getPlacedTigers().stream()
+                        .filter(tiger -> !tiger.isStacked())
+                        .collect(Collectors.toList());
+                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, tigersThatCanBeStacked);
+            }
+            else {
+                // No tigers can be stacked, must place the tile
+                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, new ArrayList<>());
+            }
+
+            // Synthesize the gameStatusMessage and sent it to all players
             GameStatusMessage gameStatusMessage = createGameStatusMessage();
             for (Player notifyingPlayer : playerList) {
                 notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
@@ -86,9 +100,14 @@ public class GameInteractor {
             return new FollowerPlacementResponse(false, false, false);
         }
         else if (request.isRegionPlacement()) {
-            RegionTigerPlacement placement = request.regionTigerPlacement;
-            // TODO Placeholder for push
-            return new FollowerPlacementResponse(false, false, false);
+            boolean success = attemptTigerPlacementInRegion(request);
+            if (success) {
+                players.get(request.playerName).decrementRemainingTigers();
+                return new FollowerPlacementResponse(true, false, true);
+            }
+            else {
+                return new FollowerPlacementResponse(false, false, false);
+            }
         }
         else if (request.isTigerDenPlacement()) {
             boolean success = attemptTigerPlacementInDen(request);
@@ -132,7 +151,7 @@ public class GameInteractor {
     public TilePlacementResponse handleTilePlacementRequest(TilePlacementRequest request) {
         if (!request.playerName.equals(playerTurn)) {
             // Not the players turn
-            return new TilePlacementResponse(false, null, null, null, false);
+            return new TilePlacementResponse(false, null, null, false);
         }
         else {
             try {
@@ -140,7 +159,7 @@ public class GameInteractor {
             }
             catch (BadPlacementException exception) {
                 System.err.println(exception.getMessage());
-                return new TilePlacementResponse(false, null, null, null, false);
+                return new TilePlacementResponse(false, null, null, false);
             }
 
             List<RegionTigerPlacement> regionTigerPlacements = new ArrayList<>();
@@ -157,14 +176,9 @@ public class GameInteractor {
                 denPlacement = new TigerDenTigerPlacement(den.getCenterTileLocation(), den.getRequiredTileLocations());
             }
 
-            List<Tiger> tigersThatCanBeStacked = players.get(request.playerName).getPlacedTigers().stream()
-                    .filter(tiger -> !tiger.isStacked())
-                    .collect(Collectors.toList());
+            boolean canPlaceCrocodile = request.tileToPlace.canPlaceCrocodile();
 
-            boolean canPlaceCrocodile = false; // TODO request.tileToPlace.canPlaceCrocodile();
-
-            return new TilePlacementResponse(true, regionTigerPlacements, denPlacement,
-                                             tigersThatCanBeStacked, canPlaceCrocodile);
+            return new TilePlacementResponse(true, regionTigerPlacements, denPlacement, canPlaceCrocodile);
         }
     }
 
@@ -215,23 +229,47 @@ public class GameInteractor {
     }
 
     private boolean attemptCrocodilePlacement(FollowerPlacementRequest request) {
-        return false;
-        /*
-        if (players.get(request.playerName).getRemainingCrocodiles() <= 0) {
+        if (!players.get(request.playerName).hasRemainingCrocodiles()) {
             // No crocodiles to place
             return false;
         }
         else if (board.getLastPlacedTile().hasCrocodile()) {
-            // Corocodile already on tile
+            // Crocodile already on tile
             return false;
         }
         else if (board.getLastPlacedTile().canPlaceCrocodile()) {
+            board.getLastPlacedTile().placeCrocodile();
+            players.get(request.playerName).decrementRemainingCrocodiles();
             return true;
         } else {
             // Not sure what else could go wrong
             return false;
         }
-        */
+    }
+
+    private boolean attemptTigerPlacementInRegion(FollowerPlacementRequest request) {
+        if (!players.get(request.playerName).hasRemainingTigers()) {
+            return false;
+        }
+        Region region = board.regionForId(request.regionTigerPlacement.regionInfo.regionId);
+        Tile lastPlacedTile = board.getLastPlacedTile();
+        for (TileSection tileSection : lastPlacedTile.getTileSections()) {
+            if (tileSection.getRegion().equals(region)) {
+                try {
+                    Tiger tigerToPlace = new Tiger(request.playerName, false);
+                    tileSection.placeTiger(tigerToPlace);
+                    board.addPlacedTiger(tigerToPlace);
+                    return true;
+                }
+                catch (TigerAlreadyPlacedException exception) {
+                    System.err.println(exception.getMessage());
+                    return false;
+                }
+            }
+        }
+        // Region was not on the tile
+        System.err.println("Attempted to place a tiger in a region not on the last placed tiger");
+        return false;
     }
 
     private GameStatusMessage createGameStatusMessage() {

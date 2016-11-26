@@ -80,7 +80,13 @@ public class AIManager implements PlayerNotifier {
         }
     }
 
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations) {
+    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
+                          List<Tiger> tigersThatCanBeStacked) {
+
+        if (possibleLocations.isEmpty()) {
+            // Stack a tiger?
+        }
+
         // Decide tile placement from lastGameInfoMessages
 
         /*

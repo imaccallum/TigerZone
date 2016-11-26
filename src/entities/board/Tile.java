@@ -187,10 +187,6 @@ public class Tile {
      * The boolean state
      */
     public boolean canPlaceCrocodile() {
-        if (hasCrocodile) {
-            return false;
-        }
-
         boolean hasLake = hasTerrain(Terrain.LAKE);
         boolean hasJungle = hasTerrain(Terrain.JUNGLE);
         boolean hasTrail = hasTerrain(Terrain.TRAIL);

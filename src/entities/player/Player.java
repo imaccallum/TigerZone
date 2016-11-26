@@ -78,6 +78,10 @@ public class Player {
         remainingCrocodiles--;
     }
 
+    public boolean hasRemainingCrocodiles() {
+        return getRemainingCrocodiles() > 0;
+    }
+
     public PlayerNotifier getPlayerNotifier() {
         return notifier;
     }
