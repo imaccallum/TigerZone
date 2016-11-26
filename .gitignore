@@ -8,3 +8,5 @@
 *.txt
 
 *.rtf
+
+lib/mockito-all-1.9.5.jar
