@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +39,9 @@ public class TigerDenTest {
 
     @Test
     public void testCompletedDenShowsItIsCompleted() {
-        TigerDen den = new TigerDen(center, createCompleteDenMockBoard());
+        TigerDen den = new TigerDen();
+        den.setCenterTileLocation(center);
+        den.setBoard(createCompleteDenMockBoard());
         Assert.assertTrue(den.isComplete());
     }
 
@@ -47,14 +49,16 @@ public class TigerDenTest {
     public void testIncompleteDensShouldShowIncomplete() {
         for (Point surroundingPoint : surroundingPoints) {
             Board board = createIncompleteDenMockBoard(surroundingPoint);
-            TigerDen den = new TigerDen(center, board);
+            TigerDen den = new TigerDen();
+            den.setCenterTileLocation(center);
+            den.setBoard(board);
             Assert.assertFalse(den.isComplete());
         }
     }
 
     private Board createCompleteDenMockBoard() {
         Board board = mock(Board.class);
-        // Setup surrounding points to return mock tiles
+        //Setup surrounding points to return mock tiles
         when(board.getTile(center)).thenReturn(mockTile);
         for (Point point : surroundingPoints) {
             when(board.getTile(point)).thenReturn(mockTile);
@@ -64,7 +68,7 @@ public class TigerDenTest {
 
     private Board createIncompleteDenMockBoard(Point removed) {
         Board board = createCompleteDenMockBoard();
-        // Setup to remove the one point wanted to be removed
+        //Setup to remove the one point wanted to be removed
         when(board.getTile(removed)).thenReturn(null);
         return board;
     }

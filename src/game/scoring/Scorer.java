@@ -3,19 +3,23 @@ package game.scoring;
 import entities.board.Tiger;
 import entities.overlay.Region;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scorer {
-    public abstract int score(Region region);
-    public abstract int scoreAtEnd(Region region);
-    public void returnTigers(Region region){
-        List<Tiger> tigerList = region.getAllTigers();
+    protected static int jungleAdjacentDenBonus = 5;
+    protected static int jungleAdjacentLakeBonus = 3;
+    protected static int completeLakeScorePerTile = 2;
+    protected static int incompleteLakeScorePerTile = 1;
+    protected static int gameTrailScorePerTile = 1;
+    protected Region regionToScore;
 
-        for(Tiger t : tigerList){
-            t.getOwningPlayer().incrementRemainingTigers();
-        }
+    /**
+     * Score the region held by the scorer, overridden by relevant subclass for the region
+     *
+     * @return
+     * The score of the region
+     */
+    public abstract int score();
 
-        region.getAllTigers().clear();
-    }
+    public abstract int scoreIfCompletedNow();
 }
