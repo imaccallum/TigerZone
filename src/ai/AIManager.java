@@ -41,29 +41,23 @@ public class AIManager implements PlayerNotifier {
     }
 
     // Use function through the Board's findValidTilePlacements()
-    public void parseScoreForPossibleMove(LocationAndOrientation locationAndOrientation, Tile tile, Player player) {
-        int score, tileScore, preyScore;
-        score = tileScore = preyScore = 0;
+    public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile, Player player) {
+        int score,scoreWithoutCrocodile, scoreWithCrocodile;
+        scoreWithoutCrocodile = scoreWithCrocodile = 0;
 
-        // Assumes you have inserted the tile and will delete it later on if the move is not optimal
-        for (TileSection tileSection: tile.getTileSections()) {
-            Scorer scorer= tileSection.getRegion().getScorer();
-            int regionScore = scorer.score();
-
-            if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
-                if (tileSection.getRegion().getDominantPlayerNames().size() == 1) {
-                    tileScore += regionScore;
-                }
-                else {
-                    tileScore += (regionScore / 2);
-                }
-            }
-            else {
-                tileScore -= regionScore;
-            }
+        if (player.hasRemainingCrocodiles() && tile.canPlaceCrocodile()){
+            tile.placeCrocodile();
+            scoreWithCrocodile += calculateScoreForTile(tile, player);
+        } else {
+            scoreWithoutCrocodile += calculateScoreForTile(tile, player);
         }
 
-        score += tileScore + preyScore;
+        score = Math.max(scoreWithoutCrocodile, scoreWithCrocodile);
+
+        if (score == scoreWithCrocodile ){
+            // TODO: 11/26/2016 make sure the player knows that the move involves placing a crocodile
+        }
+
         moves.put(locationAndOrientation, score);
     }
 
@@ -71,6 +65,37 @@ public class AIManager implements PlayerNotifier {
         moves.clear();
     }
 
+    public int calculateScoreForTile(Tile tile, Player player){
+        int tileScore = 0;
+
+        // Assumes you have inserted the tile and will delete it later on if the move is not optimal
+        for (TileSection tileSection: tile.getTileSections()) {
+            Scorer scorer= tileSection.getRegion().getScorer();
+            int regionScore = scorer.score();
+
+            if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
+                // If you are the owner of the region you are trying to expand
+                if (tileSection.getRegion().getDominantPlayerNames().size() == 1) {
+                    tileScore += regionScore;
+                }
+                // If the ownership is shared
+                else {
+                    tileScore += (regionScore / 2);
+                }
+            }
+            else {
+                // If you can claim the region as your own.
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0){
+                    // You should place the Tiger in this region
+                    tileScore += regionScore;
+                } else {
+
+                    tileScore -= regionScore;
+                }
+            }
+        }
+        return tileScore;
+    }
 
     // MARK: Implementation of PlayerNotifier
 
