@@ -5,6 +5,7 @@ import entities.board.Terrain;
 import entities.board.Tiger;
 import entities.player.Player;
 import exceptions.IncompatibleTerrainException;
+import game.messaging.info.RegionInfo;
 import game.scoring.JungleScorer;
 import game.scoring.LakeScorer;
 import game.scoring.Scorer;
@@ -132,9 +133,9 @@ public class Region {
     public boolean isDisputed() {
         List<Tiger> tigers = getAllTigers();
         if (!tigers.isEmpty()) {
-            Player player = tigers.get(0).getOwningPlayer();
+            String playerName = tigers.get(0).getOwningPlayerName();
             for (Tiger tiger : tigers) {
-                if (tiger.getOwningPlayer() != player) {
+                if (!tiger.getOwningPlayerName().equals(playerName)) {
                     return true;
                 }
             }
@@ -160,22 +161,38 @@ public class Region {
     }
 
 
-    public List<Player> getDominantPlayers() {
-        List<Player> dominantList = new ArrayList<>();
-        HashMap<Player, Integer> tigerCount = new HashMap<>();
-        for(Tiger t : getAllTigers()){
-            int count = tigerCount.containsKey(t.getOwningPlayer()) ? tigerCount.get(t.getOwningPlayer()) : 0;
-            tigerCount.put(t.getOwningPlayer(), count + 1);
+    public List<String> getDominantPlayerNames() {
+        List<String> dominantList = new ArrayList<>();
+        HashMap<String, Integer> tigerCount = new HashMap<>();
+        for(Tiger tiger : getAllTigers()){
+            int count = 0;
+            if (tigerCount.containsKey(tiger.getOwningPlayerName())) {
+                count = tigerCount.get(tiger.getOwningPlayerName());
+            }
+            tigerCount.put(tiger.getOwningPlayerName(), count + 1);
         }
 
         int max = Collections.max(tigerCount.values());
 
-        for(Player p : tigerCount.keySet()){
-            if(tigerCount.get(p) == max)
-                dominantList.add(p);
+        for(String playerName : tigerCount.keySet()){
+            if(tigerCount.get(playerName) == max)
+                dominantList.add(playerName);
         }
 
         return dominantList;
+    }
+
+    public RegionInfo getRegionInfo() {
+        int projectedScore = getScorer().scoreIfCompletedNow();
+        int countUnconnectedNodes = 0;
+        for (TileSection tileSection : tileSections) {
+            for (Node node : tileSection.getNodes()) {
+                if (!node.isConnected()) {
+                    ++countUnconnectedNodes;
+                }
+            }
+        }
+        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore);
     }
 
 }

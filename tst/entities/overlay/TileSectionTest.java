@@ -52,15 +52,15 @@ public class TileSectionTest {
     @Test
     public void testTigerPlacementShouldWorkWithOneTigerPlaced() throws TigerAlreadyPlacedException {
         TileSection tileSection = defaultTileSection();
-        Tiger tiger = new Tiger(new Player(""));
+        Tiger tiger = new Tiger("", false);
         tileSection.placeTiger(tiger);
         Assert.assertEquals(tiger, tileSection.getTiger());
     }
 
     @Test (expected = TigerAlreadyPlacedException.class)
     public void testPlaceTigerShouldThrowExceptionIfTigerAlreadyThere() throws TigerAlreadyPlacedException {
-        Tiger tiger1 = new Tiger(new Player(""));
-        Tiger tiger2 = new Tiger(new Player(""));
+        Tiger tiger1 = new Tiger("", false);
+        Tiger tiger2 = new Tiger("", false);
         TileSection section = defaultTileSection();
         section.placeTiger(tiger1);
         section.placeTiger(tiger2);

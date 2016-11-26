@@ -19,6 +19,7 @@ public class TrailScorer extends Scorer {
     public TrailScorer(Region regionToScore) {
         this.regionToScore = regionToScore;
     }
+
     /**
      * Score the game trail based on the number of tiles and the number of crocodiles and prey animals
      *
@@ -46,8 +47,17 @@ public class TrailScorer extends Scorer {
 
         int score = (regionTiles.size() * gameTrailScorePerTile) + ((predationScore > 0) ? predationScore : 0);
 
-        super.returnTigers();
-
         return score;
+    }
+
+    /**
+     * The score of this game trail if it were completed now
+     *
+     * @return
+     * The score if completed now
+     */
+    @Override
+    public int scoreIfCompletedNow() {
+        return score();
     }
 }

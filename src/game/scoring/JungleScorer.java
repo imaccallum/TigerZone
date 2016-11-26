@@ -58,4 +58,15 @@ public class JungleScorer extends Scorer {
         }
         return score;
     }
+
+    /**
+     * The score of the jungle if it were complete right now
+     *
+     * @return
+     * The score associated with a completed jungle
+     */
+    @Override
+    public int scoreIfCompletedNow() {
+        return score();  // No difference
+    }
 }

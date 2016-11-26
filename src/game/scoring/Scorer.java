@@ -21,16 +21,5 @@ public abstract class Scorer {
      */
     public abstract int score();
 
-    /**
-     * Returns the tigers to the relevant players for the region
-     */
-    protected void returnTigers() {
-        List<Tiger> tigerList = regionToScore.getAllTigers();
-
-        for(Tiger tiger : tigerList){
-            tiger.getOwningPlayer().incrementRemainingTigers();
-        }
-
-        regionToScore.getAllTigers().clear();
-    }
+    public abstract int scoreIfCompletedNow();
 }

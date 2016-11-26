@@ -126,7 +126,7 @@ public class BoardTest {
     @Test // Should not throw
     public void testCanPlaceTigerShouldReturnTrueIfTileSectionIsEmpty() throws TigerAlreadyPlacedException {
         Assert.assertTrue(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
-        startingTile.getTileSections().get(0).placeTiger(new Tiger(new Player("Diego")));
+        startingTile.getTileSections().get(0).placeTiger(new Tiger("Diego", false));
         Assert.assertFalse(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
     }
 }

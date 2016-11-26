@@ -5,6 +5,7 @@ import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 import exceptions.BadPlacementException;
 import exceptions.IncompatibleTerrainException;
+import exceptions.StackingTigerException;
 import game.LocationAndOrientation;
 
 import java.awt.*;
@@ -22,6 +23,7 @@ public class Board {
     private Map<UUID, Region> regions;
     private List<TigerDen> tigerDens;
     private Tile lastTilePlaced;
+    private Set<Tiger> placedTigers;
 
     private int boardSize;
     private int numTiles;
@@ -41,6 +43,7 @@ public class Board {
         openTileLocations = new HashSet<>();
         regions = new HashMap<>();
         tigerDens = new ArrayList<>();
+        placedTigers = new HashSet<>();
 
         // System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
@@ -511,4 +514,27 @@ public class Board {
 
     }
 
+    public void addPlacedTiger(Tiger tiger) {
+        placedTigers.add(tiger);
+    }
+
+    public void removePlacedTiger(Tiger tiger) {
+        placedTigers.remove(tiger);
+    }
+
+    public void stackTiger(Tiger tigerToStack) throws StackingTigerException {
+        if (!placedTigers.contains(tigerToStack)) {
+            throw new StackingTigerException("Tiger not placed on the board");
+        } else if (tigerToStack.isStacked()) {
+            throw new StackingTigerException("Tiger is already stacked");
+        } else {
+            // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
+            placedTigers.remove(tigerToStack);
+            placedTigers.add(new Tiger(tigerToStack.getOwningPlayerName(), true));
+        }
+    }
+
+    public List<Region> regionsAsList() {
+        return new ArrayList<>(regions.values());
+    }
 }
