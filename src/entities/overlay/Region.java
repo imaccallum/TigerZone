@@ -22,11 +22,13 @@ public class Region {
     private UUID regionId;
     private List<TileSection> tileSections;
     private Terrain terrain;
+    private boolean hasCrocodile;
 
     public Region(Terrain terrain) {
         this.terrain = terrain;
         regionId = UUID.randomUUID();
         tileSections = new ArrayList<>();
+        hasCrocodile = false;
     }
 
     // HAS TESTS - bookkeeping
@@ -143,24 +145,13 @@ public class Region {
         return false;
     }
 
-    // MARK: Getters and Setters
-
-    // Get the region id
-    public UUID getRegionId() {
-        return regionId;
-    }
-
-    // Get the tile sections in the region
-    public List<TileSection> getTileSections() {
-        return tileSections;
-    }
-
-    // Get the terrain of the region.
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-
+    /**
+     * Get the list of players that are dominant, ie have the same number of tigers and have the max number of tigers
+     * in the region
+     *
+     * @return
+     * The list of dominant players
+     */
     public List<String> getDominantPlayerNames() {
         List<String> dominantList = new ArrayList<>();
         HashMap<String, Integer> tigerCount = new HashMap<>();
@@ -182,6 +173,12 @@ public class Region {
         return dominantList;
     }
 
+    /**
+     * Get the immutable object representing the region info for the AI to make decisions with
+     *
+     * @return
+     * The RegionInfo object representing this region.
+     */
     public RegionInfo getRegionInfo() {
         int projectedScore = getScorer().scoreIfCompletedNow();
         int countUnconnectedNodes = 0;
@@ -195,5 +192,32 @@ public class Region {
         return new RegionInfo(regionId, countUnconnectedNodes, projectedScore);
     }
 
+
+    // MARK: Getters and Setters
+
+    // Get the region id
+    public UUID getRegionId() {
+        return regionId;
+    }
+
+    // Get the tile sections in the region
+    public List<TileSection> getTileSections() {
+        return tileSections;
+    }
+
+    // Get the terrain of the region.
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    // Get whether the region has a crocodile
+    public boolean hasCrocodile() {
+        return hasCrocodile;
+    }
+
+    // Set if the region has a crocodile
+    public void setHasCrocodile(boolean hasCrocodile) {
+        this.hasCrocodile = hasCrocodile;
+    }
 }
 

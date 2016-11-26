@@ -23,11 +23,6 @@ public class TilePlacementResponse {
     public final TigerDenTigerPlacement tigerDenPlacementOption;
 
     /**
-     * The possible tigers that can be stacked
-     */
-    public final List<Tiger> tigersThatCanBeStacked;
-
-    /**
      * Whether or not a crocodile can be placed in the current tile
      */
     public final boolean canPlaceCrocodile;
@@ -50,12 +45,10 @@ public class TilePlacementResponse {
     public TilePlacementResponse(boolean wasValid,
                                  List<RegionTigerPlacement> regionTigerPlacementOptions,
                                  TigerDenTigerPlacement tigerDenPlacementOption,
-                                 List<Tiger> tigersThatCanBeStacked,
                                  boolean canPlaceCrocodile) {
         this.wasValid = wasValid;
         this.regionTigerPlacementOptions = regionTigerPlacementOptions;
         this.tigerDenPlacementOption = tigerDenPlacementOption;
-        this.tigersThatCanBeStacked = tigersThatCanBeStacked;
         this.canPlaceCrocodile = canPlaceCrocodile;
     }
 }

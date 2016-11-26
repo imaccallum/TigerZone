@@ -158,8 +158,8 @@ public class TrailScorerTest {
     // crocodiles can't make the addition negative. Four tiles, two crocs, one prey ==> [4+0 = 4 points]
     private void setupFourPointClosedTrailWithOnePreyAnimalAndTwoCrocodiles(){
         setupFourPointClosedTrail();
-        leftTile.setHasCrocodile(true);
-        middleLeftTile.setHasCrocodile(true);
+        leftTile.placeCrocodile();
+        middleLeftTile.placeCrocodile();
         rightTile.setPreyAnimal(PreyAnimal.DEER);
     }
 
@@ -173,7 +173,7 @@ public class TrailScorerTest {
     // Four tiles, two prey, one croc ==> [4+(2-1) = 5 points]
     private void setupFivePointClosedTrailWithTwoPreyAnimalsAndOneCrocodile(){
         setupFourPointClosedTrail();
-        leftTile.setHasCrocodile(true);
+        leftTile.placeCrocodile();
         middleLeftTile.setPreyAnimal(PreyAnimal.DEER);
         rightTile.setPreyAnimal(PreyAnimal.DEER);
     }

@@ -224,7 +224,7 @@ public class LakeScorerTest {
     // make sure crocodile doesn't reduce multiplier to negative (two tiles, one croc ==> (2*1) = 2 Points
     private void setupTwoPointOpenLakeWithNoUniquePreyAndOneCrocodile() {
         setupTwoPointOpenLake();
-        rightTile.setHasCrocodile(true);
+        rightTile.placeCrocodile();
     }
 
     //            has a Deer                                                    has a Buffalo
@@ -244,7 +244,7 @@ public class LakeScorerTest {
     private void setupEightPointOpenLakeWithTwoUniquePreyAndOneCrocodile() {
         setupSixteenPointOpenLakeWithThreeUniquePreyAnimals();
         centerTile.setPreyAnimal(null);
-        bottomTile.setHasCrocodile(true);
+        bottomTile.placeCrocodile();
     }
 
     //            has a Deer                       has a Boar                   has a Crocodile
@@ -257,7 +257,7 @@ public class LakeScorerTest {
     // three tiles, two unique prey, one croc ==> [(3*2)*(1+2-1)] = 12 Points)
     private void setupTwelvePointClosedLakeWithTwoUniquePreyAndOneCrocodile(){
         setupEighteenPointClosedLakeWithTwoUniquePreyAnimals();
-        rightTile.setHasCrocodile(true);
+        rightTile.placeCrocodile();
     }
 
     //            has a Deer                      has a Boar                    has a Buffalo
@@ -283,8 +283,8 @@ public class LakeScorerTest {
         leftTile.setPreyAnimal(PreyAnimal.DEER);
         leftTile.rotateCounterClockwise(3);
         bottomTile = factory.makeTile("LJJJ-");
-        bottomTile.setHasCrocodile(true);
+        bottomTile.placeCrocodile();
         bottomRightTile = factory.makeTile("LJJJ-");
-        bottomRightTile.setHasCrocodile(true);
+        bottomRightTile.placeCrocodile();
     }
 }
