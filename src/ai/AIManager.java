@@ -9,6 +9,8 @@ import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.GameStatusMessage;
 import game.messaging.info.PlayerInfo;
+import game.messaging.request.TilePlacementRequest;
+import game.messaging.response.TilePlacementResponse;
 import game.scoring.Scorer;
 
 import java.util.*;
@@ -80,15 +82,31 @@ public class AIManager implements PlayerNotifier {
         }
     }
 
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations) {
-        // Decide tile placement from lastGameInfoMessages
+    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
+                          List<Tiger> tigersThatCanBeStacked) {
+
+        if (possibleLocations.isEmpty()) {
+            // Stack a tiger?
+        }
+        else {
+            // Decide tile placement from lastGameInfoMessages
+            int rand = new Random().nextInt(possibleLocations.size());
+            LocationAndOrientation locOrient = possibleLocations.get(rand);
+            tileToPlace.rotateCounterClockwise(locOrient.getOrientation());
+            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, locOrient.getLocation());
+            TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
+
+            if (!response.wasValid) {
+                // forfeit
+            }
+        }
+
+
 
         /*
-        TilePlacementResponse tilePlacementResponse = gameInteractor.handleTilePlacementRequest(...);
 
-        if (!tilePlacementResponse.wasValid) {
-            // forfeit
-        }
+
+
         */
 
         PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
