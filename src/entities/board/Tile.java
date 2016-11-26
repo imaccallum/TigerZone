@@ -180,6 +180,55 @@ public class Tile {
         return nodesClockwise;
     }
 
+    /**
+     * Get whether a crocodile can be placed on a given tile
+     *
+     * @return
+     * The boolean state
+     */
+    public boolean canPlaceCrocodile() {
+        if (hasCrocodile) {
+            return false;
+        }
+
+        boolean hasLake = hasTerrain(Terrain.LAKE);
+        boolean hasJungle = hasTerrain(Terrain.JUNGLE);
+        boolean hasTrail = hasTerrain(Terrain.TRAIL);
+
+        if (hasJungle && (hasTrail || hasLake)) {
+            boolean canPlace = true;
+            // Can place if neither the trails or the lakes have crocs
+            for (TileSection tileSection : tileSections) {
+                if (tileSection.getTerrain()  == Terrain.TRAIL) {
+                    canPlace = canPlace && !tileSection.getRegion().hasCrocodile();
+                }
+                else if (tileSection.getTerrain() == Terrain.LAKE) {
+                    canPlace = canPlace && !tileSection.getRegion().hasCrocodile();
+                }
+            }
+            return canPlace;
+        }
+        else {
+            // The entire tile is lake, cannot place
+            return false;
+        }
+    }
+
+    /**
+     * Place a crocodile on the tile, updates all lake and trail regions to have crocodiles
+     */
+    public void placeCrocodile() {
+        hasCrocodile = true;
+        for (TileSection tileSection : tileSections) {
+            if (tileSection.getTerrain() == Terrain.TRAIL) {
+                tileSection.getRegion().setHasCrocodile(true);
+            }
+            else if (tileSection.getTerrain() == Terrain.LAKE) {
+                tileSection.getRegion().setHasCrocodile(true);
+            }
+        }
+    }
+
     // MARK: Getters and Setters
 
     // Is there a den in the tile
@@ -240,11 +289,6 @@ public class Tile {
     // Get whether the tile has a crocodile.
     public boolean hasCrocodile() {
         return hasCrocodile;
-    }
-
-    // Set whether the tile has a crocodile.
-    public void setHasCrocodile(boolean hasCrocodile) {
-        this.hasCrocodile = hasCrocodile;
     }
 
     // Set the type
@@ -366,5 +410,23 @@ public class Tile {
             rowThree += spacing("X") + "|\n";
         }
         return rowThree;
+    }
+
+    //
+    // Get if the tile has a particular terrain on it
+    //
+    // @param terrain,
+    // The terrain type we are looking for
+    //
+    // @return
+    // The boolean representing this state
+    //
+    private boolean hasTerrain(Terrain terrain) {
+        for (TileSection tileSection : tileSections) {
+            if (tileSection.getTerrain() == terrain) {
+                return true;
+            }
+        }
+        return false;
     }
 }
