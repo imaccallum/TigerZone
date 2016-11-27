@@ -335,41 +335,45 @@ public class Main {
             deck.push(t);
         }
 
-        GameInteractor gm = new GameInteractor(deck);
+        GameInteractor game = new GameInteractor(deck);
 
-        Player p0 = new Player("Player 0", new AIManager(gm, "Player 0"));
-        Player p1 = new Player("Player 1", new AIManager(gm, "Player 1"));
-        gm.addPlayer(p0);
-        gm.addPlayer(p1);
+        Player p0 = new Player("Player 0", new AIManager(game, "Player 0"));
+        Player p1 = new Player("Player 1", new AIManager(game, "Player 1"));
+        game.addPlayer(p0);
+        game.addPlayer(p1);
 
-        while(!deck.empty())
-        {
-            Tile t = deck.pop();
-            Board board = gm.getBoard();
-//            System.out.println(t);
+        game.init();
+        game.playGame();
+        game.getBoard().log();
 
-            List<LocationAndOrientation>  tileOptions = board.findValidTilePlacements(t);
-            if(tileOptions.size() > 0) {
-                int random = (int) (Math.random() * tileOptions.size());
-                LocationAndOrientation optimalPlacement = tileOptions.get(random);
-                System.out.println("Inserted " + t.getType() + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
-                t.rotateCounterClockwise(optimalPlacement.getOrientation());
-                if(Math.random() > .9 && p1.hasRemainingTigers()){
-                    t.getTileSections().get(0).placeTiger(new Tiger(p1.getName(), false));
-                }
-                board.place(t, optimalPlacement.getLocation());
-            }
-            else {
-                System.out.println("No valid moves, discarding tile.");
-            }
-            if(deck.size() == 0) {
-                System.out.println(board.toString());
-                board.log();
-                System.out.println(board.getNumTiles());
-            }
-
-            //         System.out.println("------------------------");
-
-        }
+//        while(!deck.empty())
+//        {
+//            Tile t = deck.pop();
+//            Board board = gm.getBoard();
+////            System.out.println(t);
+//
+//            List<LocationAndOrientation>  tileOptions = board.findValidTilePlacements(t);
+//            if(tileOptions.size() > 0) {
+//                int random = (int) (Math.random() * tileOptions.size());
+//                LocationAndOrientation optimalPlacement = tileOptions.get(random);
+//                System.out.println("Inserted " + t.getType() + " @ " + optimalPlacement.getLocation() + " with orientation " + optimalPlacement.getOrientation());
+//                t.rotateCounterClockwise(optimalPlacement.getOrientation());
+//                if(Math.random() > .9 && p1.hasRemainingTigers()){
+//                    t.getTileSections().get(0).placeTiger(new Tiger(p1.getName(), false));
+//                }
+//                board.place(t, optimalPlacement.getLocation());
+//            }
+//            else {
+//                System.out.println("No valid moves, discarding tile.");
+//            }
+//            if(deck.size() == 0) {
+//                System.out.println(board.toString());
+//                board.log();
+//                System.out.println(board.getNumTiles());
+//            }
+//
+//            //         System.out.println("------------------------");
+//
+//        }
     }
 }
