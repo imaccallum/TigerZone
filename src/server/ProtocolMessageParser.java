@@ -2,6 +2,8 @@ package server;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
+import wrappers.BeginTurnWrapper;
+import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
 
 import java.awt.*;
@@ -173,7 +175,7 @@ public class ProtocolMessageParser {
             String gid = m.group(1);
             String pid0 = m.group(2);
             String pid1 = m.group(4);
-            
+
             int score0 = Integer.parseInt(m.group(3));
             int score1 = Integer.parseInt(m.group(5));
 
@@ -181,5 +183,17 @@ public class ProtocolMessageParser {
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
         }
+    }
+
+
+
+    // MARK: - Move protocol parser
+
+    public BeginTurnWrapper parseBeginTurn(String input) throws ParseFailureException {
+
+    }
+
+    public ConfirmedMoveWrapper parseConfirmMove(String input) {
+        
     }
 }
