@@ -1,7 +1,8 @@
 package game;
 
-import ai.AIManager;  // TODO remove backwards dependencies
-import entities.board.*;
+import entities.board.Board;
+import entities.board.Tiger;
+import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
@@ -20,7 +21,6 @@ import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
 
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameInteractor {
@@ -41,6 +41,13 @@ public class GameInteractor {
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
         playerList.add(player);
+    }
+
+    public void init() {
+        GameStatusMessage gameStatusMessage = createGameStatusMessage();
+        for (Player notifyingPlayer : playerList) {
+            notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
+        }
     }
 
     /**
@@ -72,6 +79,7 @@ public class GameInteractor {
             for (Player notifyingPlayer : playerList) {
                 notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
             }
+
         }
 
         // Score the regions at the end
