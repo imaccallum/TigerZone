@@ -15,10 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 
 import java.net.*;
@@ -216,7 +213,20 @@ class NetworkContext {
     }
 }
 
+class Challenge {
 
+}
+
+class Match {
+    String pid, opid;
+    Map<String, Game> games;
+
+
+}
+
+class Game {
+
+}
 
 
 public class Main {
