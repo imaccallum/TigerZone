@@ -2,6 +2,7 @@ package server;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
+import wrappers.GameOverWrapper;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -163,7 +164,22 @@ public class ProtocolMessageParser {
         }
     }
 
-//    public String parseGameOver(String input) {
-//
-//    }
+    public GameOverWrapper parseGameOver(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) OVER PLAYER (.+) (\\d+) PLAYER (.+) (\\d+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+
+            String gid = m.group(1);
+            String pid0 = m.group(2);
+            String pid1 = m.group(4);
+            
+            int score0 = Integer.parseInt(m.group(3));
+            int score1 = Integer.parseInt(m.group(5));
+
+            return new GameOverWrapper(gid, pid0, score0, pid1, score1);
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
+    }
 }
