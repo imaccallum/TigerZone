@@ -8,6 +8,7 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.BadServerInputException;
+import exceptions.ParseFailureException;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
 
@@ -44,17 +45,17 @@ class TournamentProtocol extends NetworkProtocol {
 
     public String processInput(String input) throws BadServerInputException {
 
-        if (input.startsWith("THIS IS SPARTA!")) {
-
-            // Switch to AuthenticationProtocol
-            AuthenticationProtocol protocol = new AuthenticationProtocol(context);
-            context.setProtocol(protocol);
-            return protocol.processInput(input);
-
-        } else if (input.equals("THANK YOU FOR PLAYING! GOODBYE")) {
-            return null;
-        }
-        return "";
+//        if (input.startsWith("THIS IS SPARTA!")) {
+//
+//            // Switch to AuthenticationProtocol
+//            AuthenticationProtocol protocol = new AuthenticationProtocol(context);
+//            context.setProtocol(protocol);
+//            return protocol.processInput(input);
+//
+//        } else if (input.equals("THANK YOU FOR PLAYING! GOODBYE")) {
+//            return null;
+//        }
+        throw new BadServerInputException(input);
     }
 
 }
@@ -67,20 +68,22 @@ class AuthenticationProtocol extends NetworkProtocol {
 
     public String processInput(String input) throws BadServerInputException {
 
-        ProtocolMessageBuilder messageBuilder = new ProtocolMessageBuilder();
-        ProtocolMessageParser messageParser = new ProtocolMessageParser();
-        String pid;
+//        ProtocolMessageBuilder messageBuilder = new ProtocolMessageBuilder();
+//        ProtocolMessageParser messageParser = new ProtocolMessageParser();
+//        String pid;
+//
+//        if (input.equals("THIS IS SPARTA!")) {
+//            return messageBuilder.joinBuilder(context.getTournamentPassword());
+//        } else if (input.equals("HELLO!")) {
+//            return messageBuilder.identityBuilder(context.getUsername(), context.getPassword());
+//        } else if ((pid = messageParser.parseWelcomePID(input)) != null) {
+//            context.setProtocol(new ChallengeProtocol(context, pid));
+//            return null;
+//        } else {
+//            throw new BadServerInputException(input);
+//        }
 
-        if (input.equals("THIS IS SPARTA!")) {
-            return messageBuilder.joinBuilder(context.getTournamentPassword());
-        } else if (input.equals("HELLO!")) {
-            return messageBuilder.identityBuilder(context.getUsername(), context.getPassword());
-        } else if ((pid = messageParser.parseWelcomePID(input)) != null) {
-            context.setProtocol(new ChallengeProtocol(context, pid));
-            return null;
-        } else {
-            throw new BadServerInputException(input);
-        }
+        throw new BadServerInputException(input);
     }
 }
 
@@ -93,16 +96,7 @@ class ChallengeProtocol extends NetworkProtocol {
     }
 
     public String processInput(String input) throws BadServerInputException {
-
-        Pattern p = Pattern.compile("NEW CHALLENGE .+ YOU WILL PLAY .+ MATCH.+");
-        Matcher m = p.matcher(input);
-
-        if (m.find()) {
-            String pid = m.group(1);
-            context.setProtocol(new ChallengeProtocol(context, pid));
-        }
-
-        return "";
+        throw new BadServerInputException(input);
     }
 }
 
