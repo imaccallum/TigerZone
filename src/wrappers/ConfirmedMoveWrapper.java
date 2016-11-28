@@ -9,12 +9,21 @@ public class ConfirmedMoveWrapper {
     private int moveNumber;
     private String pid;
     private PlacementMoveWrapper move;
+    private boolean forfeited = false;
     private String error;
 
     public ConfirmedMoveWrapper(String gid, int moveNumber, String pid) {
         this.gid = gid;
         this.moveNumber = moveNumber;
         this.pid = pid;
+    }
+
+    public boolean hasForfeited() {
+        return forfeited;
+    }
+
+    public void setForfeited(boolean forfeited) {
+        this.forfeited = forfeited;
     }
 
     public void setMove(PlacementMoveWrapper move) {
