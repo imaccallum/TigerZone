@@ -1,4 +1,4 @@
-package ai;
+package controller;
 
 import entities.board.Tiger;
 import entities.board.Tile;
@@ -15,14 +15,14 @@ import game.scoring.Scorer;
 
 import java.util.*;
 
-public class AIManager implements PlayerNotifier {
+public class AIController implements PlayerNotifier {
     private Map<LocationAndOrientation, Integer> moves;
     private Stack<GameStatusMessage> lastGameStatusMessages;
     private GameInteractor gameInteractor;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
 
-    public AIManager(GameInteractor gameInteractor, String playerName) {
+    public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         moves = new HashMap<>();
         lastGameStatusMessages = new Stack<>();
@@ -54,7 +54,7 @@ public class AIManager implements PlayerNotifier {
 
         score = Math.max(scoreWithoutCrocodile, scoreWithCrocodile);
 
-        if (score == scoreWithCrocodile ){
+        if (score == scoreWithCrocodile) {
             // TODO: 11/26/2016 make sure the player knows that the move involves placing a crocodile
         }
 
@@ -65,12 +65,12 @@ public class AIManager implements PlayerNotifier {
         moves.clear();
     }
 
-    public int calculateScoreForTile(Tile tile, Player player){
+    public int calculateScoreForTile(Tile tile, Player player) {
         int tileScore = 0;
 
         // Assumes you have inserted the tile and will delete it later on if the move is not optimal
-        for (TileSection tileSection: tile.getTileSections()) {
-            Scorer scorer= tileSection.getRegion().getScorer();
+        for (TileSection tileSection : tile.getTileSections()) {
+            Scorer scorer = tileSection.getRegion().getScorer();
             int regionScore = scorer.score();
 
             if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
@@ -85,7 +85,7 @@ public class AIManager implements PlayerNotifier {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0){
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0) {
                     // You should place the Tiger in this region
                     tileScore += regionScore;
                 } else {
@@ -108,10 +108,10 @@ public class AIManager implements PlayerNotifier {
     }
 
     public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
-                          List<Tiger> tigersThatCanBeStacked) {
+                          List<Tiger> tigersPlacedOnBoard) {
 
         if (possibleLocations.isEmpty()) {
-            // Stack a tiger?
+            // Stack a tiger or remove a tiger?
         }
         else {
             // Decide tile placement from lastGameInfoMessages
