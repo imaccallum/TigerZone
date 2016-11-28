@@ -221,26 +221,46 @@ public class ProtocolMessageParser {
     }
 
     public ConfirmedMoveWrapper parseConfirmMove(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (.+) (.+)");
+        Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (\\S+) (.+)");
         Matcher m = p.matcher(input);
 
-//        if (m.find()) {
-//
-//            String gid = m.group(1);
-//            int moveNumber = Integer.parseInt(m.group(2));
-//            String pid = m.group(3);
-//            String suffix = m.group(4);
-//
-//            try {
-//                PlacementMoveWrapper mv = parseMove(suffix);
-//                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
-//            } catch (ParseFailureException e) {
-//                throw e;
-//            }
-//
-//        } else {
+        if (m.find()) {
+
+            String gid = m.group(1);
+            int moveNumber = Integer.parseInt(m.group(2));
+            String pid = m.group(3);
+            String suffix = m.group(4);
+
+            ConfirmedMoveWrapper wrapper = new ConfirmedMoveWrapper(gid, moveNumber, pid);
+
+            try {
+                String error = parseForfeit(suffix);
+                wrapper.setError(error);
+                wrapper.setForfeited(true);
+                return wrapper;
+
+            } catch (ParseFailureException e) {}
+
+            try {
+                PlacementMoveWrapper move = parseMove(suffix);
+                wrapper.setMove(move);
+                return wrapper;
+            } catch (ParseFailureException e) {}
+        }
+
+        throw new ParseFailureException("Failed to parse: " + input);
+    }
+
+    public String parseForfeit(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("FORFEITED: (.+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            String error = m.group(1);
+            return error;
+        } else {
             throw new ParseFailureException("Failed to parse: " + input);
-//        }
+        }
     }
 
 
