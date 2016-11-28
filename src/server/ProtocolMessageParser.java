@@ -5,7 +5,7 @@ import javafx.util.Pair;
 import wrappers.BeginTurnWrapper;
 import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
-import wrappers.MoveWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -218,7 +218,7 @@ public class ProtocolMessageParser {
             String move = m.group(4);
 
             try {
-                MoveWrapper mv = parseMove(move);
+                PlacementMoveWrapper mv = parseMove(move);
                 return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
             } catch (ParseFailureException e) {
                 throw e;
@@ -229,7 +229,7 @@ public class ProtocolMessageParser {
         }
     }
 
-    public MoveWrapper parseMove(String input) throws ParseFailureException {
+    public PlacementMoveWrapper parseMove(String input) throws ParseFailureException {
         Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");
         Matcher m0 = p0.matcher(input);
 
@@ -241,12 +241,12 @@ public class ProtocolMessageParser {
             int orientation = Integer.parseInt(m0.group(4));
             String pid = m0.group(3);
 
-            Point point = new Point(x, y);
-            return new MoveWrapper(tile, point, orientation, );
+//            Point point = new Point(x, y);
+//            return new PlacementMoveWrapper(tile, point, orientation, );
         }
 
-        Pattern p1 = Pattern.compile("");
-
+//        Pattern p1 = Pattern.compile("");
+//
 
             throw new ParseFailureException("Failed to parse: " + input);
     }
