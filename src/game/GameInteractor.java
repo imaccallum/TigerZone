@@ -19,7 +19,7 @@ import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
-import server.ServerMatchMessageHandler;
+import game.messaging.response.ValidMovesResponse;
 
 import java.io.IOException;
 import java.util.*;
@@ -27,17 +27,17 @@ import java.util.stream.Collectors;
 
 public class GameInteractor implements Runnable {
     private String playerTurn;
-    private Stack<Tile> tileStack;
     private Map<String, Player> players;
     private List<Player> playerList;
     private Board board;
+    private int remainingTiles;
 
-    public GameInteractor(Stack<Tile> stack) {
-        board = new Board(stack.size(), stack.pop());
-        tileStack = stack;
+    public GameInteractor(Tile firstTile, int stackSize) {
+        board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
         playerTurn = "";
+        remainingTiles = stackSize - 1;
     }
 
     public void addPlayer(Player player) {
@@ -56,6 +56,7 @@ public class GameInteractor implements Runnable {
      * Runs the game
      */
     public void run() {
+
     }
 
     /**
@@ -63,22 +64,11 @@ public class GameInteractor implements Runnable {
      */
     public void playGame() {
         int playerTurnNumber = 0;
-        while (!tileStack.isEmpty()) {
+        while (!(remainingTiles == 0)) {
             Player player = playerList.get(playerTurnNumber);
             playerTurn = player.getName();
             playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
-            Tile tileToPlace = tileStack.pop();
-            List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tileToPlace);
-
-            if (validPlacements.isEmpty()) {
-                // As consolation, allow player to stack tigers
-                Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, tigersPlacedOnBoard);
-            }
-            else {
-                // No tigers can be stacked, must place the tile
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, new HashSet<>());
-            }
+            player.getPlayerNotifier().startTurn();
 
             // Synthesize the gameStatusMessage and sent it to all players
             GameStatusMessage gameStatusMessage = createGameStatusMessage();
@@ -96,6 +86,27 @@ public class GameInteractor implements Runnable {
                 players.get(name).addToScore(score);
             }
         });
+    }
+
+    /**
+     * Get the valid moves for a tile on the board
+     *
+     * @param tile,
+     * The tile that we want to place
+     *
+     * @return
+     * A response with the valid moves one can do
+     */
+    public ValidMovesResponse getValidMoves(Tile tile) {
+        List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tile);
+        if (validPlacements.isEmpty()) {
+            // As consolation, allow player to stack tigers
+            Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
+            return new ValidMovesResponse(validPlacements, tigersPlacedOnBoard, true);
+        }
+        else {
+            return new ValidMovesResponse(validPlacements, new HashSet<>(), false);
+        }
     }
 
     /**

@@ -2,16 +2,22 @@ package controller;
 
 import entities.board.Tiger;
 import entities.board.Tile;
+import entities.board.TileFactory;
 import entities.overlay.TileSection;
 import entities.player.Player;
 import entities.player.PlayerNotifier;
+import exceptions.ParseFailureException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.GameStatusMessage;
 import game.messaging.info.PlayerInfo;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
+import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
+import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.BeginTurnWrapper;
 
 import java.util.*;
 
@@ -21,12 +27,16 @@ public class AIController implements PlayerNotifier {
     private GameInteractor gameInteractor;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
+    private ServerMatchMessageHandler serverMessageHandler;
+    private ProtocolMessageParser messageParser;
 
-    public AIController(GameInteractor gameInteractor, String playerName) {
+    public AIController(GameInteractor gameInteractor, String playerName,
+                        ServerMatchMessageHandler serverMessageHandler) {
         this.gameInteractor = gameInteractor;
+        this.playerName = playerName;
+        this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
         lastGameStatusMessages = new Stack<>();
-        this.playerName = playerName;
         this.playersInfo = new HashMap<>();
     }
 
@@ -128,8 +138,24 @@ public class AIController implements PlayerNotifier {
         }
     }
 
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
-                          Set<Tiger> tigersPlacedOnBoard) {
+    public void startTurn() {
+        String serverMessage;
+        BeginTurnWrapper beginTurn;
+        try {
+            serverMessage = serverMessageHandler.getServerInput();
+            beginTurn = messageParser.parseBeginTurn(serverMessage);
+        }
+        catch (InterruptedException exception) {
+            System.err.println(exception.getMessage());
+            return;
+        } catch (ParseFailureException exception) {
+            System.err.println(exception.getMessage());
+            return;
+        }
+
+        Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
+        ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
+        List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
