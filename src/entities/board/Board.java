@@ -497,7 +497,7 @@ public class Board {
     //
     private void setTileAtLocation(Tile tile, Point location) {
         boardMatrix[location.y][location.x] = tile;
-        tile.setLocation(location);
+        tile.setLocation(location, new Point(boardSize/2 - 1, boardSize/2 - 1));
     }
 
     // Checks to see if a tiger can be placed
