@@ -125,11 +125,6 @@ public class AIController implements PlayerNotifier {
         }
     }
 
-    @Override
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possiblePlacements, Set<Tiger> tigersPlacedOnBoard) {
-
-    }
-
     public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
                           Set<Tiger> tigersPlacedOnBoard) {
 

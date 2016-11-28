@@ -4,6 +4,8 @@ import game.LocationAndOrientation;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
+import wrappers.BeginTurnWrapper;
+import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
 
 import java.awt.*;
@@ -20,6 +22,16 @@ public class ProtocolMessageParserTest {
     @Before
     public void setup(){
         parser = new ProtocolMessageParser();
+    }
+
+
+    // MARK: - Other protocol tests
+    @Test
+    public void parseGID() throws Exception {
+        String gid0 = "ub4h3brdh34";
+        String input = "GAME " + gid0 + " MOVE";
+        String gid1 = parser.parseGID(input);
+        assertEquals(gid0, gid1);
     }
 
 
@@ -211,12 +223,29 @@ public class ProtocolMessageParserTest {
     // MARK: - Move protocol tests
     @Test
     public void parseBeginTurn() throws Exception {
+        String gid0 = "n23iujrn";
+        int time0 = 1;
+        int move0 = 0;
+        String tile0 = "LLJJ0-";
 
+        String input = "MAKE YOUR MOVE IN GAME " + gid0 + " WITHIN " + time0 + " SECONDS: MOVE " + move0 + " PLACE " + tile0;
+        BeginTurnWrapper wrapper = parser.parseBeginTurn(input);
+
+        String gid1 = wrapper.getGid();
+        int time1 = wrapper.getTime();
+        int move1 = wrapper.getMoveNumber();
+        String tile1 = wrapper.getTile();
+
+        assertEquals(gid0, gid1);
+        assertEquals(time0, time1);
+        assertEquals(move0, move1);
+        assertEquals(tile0, tile1);
     }
 
     @Test
     public void parseConfirmMove() throws Exception {
-
+        String input = "";
+        ConfirmedMoveWrapper wrapper = parser.parseConfirmMove(input);
     }
 
     @Test

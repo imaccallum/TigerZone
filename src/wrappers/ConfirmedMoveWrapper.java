@@ -11,11 +11,17 @@ public class ConfirmedMoveWrapper {
     private PlacementMoveWrapper move;
     private String error;
 
-    public ConfirmedMoveWrapper(String gid, int moveNumber, String pid, PlacementMoveWrapper move, String error) {
+    public ConfirmedMoveWrapper(String gid, int moveNumber, String pid) {
         this.gid = gid;
         this.moveNumber = moveNumber;
         this.pid = pid;
+    }
+
+    public void setMove(PlacementMoveWrapper move) {
         this.move = move;
+    }
+
+    public void setError(String error) {
         this.error = error;
     }
 
