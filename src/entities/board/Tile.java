@@ -281,9 +281,14 @@ public class Tile {
                 return 1;
             }
             if(nodeInTileSection.equals(edges[0]) && min > 2){
-                if(corners[0] == null && edges[0].getTileSection().getTerrain()!=Terrain.LAKE &&
+                if(tilesection.getTerrain() == Terrain.LAKE && tilesection.getNodes().size()>=2 &&
+                        edges[3].getTileSection().getTerrain() == Terrain.LAKE){
+                    return 1;
+                }
+                else if(corners[0] == null && edges[0].getTileSection().getTerrain() != Terrain.LAKE &&
+                    (edges[0].getTileSection().getTerrain().equals(edges[3].getTileSection().getTerrain()) ||
                         (edges[0].getTileSection().getTerrain() == Terrain.JUNGLE ||
-                                edges[3].getTileSection().getTerrain()==Terrain.JUNGLE)) {
+                                edges[3].getTileSection().getTerrain()==Terrain.JUNGLE))) {
                     return 1;
                 }
                 else{
@@ -291,23 +296,36 @@ public class Tile {
                 }
             }
             else if(nodeInTileSection.equals(corners[1]) && min > 3){
-                min = 3;
-            }
-            else if(nodeInTileSection.equals(edges[3]) && min > 4){
-                if(corners[0] == null && (edges[0].getTileSection().getTerrain() == Terrain.JUNGLE ||
-                        edges[3].getTileSection().getTerrain()==Terrain.JUNGLE)) {
+                if(corners[0] == null && !(edges[0].getTileSection().getTerrain() == Terrain.TRAIL ||
+                        (edges[0].getTileSection().getNodes().size()>=2 && edges[0].getTileSection().getTerrain() == Terrain.LAKE))){
                     return 1;
                 }
-                else{
+                else {
+                    min = 3;
+                }
+            }
+            else if(nodeInTileSection.equals(edges[3]) && min > 4){
+                if(tilesection.getTerrain() == Terrain.JUNGLE){
+                    min = 1;
+                }
+                else {
                     min = 4;
                 }
             }
             else if(nodeInTileSection.equals(edges[1]) && min > 6){
-                if(corners[1] == null && edges[0].getTileSection().getTerrain()
+                if(tilesection.getTerrain().equals(Terrain.LAKE) && tilesection.getNodes().size()==1){
+                    min = 6;
+                }
+                else if(corners[1] == null && edges[0].getTileSection().getTerrain()
                         .equals(edges[1].getTileSection().getTerrain())) {
                     min = 3;
                 }
-                else if(den == null && edges[1].getTileSection().getTerrain() == Terrain.TRAIL){
+                else if(tilesection.getTerrain() == Terrain.JUNGLE){
+                    min = 3;
+                }
+                else if(den == null && edges[1].getTileSection().getTerrain() == Terrain.TRAIL &&
+                        edges[2].getTileSection().getTerrain()==Terrain.TRAIL &&
+                        edges[3].getTileSection().getTerrain()!=Terrain.TRAIL){
                     min = 5;
                 }
                 else{
@@ -318,8 +336,13 @@ public class Tile {
                 min = 7;
             }
             else if(nodeInTileSection.equals(edges[2]) && min > 8){
-                if(corners[1] == null && edges[2].getTileSection().getTerrain()
-                        .equals(edges[3].getTileSection().getTerrain())) {
+                if(tilesection.getTerrain().equals(Terrain.LAKE) && tilesection.getNodes().size()>1){
+                    min = 8;
+                }
+                else if(corners[3] == null && edges[2].getTileSection().getTerrain() != Terrain.LAKE &&
+                        (edges[2].getTileSection().getTerrain().equals(edges[3].getTileSection().getTerrain()) ||
+                                (edges[2].getTileSection().getTerrain() == Terrain.JUNGLE ||
+                                        edges[3].getTileSection().getTerrain()==Terrain.JUNGLE))) {
                     min = 7;
                 }
                 else{
