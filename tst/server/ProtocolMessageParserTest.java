@@ -325,6 +325,10 @@ public class ProtocolMessageParserTest {
 
     @Test
     public void parseTigerZone() throws Exception {
+        int zone0 = 6;
+        String input = "TIGER " + zone0;
 
+        int zone1 = parser.parseTigerZone(input);
+        assertEquals(zone0, zone1);
     }
 }
