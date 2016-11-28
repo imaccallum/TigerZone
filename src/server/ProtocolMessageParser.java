@@ -14,6 +14,19 @@ import java.util.regex.Pattern;
 
 public class ProtocolMessageParser {
 
+    // MARK: - Other parsers
+    public String parseGID(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) ");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            String gid = m.group(1);
+            return gid;
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
+    }
+
     // MARK: - Authentication protocol parser
     public boolean parseIsSparta(String input) {
         return input.equals("THIS IS SPARTA!");
@@ -191,7 +204,7 @@ public class ProtocolMessageParser {
 
     // MARK: - Move protocol parser
     public BeginTurnWrapper parseBeginTurn(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("MAKE YOUR MOVE IN GAME (.+) WITHIN (\\d+) SECONDS\\?: MOVE (\\d+) PLACE (.+)");
+        Pattern p = Pattern.compile("MAKE YOUR MOVE IN GAME (.+) WITHIN (\\d+) SECONDS?: MOVE (\\d+) PLACE (.+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -211,24 +224,26 @@ public class ProtocolMessageParser {
         Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (.+) (.+)");
         Matcher m = p.matcher(input);
 
-        if (m.find()) {
-
-            String gid = m.group(1);
-            int moveNumber = Integer.parseInt(m.group(2));
-            String pid = m.group(3);
-            String move = m.group(4);
-
-            try {
-                PlacementMoveWrapper mv = parseMove(move);
-                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
-            } catch (ParseFailureException e) {
-                throw e;
-            }
-
-        } else {
+//        if (m.find()) {
+//
+//            String gid = m.group(1);
+//            int moveNumber = Integer.parseInt(m.group(2));
+//            String pid = m.group(3);
+//            String suffix = m.group(4);
+//
+//            try {
+//                PlacementMoveWrapper mv = parseMove(suffix);
+//                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
+//            } catch (ParseFailureException e) {
+//                throw e;
+//            }
+//
+//        } else {
             throw new ParseFailureException("Failed to parse: " + input);
-        }
+//        }
     }
+
+
 
     public PlacementMoveWrapper parseMove(String input) throws ParseFailureException {
         Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");

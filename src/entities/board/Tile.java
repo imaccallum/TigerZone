@@ -276,7 +276,9 @@ public class Tile {
      */
     public Node getTigerZone(){
         for(TileSection tilesection: tileSections){
-            return tilesection.getNodes().get(0);
+            if(tilesection.hasTiger()){
+                return tilesection.getNodes().get(0);
+            }
         }
         return null;
     }
