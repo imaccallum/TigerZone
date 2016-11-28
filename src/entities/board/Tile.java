@@ -25,6 +25,7 @@ public class Tile {
     private String type;
     private boolean hasCrocodile;
     private int orientation;
+    private Point serverLocation;
 
     public Tile(String s) {
         edges = new Node[COUNT];
@@ -322,8 +323,9 @@ public class Tile {
     }
 
     // Set the location for a tile
-    public void setLocation(Point location) {
+    public void setLocation(Point location, Point boardcenter) {
         this.location = location;
+        this.serverLocation = new Point(location.x - boardcenter.x, location.y - boardcenter.y);
     }
 
     // Get the lost of tile sections on a tile.
