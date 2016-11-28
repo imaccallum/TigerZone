@@ -70,7 +70,10 @@ public class Board {
 
 
     /**
-     * Removes the last placed tile from the board
+     * Remove the last placed tile from the board
+     *
+     * @return
+     * The tile that was removed
      */
     public Tile removeLastPlacedTile() {
         Tile tile = tilesPlacedInOrder.pop();
@@ -96,6 +99,7 @@ public class Board {
 
         numTiles--;
         openTileLocations.add(location);
+        return tile;
     }
 
     /**
@@ -408,17 +412,27 @@ public class Board {
         // The edges to be connected
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
         Node rightEdge = leftTile.getEdge(EdgeLocation.RIGHT);
-        mergedRegionsStack.push(connectNodes(leftEdge, rightEdge));
+        RegionMerge merge = connectNodes(leftEdge, rightEdge);
+
+        if (merge != null) {
+            mergedRegionsStack.push(merge);
+        }
 
         if (leftEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             // Since the middle terrain is a trail, connect the corners
             Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
             Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
-            mergedRegionsStack.push(connectNodes(topLeftCorner, topRightCorner));
+            merge = connectNodes(topLeftCorner, topRightCorner);
+            if (merge != null) {
+                mergedRegionsStack.push(merge);
+            }
 
             Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
-            mergedRegionsStack.push(connectNodes(bottomLeftCorner, bottomRightCorner));
+            merge = connectNodes(bottomLeftCorner, bottomRightCorner);
+            if (merge != null) {
+                mergedRegionsStack.push(merge);
+            }
         }
         return mergedRegionsStack;
     }
@@ -468,17 +482,26 @@ public class Board {
         // The edges to be connected
         Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
-        mergedRegionsStack.push(connectNodes(topEdge, bottomEdge));
+        RegionMerge merge = connectNodes(topEdge, bottomEdge);
+        if (merge != null) {
+            mergedRegionsStack.push(merge);
+        }
 
         if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             // Since the middle terrain is a trail, connect the corners
             Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
             Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
-            mergedRegionsStack.push(connectNodes(topRightCorner, bottomRightCorner));
+            merge = connectNodes(topRightCorner, bottomRightCorner);
+            if (merge != null) {
+                mergedRegionsStack.push(merge);
+            }
 
             Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node topLeftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
-            mergedRegionsStack.push(connectNodes(topLeftCorner, bottomLeftCorner));
+            merge = connectNodes(topLeftCorner, bottomLeftCorner);
+            if (merge != null) {
+                mergedRegionsStack.push(merge);
+            }
         }
         return mergedRegionsStack;
     }
@@ -543,6 +566,7 @@ public class Board {
                 throw new BadPlacementException(e.getMessage());
             }
         }
+        return null;
     }
 
     // Sets a tile to a location in the board matrix and gives the tile that location
@@ -558,7 +582,7 @@ public class Board {
     //
     private void undoRegionMerge(RegionMerge mergeToUndo) {
         Region newRegion = mergeToUndo.newRegion;
-        List<Region> oldRegions = mergeToUndo.oldRegions;
+        List<Region> oldRegions = Arrays.asList(mergeToUndo.firstOldRegion, mergeToUndo.secondOldRegion);
         for (Region oldRegion : oldRegions) {
             newRegion.getTileSections().stream()
                     .filter(tileSection -> oldRegion.getTileSections().contains(tileSection))
