@@ -43,43 +43,46 @@ public class AIController implements PlayerNotifier {
     }
 
     // Use function through the Board's findValidTilePlacements()
-    public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile, Player player) {
-        boolean needsCroc = false;
+    public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile) {
         Move moveWithCroc = null;
         Move moveWithoutCroc = null;
-
         int score;
+        boolean crocIsViable = false;
 
-        if (player.hasRemainingCrocodiles() && tile.canPlaceCrocodile()){
+        if (playersInfo.get(playerName).remainingCrocodiles > 0 && tile.canPlaceCrocodile()){
             tile.placeCrocodile();
-            moveWithCroc = calculateScoreForTile(tile, player);
-        } else {
-            moveWithoutCroc = calculateScoreForTile(tile, player);
+            moveWithCroc = calculateScoreForTile(tile);
+            crocIsViable = true;
         }
 
-        // Since you can only place one follower at the time make sure placing the crocodile is worth
-        //over placing a tiger.
-        if (moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives() <= moveWithoutCroc.getScore()){
-            moveWithCroc.setScore(0);
-        }
+        moveWithoutCroc = calculateScoreForTile(tile);
 
-        score = Math.max(moveWithCroc.getScore(), moveWithoutCroc.getScore());
+        if (crocIsViable){
+            // Since you can only place one follower at the time make sure placing the crocodile is worth
+            //over placing a tiger.
 
-        if (score == moveWithCroc.getScore() && moveWithoutCroc.getScore() != moveWithCroc.getScore()){
-            moveWithCroc.setLocationAndOrientation(locationAndOrientation);
-            moveWithCroc.setNeedsCrocodile(true);
-            moveWithCroc.setNeedsTiger(false);
-            moveWithCroc.setScore(moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives());
-            moveWithCroc.setTileSection(null);
-            moves.add(moveWithCroc);
-            return;
+            if (moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives() <= moveWithoutCroc.getScore()){
+                moveWithCroc.setScore(0);
+            }
+
+            score = Math.max(moveWithCroc.getScore(), moveWithoutCroc.getScore());
+
+            if (score == moveWithCroc.getScore() && moveWithoutCroc.getScore() != moveWithCroc.getScore()){
+                moveWithCroc.setLocationAndOrientation(locationAndOrientation);
+                moveWithCroc.setNeedsCrocodile(true);
+                moveWithCroc.setNeedsTiger(false);
+                moveWithCroc.setScore(moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives());
+                moveWithCroc.setTileSection(null);
+                moves.add(moveWithCroc);
+                return;
+            }
         }
 
         moveWithoutCroc.setLocationAndOrientation(locationAndOrientation);
         moves.add(moveWithoutCroc);
     }
 
-    public Move calculateScoreForTile(Tile tile, Player player){
+    public Move calculateScoreForTile(Tile tile){
         int tileScore = 0;
         TileSection sectionWhereTileNeedsToBePlaced  = null;
         int scoreWhereTigerWasPlaced = 0;
@@ -89,7 +92,7 @@ public class AIController implements PlayerNotifier {
             Scorer scorer= tileSection.getRegion().getScorer();
             int regionScore = scorer.score();
 
-            if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
+            if (tileSection.getRegion().getDominantPlayerNames().contains(playerName)) {
                 // If you are the owner of the region you are trying to expand
                 if (tileSection.getRegion().getDominantPlayerNames().size() == 1) {
                     tileScore += regionScore;
@@ -97,7 +100,7 @@ public class AIController implements PlayerNotifier {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0){
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && playersInfo.get(playerName).remainingTigers > 0){
                     if (regionScore > scoreWhereTigerWasPlaced) {
                         scoreWhereTigerWasPlaced = regionScore;
                         sectionWhereTileNeedsToBePlaced = tileSection;
@@ -133,10 +136,15 @@ public class AIController implements PlayerNotifier {
         }
         else {
             // Decide tile placement from lastGameInfoMessages
-            int rand = new Random().nextInt(possibleLocations.size());
-            LocationAndOrientation locOrient = possibleLocations.get(rand);
-            tileToPlace.rotateCounterClockwise(locOrient.getOrientation());
-            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, locOrient.getLocation());
+            //int rand = new Random().nextInt(possibleLocations.size());
+            for (LocationAndOrientation locationAndOrientation: possibleLocations) {
+                addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+            }
+            LocationAndOrientation bestMove = getBestMove();
+            moves.clear();
+
+            tileToPlace.rotateCounterClockwise(bestMove.getOrientation());
+            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());
             TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
 
             if (!response.wasValid) {
