@@ -61,10 +61,10 @@ public class Board {
         }
 
         tilesPlacedInOrder.push(firstTile);
-        openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
-        openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
-        openTileLocations.add(new Point(numberOfTiles, numberOfTiles - 1));
-        openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles - 2));
+        openTileLocations.add(new Point(centerLocation.x - 1, centerLocation.y));
+        openTileLocations.add(new Point(centerLocation.x + 1, centerLocation.y));
+        openTileLocations.add(new Point(centerLocation.x, centerLocation.y + 1));
+        openTileLocations.add(new Point(centerLocation.x, centerLocation.y - 1));
         numTiles = 1;
     }
 
@@ -119,8 +119,8 @@ public class Board {
         Stack<RegionMerge> regionMerges = new Stack<>();
 
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
-        int row = location.y + centerLocation.y;
-        int col = location.x + centerLocation.x;
+        int row = location.y;
+        int col = location.x;
 
         // Get the surrounding tiles of the placement.
         Tile leftTile = boardMatrix[row][col-1];
@@ -666,7 +666,7 @@ public class Board {
     // Sets a tile to a location in the board matrix and gives the tile that location
     private void setTileAtLocation(Tile tile, Point location) {
         boardMatrix[location.y][location.x] = tile;
-        tile.setLocation(location, new Point(boardSize/2 - 1, boardSize/2 - 1));
+        tile.setLocation(location, centerLocation);
     }
 
     //
@@ -718,7 +718,11 @@ public class Board {
         return new ArrayList<>(regions.values());
     }
 
-    public Point getServerLocation(Point serverLocation) {
-        return new Point(serverLocation.x - centerLocation.x, serverLocation.y - centerLocation.y);
+    public Point getServerLocation(Point location) {
+        return new Point(location.x - centerLocation.x, location.y - centerLocation.y);
+    }
+
+    public Point getNativeLocation(Point serverLocation) {
+        return new Point(serverLocation.x + centerLocation.x, serverLocation.y + centerLocation.y);
     }
 }
