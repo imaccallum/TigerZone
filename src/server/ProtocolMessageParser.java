@@ -1,4 +1,5 @@
 package server;
+import entities.board.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
@@ -13,6 +14,19 @@ import java.util.regex.Pattern;
 
 public class ProtocolMessageParser {
 
+    // MARK: - Other parsers
+    public String parseGID(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) ");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            String gid = m.group(1);
+            return gid;
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
+    }
+
     // MARK: - Authentication protocol parser
     public boolean parseIsSparta(String input) {
         return input.equals("THIS IS SPARTA!");
@@ -23,11 +37,11 @@ public class ProtocolMessageParser {
     }
 
     public String parseWelcomePID(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("WELCOME .+ PLEASE WAIT FOR THE NEXT CHALLENGE");
+        Pattern p = Pattern.compile("WELCOME (.+) PLEASE WAIT FOR THE NEXT CHALLENGE");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
-            String pid = m.group(0);
+            String pid = m.group(1);
             return pid;
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
@@ -190,7 +204,7 @@ public class ProtocolMessageParser {
 
     // MARK: - Move protocol parser
     public BeginTurnWrapper parseBeginTurn(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("MAKE YOUR MOVE IN GAME (.+) WITHIN (\\d+) SECONDS\\?: MOVE (\\d+) PLACE (.+)");
+        Pattern p = Pattern.compile("MAKE YOUR MOVE IN GAME (.+) WITHIN (\\d+) SECONDS?: MOVE (\\d+) PLACE (.+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -210,24 +224,26 @@ public class ProtocolMessageParser {
         Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (.+) (.+)");
         Matcher m = p.matcher(input);
 
-        if (m.find()) {
-
-            String gid = m.group(1);
-            int moveNumber = Integer.parseInt(m.group(2));
-            String pid = m.group(3);
-            String move = m.group(4);
-
-            try {
-                PlacementMoveWrapper mv = parseMove(move);
-                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
-            } catch (ParseFailureException e) {
-                throw e;
-            }
-
-        } else {
+//        if (m.find()) {
+//
+//            String gid = m.group(1);
+//            int moveNumber = Integer.parseInt(m.group(2));
+//            String pid = m.group(3);
+//            String suffix = m.group(4);
+//
+//            try {
+//                PlacementMoveWrapper mv = parseMove(suffix);
+//                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
+//            } catch (ParseFailureException e) {
+//                throw e;
+//            }
+//
+//        } else {
             throw new ParseFailureException("Failed to parse: " + input);
-        }
+//        }
     }
+
+
 
     public PlacementMoveWrapper parseMove(String input) throws ParseFailureException {
         Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");
@@ -239,15 +255,38 @@ public class ProtocolMessageParser {
             int x = Integer.parseInt(m0.group(2));
             int y = Integer.parseInt(m0.group(3));
             int orientation = Integer.parseInt(m0.group(4));
-            String pid = m0.group(3);
+            String placement = m0.group(5);
 
-//            Point point = new Point(x, y);
-//            return new PlacementMoveWrapper(tile, point, orientation, );
+            Point point = new Point(x, y);
+            PlacementMoveWrapper wrapper = new PlacementMoveWrapper(tile, point, orientation);
+
+            if (placement.startsWith("TIGER ")) {
+                wrapper.setPlacedObject(Placement.TIGER);
+
+                int zone = parseTigerZone(placement);
+                wrapper.setZone(zone);
+
+            } else if (placement.equals("CROCODILE")) {
+                wrapper.setPlacedObject(Placement.CROCODILE);
+            } else {
+                wrapper.setPlacedObject(Placement.NONE);
+            }
+
+            return wrapper;
         }
 
-//        Pattern p1 = Pattern.compile("");
-//
-
             throw new ParseFailureException("Failed to parse: " + input);
+    }
+
+    public int parseTigerZone(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("TIGER (\\d+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            int zone = Integer.parseInt(m.group(1));
+            return zone;
+        }
+
+        throw new ParseFailureException("Failed to parse: " + input);
     }
 }

@@ -268,10 +268,17 @@ public class Tile {
         return false;
     }
 
+    /*
+     * Get the Node where the Tiger is on in the tileSection on the tile
+     *
+     * @return
+     * Node that has the tiger
+     */
     public Node getTigerZone(){
-        //return which Node tigers are on based upon the lowest number node in the TileSection with the Tiger
         for(TileSection tilesection: tileSections){
-            return tilesection.getNodes().get(0);
+            if(tilesection.hasTiger()){
+                return tilesection.getNodes().get(0);
+            }
         }
         return null;
     }
@@ -320,6 +327,11 @@ public class Tile {
     // Get the location for a tile
     public Point getLocation() {
         return location;
+    }
+
+    // Get the location for the tile in terms of the Server start tile
+    public Point getServerLocation() {
+        return serverLocation;
     }
 
     // Set the location for a tile
