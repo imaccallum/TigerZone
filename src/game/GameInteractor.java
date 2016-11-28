@@ -54,7 +54,7 @@ public class GameInteractor implements Runnable {
     public void place(Tile tile, Point location) throws BadPlacementException {
         board.place(tile, location);
     }
-    public void removeLasPlacedTile() {
+    public void removeLastPlacedTile() {
         board.removeLastPlacedTile();
     }
     // end bad programming practices
