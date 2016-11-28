@@ -13,7 +13,7 @@ public class ProtocolMessageParser {
 
     // MARK: - Other parsers
     public String parseGID(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("GAME (.+) ");
+        Pattern p = Pattern.compile("GAME\\W+(\\w+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
