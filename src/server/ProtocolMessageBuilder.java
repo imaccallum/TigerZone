@@ -1,7 +1,8 @@
 package server;
 
 import entities.board.Placement;
-import wrappers.MoveWrapper;
+import wrappers.NonplacementMoveWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 
@@ -13,8 +14,7 @@ public class ProtocolMessageBuilder {
     public String identityBuilder(String username, String password){
         return "I AM " + username + " " + password;
     }
-
-    public String messageForMove(MoveWrapper move, String gameId) {
+    public String messageForMove(PlacementMoveWrapper move, String gameId) {
         Point location = move.getLocation();
         if (move.getPlacedObject() == Placement.TIGER) {
             int zone = move.getZone();
@@ -30,7 +30,11 @@ public class ProtocolMessageBuilder {
         }
     }
 
-    public String unplaceableTilePass(String gameId, String tileCode){
+    public String messageForNonplacementMove(NonplacementMoveWrapper move, String gameId) {
+        if (move.get)
+    }
+
+    public String unplaceableTilePass(String gameId, String tileCode) {
         return "GAME " + gameId + " TILE " + tileCode + " UNPLACEABLE PASS";
     }
 

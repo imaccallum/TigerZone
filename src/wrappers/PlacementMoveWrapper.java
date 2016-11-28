@@ -4,7 +4,7 @@ import entities.board.Placement;
 
 import java.awt.*;
 
-public class MoveWrapper {
+public class PlacementMoveWrapper {
 
     private String tile;
     private Point location;
@@ -12,7 +12,7 @@ public class MoveWrapper {
     private Placement placedObject;
     private int zone;
 
-    public MoveWrapper(String tile, Point location, int orientation, Placement placedObject, int zone) {
+    public PlacementMoveWrapper(String tile, Point location, int orientation, Placement placedObject, int zone) {
         this.tile = tile;
         this.location = location;
         this.orientation = orientation;
