@@ -1,5 +1,10 @@
 package server;
 
+import entities.board.Placement;
+import wrappers.MoveWrapper;
+
+import java.awt.*;
+
 public class ProtocolMessageBuilder {
     public String joinBuilder(String tournamentPassword){
         return "JOIN " + tournamentPassword;
@@ -9,16 +14,20 @@ public class ProtocolMessageBuilder {
         return "I AM " + username + " " + password;
     }
 
-    public String placeTile(String gameId, String tileCode, int x, int y, int orientation){
-        return "GAME " + gameId + " PLACE " + tileCode + " AT " + x + " " + y + " NONE";
-    }
-
-    public String placeTileWithTiger(String gameId, String tileCode, int x, int y, int orientation, int zone){
-        return "GAME " + gameId + " PLACE " + tileCode + " AT " + x + " " + y + " TIGER " + zone;
-    }
-
-    public String placeTileWithCrocodile(String gameId, String tileCode, int x, int y, int orientation){
-        return "GAME " + gameId + " PLACE " + tileCode + " AT " + x + " " + y + " " + "CROCODILE";
+    public String messageForMove(MoveWrapper move, String gameId) {
+        Point location = move.getLocation();
+        if (move.getPlacedObject() == Placement.TIGER) {
+            int zone = move.getZone();
+            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y +
+                    " TIGER " + zone;
+        }
+        else if (move.getPlacedObject() == Placement.CROCODILE) {
+            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y +
+                    " " + "CROCODILE";
+        }
+        else {
+            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y + " NONE";
+        }
     }
 
     public String unplaceableTilePass(String gameId, String tileCode){

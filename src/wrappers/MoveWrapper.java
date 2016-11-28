@@ -4,9 +4,6 @@ import entities.board.Placement;
 
 import java.awt.*;
 
-/**
- * Created by ianmaccallum on 11/27/16.
- */
 public class MoveWrapper {
 
     private String tile;

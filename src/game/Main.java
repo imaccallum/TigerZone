@@ -1,16 +1,10 @@
 package game;
 
-import ai.AIManager;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import entities.board.Board;
-import entities.board.Tiger;
+import controller.AIController;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.BadServerInputException;
-import exceptions.ParseFailureException;
-import server.ProtocolMessageBuilder;
-import server.ProtocolMessageParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,9 +14,6 @@ import java.util.*;
 
 
 import java.net.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 
 abstract class NetworkProtocol {
@@ -341,8 +332,8 @@ public class Main {
 
         GameInteractor game = new GameInteractor(deck);
 
-        Player p0 = new Player("Player 0", new AIManager(game, "Player 0"));
-        Player p1 = new Player("Player 1", new AIManager(game, "Player 1"));
+        Player p0 = new Player("Player 0", new AIController(game, "Player 0"));
+        Player p1 = new Player("Player 1", new AIController(game, "Player 1"));
         game.addPlayer(p0);
         game.addPlayer(p1);
 
