@@ -21,8 +21,10 @@ import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
 import server.ServerMatchMessageHandler;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameInteractor implements Runnable {
@@ -57,6 +59,15 @@ public class GameInteractor implements Runnable {
      */
     public void run() {
     }
+
+    // "bad programming practices"
+    public void place(Tile tile, Point location) throws BadPlacementException {
+        board.place(tile, location);
+    }
+    public void removeLasPlacedTile() {
+        board.removeLastPlacedTile();
+    }
+    // end bad programming practices
 
     /**
      * Plays the game, ending when the tile stack is empty.

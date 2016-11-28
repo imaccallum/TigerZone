@@ -4,6 +4,7 @@ import entities.board.Tiger;
 import entities.board.Tile;
 import entities.overlay.TileSection;
 import entities.player.PlayerNotifier;
+import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.GameStatusMessage;
@@ -136,14 +137,23 @@ public class AIController implements PlayerNotifier {
         else {
             // Decide tile placement from lastGameInfoMessages
             //int rand = new Random().nextInt(possibleLocations.size());
-            for (LocationAndOrientation locationAndOrientation: possibleLocations) {
+            //TilePlacementRequest request;
+            for (LocationAndOrientation locationAndOrientation: possibleLocations){
+                tileToPlace.rotateCounterClockwise(locationAndOrientation.getOrientation());
+               // request =  new TilePlacementRequest(playerName, tileToPlace, locationAndOrientation.getLocation());
+                try {
+                    gameInteractor.place(tileToPlace, locationAndOrientation.getLocation());
+                } catch (BadPlacementException e) {
+                    e.printStackTrace();
+                }
+                // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                gameInteractor.removeLasPlacedTile();
             }
+
             LocationAndOrientation bestMove = getBestMove();
             moves.clear();
-
-            tileToPlace.rotateCounterClockwise(bestMove.getOrientation());
-            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());
+            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());;
             TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
 
             if (!response.wasValid) {
