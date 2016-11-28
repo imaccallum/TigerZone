@@ -1,6 +1,21 @@
 package server.networkState;
 
+import entities.board.Tile;
+import entities.board.TileFactory;
+import exceptions.ParseFailureException;
+import game.GameInteractor;
+import game.MessageOutputRunner;
+import javafx.util.Pair;
+import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.GameOverWrapper;
+
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by ianmaccallum on 11/28/16.
@@ -26,11 +41,98 @@ public class NetworkContext {
     private int remainingTileCount;
     private String[] remainingTiles;
 
-    public NetworkContext(String tournamentPassword, String username, String password) {
-        this.tournamentPassword = tournamentPassword;
-        this.username = username;
-        this.password = password;
+    private BufferedReader in;
+    private PrintWriter out;
+
+    private Lock mutex = new ReentrantLock();
+
+
+    public NetworkContext(BufferedReader in, PrintWriter out) {
+        this.in = in;
+        this.out = out;
     }
+
+
+
+    public Pair<GameOverWrapper, GameOverWrapper> startMatch() {
+        // TODO
+        // Parse input for match start
+        // Initialize GameManagers
+        // Start two threads
+
+        Tile firstTile = TileFactory.makeTile(startingTile);
+        Tile secondTile = TileFactory.makeTile(startingTile);
+
+        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
+        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
+
+        GameInteractor gameInteractorOne = new GameInteractor(firstTile, remainingTileCount + 1);
+        GameInteractor gameInteractorTwo = new GameInteractor(secondTile, remainingTileCount + 1);
+
+        MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
+        MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);
+
+        Thread matchGameOneThread = new Thread(gameInteractorOne);
+        Thread matchGameTwoThread = new Thread(gameInteractorTwo);
+        Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
+        Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
+
+        matchGameOneThread.run();
+        matchGameTwoThread.run();
+        gameOneMessageRunner.run();
+        gameTwoMessageRunner.run();
+
+        ProtocolMessageParser parser = new ProtocolMessageParser();
+        GameOverWrapper firstGameOverWrapper = null;
+        GameOverWrapper secondGameOverWrapper = null;
+
+        while (firstGameOverWrapper == null || secondGameOverWrapper == null) {
+            try {
+                String serverInput = in.readLine();
+                String gameId = parser.parseGID(serverInput);
+                switch(gameId) {
+                    case "A": {
+                        try {
+                            firstGameOverWrapper = parser.parseGameOver(serverInput);
+                        }
+                        catch (ParseFailureException exception) {
+                            gameOneMessageHandler.setServerInput(serverInput);
+                        }
+                    }
+
+                    case "B": {
+                        try {
+                            secondGameOverWrapper = parser.parseGameOver(serverInput);
+                        }
+                        catch (ParseFailureException exception) {
+                            gameTwoMessageHandler.setServerInput(serverInput);
+                        }
+                    }
+
+                    default: System.err.println("Invalid game Id received");
+                }
+            }
+            catch (IOException exception) {
+                System.err.println("Received IO exception");
+            }
+            catch (ParseFailureException exception) {
+                System.err.println("Failed to parse the group id, exception: " + exception.getMessage());
+            }
+        }
+        try {
+            matchGameOneThread.join();
+            matchGameTwoThread.join();
+        } catch (InterruptedException exception) {
+            System.err.println("Game interrupted");
+        }
+        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
+        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
+        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
+    }
+
+
+
+
 
     public NetworkState getState() {
         return state;
