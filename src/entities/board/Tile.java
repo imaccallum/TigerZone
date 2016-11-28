@@ -269,10 +269,10 @@ public class Tile {
     }
 
     /*
-     * Get the Node where the Tiger is on in the tileSection on the tile
+     * Get the int for the Node where the Tiger should be placed on in the tileSection on the tile
      *
      * @return
-     * Node that has the tiger
+     * int for the Node that should have the Tiger placed on it
      */
     public int getTigerZone(TileSection tilesection){
         int min = 9;
