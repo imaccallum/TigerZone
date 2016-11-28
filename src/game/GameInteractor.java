@@ -112,7 +112,6 @@ public class GameInteractor implements Runnable {
             else if (confirmed) {
                 playerTurn = confirmedMove.getPid();
                 confirmMove(confirmedMove);
-                System.out.println("GAME " + gameId + '\n' + board.toString());
             }
         }
     }
