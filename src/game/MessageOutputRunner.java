@@ -15,7 +15,7 @@ public class MessageOutputRunner implements Runnable {
     public MessageOutputRunner(Lock mutex, PrintWriter serverOutput, ServerMatchMessageHandler messageHandler) {
         this.mutex = mutex;
         this.serverOutput = serverOutput;
-        serverOutput
+        this.messageHandler = messageHandler;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class MessageOutputRunner implements Runnable {
             catch (InterruptedException exception) {
                 System.err.println("MessageOutputRunner was interrupted");
             }
-            
+
             if (serverOutputString.equals(terminationMessage)) {
                 break;
             }

@@ -380,8 +380,8 @@ public class Main {
         // Parse input for match start
         // Initialize GameManagers
         // Start two threads
-        Thread one = new Thread();
-        Thread two = new Thread();
+        Thread matchGameOneThread = new Thread();
+        Thread matchGameTwoThread = new Thread();
     }
 
     public void playGame(BufferedReader in, PrintWriter out, GameInteractor gameInteractor) {
