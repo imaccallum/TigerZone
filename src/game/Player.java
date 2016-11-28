@@ -1,9 +1,9 @@
-package entities.player;
+package game;
 
+import controller.PlayerNotifier;
 import entities.board.Tiger;
 import game.messaging.info.PlayerInfo;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
