@@ -40,11 +40,11 @@ public class TileSectionTest {
     public void testHasOpenConnectionShouldReturnTrueIfUnconnectedNodesExist() {
         TileSection section = new TileSection(Terrain.LAKE);
         section.addNodes(new Node(), new Node(), new Node());
-        section.getNodes().get(0).setConnectedNode(new Node());
+        section.getNodes().get(0).addConnectedNode(new Node());
         Assert.assertTrue(section.hasOpenConnection());
-        section.getNodes().get(1).setConnectedNode(new Node());
+        section.getNodes().get(1).addConnectedNode(new Node());
         Assert.assertTrue(section.hasOpenConnection());
-        section.getNodes().get(2).setConnectedNode(new Node());
+        section.getNodes().get(2).addConnectedNode(new Node());
         Assert.assertFalse(section.hasOpenConnection());
 
     }
