@@ -68,6 +68,8 @@ public class NetworkContext {
         ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
         ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
 
+        System.out.println(remainingTileCount);
+
         GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1, gameOneMessageHandler, "A");
         GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1, gameTwoMessageHandler, "B");
 

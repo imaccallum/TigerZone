@@ -37,8 +37,6 @@ public class GameInteractor implements Runnable {
     private GameOverWrapper gameOver;
     private AIInterface aiNotifier;
     private String gameId;
-    private String ourPid;
-    private String opponentPid;
 
     public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler, String gameId) {
         board = new Board(stackSize, firstTile);
@@ -49,7 +47,6 @@ public class GameInteractor implements Runnable {
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
         this.gameId = gameId;
-        this.ourPid = ourPid;
     }
 
     @Override
@@ -302,7 +299,7 @@ public class GameInteractor implements Runnable {
         }
         else if (confirmedMove.isPlacementMove()) {
             PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
-            Point location = placementMove.getLocation();
+            Point location = board.getNativeLocation(placementMove.getLocation());
             int orientation = placementMove.getOrientation();
             Tile tileToPlace = TileFactory.makeTile(placementMove.getTile());
             tileToPlace.rotateCounterClockwise(orientation);
