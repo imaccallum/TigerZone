@@ -1,8 +1,12 @@
 package server;
 
+import game.LocationAndOrientation;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
+import wrappers.GameOverWrapper;
+
+import java.awt.*;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +32,7 @@ public class ProtocolMessageParserTest {
 
     @Test
     public void parseIsHello() throws Exception {
-        boolean t = parser.parseIsSparta("HELLO!");
+        boolean t = parser.parseIsHello("HELLO!");
         assertTrue(t);
     }
 
@@ -131,7 +135,26 @@ public class ProtocolMessageParserTest {
 
     @Test
     public void parseStartingTile() throws Exception {
-        parser.parseStartingTile();
+        String tile0 = "LLJJ-";
+        int x0 = 4;
+        int y0 = 3;
+        int o0 = 2;
+
+        String input = "STARTING TILE IS " + tile0 + " AT " + x0 + " " + y0 + " " + o0;
+        Pair<String, LocationAndOrientation> pair = parser.parseStartingTile(input);
+
+        LocationAndOrientation lo = pair.getValue();
+        Point location = lo.getLocation();
+
+        String tile1 = pair.getKey();
+        int x1 = location.x;
+        int y1 = location.y;
+        int o1 = lo.getOrientation();
+
+        assertEquals(tile0, tile1);
+        assertEquals(x0, x1);
+        assertEquals(y0, y1);
+        assertEquals(o0, o1);
     }
 
     @Test
@@ -149,22 +172,43 @@ public class ProtocolMessageParserTest {
         }
     }
 
-
-    @Test
-    public void parseRemainingTiles1() throws Exception {
-
-    }
-
     @Test
     public void parseMatchBeginsPlanTime() throws Exception {
+        int time0 = 2;
+        String input = "MATCH BEGINS IN " + time0 + " SECONDS";
 
+        int time1 = parser.parseMatchBeginsPlanTime(input).intValue();
+
+        assertEquals(time0, time1);
     }
 
     @Test
     public void parseGameOver() throws Exception {
+        String gid0 = "n4uj3n3d";
+        String pid_a0 = "h34brh34j";
+        int score_a0 = 140;
+        String pid_b0 = "34wr3f4";
+        int score_b0 = 129;
 
+        String input = "GAME " + gid0 + " OVER PLAYER " + pid_a0 + " " + score_a0 + " PLAYER " + pid_b0 + " " + score_b0;
+        GameOverWrapper wrapper = parser.parseGameOver(input);
+
+        String gid1 = wrapper.getGid();
+        String pid_a1 = wrapper.getPid0();
+        int score_a1 = wrapper.getScore0();
+        String pid_b1 = wrapper.getPid1();
+        int score_b1 = wrapper.getScore1();
+
+        assertEquals(gid0, gid1);
+        assertEquals(pid_a0, pid_a1);
+        assertEquals(score_a0, score_a1);
+        assertEquals(pid_b0, pid_b1);
+        assertEquals(score_b0, score_b1);
     }
 
+
+
+    // MARK: - Move protocol tests
     @Test
     public void parseBeginTurn() throws Exception {
 
@@ -184,9 +228,4 @@ public class ProtocolMessageParserTest {
     public void parseTigerZone() throws Exception {
 
     }
-
-
-
-
-
 }
