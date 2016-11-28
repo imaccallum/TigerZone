@@ -23,7 +23,7 @@ import game.messaging.response.TilePlacementResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameInteractor {
+public class GameInteractor implements Runnable {
     private String playerTurn;
     private Stack<Tile> tileStack;
     private Map<String, Player> players;
@@ -48,6 +48,14 @@ public class GameInteractor {
         for (Player notifyingPlayer : playerList) {
             notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
         }
+    }
+
+    /**
+     * Runs the game
+     */
+
+    public void run() {
+
     }
 
     /**
