@@ -1,8 +1,7 @@
 package game;
 
-import controller.AINotifier;
+import controller.AIInterface;
 import controller.Move;
-import controller.ServerListener;
 import entities.board.*;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
@@ -14,9 +13,7 @@ import exceptions.TigerAlreadyPlacedException;
 import game.messaging.info.RegionInfo;
 import game.messaging.info.RegionTigerPlacement;
 import game.messaging.info.TigerDenTigerPlacement;
-import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
-import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
 import server.ProtocolMessageBuilder;
@@ -38,8 +35,10 @@ public class GameInteractor implements Runnable {
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
     private GameOverWrapper gameOver;
-    private AINotifier aiNotifier;
+    private AIInterface aiNotifier;
     private String gameId;
+    private String ourPid;
+    private String opponentPid;
 
     public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler, String gameId) {
         board = new Board(stackSize, firstTile);
@@ -50,6 +49,7 @@ public class GameInteractor implements Runnable {
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
         this.gameId = gameId;
+        this.ourPid = ourPid;
     }
 
     @Override
@@ -90,6 +90,7 @@ public class GameInteractor implements Runnable {
             }
 
             if (ourTurn) {
+                playerTurn = aiNotifier.getPlayerName();
                 String serverMessage = "";
                 Move bestMove = aiNotifier.decideMove(beginTurn);
                 if (bestMove != null) {
@@ -110,13 +111,14 @@ public class GameInteractor implements Runnable {
                     serverMessage = messageBuilder.messageForMove(placementMove, gameId);
                 }
                 else {
-                    serverMessage = messageBuilder.messageForMove(new NonplacementMoveWrapper())
+                    NonplacementMoveWrapper nonplacementMove = new NonplacementMoveWrapper(beginTurn.getTile());
+                    serverMessage = messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
                 }
+                messageHandler.setServerOutput(serverMessage);
             }
             else if (confirmed) {
+                playerTurn = confirmedMove.getPid();
                 confirmMove(confirmedMove);
-            } else {
-
             }
         }
     }
@@ -350,7 +352,7 @@ public class GameInteractor implements Runnable {
         }
     }
 
-    public void setAiNotifier(AINotifier aiNotifier) {
+    public void setAiNotifier(AIInterface aiNotifier) {
         this.aiNotifier = aiNotifier;
     }
 

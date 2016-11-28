@@ -1,10 +1,13 @@
 package server.networkState;
 
+import controller.AIController;
+import controller.AIInterface;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import exceptions.ParseFailureException;
 import game.GameInteractor;
 import game.MessageOutputRunner;
+import game.Player;
 import javafx.util.Pair;
 import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
@@ -66,14 +69,26 @@ public class NetworkContext {
         ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
         ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
 
-        GameInteractor gameInteractorOne = new GameInteractor(firstTile, remainingTileCount + 1);
-        GameInteractor gameInteractorTwo = new GameInteractor(secondTile, remainingTileCount + 1);
+        GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1, gameOneMessageHandler, "A");
+        GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1, gameTwoMessageHandler, "B");
+
+        gameOne.addPlayer(new Player(pid));
+        gameOne.addPlayer(new Player(opid));
+
+        gameTwo.addPlayer(new Player(pid));
+        gameTwo.addPlayer(new Player(opid));
+
+        AIInterface ai1 = new AIController(gameOne, pid, gameOneMessageHandler);
+        AIInterface ai2 = new AIController(gameTwo, pid, gameTwoMessageHandler);
+
+        gameOne.setAiNotifier(ai1);
+        gameTwo.setAiNotifier(ai2);
 
         MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
         MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);
 
-        Thread matchGameOneThread = new Thread(gameInteractorOne);
-        Thread matchGameTwoThread = new Thread(gameInteractorTwo);
+        Thread matchGameOneThread = new Thread(gameOne);
+        Thread matchGameTwoThread = new Thread(gameTwo);
         Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
         Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
 
