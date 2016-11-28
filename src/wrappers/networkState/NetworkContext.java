@@ -1,5 +1,7 @@
 package wrappers.networkState;
 
+import java.awt.*;
+
 /**
  * Created by ianmaccallum on 11/28/16.
  */
@@ -10,11 +12,16 @@ public class NetworkContext {
     private String username;
     private String password;
     private String pid;
+    private String opid;
     private String cid;
     private String rid;
     private int round;
     private int roundCount;
     private boolean shouldReturn = false;
+
+    private String startingTile;
+    private Point startingTileLocation;
+    private int startingTileOrientation;
 
     public NetworkContext(String tournamentPassword, String username, String password) {
         this.tournamentPassword = tournamentPassword;
@@ -62,6 +69,14 @@ public class NetworkContext {
         this.pid = pid;
     }
 
+    public String getOpid() {
+        return opid;
+    }
+
+    public void setOpid(String opid) {
+        this.opid = opid;
+    }
+
     public String getCid() {
         return cid;
     }
@@ -100,5 +115,29 @@ public class NetworkContext {
 
     public void setShouldReturn(boolean shouldReturn) {
         this.shouldReturn = shouldReturn;
+    }
+
+    public String getStartingTile() {
+        return startingTile;
+    }
+
+    public void setStartingTile(String startingTile) {
+        this.startingTile = startingTile;
+    }
+
+    public Point getStartingTileLocation() {
+        return startingTileLocation;
+    }
+
+    public void setStartingTileLocation(Point startingTileLocation) {
+        this.startingTileLocation = startingTileLocation;
+    }
+
+    public int getStartingTileOrientation() {
+        return startingTileOrientation;
+    }
+
+    public void setStartingTileOrientation(int startingTileOrientation) {
+        this.startingTileOrientation = startingTileOrientation;
     }
 }
