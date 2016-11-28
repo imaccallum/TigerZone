@@ -22,7 +22,7 @@ import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
-public class AIController {
+public class AIController implements AINotifier {
     private List<Move> moves;
     private GameInteractor gameInteractor;
     private Move bestMove;
@@ -136,9 +136,9 @@ public class AIController {
     }
 
 
-    // MARK: Implementation of PlayerNotifier
+    // MARK: Implementation of AINotifier
 
-    public boolean decideMove(BeginTurnWrapper beginTurn) {
+    public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
@@ -148,7 +148,7 @@ public class AIController {
 
             // Create no moves server commands
             // else, bestMove contains all info needed to build server commands
-
+            return null;
         }
         else {
             // Decide tile placement from lastGameInfoMessages
@@ -171,6 +171,7 @@ public class AIController {
 //            tileToPlace.rotateCounterClockwise(bestMove.getLocationAndOrientation().getOrientation());
 
             moves.clear();
+            return bestMove;
 
 //            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace,
 //                    bestMove.getLocationAndOrientation().getLocation());
@@ -187,6 +188,5 @@ public class AIController {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.setServerOutput(serverOutput);
         }
-        return true;
     }
 }
