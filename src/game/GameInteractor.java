@@ -68,9 +68,7 @@ public class GameInteractor implements Runnable {
                 beginTurn = messageParser.parseBeginTurn(message);
                 ourTurn = true;
             }
-            catch (ParseFailureException exception) {
-                System.out.println("Failed to parse begin turn");
-            }
+            catch (ParseFailureException exception) {}
 
             boolean confirmed = false;
             ConfirmedMoveWrapper confirmedMove = null;
@@ -78,26 +76,23 @@ public class GameInteractor implements Runnable {
                 confirmedMove = messageParser.parseConfirmMove(message);
                 confirmed = true;
             }
-            catch (ParseFailureException exception) {
-                System.out.println("Failed to parse placement turn");
-            }
+            catch (ParseFailureException exception) {}
 
             try {
                 gameOver = messageParser.parseGameOver(message);
             }
-            catch (ParseFailureException exception) {
-                System.out.println("Failed to parse game over");
-            }
+            catch (ParseFailureException exception) {}
 
             if (ourTurn) {
                 playerTurn = aiNotifier.getPlayerName();
                 String serverMessage = "";
                 Move bestMove = aiNotifier.decideMove(beginTurn);
                 if (bestMove != null) {
-                    Point location = bestMove.getLocationAndOrientation().getLocation();
+                    Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
                     int orientation = bestMove.getLocationAndOrientation().getOrientation();
                     String tile = bestMove.getTile().getType();
-                    PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation);
+                    PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation,
+                                                                                  beginTurn.getMoveNumber());
                     if (bestMove.needsTiger()) {
                         placementMove.setPlacedObject(Placement.TIGER);
                         placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
@@ -111,7 +106,8 @@ public class GameInteractor implements Runnable {
                     serverMessage = messageBuilder.messageForMove(placementMove, gameId);
                 }
                 else {
-                    NonplacementMoveWrapper nonplacementMove = new NonplacementMoveWrapper(beginTurn.getTile());
+                    NonplacementMoveWrapper nonplacementMove = new NonplacementMoveWrapper(beginTurn.getTile(),
+                                                                                           beginTurn.getMoveNumber());
                     serverMessage = messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
                 }
                 messageHandler.setServerOutput(serverMessage);
@@ -155,6 +151,10 @@ public class GameInteractor implements Runnable {
         else {
             return new ValidMovesResponse(validPlacements, new HashSet<>(), false);
         }
+    }
+
+    public Map<String, Player> getPlayers() {
+        return players;
     }
 
 

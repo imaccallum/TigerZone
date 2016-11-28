@@ -6,9 +6,11 @@ public class NonplacementMoveWrapper {
     private String tile;
     private UnplaceableType type;
     private Point tigerLocation;
+    private int moveNumber;
 
-    public NonplacementMoveWrapper(String tile) {
+    public NonplacementMoveWrapper(String tile, int moveNumber) {
         this.tile = tile;
+        this.moveNumber = moveNumber;
     }
 
     public void setType(UnplaceableType type) {
@@ -17,6 +19,10 @@ public class NonplacementMoveWrapper {
 
     public void setTigerLocation(Point tigerLocation) {
         this.tigerLocation = tigerLocation;
+    }
+
+    public void setMoveNumber(int moveNumber) {
+        this.moveNumber = moveNumber;
     }
 
     public String getTile() {
@@ -29,5 +35,9 @@ public class NonplacementMoveWrapper {
 
     public Point getTigerLocation() {
         return tigerLocation;
+    }
+
+    public int getMoveNumber() {
+        return moveNumber;
     }
 }

@@ -53,7 +53,7 @@ public class AIController implements AIInterface {
         int score;
         boolean crocIsViable = false;
 
-        if (playersInfo.get(playerName).remainingCrocodiles > 0 && tile.canPlaceCrocodile()){
+        if (gameInteractor.getPlayers().get(playerName).hasRemainingCrocodiles() && tile.canPlaceCrocodile()) {
             tile.placeCrocodile();
             moveWithCroc = calculateScoreForTile(tile);
             crocIsViable = true;
@@ -104,7 +104,7 @@ public class AIController implements AIInterface {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && playersInfo.get(playerName).remainingTigers > 0){
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
                     if (regionScore > scoreWhereTigerWasPlaced) {
                         scoreWhereTigerWasPlaced = regionScore;
                         sectionWhereTileNeedsToBePlaced = tileSection;
@@ -153,6 +153,8 @@ public class AIController implements AIInterface {
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                // Reset rotation
+                tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
                 gameInteractor.removeLastPlacedTile();
             }
 
