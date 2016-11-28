@@ -16,7 +16,7 @@ import game.scoring.Scorer;
 import java.util.*;
 
 public class AIController implements PlayerNotifier {
-    private Map<LocationAndOrientation, Integer> moves;
+    private List<Move> moves;
     private Stack<GameStatusMessage> lastGameStatusMessages;
     private GameInteractor gameInteractor;
     private String playerName;
@@ -24,53 +24,69 @@ public class AIController implements PlayerNotifier {
 
     public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
-        moves = new HashMap<>();
+        moves = new ArrayList<>();
         lastGameStatusMessages = new Stack<>();
         this.playerName = playerName;
         this.playersInfo = new HashMap<>();
     }
 
     public LocationAndOrientation getBestMove() {
-        int maxScore = Collections.max(moves.values());
-        for (Map.Entry<LocationAndOrientation, Integer> entry : moves.entrySet()) {
-            if (entry.getValue() == maxScore) {
-                return entry.getKey();
+        int max = moves.get(0).getScore();
+        LocationAndOrientation loc = moves.get(0).getLocationAndOrientation();
+        for (Move move: moves) {
+            if (move.getScore() > max) {
+                max = move.getScore();
+                loc = move.getLocationAndOrientation();
             }
         }
-        return null;
+        return loc;
     }
 
     // Use function through the Board's findValidTilePlacements()
     public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile, Player player) {
-        int score,scoreWithoutCrocodile, scoreWithCrocodile;
-        scoreWithoutCrocodile = scoreWithCrocodile = 0;
+        boolean needsCroc = false;
+        Move moveWithCroc = null;
+        Move moveWithoutCroc = null;
+
+        int score;
 
         if (player.hasRemainingCrocodiles() && tile.canPlaceCrocodile()){
             tile.placeCrocodile();
-            scoreWithCrocodile += calculateScoreForTile(tile, player);
+            moveWithCroc = calculateScoreForTile(tile, player);
         } else {
-            scoreWithoutCrocodile += calculateScoreForTile(tile, player);
+            moveWithoutCroc = calculateScoreForTile(tile, player);
         }
 
-        score = Math.max(scoreWithoutCrocodile, scoreWithCrocodile);
-
-        if (score == scoreWithCrocodile) {
-            // TODO: 11/26/2016 make sure the player knows that the move involves placing a crocodile
+        // Since you can only place one follower at the time make sure placing the crocodile is worth
+        //over placing a tiger.
+        if (moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives() <= moveWithoutCroc.getScore()){
+            moveWithCroc.setScore(0);
         }
 
-        moves.put(locationAndOrientation, score);
+        score = Math.max(moveWithCroc.getScore(), moveWithoutCroc.getScore());
+
+        if (score == moveWithCroc.getScore() && moveWithoutCroc.getScore() != moveWithCroc.getScore()){
+            moveWithCroc.setLocationAndOrientation(locationAndOrientation);
+            moveWithCroc.setNeedsCrocodile(true);
+            moveWithCroc.setNeedsTiger(false);
+            moveWithCroc.setScore(moveWithCroc.getScore() - moveWithCroc.getScoreTigerGives());
+            moveWithCroc.setTileSection(null);
+            moves.add(moveWithCroc);
+            return;
+        }
+
+        moveWithoutCroc.setLocationAndOrientation(locationAndOrientation);
+        moves.add(moveWithoutCroc);
     }
 
-    public void clearMoves() {
-        moves.clear();
-    }
-
-    public int calculateScoreForTile(Tile tile, Player player) {
+    public Move calculateScoreForTile(Tile tile, Player player){
         int tileScore = 0;
+        TileSection sectionWhereTileNeedsToBePlaced  = null;
+        int scoreWhereTigerWasPlaced = 0;
 
         // Assumes you have inserted the tile and will delete it later on if the move is not optimal
-        for (TileSection tileSection : tile.getTileSections()) {
-            Scorer scorer = tileSection.getRegion().getScorer();
+        for (TileSection tileSection: tile.getTileSections()) {
+            Scorer scorer= tileSection.getRegion().getScorer();
             int regionScore = scorer.score();
 
             if (tileSection.getRegion().getDominantPlayerNames().contains(player.getName())) {
@@ -78,25 +94,27 @@ public class AIController implements PlayerNotifier {
                 if (tileSection.getRegion().getDominantPlayerNames().size() == 1) {
                     tileScore += regionScore;
                 }
-                // If the ownership is shared
-                else {
-                    tileScore += (regionScore / 2);
-                }
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0) {
-                    // You should place the Tiger in this region
-                    tileScore += regionScore;
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && player.getRemainingTigers() > 0){
+                    if (regionScore > scoreWhereTigerWasPlaced) {
+                        scoreWhereTigerWasPlaced = regionScore;
+                        sectionWhereTileNeedsToBePlaced = tileSection;
+                    }
                 } else {
-
                     tileScore -= regionScore;
                 }
             }
         }
-        return tileScore;
+        tileScore += scoreWhereTigerWasPlaced;
+        boolean needsTiger = scoreWhereTigerWasPlaced > 0;
+        return new Move(null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
     }
 
+    public void clearMoves() {
+        moves.clear();
+    }
     // MARK: Implementation of PlayerNotifier
 
     public void notifyGameStatus(GameStatusMessage gameStatusMessage) {
@@ -108,7 +126,7 @@ public class AIController implements PlayerNotifier {
     }
 
     public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
-                          List<Tiger> tigersPlacedOnBoard) {
+                          Set<Tiger> tigersPlacedOnBoard) {
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
