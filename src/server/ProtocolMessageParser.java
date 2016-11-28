@@ -1,4 +1,5 @@
 package server;
+import entities.board.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
@@ -239,15 +240,38 @@ public class ProtocolMessageParser {
             int x = Integer.parseInt(m0.group(2));
             int y = Integer.parseInt(m0.group(3));
             int orientation = Integer.parseInt(m0.group(4));
-            String pid = m0.group(3);
+            String placement = m0.group(5);
 
-//            Point point = new Point(x, y);
-//            return new PlacementMoveWrapper(tile, point, orientation, );
+            Point point = new Point(x, y);
+            PlacementMoveWrapper wrapper = new PlacementMoveWrapper(tile, point, orientation);
+
+            if (placement.startsWith("TIGER ")) {
+                wrapper.setPlacedObject(Placement.TIGER);
+
+                int zone = parseTigerZone(placement);
+                wrapper.setZone(zone);
+
+            } else if (placement.equals("CROCODILE")) {
+                wrapper.setPlacedObject(Placement.CROCODILE);
+            } else {
+                wrapper.setPlacedObject(Placement.NONE);
+            }
+
+            return wrapper;
         }
 
-//        Pattern p1 = Pattern.compile("");
-//
-
             throw new ParseFailureException("Failed to parse: " + input);
+    }
+
+    public int parseTigerZone(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("TIGER (\\d+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            int zone = Integer.parseInt(m.group(1));
+            return zone;
+        }
+
+        throw new ParseFailureException("Failed to parse: " + input);
     }
 }
