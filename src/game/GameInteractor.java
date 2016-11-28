@@ -20,6 +20,7 @@ import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -289,7 +290,7 @@ public class GameInteractor {
         return new GameStatusMessage(openRegionsInfo, playersInfo);
     }
 
-    public Board getBoard() {
-        return board;
+    public void log() throws IOException {
+        board.log();
     }
 }
