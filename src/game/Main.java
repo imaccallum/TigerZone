@@ -287,6 +287,7 @@ public class Main {
 
 
 
+
             //region deckArray
         String[] myarray = {"JJJJ-",
                 "JJJJX", "JJJJX", "JJJJX", "JJJJX",
@@ -370,5 +371,17 @@ public class Main {
 //            //         System.out.println("------------------------");
 //
 //        }
+    }
+
+    public void startMatch(BufferedReader in, PrintWriter out) {
+        // Parse input for match start
+        // Initialize GameManagers
+        // Start two threads
+
+    }
+
+    public void playGame(BufferedReader in, PrintWriter out, GameInteractor gameInteractor) {
+        // Setup relationships, setup AI
+        gameInteractor.playGame();
     }
 }
