@@ -494,7 +494,7 @@ public class Board {
         }
     }
 
-    //
+    // Sets a tile to a location in the board matrix and gives the tile that location
     private void setTileAtLocation(Tile tile, Point location) {
         boardMatrix[location.y][location.x] = tile;
         tile.setLocation(location, new Point(boardSize/2 - 1, boardSize/2 - 1));

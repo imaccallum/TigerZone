@@ -24,11 +24,11 @@ public class ProtocolMessageParser {
     }
 
     public String parseWelcomePID(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("WELCOME .+ PLEASE WAIT FOR THE NEXT CHALLENGE");
+        Pattern p = Pattern.compile("WELCOME (.+) PLEASE WAIT FOR THE NEXT CHALLENGE");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
-            String pid = m.group(0);
+            String pid = m.group(1);
             return pid;
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
