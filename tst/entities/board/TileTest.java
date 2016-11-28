@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.List;
 
 public class TileTest {
@@ -147,5 +148,38 @@ public class TileTest {
         TileSection lake = testTile.getEdge(EdgeLocation.RIGHT).getTileSection();
         TileSection trail = testTile.getEdge(EdgeLocation.LEFT).getTileSection();
         Assert.assertTrue(tileSectionsAdjacent.contains(lake) && tileSectionsAdjacent.contains(trail));
+    }
+
+    @Test
+    public void testHasTigerReturnsAppropriateBoolean(){
+        Assert.assertFalse(testTile.hasTiger());
+        try {
+            testTile.getTileSections().get(0).placeTiger(new Tiger("John", false));
+        }
+        catch(Exception e){}
+        Assert.assertTrue(testTile.hasTiger());
+    }
+
+    @Test
+    public void testServerLocationReturnsCorrectPoint(){
+        Board board = new Board(7, testTile);
+        TileFactory tileFactory = new TileFactory();
+        Tile testTile2 = tileFactory.makeTile("JJJJ-");
+        Tile testTile3 = tileFactory.makeTile("JJJJ-");
+        Point testTileLocation = testTile.getLocation();
+        try {
+            board.place(testTile2, new Point(testTileLocation.x, testTileLocation.y+1));
+        }
+        catch(Exception e){}
+        try {
+            board.place(testTile3, new Point(testTileLocation.x+1, testTileLocation.y+1));
+        }
+        catch(Exception e){}
+        Point testTile2ServerLocation = testTile2.getServerLocation();
+        Assert.assertEquals(testTile2ServerLocation.x, 0);
+        Assert.assertEquals(testTile2ServerLocation.y, 1);
+        Point testTile3ServerLocation = testTile3.getServerLocation();
+        Assert.assertEquals(testTile3ServerLocation.x, 1);
+        Assert.assertEquals(testTile3ServerLocation.y, 1);
     }
 }
