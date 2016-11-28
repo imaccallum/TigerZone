@@ -40,9 +40,9 @@ public class ServerMatchMessageHandler {
         while (serverOutput == null) {
             wait();
         }
-        String input = serverInput;
+        String output = serverOutput;
         serverOutput = null;
-        return input;
+        return output;
     }
 
     public synchronized void setServerOutput(String output) {
