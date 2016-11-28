@@ -1,10 +1,6 @@
 package game;
 
-import controller.AIController;
 import entities.board.Tile;
-import entities.board.TileFactory;
-import entities.player.Player;
-import exceptions.BadServerInputException;
 import exceptions.ParseFailureException;
 import javafx.util.Pair;
 import server.ProtocolMessageParser;
@@ -18,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
 
 
 import java.net.*;

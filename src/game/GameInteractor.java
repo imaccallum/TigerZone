@@ -6,7 +6,6 @@ import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
-import entities.player.Player;
 import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;

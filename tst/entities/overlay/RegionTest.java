@@ -3,7 +3,6 @@ package entities.overlay;
 import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
-import entities.player.Player;
 import exceptions.IncompatibleTerrainException;
 import game.scoring.JungleScorer;
 import game.scoring.LakeScorer;
