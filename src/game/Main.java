@@ -14,6 +14,8 @@ import java.util.*;
 
 
 import java.net.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 abstract class NetworkProtocol {
@@ -215,6 +217,7 @@ class Game {
 
 
 public class Main {
+    private static Lock mutex = new ReentrantLock();
 
     public static void main(String[] args) throws Exception {
 
@@ -377,11 +380,13 @@ public class Main {
         // Parse input for match start
         // Initialize GameManagers
         // Start two threads
-
+        Thread one = new Thread();
+        Thread two = new Thread();
     }
 
     public void playGame(BufferedReader in, PrintWriter out, GameInteractor gameInteractor) {
         // Setup relationships, setup AI
         gameInteractor.playGame();
+
     }
 }
