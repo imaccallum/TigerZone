@@ -10,10 +10,7 @@ import server.networkState.AuthenticationState;
 import server.networkState.NetworkContext;
 import server.networkState.NetworkState;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 
 
 import java.net.*;
@@ -22,11 +19,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 public class Main {
-    private static Lock mutex = new ReentrantLock();
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 2) {
+        args = new String[]{"129.68.1.88", "3333", "PersiaRocks!", "Red", "Obiwan77"};
+
+
+        if (args.length != 5) {
             System.err.println("Usage: java EchoClient <host name> <port number>");
             System.exit(1);
         }
@@ -40,26 +39,38 @@ public class Main {
         String username = args[3];
         String password = args[4];
 
-        try (
-                Socket socket = new Socket(hostName, portNumber); // create the socket within client to communicate with the server
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        ) {
+//        try (
+//                Socket socket = new Socket(hostName, portNumber); // create the socket within client to communicate with the server
+//                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+////                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+////                InputStream in = System.in;
+//
+
+        PrintWriter out = new PrintWriter(System.out);
+                InputStreamReader isr = new InputStreamReader(System.in);
+                BufferedReader in = new BufferedReader(isr);
+//
+////                OutputStream os = new OutputStream()
+////                PrintWriter out = new PrintWriter()
+//
+//        ) {
+
+            NetworkContext context = new NetworkContext(in, out);
+            context.setTournamentPassword(tournamentPassword);
+            context.setUsername(username);
+            context.setPassword(password);
+            context.setState(new AuthenticationState(context));;
+
             // server connection successful
 
             String input;  // string received from server
             String output = "";    // string client gives
 
-            NetworkContext context = new NetworkContext(tournamentPassword, username, password);
-            context.setState(new AuthenticationState(context));;
-
-
             while ((input = in.readLine()) != null) {
-
-                System.out.println("SERVER: " + input);
-
                 // Process input using current state and formulate response
                 NetworkState currentState = context.getState();
+
+                System.out.println("SERVER: " + input);
 
                 try {
                     output = currentState.processInput(input);
@@ -70,23 +81,23 @@ public class Main {
 
                 if (output != null) {
                     System.out.println("CLIENT: " + output); // print client response
-                    out.println(output); // send message to server
+//                    out.println(output); // send message to server
                 }
 
                 if (context.shouldReturn()) break;
             }
 
-        } catch (UnknownHostException e) {
-
-            System.err.println("Host " + hostName + " unknown");
-            System.exit(1);
-
-        } catch (IOException e) {
-            // if I/O connection fails for some reason
-            System.err.println("Couldn't get I/O for the connection to " + hostName);
-            System.exit(1);
-            // print appropriate error message, exit program
-        }
+//        } catch (UnknownHostException e) {
+//
+//            System.err.println("Host " + hostName + " unknown");
+//            System.exit(1);
+//
+//        } catch (IOException e) {
+//            // if I/O connection fails for some reason
+//            System.err.println("Couldn't get I/O for the connection to " + hostName);
+//            System.exit(1);
+//            // print appropriate error message, exit program
+//        }
 
 
 
@@ -183,81 +194,5 @@ public class Main {
 //            //         System.out.println("------------------------");
 //
 //        }
-    }
-
-    public static Pair<GameOverWrapper, GameOverWrapper> startMatch(BufferedReader in, PrintWriter out) {
-        // TODO
-        // Parse input for match start
-        // Initialize GameManagers
-        // Start two threads
-        Tile firstTile = new Tile("");
-        Tile secondTile = new Tile("");
-        int stackSize = 77;
-
-        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
-        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
-
-        GameInteractor gameInteractorOne = new GameInteractor(firstTile, stackSize);
-        GameInteractor gameInteractorTwo = new GameInteractor(secondTile, stackSize);
-
-
-        MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
-        MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);
-
-        Thread matchGameOneThread = new Thread(gameInteractorOne);
-        Thread matchGameTwoThread = new Thread(gameInteractorTwo);
-        Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
-        Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
-
-        matchGameOneThread.run();
-        matchGameTwoThread.run();
-        gameOneMessageRunner.run();
-        gameTwoMessageRunner.run();
-
-        ProtocolMessageParser parser = new ProtocolMessageParser();
-        GameOverWrapper firstGameOverWrapper = null;
-        GameOverWrapper secondGameOverWrapper = null;
-        while (firstGameOverWrapper == null || secondGameOverWrapper == null) {
-            try {
-                String serverInput = in.readLine();
-                String gameId = parser.parseGID(serverInput);
-                switch(gameId) {
-                    case "A": {
-                        try {
-                            firstGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (ParseFailureException exception) {
-                            gameOneMessageHandler.setServerInput(serverInput);
-                        }
-                    }
-
-                    case "B": {
-                        try {
-                            secondGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (ParseFailureException exception) {
-                            gameTwoMessageHandler.setServerInput(serverInput);
-                        }
-                    }
-
-                    default: System.err.println("Invalid game Id received");
-                }
-            }
-            catch (IOException exception) {
-                System.err.println("Received IO exception");
-            }
-            catch (ParseFailureException exception) {
-                System.err.println("Failed to parse the group id, exception: " + exception.getMessage());
-            }
-        }
-        try {
-            matchGameOneThread.join();
-            matchGameTwoThread.join();
-        } catch (InterruptedException exception) {
-            System.err.println("Game interrupted");
-        }
-        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
     }
 }

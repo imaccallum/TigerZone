@@ -253,6 +253,98 @@ public class Tile {
         }
     }
 
+    /**
+     * Get the tile section that the server zone is talking about
+     *
+     * @param zone,
+     * The integer representing the zone
+     *
+     * @return
+     * The TileSection
+     */
+    public TileSection tileSectionForZone(int zone) {
+        switch (zone) {
+            case 1: {
+                Node corner = getCorner(CornerLocation.TOP_LEFT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.LEFT).getTileSection()
+                            .equals(getEdge(EdgeLocation.TOP).getTileSection())) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.LEFT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.TOP).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 2: return getEdge(EdgeLocation.TOP).getTileSection();
+            case 3: {
+                Node corner = getCorner(CornerLocation.TOP_RIGHT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.RIGHT).getTileSection()
+                            .equals(getEdge(EdgeLocation.TOP).getTileSection())) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.RIGHT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.TOP).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 4: return getEdge(EdgeLocation.LEFT).getTileSection();
+            case 5: return null;
+            case 6: return getEdge(EdgeLocation.RIGHT).getTileSection();
+            case 7: {
+                Node corner = getCorner(CornerLocation.BOTTOM_LEFT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.LEFT).getTileSection()
+                            .equals(getEdge(EdgeLocation.BOTTOM).getTileSection())) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.LEFT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.BOTTOM).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 8: return getEdge(EdgeLocation.BOTTOM).getTileSection();
+            case 9: {
+                Node corner = getCorner(CornerLocation.BOTTOM_RIGHT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.RIGHT).getTileSection()
+                            .equals(getEdge(EdgeLocation.BOTTOM).getTileSection())) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.RIGHT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.BOTTOM).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            default: return null;
+        }
+    }
+
     /*
      * Get whether a tiger is on any of the TileSections of the Tile
      *

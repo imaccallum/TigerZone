@@ -5,6 +5,7 @@ import game.LocationAndOrientation;
 import javafx.util.Pair;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
+import wrappers.GameOverWrapper;
 
 import java.awt.*;
 
@@ -50,20 +51,30 @@ public class MatchState extends NetworkState {
             int count = pair.getKey().intValue();
             String[] tiles = pair.getValue();
 
+            context.setRemainingTileCount(count);
+            context.setRemainingTiles(tiles);
+
+            return null;
 
         } catch(ParseFailureException e) {}
 
 
-//        // Server tells us when match begins
-//        try {
-//
-//        } catch(ParseFailureException e) {}
+        // Server tells us when match begins
+        try {
+            int time = parser.parseMatchBeginsPlanTime(input);
+            Pair<GameOverWrapper, GameOverWrapper> pair = context.startMatch();
 
-        return null;
+            // Both games are done so the game is over
+            NetworkState oldState = returnState();
+            context.setState(oldState);
+            return null;
+
+        } catch(ParseFailureException e) {}
+
+        throw new ParseFailureException(input);
     }
 
     public NetworkState returnState() {
         return new RoundState(context);
     }
-
 }

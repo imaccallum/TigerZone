@@ -1,6 +1,5 @@
 package game;
 
-import controller.PlayerNotifier;
 import entities.board.Tiger;
 import game.messaging.info.PlayerInfo;
 
@@ -9,15 +8,13 @@ import java.util.Set;
 
 public class Player {
     private final String name;
-    private final PlayerNotifier notifier;
     private int score;
     private int remainingTigers;
     private int remainingCrocodiles;
     private Set<Tiger> placedTigers;
 
-    public Player(String name, PlayerNotifier notifier){
+    public Player(String name){
         this.name = name;
-        this.notifier = notifier;
         remainingTigers = 7;
         remainingCrocodiles = 2;
         score = 0;
@@ -28,7 +25,7 @@ public class Player {
         placedTigers.add(tiger);
     }
 
-    public void removePLacedTiger(Tiger tiger) {
+    public void removePlacedTiger(Tiger tiger) {
         placedTigers.remove(tiger);
     }
 
@@ -80,10 +77,6 @@ public class Player {
 
     public boolean hasRemainingCrocodiles() {
         return getRemainingCrocodiles() > 0;
-    }
-
-    public PlayerNotifier getPlayerNotifier() {
-        return notifier;
     }
 
     public Set<Tiger> getPlacedTigers() {
