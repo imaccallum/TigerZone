@@ -154,8 +154,8 @@ public class AIController implements AIInterface {
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
                 // Reset rotation
-                tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
                 gameInteractor.removeLastPlacedTile();
+                tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
             }
 
             bestMove = calculateBestMove();

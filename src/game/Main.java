@@ -39,21 +39,12 @@ public class Main {
         String username = args[3];
         String password = args[4];
 
-//        try (
-//                Socket socket = new Socket(hostName, portNumber); // create the socket within client to communicate with the server
-//                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-////                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-////                InputStream in = System.in;
-//
+        try (
+                Socket socket = new Socket(hostName, portNumber); // create the socket within client to communicate with the server
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        PrintWriter out = new PrintWriter(System.out);
-                InputStreamReader isr = new InputStreamReader(System.in);
-                BufferedReader in = new BufferedReader(isr);
-//
-////                OutputStream os = new OutputStream()
-////                PrintWriter out = new PrintWriter()
-//
-//        ) {
+        ) {
 
             NetworkContext context = new NetworkContext(in, out);
             context.setTournamentPassword(tournamentPassword);
@@ -81,23 +72,23 @@ public class Main {
 
                 if (output != null) {
                     System.out.println("CLIENT: " + output); // print client response
-//                    out.println(output); // send message to server
+                    out.println(output); // send message to server
                 }
 
                 if (context.shouldReturn()) break;
             }
 
-//        } catch (UnknownHostException e) {
-//
-//            System.err.println("Host " + hostName + " unknown");
-//            System.exit(1);
-//
-//        } catch (IOException e) {
-//            // if I/O connection fails for some reason
-//            System.err.println("Couldn't get I/O for the connection to " + hostName);
-//            System.exit(1);
-//            // print appropriate error message, exit program
-//        }
+        } catch (UnknownHostException e) {
+
+            System.err.println("Host " + hostName + " unknown");
+            System.exit(1);
+
+        } catch (IOException e) {
+            // if I/O connection fails for some reason
+            System.err.println("Couldn't get I/O for the connection to " + hostName);
+            System.exit(1);
+            // print appropriate error message, exit program
+        }
 
 
 
