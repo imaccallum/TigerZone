@@ -34,7 +34,8 @@ public class MessageOutputRunner implements Runnable {
             }
             else {
                 mutex.lock();
-                serverOutput.println(serverOutputString);
+                System.out.println(serverOutputString);
+                serverOutput.println("CLIENT: " + serverOutputString);
                 mutex.unlock();
             }
         }

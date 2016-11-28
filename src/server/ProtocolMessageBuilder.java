@@ -19,31 +19,33 @@ public class ProtocolMessageBuilder {
         Point location = move.getLocation();
         if (move.getPlacedObject() == Placement.TIGER) {
             int zone = move.getZone();
-            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y +
-                    " TIGER " + zone;
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
+                    location.x + " " + location.y + " " + move.getOrientation() + " TIGER " + zone;
         }
         else if (move.getPlacedObject() == Placement.CROCODILE) {
-            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y +
-                    " " + "CROCODILE";
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
+                    location.x + " " + location.y + " " + move.getOrientation() + " " + "CROCODILE";
         }
         else {
-            return "GAME " + gameId + " PLACE " + move.getTile() + " AT " + location.x + " " + location.y + " NONE";
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
+                    location.x + " " + location.y + " " + move.getOrientation() + " NONE";
         }
     }
 
     public String messageForNonplacementMove(NonplacementMoveWrapper move, String gameId) {
         if (move.getType() == UnplaceableType.ADDED_TIGER) {
             Point location = move.getTigerLocation();
-            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE ADD ANOTHER TIGER TO " + location.x +
-                    " " + location.y;
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " TILE " + move.getTile() +
+                    " UNPLACEABLE ADD ANOTHER TIGER TO " + location.x + " " + location.y;
         }
         else if (move.getType() == UnplaceableType.RETRIEVED_TIGER) {
             Point location = move.getTigerLocation();
-            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE RETRIEVE TIGER AT " + location.x +
-                    " " + location.y;
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " TILE " + move.getTile() +
+                    " UNPLACEABLE RETRIEVE TIGER AT " + location.x + " " + location.y;
         }
         else {
-            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE PASS";
+            return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " TILE " + move.getTile() +
+                    " UNPLACEABLE PASS";
         }
     }
 }

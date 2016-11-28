@@ -253,6 +253,98 @@ public class Tile {
         }
     }
 
+    /**
+     * Get the tile section that the server zone is talking about
+     *
+     * @param zone,
+     * The integer representing the zone
+     *
+     * @return
+     * The TileSection
+     */
+    public TileSection tileSectionForZone(int zone) {
+        switch (zone) {
+            case 1: {
+                Node corner = getCorner(CornerLocation.TOP_LEFT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.LEFT).getTileSection()
+                            .equals(getEdge(EdgeLocation.TOP).getTileSection())) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.LEFT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.TOP).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 2: return getEdge(EdgeLocation.TOP).getTileSection();
+            case 3: {
+                Node corner = getCorner(CornerLocation.TOP_RIGHT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.RIGHT).getTileSection()
+                            .equals(getEdge(EdgeLocation.TOP).getTileSection())) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.RIGHT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.TOP).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 4: return getEdge(EdgeLocation.LEFT).getTileSection();
+            case 5: return null;
+            case 6: return getEdge(EdgeLocation.RIGHT).getTileSection();
+            case 7: {
+                Node corner = getCorner(CornerLocation.BOTTOM_LEFT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.LEFT).getTileSection()
+                            .equals(getEdge(EdgeLocation.BOTTOM).getTileSection())) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.LEFT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.LEFT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.BOTTOM).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            case 8: return getEdge(EdgeLocation.BOTTOM).getTileSection();
+            case 9: {
+                Node corner = getCorner(CornerLocation.BOTTOM_RIGHT);
+                if (corner == null) {
+                    if (getEdge(EdgeLocation.RIGHT).getTileSection()
+                            .equals(getEdge(EdgeLocation.BOTTOM).getTileSection())) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else if (getEdge(EdgeLocation.RIGHT).getTileSection().getTerrain() == Terrain.JUNGLE) {
+                        return getEdge(EdgeLocation.RIGHT).getTileSection();
+                    }
+                    else {
+                        return getEdge(EdgeLocation.BOTTOM).getTileSection();
+                    }
+                }
+                else {
+                    return corner.getTileSection();
+                }
+            }
+            default: return null;
+        }
+    }
+
     /*
      * Get whether a tiger is on any of the TileSections of the Tile
      *
@@ -269,10 +361,10 @@ public class Tile {
     }
 
     /*
-     * Get the Node where the Tiger is on in the tileSection on the tile
+     * Get the int for the Node where the Tiger should be placed on in the tileSection on the tile
      *
      * @return
-     * Node that has the tiger
+     * int for the Node that should have the Tiger placed on it
      */
     public int getTigerZone(TileSection tilesection){
         int min = 9;
@@ -280,36 +372,69 @@ public class Tile {
             if(nodeInTileSection.equals(corners[0])){
                 return 1;
             }
-            if(nodeInTileSection.equals(edges[0])){
-                if(corners[0] == null && edges[0].getTileSection().getTerrain()
-                                .equals(edges[3].getTileSection().getTerrain())) {
+            if(nodeInTileSection.equals(edges[0]) && min > 2){
+                if(tilesection.getTerrain() == Terrain.LAKE && tilesection.getNodes().size()>=2 &&
+                        edges[3].getTileSection().getTerrain() == Terrain.LAKE){
+                    return 1;
+                }
+                else if(corners[0] == null && edges[0].getTileSection().getTerrain() != Terrain.LAKE &&
+                    (edges[0].getTileSection().getTerrain().equals(edges[3].getTileSection().getTerrain()) ||
+                        (edges[0].getTileSection().getTerrain() == Terrain.JUNGLE ||
+                                edges[3].getTileSection().getTerrain()==Terrain.JUNGLE))) {
                     return 1;
                 }
                 else{
                     min = 2;
                 }
             }
-            else if(nodeInTileSection.equals(corners[1])){
-                min = 3;
+            else if(nodeInTileSection.equals(corners[1]) && min > 3){
+                if(corners[0] == null && !(edges[0].getTileSection().getTerrain() == Terrain.TRAIL ||
+                        (edges[0].getTileSection().getNodes().size()>=2 && edges[0].getTileSection().getTerrain() == Terrain.LAKE))){
+                    return 1;
+                }
+                else {
+                    min = 3;
+                }
             }
-            else if(nodeInTileSection.equals(edges[3])){
-                min = 4;
+            else if(nodeInTileSection.equals(edges[3]) && min > 4){
+                if(tilesection.getTerrain() == Terrain.JUNGLE){
+                    min = 1;
+                }
+                else {
+                    min = 4;
+                }
             }
-            else if(nodeInTileSection.equals(edges[1])){
-                if(corners[1] == null && edges[0].getTileSection().getTerrain()
+            else if(nodeInTileSection.equals(edges[1]) && min > 6){
+                if(tilesection.getTerrain().equals(Terrain.LAKE) && tilesection.getNodes().size()==1){
+                    min = 6;
+                }
+                else if(corners[1] == null && edges[0].getTileSection().getTerrain()
                         .equals(edges[1].getTileSection().getTerrain())) {
                     min = 3;
+                }
+                else if(tilesection.getTerrain() == Terrain.JUNGLE){
+                    min = 3;
+                }
+                else if(den == null && edges[1].getTileSection().getTerrain() == Terrain.TRAIL &&
+                        edges[2].getTileSection().getTerrain()==Terrain.TRAIL &&
+                        edges[3].getTileSection().getTerrain()!=Terrain.TRAIL){
+                    min = 5;
                 }
                 else{
                     min = 6;
                 }
             }
-            else if(nodeInTileSection.equals(corners[3])){
+            else if(nodeInTileSection.equals(corners[3]) && min > 7){
                 min = 7;
             }
-            else if(nodeInTileSection.equals(edges[2])){
-                if(corners[1] == null && edges[2].getTileSection().getTerrain()
-                        .equals(edges[3].getTileSection().getTerrain())) {
+            else if(nodeInTileSection.equals(edges[2]) && min > 8){
+                if(tilesection.getTerrain().equals(Terrain.LAKE) && tilesection.getNodes().size()>1){
+                    min = 8;
+                }
+                else if(corners[3] == null && edges[2].getTileSection().getTerrain() != Terrain.LAKE &&
+                        (edges[2].getTileSection().getTerrain().equals(edges[3].getTileSection().getTerrain()) ||
+                                (edges[2].getTileSection().getTerrain() == Terrain.JUNGLE ||
+                                        edges[3].getTileSection().getTerrain()==Terrain.JUNGLE))) {
                     min = 7;
                 }
                 else{

@@ -6,6 +6,7 @@ import entities.overlay.TileSection;
 import exceptions.BadPlacementException;
 import exceptions.IncompatibleTerrainException;
 import exceptions.StackingTigerException;
+import exceptions.TigerAlreadyPlacedException;
 import game.LocationAndOrientation;
 
 import java.awt.*;
@@ -60,10 +61,10 @@ public class Board {
         }
 
         tilesPlacedInOrder.push(firstTile);
-        openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
-        openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
-        openTileLocations.add(new Point(numberOfTiles, numberOfTiles - 1));
-        openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles - 2));
+        openTileLocations.add(new Point(centerLocation.x - 1, centerLocation.y));
+        openTileLocations.add(new Point(centerLocation.x + 1, centerLocation.y));
+        openTileLocations.add(new Point(centerLocation.x, centerLocation.y + 1));
+        openTileLocations.add(new Point(centerLocation.x, centerLocation.y - 1));
         numTiles = 1;
     }
 
@@ -237,6 +238,12 @@ public class Board {
         return boardMatrix[tileLocation.y][tileLocation.x];
     }
 
+
+    public Tile getTileFromServerLocation(Point serverLocation) {
+        int x = serverLocation.x + centerLocation.x;
+        int y = serverLocation.y + centerLocation.y;
+        return getTile(new Point(x, y));
+    }
     /**
      * Get the number of tiles
      *
@@ -367,43 +374,76 @@ public class Board {
     /**
      * Remove a tiger from the board
      *
-     * @param tiger,
-     * The tiger to be removed
+     * @param location,
+     * The tile location to remove the tiger from
      */
-    public void removeTiger(Tiger tiger) {
-        for (Region region : regionsAsList()) {
-            List<Tiger> tigersInRegion = region.getAllTigers();
-            if (!tigersInRegion.isEmpty()) {
-                for (TileSection section : region.getTileSections()) {
-                    if (tiger.equals(section.getTiger())) {
-                        if (tiger.isStacked()) {
-                            tiger = new Tiger(tiger.getOwningPlayerName(), false);
-                        }
-                        else {
-                            section.removeTiger();
-                        }
-                        break;
-                    }
+    public void removeTigerFromTileAt(Point location) {
+        Tile tileToRemoveTigerFrom = getTile(location);
+        Tiger removedTiger = null;
+        if (tileToRemoveTigerFrom.getDen().getTiger() != null) {
+            removedTiger = tileToRemoveTigerFrom.getDen().getTiger();
+            tileToRemoveTigerFrom.getDen().removeTiger();
+        }
+        else {
+            for (TileSection tileSection : tileToRemoveTigerFrom.getTileSections()) {
+                if  (tileSection.getTiger() != null) {
+                    removedTiger = tileSection.getTiger();
+                    tileSection.removeTiger();
                 }
             }
         }
-        placedTigers.remove(tiger);
+        if (removedTiger != null) {
+            placedTigers.remove(removedTiger);
+        }
     }
 
     /**
      * Stacks a tiger
-     * @param tigerToStack
-     * @throws StackingTigerException
+     * @param location,
+     * The location of the tile to stack the tiger at
+     *
+     * @throws StackingTigerException if there is already a tiger or whatever
      */
-    public void stackTiger(Tiger tigerToStack) throws StackingTigerException {
-        if (!placedTigers.contains(tigerToStack)) {
-            throw new StackingTigerException("Tiger not placed on the board");
-        } else if (tigerToStack.isStacked()) {
-            throw new StackingTigerException("Tiger is already stacked");
-        } else {
-            // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
-            placedTigers.remove(tigerToStack);
-            placedTigers.add(new Tiger(tigerToStack.getOwningPlayerName(), true));
+    public void stackTigerAt(Point location) throws StackingTigerException {
+        Tile tile = getTileFromServerLocation(location);
+        Tiger tiger;
+        if (tile.getDen().getTiger() != null) {
+            tiger = tile.getDen().getTiger();
+            if (!placedTigers.contains(tiger)) {
+                throw new StackingTigerException("Tiger not placed on the board");
+            } else if (tiger.isStacked()) {
+                throw new StackingTigerException("Tiger is already stacked");
+            } else {
+                // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
+                tiger = new Tiger(tiger.getOwningPlayerName(), true);
+            }
+            tile.getDen().removeTiger();
+            try {
+                tile.getDen().placeTiger(tiger);
+            } catch (TigerAlreadyPlacedException e) {
+                throw new StackingTigerException(e.getMessage());
+            }
+        }
+        else {
+            for (TileSection tileSection : tile.getTileSections()) {
+                if  (tileSection.getTiger() != null) {
+                    tiger = tileSection.getTiger();
+                    if (!placedTigers.contains(tiger)) {
+                        throw new StackingTigerException("Tiger not placed on the board");
+                    } else if (tiger.isStacked()) {
+                        throw new StackingTigerException("Tiger is already stacked");
+                    } else {
+                        // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
+                        tiger = new Tiger(tiger.getOwningPlayerName(), true);
+                    }
+                    tileSection.removeTiger();
+                    try {
+                        tileSection.placeTiger(tiger);
+                    } catch (TigerAlreadyPlacedException e) {
+                        throw new StackingTigerException(e.getMessage());
+                    }
+                }
+            }
         }
     }
 
@@ -626,7 +666,7 @@ public class Board {
     // Sets a tile to a location in the board matrix and gives the tile that location
     private void setTileAtLocation(Tile tile, Point location) {
         boardMatrix[location.y][location.x] = tile;
-        tile.setLocation(location, new Point(boardSize/2 - 1, boardSize/2 - 1));
+        tile.setLocation(location, centerLocation);
     }
 
     //
@@ -672,10 +712,17 @@ public class Board {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"))) {
             writer.write(output);
         }
-
     }
 
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
+    }
+
+    public Point getServerLocation(Point location) {
+        return new Point(location.x - centerLocation.x, location.y - centerLocation.y);
+    }
+
+    public Point getNativeLocation(Point serverLocation) {
+        return new Point(serverLocation.x + centerLocation.x, serverLocation.y + centerLocation.y);
     }
 }

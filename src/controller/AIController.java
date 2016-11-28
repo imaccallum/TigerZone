@@ -1,35 +1,27 @@
 package controller;
 
-import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.TileSection;
-import exceptions.ParseFailureException;
 import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.info.PlayerInfo;
-import game.messaging.request.FollowerPlacementRequest;
-import game.messaging.request.TilePlacementRequest;
-import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
 import server.ProtocolMessageBuilder;
-import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
-import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
-public class AIController implements PlayerNotifier {
+public class AIController implements AIInterface {
     private List<Move> moves;
     private GameInteractor gameInteractor;
     private Move bestMove;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
     private ServerMatchMessageHandler serverMessageHandler;
-    private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
 
     public AIController(GameInteractor gameInteractor, String playerName,
@@ -39,12 +31,7 @@ public class AIController implements PlayerNotifier {
         this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
-        messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
-    }
-
-    public Move getBestMove() {
-      return bestMove;
     }
 
     private Move calculateBestMove() {
@@ -66,7 +53,7 @@ public class AIController implements PlayerNotifier {
         int score;
         boolean crocIsViable = false;
 
-        if (playersInfo.get(playerName).remainingCrocodiles > 0 && tile.canPlaceCrocodile()){
+        if (gameInteractor.getPlayers().get(playerName).hasRemainingCrocodiles() && tile.canPlaceCrocodile()) {
             tile.placeCrocodile();
             moveWithCroc = calculateScoreForTile(tile);
             crocIsViable = true;
@@ -117,7 +104,7 @@ public class AIController implements PlayerNotifier {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && playersInfo.get(playerName).remainingTigers > 0){
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
                     if (regionScore > scoreWhereTigerWasPlaced) {
                         scoreWhereTigerWasPlaced = regionScore;
                         sectionWhereTileNeedsToBePlaced = tileSection;
@@ -138,23 +125,9 @@ public class AIController implements PlayerNotifier {
     }
 
 
-    // MARK: Implementation of PlayerNotifier
+    // MARK: Implementation of AIInterface
 
-    public boolean startTurn() {
-        String serverMessage;
-        BeginTurnWrapper beginTurn;
-        try {
-            serverMessage = serverMessageHandler.getServerInput();
-            beginTurn = messageParser.parseBeginTurn(serverMessage);
-        }
-        catch (InterruptedException exception) {
-            System.err.println("Interrupted: " + exception.getMessage());
-            return false;
-        } catch (ParseFailureException exception) {
-            System.err.println("Parse failure: " + exception.getMessage());
-            return false;
-        }
-
+    public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
@@ -164,7 +137,7 @@ public class AIController implements PlayerNotifier {
 
             // Create no moves server commands
             // else, bestMove contains all info needed to build server commands
-
+            return null;
         }
         else {
             // Decide tile placement from lastGameInfoMessages
@@ -180,13 +153,16 @@ public class AIController implements PlayerNotifier {
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                // Reset rotation
                 gameInteractor.removeLastPlacedTile();
+                tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
             }
 
             bestMove = calculateBestMove();
 //            tileToPlace.rotateCounterClockwise(bestMove.getLocationAndOrientation().getOrientation());
 
             moves.clear();
+            return bestMove;
 
 //            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace,
 //                    bestMove.getLocationAndOrientation().getLocation());
@@ -203,25 +179,10 @@ public class AIController implements PlayerNotifier {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.setServerOutput(serverOutput);
         }
+    }
 
-        PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
-        if (aiPlayerInfo.remainingTigers > 0 || aiPlayerInfo.remainingCrocodiles > 0) {
-            // Can place a follower
-
-            // DECIDE FOLLOWER PLACEMENT HERE
-
-            // Find a tiger to stack
-            Set<Tiger> placedTigers = aiPlayerInfo.placedTigers;
-
-            /*
-            FollowerPlacementResponse followerPlacementResponse = gameInteractor.handleFollowerPlacementRequest(...);
-
-            if (!followerPlacementResponse.wasValid) {
-                // forfeit
-            }
-            */
-        }
-
-        return true;
+    @Override
+    public String getPlayerName() {
+        return playerName;
     }
 }
