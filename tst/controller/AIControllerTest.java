@@ -2,10 +2,11 @@ package controller;
 
 import entities.board.Tile;
 import entities.board.TileFactory;
-import entities.player.Player;
+import game.Player;
 import game.GameInteractor;
 import org.junit.Before;
 import org.junit.Test;
+import server.ServerMatchMessageHandler;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -60,12 +61,11 @@ public class AIControllerTest {
             deck.push(t);
         }
 
-        deck.push(factory.makeTile("TLTJ-"));
-        game = new GameInteractor(deck);
+        game = new GameInteractor(factory.makeTile("TLTJ-"), deck.size());
 
-        AI = new AIController(game, "odfhgisge");
-        Player p0 = new Player("Player 0", new AIController(game, "Player 0"));
-        Player p1 = new Player("Player 1", new AIController(game, "Player 1"));
+        AI = new AIController(game, "odfhgisge", new ServerMatchMessageHandler("Orange"));
+        Player p0 = new Player("Player 0", new AIController(game, "Player 0", new ServerMatchMessageHandler("Orange")));
+        Player p1 = new Player("Player 1", new AIController(game, "Player 1", new ServerMatchMessageHandler("Orange")));
         game.addPlayer(p0);
         game.addPlayer(p1);
     }
