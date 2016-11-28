@@ -105,8 +105,20 @@ public class NetworkContext {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
                 switch(gameId) {
-                    case "A": gameOneMessageHandler.setServerInput(serverInput);
-                    case "B": gameTwoMessageHandler.setServerInput(serverInput);
+                    case "A": {
+                        try {
+                            firstGameOverWrapper = parser.parseGameOver(serverInput);
+                        }
+                        catch (Exception e) {}
+                        gameOneMessageHandler.setServerInput(serverInput);
+                    }
+                    case "B": {
+                        try {
+                            secondGameOverWrapper = parser.parseGameOver(serverInput);
+                        }
+                        catch (Exception e) {}
+                        gameTwoMessageHandler.setServerInput(serverInput);
+                    }
                     default: System.err.println("Invalid game Id received");
                 }
             }
@@ -123,9 +135,6 @@ public class NetworkContext {
         } catch (InterruptedException exception) {
             System.err.println("Game interrupted");
         }
-
-        firstGameOverWrapper = gameOne.getGameOver();
-        secondGameOverWrapper = gameTwo.getGameOver();
 
         gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
         gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
