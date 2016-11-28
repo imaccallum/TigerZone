@@ -169,7 +169,7 @@ public class AIController implements PlayerNotifier {
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
-                gameInteractor.removeLasPlacedTile();
+                gameInteractor.removeLastPlacedTile();
             }
 
             LocationAndOrientation bestMove = getBestMove();
