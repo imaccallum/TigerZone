@@ -1,12 +1,20 @@
 package server.networkState;
 
+import entities.board.Tile;
 import exceptions.ParseFailureException;
+import game.GameInteractor;
 import game.LocationAndOrientation;
+import game.MessageOutputRunner;
 import javafx.util.Pair;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.GameOverWrapper;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class MatchState extends NetworkState {
 
@@ -50,20 +58,48 @@ public class MatchState extends NetworkState {
             int count = pair.getKey().intValue();
             String[] tiles = pair.getValue();
 
+            context.setRemainingTileCount(count);
+            context.setRemainingTiles(tiles);
+
+            return null;
 
         } catch(ParseFailureException e) {}
 
 
-//        // Server tells us when match begins
+        // Server tells us when match begins
+        try {
+
+            int time = parser.parseMatchBeginsPlanTime(input);
+            // TODO: setup game
+
+        } catch(ParseFailureException e) {}
+
+
+        // Game over, return to round state
+        try {
+            GameOverWrapper wrapper = parser.parseGameOver(input);
+            NetworkState oldState = returnState();
+            context.setState(oldState);
+            return null;
+
+        } catch (ParseFailureException e) {}
+
+
+//        // Make your move
 //        try {
 //
-//        } catch(ParseFailureException e) {}
-
+//        } catch (ParseFailureException e) {}
+//
+//
+//        // Confirm move
+//        try {
+//
+//        } catch (ParseFailureException e) {}
+//
         return null;
     }
 
     public NetworkState returnState() {
         return new RoundState(context);
     }
-
 }
