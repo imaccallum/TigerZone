@@ -24,6 +24,12 @@ public class ProtocolMessageParser {
         }
     }
 
+    public boolean parseGoodbye(String input) {
+        return input.equals("THANK YOU FOR PLAYING! GOODBYE");
+    }
+
+
+
     // MARK: - Authentication protocol parser
     public boolean parseIsSparta(String input) {
         return input.equals("THIS IS SPARTA!");
@@ -159,7 +165,7 @@ public class ProtocolMessageParser {
         if (m.find()) {
             Integer count = Integer.parseInt(m.group(1));
             String arr = m.group(2);
-            String[] items = arr.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+            String[] items = arr.replaceAll("\\[", "").replaceAll("\\]", "").split(" ");
             return new Pair(count, items);
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
@@ -230,17 +236,28 @@ public class ProtocolMessageParser {
 
             ConfirmedMoveWrapper wrapper = new ConfirmedMoveWrapper(gid, moveNumber, pid);
 
+            // Check forfeit
             try {
-                String error = parseForfeit(suffix);
-                wrapper.setError(error);
-                wrapper.setForfeited(true);
+                String forfeitMessage = parseForfeit(suffix);
+                wrapper.setForfeitMessage(forfeitMessage);
+                wrapper.setHasForfeited(true);
                 return wrapper;
 
             } catch (ParseFailureException e) {}
 
+            // Check placement move
             try {
                 PlacementMoveWrapper move = parsePlacementMove(suffix);
-                wrapper.setMove(move);
+                wrapper.setPlacementMove(move);
+                wrapper.setIsPlacementMove(true);
+                return wrapper;
+            } catch (ParseFailureException e) {}
+
+            // Check nonplacement move
+            try {
+                NonplacementMoveWrapper move = parseNonplacementMove(suffix);
+                wrapper.setNonplacementMove(move);
+                wrapper.setIsPlacementMove(false);
                 return wrapper;
             } catch (ParseFailureException e) {}
         }
