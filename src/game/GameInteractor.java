@@ -19,6 +19,7 @@ import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
+import server.ServerMatchMessageHandler;
 
 import java.io.IOException;
 import java.util.*;
@@ -54,9 +55,7 @@ public class GameInteractor implements Runnable {
     /**
      * Runs the game
      */
-
     public void run() {
-
     }
 
     /**
