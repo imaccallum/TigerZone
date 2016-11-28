@@ -81,16 +81,18 @@ public class Board {
 
         // Disconnect the nodes
         for (Node node : tile.nodesClockwise()) {
-            for (Node connectedNode : node.getConnectedNodes()) {
-                connectedNode.getConnectedNodes().remove(node);
+            if(node!=null) {
+                for (Node connectedNode : node.getConnectedNodes()) {
+                    connectedNode.getConnectedNodes().remove(node);
+                }
+                node.getConnectedNodes().clear();
             }
-            node.getConnectedNodes().clear();
         }
 
         Stack<RegionMerge> mergesToUndo = regionMergesForEachPlacedTile.pop();
 
         // Undo the merges in reverse order
-        while (mergesToUndo.isEmpty()) {
+        while (!mergesToUndo.isEmpty()) {
             undoRegionMerge(mergesToUndo.pop());
         }
 

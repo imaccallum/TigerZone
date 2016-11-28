@@ -337,7 +337,12 @@ public class Tile {
     // Set the location for a tile
     public void setLocation(Point location, Point boardcenter) {
         this.location = location;
-        this.serverLocation = new Point(location.x - boardcenter.x, location.y - boardcenter.y);
+        if(location == null){
+            serverLocation = null;
+        }
+        else {
+            this.serverLocation = new Point(location.x - boardcenter.x, location.y - boardcenter.y);
+        }
     }
 
     // Get the lost of tile sections on a tile.
