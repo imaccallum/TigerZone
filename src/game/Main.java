@@ -255,5 +255,6 @@ public class Main {
         }
         gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
         gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
+        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
     }
 }
