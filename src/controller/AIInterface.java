@@ -2,6 +2,7 @@ package controller;
 
 import wrappers.BeginTurnWrapper;
 
-public interface AINotifier {
+public interface AIInterface {
     Move decideMove(BeginTurnWrapper beginMove);
+    String getPlayerName();
 }

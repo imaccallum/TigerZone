@@ -1,28 +1,21 @@
 package controller;
 
-import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.TileSection;
-import exceptions.ParseFailureException;
 import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.info.PlayerInfo;
-import game.messaging.request.FollowerPlacementRequest;
-import game.messaging.request.TilePlacementRequest;
-import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
 import server.ProtocolMessageBuilder;
-import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
-import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
-public class AIController implements AINotifier {
+public class AIController implements AIInterface {
     private List<Move> moves;
     private GameInteractor gameInteractor;
     private Move bestMove;
@@ -39,10 +32,6 @@ public class AIController implements AINotifier {
         moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
         messageBuilder = new ProtocolMessageBuilder();
-    }
-
-    public Move getBestMove() {
-      return bestMove;
     }
 
     private Move calculateBestMove() {
@@ -136,7 +125,7 @@ public class AIController implements AINotifier {
     }
 
 
-    // MARK: Implementation of AINotifier
+    // MARK: Implementation of AIInterface
 
     public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
@@ -188,5 +177,10 @@ public class AIController implements AINotifier {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.setServerOutput(serverOutput);
         }
+    }
+
+    @Override
+    public String getPlayerName() {
+        return playerName;
     }
 }
