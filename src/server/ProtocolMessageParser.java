@@ -314,8 +314,8 @@ public class ProtocolMessageParser {
                 Matcher m0 = p0.matcher(suffix);
 
                 if (m0.find()) {
-                    int x = Integer.parseInt(m.group(1));
-                    int y = Integer.parseInt(m.group(2));
+                    int x = Integer.parseInt(m0.group(1));
+                    int y = Integer.parseInt(m0.group(2));
                     Point location = new Point(x, y);
                     wrapper.setTigerLocation(location);
                 } else {
