@@ -7,11 +7,11 @@ import org.junit.Test;
 import wrappers.BeginTurnWrapper;
 import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
-import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by ianmaccallum on 11/26/16.
@@ -279,7 +279,7 @@ public class ProtocolMessageParserTest {
     public void parseMove() throws Exception {
         String input = "";
 
-        PlacementMoveWrapper wrapper = parser.parseMove(input);
+        //PlacementMoveWrapper wrapper = parser.parseMove(input);
     }
 
     @Test
