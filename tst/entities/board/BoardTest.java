@@ -148,16 +148,16 @@ public class BoardTest {
 
     @Test
     public void testRemoveLocationSetsRegionsBackToOriginalStates() throws BadPlacementException{
-        Tile topRightTile = factory.makeTile("LJJJ-");
+        Tile topRightTile = TileFactory.makeTile("LJJJ-");
         topRightTile.rotateCounterClockwise(2);
-        Tile rightTwoTile = factory.makeTile("LJJJ-");
+        Tile rightTwoTile = TileFactory.makeTile("LJJJ-");
         rightTwoTile.rotateCounterClockwise(1);
-        Tile bottomRightTile = factory.makeTile("LJJJ-");
-        Tile removingTile = factory.makeTile("LLLL-");
+        Tile bottomRightTile = TileFactory.makeTile("LJJJ-");
+        Tile removingTile = TileFactory.makeTile("LLLL-");
 
-        Tile topTile = factory.makeTile("TJTJ-");
-        Tile bottomTile = factory.makeTile("TJTJ-");
-        Tile bottomRightTwoTile = factory.makeTile("JJJJ-");
+        Tile topTile = TileFactory.makeTile("TJTJ-");
+        Tile bottomTile = TileFactory.makeTile("TJTJ-");
+        Tile bottomRightTwoTile = TileFactory.makeTile("JJJJ-");
 
         Point startingTileLocation = startingTile.getLocation();
         testBoard.place(topTile, new Point(startingTileLocation.x, startingTileLocation.y-1));

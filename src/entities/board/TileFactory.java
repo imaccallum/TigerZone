@@ -7,7 +7,7 @@ import exceptions.IncompatibleTerrainException;
 
 public class TileFactory {
 
-    public Tile makeTile(String s) {
+    public static Tile makeTile(String s) {
         switch (s) {
             case "JJJJ-": return makeTileA();
             case "JJJJX": return makeTileB();
@@ -46,7 +46,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |    X       JUNGLE      X     |
     // |JJJJ---------------------JJJJ-|
-    private Tile makeTileA() {
+    private static Tile makeTileA() {
         // Initialize the Tile and Sections with respective terrain types
         Tile tile = new Tile("JJJJ-");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
@@ -85,7 +85,7 @@ public class TileFactory {
     // |  JUNGLE     True     JUNGLE  |
     // |    X       JUNGLE      X     |
     // |JJJJX--------------------JJJJX|
-    private Tile makeTileB() {
+    private static Tile makeTileB() {
         Tile tile = new Tile("JJJJX");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         tile.setDen(new TigerDen());
@@ -119,7 +119,7 @@ public class TileFactory {
     // |  JUNGLE     True     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |JJTJX--------------------JJTJX|
-    private Tile makeTileC() {
+    private static Tile makeTileC() {
         Tile tile = new Tile("JJTJX");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         tile.setDen(new TigerDen());
@@ -162,7 +162,7 @@ public class TileFactory {
     // |  TRAIL     False     TRAIL   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TTTT---------------------TTTT-|
-    private Tile makeTileD() {
+    private static Tile makeTileD() {
         Tile tile = new Tile("TTTT-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -232,7 +232,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TJTJ---------------------TJTJ-|
-    private Tile makeTileE() {
+    private static Tile makeTileE() {
         Tile tile = new Tile("TJTJ-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -282,7 +282,7 @@ public class TileFactory {
     // |  TRAIL     False     JUNGLE  |
     // |  JUNGLE    JUNGLE      X     |
     // |TJJT---------------------TJJT-|
-    private Tile makeTileF() {
+    private static Tile makeTileF() {
         Tile tile = new Tile( "TJJT-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -331,7 +331,7 @@ public class TileFactory {
     // |  TRAIL     False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TJTT---------------------TJTT-|
-    private Tile makeTileG() {
+    private static Tile makeTileG() {
         Tile tile = new Tile( "TJTT-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -393,7 +393,7 @@ public class TileFactory {
     // |   LAKE     False      LAKE   |
     // |    X        LAKE       X     |
     // |LLLL---------------------LLLL-|
-    private Tile makeTileH() {
+    private static Tile makeTileH() {
         Tile tile = new Tile("LLLL-");
         TileSection lake = new TileSection(Terrain.LAKE);
 
@@ -425,7 +425,7 @@ public class TileFactory {
     // |   LAKE     False      LAKE   |
     // |    X        LAKE       X     |
     // |JLLL---------------------JLLL-|
-    private Tile makeTileI() {
+    private static Tile makeTileI() {
         Tile tile = new Tile( "JLLL-");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection jungle = new TileSection(Terrain.JUNGLE);
@@ -461,7 +461,7 @@ public class TileFactory {
     // |  JUNGLE    False      LAKE   |
     // |    X       JUNGLE      X     |
     // |LLJJ---------------------LLJJ-|
-    private Tile makeTileJ() {
+    private static Tile makeTileJ() {
         Tile tile = new Tile( "LLJJ-");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection jungle = new TileSection(Terrain.JUNGLE);
@@ -498,7 +498,7 @@ public class TileFactory {
     // |   LAKE     False      LAKE   |
     // |    X       JUNGLE      X     |
     // |JLJL---------------------JLJL-|
-    private Tile makeTileK() {
+    private static Tile makeTileK() {
         Tile tile = new Tile("JLJL-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -538,7 +538,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |    X        LAKE       X     |
     // |LJLJ---------------------LJLJ-|
-    Tile makeTileL() {
+    private static Tile makeTileL() {
         Tile tile = new Tile( "LJLJ-");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         TileSection lake = new TileSection(Terrain.LAKE);
@@ -578,7 +578,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |    X       JUNGLE      X     |
     // |LJJJ---------------------LJJJ-|
-    private Tile makeTileM() {
+    private static Tile makeTileM() {
         Tile tile = new Tile("LJJJ-");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         TileSection lake = new TileSection(Terrain.LAKE);
@@ -614,7 +614,7 @@ public class TileFactory {
     // |  JUNGLE    False      LAKE   |
     // |    X        LAKE       X     |
     // |JLLJ---------------------JLLJ-|
-    private Tile makeTileN() {
+    private static Tile makeTileN() {
         Tile tile = new Tile("JLLJ-");
         TileSection jungle = new TileSection(Terrain.JUNGLE);
         TileSection lake0 = new TileSection(Terrain.LAKE);
@@ -654,7 +654,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    JUNGLE      X     |
     // |TLJT---------------------TLJT-|
-    private Tile makeTileO() {
+    private static Tile makeTileO() {
         Tile tile = new Tile("TLJT-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -706,7 +706,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    JUNGLE       X    |
     // |TLJTP--------------------TLJTP|
-    private Tile makeTileP() {
+    private static Tile makeTileP() {
         Tile tile = new Tile("TLJTP");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -759,7 +759,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |JLTT---------------------JLTT-|
-    private Tile makeTileQ() {
+    private static Tile makeTileQ() {
         Tile tile = new Tile("JLTT-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -811,7 +811,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |JLTTB--------------------JLTTB|
-    private Tile makeTileR() {
+    private static Tile makeTileR() {
         Tile tile = new Tile( "JLTTB");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection jungle1 = new TileSection(Terrain.JUNGLE);
@@ -864,7 +864,7 @@ public class TileFactory {
     // |  JUNGLE    False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TLTJ---------------------TLTJ-|
-    private Tile makeTileS() {
+    private static Tile makeTileS() {
         Tile tile = new Tile( "TLTJ-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -918,7 +918,7 @@ public class TileFactory {
     // |  JUNGLE    False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TLTJD--------------------TLTJD|
-    private Tile makeTileT() {
+    private static Tile makeTileT() {
         Tile tile = new Tile( "TLTJD");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -973,7 +973,7 @@ public class TileFactory {
     // |   LAKE     False      LAKE   |
     // |    X        LAKE       X     |
     // |TLLL---------------------TLLL-|
-    private Tile makeTileU() {
+    private static Tile makeTileU() {
         Tile tile = new Tile( "TLLL-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -1023,7 +1023,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TLTT---------------------TLTT-|
-    private Tile makeTileV() {
+    private static Tile makeTileV() {
         Tile tile = new Tile( "TLTT-");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection trail0 = new TileSection(Terrain.TRAIL);
@@ -1089,7 +1089,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |TLTTP--------------------TLTTP|
-    private Tile makeTileW() {
+    private static Tile makeTileW() {
         Tile tile = new Tile( "TLTTP");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection trail0 = new TileSection(Terrain.TRAIL);
@@ -1156,7 +1156,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE     LAKE       X     |
     // |TLLT---------------------TLLT-|
-    Tile makeTileX() {
+    private static Tile makeTileX() {
         Tile tile = new Tile( "TLLT-");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -1208,7 +1208,7 @@ public class TileFactory {
     // |  TRAIL     False      LAKE   |
     // |  JUNGLE     LAKE       X     |
     // |TLLTB--------------------TLLTB|
-    private Tile makeTileY() {
+    private static Tile makeTileY() {
         Tile tile = new Tile( "TLLTB");
         TileSection lake = new TileSection(Terrain.LAKE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -1261,7 +1261,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |LJTJ---------------------LJTJ-|
-    private Tile makeTileZ() {
+    private static Tile makeTileZ() {
         Tile tile = new Tile( "LJTJ-");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -1311,7 +1311,7 @@ public class TileFactory {
     // |  JUNGLE    False     JUNGLE  |
     // |  JUNGLE    TRAIL     JUNGLE  |
     // |LJTJD--------------------LJTJD|
-    private Tile makeTile0() {
+    private static Tile makeTile0() {
         Tile tile = new Tile("LJTJD");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);
@@ -1362,7 +1362,7 @@ public class TileFactory {
     // |   LAKE     False      LAKE   |
     // |    X        LAKE       X     |
     // |TLLLC--------------------TLLLC|
-    private Tile makeTile1() {
+    private static Tile makeTile1() {
         Tile tile = new Tile("TLLLC");
         TileSection jungle0 = new TileSection(Terrain.JUNGLE);
         TileSection trail = new TileSection(Terrain.TRAIL);

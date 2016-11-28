@@ -1,23 +1,40 @@
 package controller;
 
-import entities.board.Tiger;
-import entities.board.Tile;
 import entities.player.PlayerNotifier;
-import game.LocationAndOrientation;
-import game.messaging.GameStatusMessage;
-
-import java.util.List;
-import java.util.Set;
+import exceptions.ParseFailureException;
+import server.ProtocolMessageBuilder;
+import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.ConfirmedMoveWrapper;
+import wrappers.NonplacementMoveWrapper;
+import wrappers.PlacementMoveWrapper;
 
 public class ServerController implements PlayerNotifier {
-    @Override
-    public void notifyGameStatus(GameStatusMessage message) {
+    private ServerMatchMessageHandler matchMessageHandler;
+    private ProtocolMessageBuilder messageBuilder;
+    private ProtocolMessageParser messageParser;
 
+    public ServerController(ServerMatchMessageHandler matchMessageHandler) {
+        this.matchMessageHandler = matchMessageHandler;
+        messageBuilder = new ProtocolMessageBuilder();
+        messageParser = new ProtocolMessageParser();
     }
 
     @Override
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possiblePlacements,
-                          Set<Tiger> tigersPlacedOnBoard) {
-        // Send to server to inform of turn
+    public void startTurn() {
+        String turnConfirmed = "";
+        try {
+            turnConfirmed = matchMessageHandler.getServerInput();
+        } catch (InterruptedException exception) {
+            System.err.println(exception.getMessage());
+        }
+
+        ConfirmedMoveWrapper confirmedMove;
+        try {
+            confirmedMove = messageParser.parseConfirmMove(turnConfirmed);
+        }
+        catch (ParseFailureException exception) {
+            System.out.println("Failed to parse placement turn");
+        }
     }
 }
