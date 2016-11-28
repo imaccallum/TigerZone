@@ -1,6 +1,6 @@
 package entities.board;
 
-import entities.player.Player;
+import entities.overlay.Region;
 import exceptions.BadPlacementException;
 import exceptions.TigerAlreadyPlacedException;
 import game.LocationAndOrientation;
@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 public class BoardTest {
@@ -128,5 +127,62 @@ public class BoardTest {
         Assert.assertTrue(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
         startingTile.getTileSections().get(0).placeTiger(new Tiger("Diego", false));
         Assert.assertFalse(testBoard.canPlaceTiger(startingTile.getTileSections().get(0)));
+    }
+
+
+    // |TJTJ---------------------TJTJ-||LJJJ---------------------LJJJ-|
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X       JUNGLE      X     |
+    // |  TRAIL     False     JUNGLE  ||  JUNGLE    False     JUNGLE  |     Removing LLLL- middle tile
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X        LAKE       X     |
+    // |TJTJ---------------------TJTJ-||LJJJ---------------------LJJJ-|
+    // |LJLJ---------------------LJLJ-||LLLL---------------------LLLL-||LJJJ---------------------LJJJ-|
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X        LAKE       X     ||    X       JUNGLE      X     |
+    // |  JUNGLE    False      LAKE   ||   LAKE      True      LAKE   ||   LAKE      False     JUNGLE |
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X        LAKE       X     ||    X       JUNGLE      X     |
+    // |LJLJ---------------------LJLJ-||LLLL---------------------LLLL-||LJJJ---------------------LJJJ-|
+    // |TJTJ---------------------TJTJ-||LJJJ---------------------LJJJ-||JJJJ---------------------JJJJ-|
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X        LAKE       X     ||    X       JUNGLE      X     |
+    // |  JUNGLE    False     JUNGLE  ||  JUNGLE    False     JUNGLE  ||  JUNGLE     False     JUNGLE |
+    // |  JUNGLE    TRAIL     JUNGLE  ||    X       JUNGLE      X     ||    X       JUNGLE      X     |
+    // |TJTJ---------------------TJTJ-||LJJJ---------------------LJJJ-||JJJJ---------------------JJJJ-|
+
+    @Test
+    public void testRemoveLocationSetsRegionsBackToOriginalStates() throws BadPlacementException{
+        Tile topRightTile = factory.makeTile("LJJJ-");
+        topRightTile.rotateCounterClockwise(2);
+        Tile rightTwoTile = factory.makeTile("LJJJ-");
+        rightTwoTile.rotateCounterClockwise(1);
+        Tile bottomRightTile = factory.makeTile("LJJJ-");
+        Tile removingTile = factory.makeTile("LLLL-");
+
+        Tile topTile = factory.makeTile("TJTJ-");
+        Tile bottomTile = factory.makeTile("TJTJ-");
+        Tile bottomRightTwoTile = factory.makeTile("JJJJ-");
+
+        Point startingTileLocation = startingTile.getLocation();
+        testBoard.place(topTile, new Point(startingTileLocation.x, startingTileLocation.y-1));
+        testBoard.place(bottomTile, new Point(startingTileLocation.x, startingTileLocation.y+1));
+        testBoard.place(bottomRightTile, new Point(startingTileLocation.x+1, startingTileLocation.y+1));
+        testBoard.place(bottomRightTwoTile, new Point(startingTileLocation.x+2, startingTileLocation.y+1));
+        testBoard.place(topRightTile, new Point(startingTileLocation.x+1, startingTileLocation.y-1));
+        testBoard.place(rightTwoTile, new Point(startingTileLocation.x+2, startingTileLocation.y));
+
+        Region topRightTileLakeRegion = topRightTile.getTileSections().get(1).getRegion();
+        Region bottomRightTileLakeRegion = bottomRightTile.getTileSections().get(1).getRegion();
+        Region rightTwoTileLakeRegion = rightTwoTile.getTileSections().get(1).getRegion();
+        Region startingTileLakeRegion = startingTile.getTileSections().get(3).getRegion();
+
+        testBoard.place(removingTile, new Point(startingTileLocation.x+1, startingTileLocation.y));
+        testBoard.removeLastPlacedTile();
+
+        Region newTopRightTileLakeRegion = topRightTile.getTileSections().get(1).getRegion();
+        Region newBottomRightTileLakeRegion = bottomRightTile.getTileSections().get(1).getRegion();
+        Region newRightTwoTileLakeRegion = rightTwoTile.getTileSections().get(1).getRegion();
+        Region newStartingTileLakeRegion = startingTile.getTileSections().get(3).getRegion();
+
+        Assert.assertTrue(topRightTileLakeRegion.equals(newTopRightTileLakeRegion));
+        Assert.assertTrue(bottomRightTileLakeRegion.equals(newBottomRightTileLakeRegion));
+        Assert.assertTrue(rightTwoTileLakeRegion.equals(newRightTwoTileLakeRegion));
+        Assert.assertTrue(startingTileLakeRegion.equals(newStartingTileLakeRegion));
     }
 }

@@ -3,7 +3,6 @@ package controller;
 import entities.board.Tiger;
 import entities.board.Tile;
 import entities.overlay.TileSection;
-import entities.player.Player;
 import entities.player.PlayerNotifier;
 import exceptions.BadPlacementException;
 import game.GameInteractor;
