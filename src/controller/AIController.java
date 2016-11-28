@@ -21,13 +21,12 @@ import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
-public class AIController implements PlayerNotifier {
+public class AIController {
     private List<Move> moves;
     private GameInteractor gameInteractor;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
     private ServerMatchMessageHandler serverMessageHandler;
-    private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
 
     public AIController(GameInteractor gameInteractor, String playerName,
@@ -37,7 +36,6 @@ public class AIController implements PlayerNotifier {
         this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
-        messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
     }
 
@@ -133,21 +131,7 @@ public class AIController implements PlayerNotifier {
 
     // MARK: Implementation of PlayerNotifier
 
-    public boolean startTurn() {
-        String serverMessage;
-        BeginTurnWrapper beginTurn;
-        try {
-            serverMessage = serverMessageHandler.getServerInput();
-            beginTurn = messageParser.parseBeginTurn(serverMessage);
-        }
-        catch (InterruptedException exception) {
-            System.err.println("Interrupted: " + exception.getMessage());
-            return false;
-        } catch (ParseFailureException exception) {
-            System.err.println("Parse failure: " + exception.getMessage());
-            return false;
-        }
-
+    public boolean startTurn(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;

@@ -56,6 +56,20 @@ public class TigerDen {
         return complete;
     }
 
+    public void removeTiger() {
+        if (this.tiger.isStacked()) {
+            tiger = new Tiger(tiger.getOwningPlayerName(), false);
+        }
+        else {
+            Tiger returnTiger = tiger;
+            tiger = null;
+        }
+    }
+
+    public Tiger getTiger() {
+        return tiger;
+    }
+
     // MARK: Getters and Setters
 
     // Get the center tile location of the den

@@ -102,6 +102,8 @@ public class GameInteractor implements Runnable {
         }
     }
 
+
+
     /**
      * Handle the placement of a follower as described in a follower placement request
      *
@@ -111,6 +113,7 @@ public class GameInteractor implements Runnable {
      * @return
      * The response to this request as a FollowerPlacementResponse
      */
+    /*
     public FollowerPlacementResponse handleFollowerPlacementRequest(FollowerPlacementRequest request) {
         if (!request.playerName.equals(playerTurn)) {
             // Not the current players turn
@@ -164,6 +167,7 @@ public class GameInteractor implements Runnable {
             return new FollowerPlacementResponse(false, false, true);
         }
     }
+    */
 
     /**
      * handle a request to place a tile on the board
@@ -208,18 +212,27 @@ public class GameInteractor implements Runnable {
         }
     }
 
-    public void removeTiger(Tiger tiger) {
-        board.removeTiger(tiger);
+    public void removeTigerFromTileAt(Point location, String playerName) {
+        board.removeTigerFromTileAt(location);
+        players.get(playerName).incrementRemainingTigers();
     }
 
-    public void stackTiger(Tiger tiger) {
+    public void stackTigerAt(Point location, String playerName) {
         try {
-            board.stackTiger(tiger);
+            board.stackTigerAt(location);
+            players.get(playerName).decrementRemainingTigers();
         }
         catch (StackingTigerException exception) {
             System.err.println("Stacking tiger error: " + exception.getMessage());
         }
     }
+
+    public void placeTiger(Tiger tiger, String playerName) {
+        players.get(playerName).addPlacedTiger(tiger);
+        players.get(playerName).decrementRemainingTigers();
+    }
+
+    /*
 
     private boolean attemptTigerPlacementInDen(FollowerPlacementRequest request) {
         TigerDenTigerPlacement placement = request.denTigerPlacement;
@@ -310,6 +323,8 @@ public class GameInteractor implements Runnable {
         System.err.println("Attempted to place a tiger in a region not on the last placed tiger");
         return false;
     }
+
+    */
 
     public void log() throws IOException {
         board.log();
