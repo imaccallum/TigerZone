@@ -149,7 +149,6 @@ public class Main {
         game.addPlayer(p0);
         game.addPlayer(p1);
 
-        game.init();
         game.playGame();
         game.log();
 

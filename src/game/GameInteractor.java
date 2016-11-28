@@ -10,8 +10,6 @@ import entities.player.Player;
 import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
-import game.messaging.GameStatusMessage;
-import game.messaging.info.PlayerInfo;
 import game.messaging.info.RegionInfo;
 import game.messaging.info.RegionTigerPlacement;
 import game.messaging.info.TigerDenTigerPlacement;
@@ -25,7 +23,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameInteractor implements Runnable {
     private String playerTurn;
@@ -45,13 +42,6 @@ public class GameInteractor implements Runnable {
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
         playerList.add(player);
-    }
-
-    public void init() {
-        GameStatusMessage gameStatusMessage = createGameStatusMessage();
-        for (Player notifyingPlayer : playerList) {
-            notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
-        }
     }
 
     /**
@@ -80,13 +70,6 @@ public class GameInteractor implements Runnable {
             playerTurn = player.getName();
             playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
             player.getPlayerNotifier().startTurn();
-
-            // Synthesize the gameStatusMessage and sent it to all players
-            GameStatusMessage gameStatusMessage = createGameStatusMessage();
-            for (Player notifyingPlayer : playerList) {
-                notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
-            }
-
         }
 
         // Score the regions at the end
@@ -305,18 +288,6 @@ public class GameInteractor implements Runnable {
         // Region was not on the tile
         System.err.println("Attempted to place a tiger in a region not on the last placed tiger");
         return false;
-    }
-
-    private GameStatusMessage createGameStatusMessage() {
-        List<Region> regions = board.regionsAsList();
-        List<RegionInfo> openRegionsInfo = regions.stream()
-                .filter(region -> !region.isFinished())
-                .map(Region::getRegionInfo)
-                .collect(Collectors.toList());
-        List<PlayerInfo> playersInfo = playerList.stream()
-                .map(Player::getPlayerInfo)
-                .collect(Collectors.toList());
-        return new GameStatusMessage(openRegionsInfo, playersInfo);
     }
 
     public void log() throws IOException {

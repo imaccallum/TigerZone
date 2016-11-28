@@ -9,26 +9,27 @@ import exceptions.ParseFailureException;
 import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
-import game.messaging.GameStatusMessage;
 import game.messaging.info.PlayerInfo;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
+import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
 public class AIController implements PlayerNotifier {
     private List<Move> moves;
-    private Stack<GameStatusMessage> lastGameStatusMessages;
     private GameInteractor gameInteractor;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
     private ServerMatchMessageHandler serverMessageHandler;
     private ProtocolMessageParser messageParser;
+    private ProtocolMessageBuilder messageBuilder;
 
     public AIController(GameInteractor gameInteractor, String playerName,
                         ServerMatchMessageHandler serverMessageHandler) {
@@ -36,8 +37,9 @@ public class AIController implements PlayerNotifier {
         this.playerName = playerName;
         this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
-        lastGameStatusMessages = new Stack<>();
         this.playersInfo = new HashMap<>();
+        messageParser = new ProtocolMessageParser();
+        messageBuilder = new ProtocolMessageBuilder();
     }
 
     public LocationAndOrientation getBestMove() {
@@ -128,15 +130,9 @@ public class AIController implements PlayerNotifier {
     public void clearMoves() {
         moves.clear();
     }
-    // MARK: Implementation of PlayerNotifier
 
-    public void notifyGameStatus(GameStatusMessage gameStatusMessage) {
-        this.lastGameStatusMessages.push(gameStatusMessage);
-        for (PlayerInfo info : gameStatusMessage.playersInfo) {
-            // Update all of the players info in the map
-            playersInfo.put(info.playerName, info);
-        }
-    }
+
+    // MARK: Implementation of PlayerNotifier
 
     public void startTurn() {
         String serverMessage;
@@ -146,10 +142,10 @@ public class AIController implements PlayerNotifier {
             beginTurn = messageParser.parseBeginTurn(serverMessage);
         }
         catch (InterruptedException exception) {
-            System.err.println(exception.getMessage());
+            System.err.println("Interrupted: " + exception.getMessage());
             return;
         } catch (ParseFailureException exception) {
-            System.err.println(exception.getMessage());
+            System.err.println("Parse failure: " + exception.getMessage());
             return;
         }
 
@@ -178,22 +174,21 @@ public class AIController implements PlayerNotifier {
             }
 
             LocationAndOrientation bestMove = getBestMove();
+            tileToPlace.rotateCounterClockwise(bestMove.getOrientation());
             moves.clear();
-            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());;
+            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());
             TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
 
             if (!response.wasValid) {
-                // forfeit
+                System.err.println("Tile placed in invalid condition.");
             }
+
+            // Wrap the move, create the server protocol string and output to the server
+            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(), bestMove.getLocation(),
+                                                                          bestMove.getOrientation());
+            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
+            serverMessageHandler.setServerOutput(serverOutput);
         }
-
-
-
-        /*
-
-
-
-        */
 
         PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
         if (aiPlayerInfo.remainingTigers > 0 || aiPlayerInfo.remainingCrocodiles > 0) {

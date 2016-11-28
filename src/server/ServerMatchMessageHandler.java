@@ -49,4 +49,8 @@ public class ServerMatchMessageHandler {
         serverOutput = output;
         notifyAll();
     }
+
+    public String getGameId() {
+        return gameId;
+    }
 }
