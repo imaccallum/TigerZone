@@ -148,14 +148,13 @@ public class Main {
             deck.push(t);
         }
 
-        GameInteractor game = new GameInteractor(deck);
+        GameInteractor game = new GameInteractor(deck.pop(), deck.size());
 
-        Player p0 = new Player("Player 0", new AIController(game, "Player 0"));
-        Player p1 = new Player("Player 1", new AIController(game, "Player 1"));
+        Player p0 = new Player("Player 0", new AIController(game, "Player 0", new ServerMatchMessageHandler("A")));
+        Player p1 = new Player("Player 1", new AIController(game, "Player 1", new ServerMatchMessageHandler("B")));
         game.addPlayer(p0);
         game.addPlayer(p1);
 
-        game.init();
         game.playGame();
         game.log();
 
@@ -196,14 +195,16 @@ public class Main {
         // Parse input for match start
         // Initialize GameManagers
         // Start two threads
-        Stack<Tile> tileStack = new Stack<>();
-        Stack<Tile> tileStack1 = new Stack<>();
-
-        GameInteractor gameInteractorOne = new GameInteractor(tileStack);
-        GameInteractor gameInteractorTwo = new GameInteractor(tileStack1);
+        Tile firstTile = new Tile("");
+        Tile secondTile = new Tile("");
+        int stackSize = 77;
 
         ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
         ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
+
+        GameInteractor gameInteractorOne = new GameInteractor(firstTile, stackSize);
+        GameInteractor gameInteractorTwo = new GameInteractor(secondTile, stackSize);
+
 
         MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
         MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);

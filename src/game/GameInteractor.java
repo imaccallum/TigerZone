@@ -10,8 +10,6 @@ import entities.player.Player;
 import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
-import game.messaging.GameStatusMessage;
-import game.messaging.info.PlayerInfo;
 import game.messaging.info.RegionInfo;
 import game.messaging.info.RegionTigerPlacement;
 import game.messaging.info.TigerDenTigerPlacement;
@@ -19,25 +17,26 @@ import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
-import server.ServerMatchMessageHandler;
+import game.messaging.response.ValidMovesResponse;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class GameInteractor implements Runnable {
     private String playerTurn;
-    private Stack<Tile> tileStack;
     private Map<String, Player> players;
     private List<Player> playerList;
     private Board board;
+    private int remainingTiles;
 
-    public GameInteractor(Stack<Tile> stack) {
-        board = new Board(stack.size(), stack.pop());
-        tileStack = stack;
+    public GameInteractor(Tile firstTile, int stackSize) {
+        board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
         playerTurn = "";
+        remainingTiles = stackSize - 1;
     }
 
     public void addPlayer(Player player) {
@@ -45,47 +44,32 @@ public class GameInteractor implements Runnable {
         playerList.add(player);
     }
 
-    public void init() {
-        GameStatusMessage gameStatusMessage = createGameStatusMessage();
-        for (Player notifyingPlayer : playerList) {
-            notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
-        }
-    }
-
     /**
      * Runs the game
      */
     public void run() {
+
     }
+
+    // "bad programming practices"
+    public void place(Tile tile, Point location) throws BadPlacementException {
+        board.place(tile, location);
+    }
+    public void removeLasPlacedTile() {
+        board.removeLastPlacedTile();
+    }
+    // end bad programming practices
 
     /**
      * Plays the game, ending when the tile stack is empty.
      */
     public void playGame() {
         int playerTurnNumber = 0;
-        while (!tileStack.isEmpty()) {
+        while (!(remainingTiles == 0)) {
             Player player = playerList.get(playerTurnNumber);
             playerTurn = player.getName();
             playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
-            Tile tileToPlace = tileStack.pop();
-            List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tileToPlace);
-
-            if (validPlacements.isEmpty()) {
-                // As consolation, allow player to stack tigers
-                Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, tigersPlacedOnBoard);
-            }
-            else {
-                // No tigers can be stacked, must place the tile
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, new HashSet<>());
-            }
-
-            // Synthesize the gameStatusMessage and sent it to all players
-            GameStatusMessage gameStatusMessage = createGameStatusMessage();
-            for (Player notifyingPlayer : playerList) {
-                notifyingPlayer.getPlayerNotifier().notifyGameStatus(gameStatusMessage);
-            }
-
+            player.getPlayerNotifier().startTurn();
         }
 
         // Score the regions at the end
@@ -96,6 +80,27 @@ public class GameInteractor implements Runnable {
                 players.get(name).addToScore(score);
             }
         });
+    }
+
+    /**
+     * Get the valid moves for a tile on the board
+     *
+     * @param tile,
+     * The tile that we want to place
+     *
+     * @return
+     * A response with the valid moves one can do
+     */
+    public ValidMovesResponse getValidMoves(Tile tile) {
+        List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tile);
+        if (validPlacements.isEmpty()) {
+            // As consolation, allow player to stack tigers
+            Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
+            return new ValidMovesResponse(validPlacements, tigersPlacedOnBoard, true);
+        }
+        else {
+            return new ValidMovesResponse(validPlacements, new HashSet<>(), false);
+        }
     }
 
     /**
@@ -283,18 +288,6 @@ public class GameInteractor implements Runnable {
         // Region was not on the tile
         System.err.println("Attempted to place a tiger in a region not on the last placed tiger");
         return false;
-    }
-
-    private GameStatusMessage createGameStatusMessage() {
-        List<Region> regions = board.regionsAsList();
-        List<RegionInfo> openRegionsInfo = regions.stream()
-                .filter(region -> !region.isFinished())
-                .map(Region::getRegionInfo)
-                .collect(Collectors.toList());
-        List<PlayerInfo> playersInfo = playerList.stream()
-                .map(Player::getPlayerInfo)
-                .collect(Collectors.toList());
-        return new GameStatusMessage(openRegionsInfo, playersInfo);
     }
 
     public void log() throws IOException {

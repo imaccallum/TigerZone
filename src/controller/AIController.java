@@ -2,31 +2,44 @@ package controller;
 
 import entities.board.Tiger;
 import entities.board.Tile;
+import entities.board.TileFactory;
 import entities.overlay.TileSection;
 import entities.player.PlayerNotifier;
+import exceptions.ParseFailureException;
+import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
-import game.messaging.GameStatusMessage;
 import game.messaging.info.PlayerInfo;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
+import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
+import server.ProtocolMessageBuilder;
+import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.BeginTurnWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.util.*;
 
 public class AIController implements PlayerNotifier {
     private List<Move> moves;
-    private Stack<GameStatusMessage> lastGameStatusMessages;
     private GameInteractor gameInteractor;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
+    private ServerMatchMessageHandler serverMessageHandler;
+    private ProtocolMessageParser messageParser;
+    private ProtocolMessageBuilder messageBuilder;
 
-    public AIController(GameInteractor gameInteractor, String playerName) {
+    public AIController(GameInteractor gameInteractor, String playerName,
+                        ServerMatchMessageHandler serverMessageHandler) {
         this.gameInteractor = gameInteractor;
-        moves = new ArrayList<>();
-        lastGameStatusMessages = new Stack<>();
         this.playerName = playerName;
+        this.serverMessageHandler = serverMessageHandler;
+        moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
+        messageParser = new ProtocolMessageParser();
+        messageBuilder = new ProtocolMessageBuilder();
     }
 
     public LocationAndOrientation getBestMove() {
@@ -117,18 +130,28 @@ public class AIController implements PlayerNotifier {
     public void clearMoves() {
         moves.clear();
     }
+
+
     // MARK: Implementation of PlayerNotifier
 
-    public void notifyGameStatus(GameStatusMessage gameStatusMessage) {
-        this.lastGameStatusMessages.push(gameStatusMessage);
-        for (PlayerInfo info : gameStatusMessage.playersInfo) {
-            // Update all of the players info in the map
-            playersInfo.put(info.playerName, info);
+    public void startTurn() {
+        String serverMessage;
+        BeginTurnWrapper beginTurn;
+        try {
+            serverMessage = serverMessageHandler.getServerInput();
+            beginTurn = messageParser.parseBeginTurn(serverMessage);
         }
-    }
+        catch (InterruptedException exception) {
+            System.err.println("Interrupted: " + exception.getMessage());
+            return;
+        } catch (ParseFailureException exception) {
+            System.err.println("Parse failure: " + exception.getMessage());
+            return;
+        }
 
-    public void startTurn(Tile tileToPlace, List<LocationAndOrientation> possibleLocations,
-                          Set<Tiger> tigersPlacedOnBoard) {
+        Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
+        ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
+        List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
@@ -136,28 +159,36 @@ public class AIController implements PlayerNotifier {
         else {
             // Decide tile placement from lastGameInfoMessages
             //int rand = new Random().nextInt(possibleLocations.size());
-            for (LocationAndOrientation locationAndOrientation: possibleLocations) {
+            //TilePlacementRequest request;
+            for (LocationAndOrientation locationAndOrientation: possibleLocations){
+                tileToPlace.rotateCounterClockwise(locationAndOrientation.getOrientation());
+               // request =  new TilePlacementRequest(playerName, tileToPlace, locationAndOrientation.getLocation());
+                try {
+                    gameInteractor.place(tileToPlace, locationAndOrientation.getLocation());
+                } catch (BadPlacementException e) {
+                    e.printStackTrace();
+                }
+                // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                gameInteractor.removeLasPlacedTile();
             }
-            LocationAndOrientation bestMove = getBestMove();
-            moves.clear();
 
+            LocationAndOrientation bestMove = getBestMove();
             tileToPlace.rotateCounterClockwise(bestMove.getOrientation());
+            moves.clear();
             TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());
             TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
 
             if (!response.wasValid) {
-                // forfeit
+                System.err.println("Tile placed in invalid condition.");
             }
+
+            // Wrap the move, create the server protocol string and output to the server
+            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(), bestMove.getLocation(),
+                                                                          bestMove.getOrientation());
+            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
+            serverMessageHandler.setServerOutput(serverOutput);
         }
-
-
-
-        /*
-
-
-
-        */
 
         PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
         if (aiPlayerInfo.remainingTigers > 0 || aiPlayerInfo.remainingCrocodiles > 0) {
