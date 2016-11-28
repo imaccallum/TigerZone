@@ -9,8 +9,6 @@ public class NonplacementMoveWrapper {
 
     public NonplacementMoveWrapper(String tile) {
         this.tile = tile;
-        this.type = type;
-        this.tigerLocation = tigerLocation;
     }
 
     public void setType(UnplaceableType type) {
