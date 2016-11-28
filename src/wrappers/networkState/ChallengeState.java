@@ -35,6 +35,7 @@ public class ChallengeState extends NetworkState {
                 // End of challenges, return to authentication protocol
                 NetworkState oldState = returnState();
                 context.setState(oldState);
+                return null;
             } else if (parser.parseIsWaitForNextChallenge(input)) {
                 // Do nothing, continue waiting
                 return null;
@@ -42,6 +43,7 @@ public class ChallengeState extends NetworkState {
                 throw e;
             }
         }
+
     }
 
     public NetworkState returnState() {
