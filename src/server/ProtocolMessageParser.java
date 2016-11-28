@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import wrappers.BeginTurnWrapper;
 import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
+import wrappers.MoveWrapper;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -188,12 +189,65 @@ public class ProtocolMessageParser {
 
 
     // MARK: - Move protocol parser
-
     public BeginTurnWrapper parseBeginTurn(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("MAKE YOUR MOVE IN GAME (.+) WITHIN (\\d+) SECONDS\\?: MOVE (\\d+) PLACE (.+)");
+        Matcher m = p.matcher(input);
 
+        if (m.find()) {
+
+            String gid = m.group(1);
+            int time = Integer.parseInt(m.group(2));
+            int moveNumber = Integer.parseInt(m.group(3));
+            String tile = m.group(4);
+
+            return new BeginTurnWrapper(gid, time, moveNumber, tile);
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
     }
 
-    public ConfirmedMoveWrapper parseConfirmMove(String input) {
-        
+    public ConfirmedMoveWrapper parseConfirmMove(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (.+) (.+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+
+            String gid = m.group(1);
+            int moveNumber = Integer.parseInt(m.group(2));
+            String pid = m.group(3);
+            String move = m.group(4);
+
+            try {
+                MoveWrapper mv = parseMove(move);
+                return new ConfirmedMoveWrapper(gid, moveNumber, pid, mv, null);
+            } catch (ParseFailureException e) {
+                throw e;
+            }
+
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
+    }
+
+    public MoveWrapper parseMove(String input) throws ParseFailureException {
+        Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");
+        Matcher m0 = p0.matcher(input);
+
+        if (m0.find()) {
+
+            String tile = m0.group(1);
+            int x = Integer.parseInt(m0.group(2));
+            int y = Integer.parseInt(m0.group(3));
+            int orientation = Integer.parseInt(m0.group(4));
+            String pid = m0.group(3);
+
+            Point point = new Point(x, y);
+            return new MoveWrapper(tile, point, orientation, );
+        }
+
+        Pattern p1 = Pattern.compile("");
+
+
+            throw new ParseFailureException("Failed to parse: " + input);
     }
 }
