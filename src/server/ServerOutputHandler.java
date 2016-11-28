@@ -18,6 +18,8 @@ public class ServerOutputHandler {
 
     public void didMakeNonPlacementMove(NonplacementMoveWrapper move) {
         String serverOutput = protocolMessageBuilder.messageForNonplacementMove(move, gameId);
+        
+    }
 
     public void didMakeMove(PlacementMoveWrapper move) {
         String serverOutput = protocolMessageBuilder.messageForMove(move, gameId);

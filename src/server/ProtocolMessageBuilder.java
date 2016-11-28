@@ -3,6 +3,7 @@ package server;
 import entities.board.Placement;
 import wrappers.NonplacementMoveWrapper;
 import wrappers.PlacementMoveWrapper;
+import wrappers.UnplaceableType;
 
 import java.awt.*;
 
@@ -31,18 +32,18 @@ public class ProtocolMessageBuilder {
     }
 
     public String messageForNonplacementMove(NonplacementMoveWrapper move, String gameId) {
-        if (move.get)
-    }
-
-    public String unplaceableTilePass(String gameId, String tileCode) {
-        return "GAME " + gameId + " TILE " + tileCode + " UNPLACEABLE PASS";
-    }
-
-    public String unplaceableTileRetrieveTiger(String gameId, String tileCode, int x, int y){
-        return "GAME " + gameId + " TILE " + tileCode + " UNPLACEABLE RETRIEVE TIGER AT " + x + " " + y;
-    }
-
-    public String unplaceableTileAddTiger(String gameId, String tileCode, int x, int y){
-        return "GAME " + gameId + " TILE " + tileCode + " UNPLACEABLE ADD ANOTHER TIGER TO " + x + " " + y;
+        if (move.getType() == UnplaceableType.ADDED_TIGER) {
+            Point location = move.getTigerLocation();
+            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE ADD ANOTHER TIGER TO " + location.x +
+                    " " + location.y;
+        }
+        else if (move.getType() == UnplaceableType.RETRIEVED_TIGER) {
+            Point location = move.getTigerLocation();
+            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE RETRIEVE TIGER AT " + location.x +
+                    " " + location.y;
+        }
+        else {
+            return "GAME " + gameId + " TILE " + move.getTile() + " UNPLACEABLE PASS";
+        }
     }
 }
