@@ -124,8 +124,8 @@ public class NetworkContext {
             System.err.println("Game interrupted");
         }
 
-        firstGameOverWrapper = gameInteractorOne.getGameOver();
-        secondGameOverWrapper = gameInteractorTwo.getGameOver();
+        firstGameOverWrapper = gameOne.getGameOver();
+        secondGameOverWrapper = gameTwo.getGameOver();
 
         gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
         gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
