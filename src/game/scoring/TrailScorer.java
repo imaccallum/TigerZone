@@ -1,41 +1,63 @@
 package game.scoring;
 
+import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TileSection;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TrailScorer extends Scorer {
-    @Override
-    public int score(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
+    /**
+     * Construct a scorer for a trail
+     *
+     * @param regionToScore,
+     * The trail region to be scored
+     */
+    public TrailScorer(Region regionToScore) {
+        this.regionToScore = regionToScore;
+    }
 
-        for(TileSection ts : tileSections){
-            score += 1;
+    /**
+     * Score the game trail based on the number of tiles and the number of crocodiles and prey animals
+     *
+     * @return
+     * The score of the trail
+     */
+    @Override
+    public int score() {
+        List<TileSection> tileSections = regionToScore.getTileSections();
+        Set<Tile> regionTiles = new HashSet<>();
+
+        // Collect all of the unique tiles.
+        regionTiles.addAll(tileSections.stream().map(TileSection::getTile).collect(Collectors.toList()));
+
+        // For every prey animal, add to score, for every crocodile subtract
+        int predationScore = 0;
+        for(Tile tile : regionTiles){
+            if (tile.getPreyAnimal() != null) {
+                predationScore++;
+            }
+            if (tile.hasCrocodile()) {
+                predationScore--;
+            }
         }
 
-        region.setTotalPrey();
-        score += region.getTotalPrey();
-
-        super.returnMeeples(region);
+        int score = (regionTiles.size() * gameTrailScorePerTile) + ((predationScore > 0) ? predationScore : 0);
 
         return score;
     }
 
+    /**
+     * The score of this game trail if it were completed now
+     *
+     * @return
+     * The score if completed now
+     */
     @Override
-    public int scoreAtEnd(Region region) {
-        List<TileSection> tileSections = region.getTileSections();
-        int score = 0;
-
-        for(TileSection ts : tileSections){
-            score += 1;
-        }
-
-        score += region.getTigerList().size();
-
-        super.returnMeeples(region);
-
-        return score;
+    public int scoreIfCompletedNow() {
+        return score();
     }
 }

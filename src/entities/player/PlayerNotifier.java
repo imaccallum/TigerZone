@@ -1,10 +1,14 @@
 package entities.player;
 
-import entities.overlay.TileSection;
+import entities.board.Tiger;
+import entities.board.Tile;
+import game.LocationAndOrientation;
+import game.messaging.GameStatusMessage;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PlayerNotifier {
-    void notifyTigerPlacementOptions(List<TileSection> tileSections);
-    void notifyEndTurnStatus(EndTurnStatus status);
+    void notifyGameStatus(GameStatusMessage message);
+    void startTurn(Tile tileToPlace, List<LocationAndOrientation> possiblePlacements, Set<Tiger> tigersPlacedOnBoard);
 }

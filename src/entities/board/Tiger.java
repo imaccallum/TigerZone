@@ -1,16 +1,24 @@
 package entities.board;
 
-import entities.player.Player;
-
 // A follower that a player can place in tile sections/regions to earn points.
 public class Tiger {
-    private Player player;
+    private final String owningPlayerName;
+    private final boolean stacked;
 
-    public Tiger(Player player) {
-        this.player = player;
+    public Tiger(String owningPlayerName, boolean stacked) {
+        this.owningPlayerName = owningPlayerName;
+        this.stacked = stacked;
     }
 
-    public Player getOwningPlayer() {
-        return player;
+    // MARK: Getters and setters
+
+    // Get the owning player
+    public String getOwningPlayerName() {
+        return owningPlayerName;
+    }
+
+    // Get whether or not the tiger is stacked
+    public boolean isStacked() {
+        return stacked;
     }
 }

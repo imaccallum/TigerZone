@@ -1,156 +1,500 @@
 package entities.board;
 
-import entities.board.Node;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
-import game.BadPlacementException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 public class Tile {
 
-    //			Edge[0]
+    //			    Edge[0]
     //		Corner[0]	Corner[1]
-    //	Edge[3]		Center		Edge[1]
+    //	Edge[3]		    		Edge[1]
     //		Corner[3]	Corner[2]
-    //			Edge[2]
+    //			    Edge[2]
+
     private final int COUNT = 4; // Count of orientations
     private Node[] edges;
     private Node[] corners;
-    private Node center;
-    private Tile[] adjacentTiles; // Adjacent tiles
-    private boolean hasDeer;
-    private boolean hasBuffalo;
-    private boolean hasBoar;
+    private TigerDen den;
+    private PreyAnimal preyAnimal;
+    private Point location;
     private List<TileSection> tileSections;
+    private String type;
+    private boolean hasCrocodile;
+    private int orientation;
+    private Point serverLocation;
 
-    public Tile() {
+    public Tile(String s) {
         edges = new Node[COUNT];
         corners = new Node[COUNT];
-        adjacentTiles = new Tile[COUNT];
         tileSections = new ArrayList<>();
-        hasDeer = false;
-        hasBoar = false;
-        hasBuffalo = false;
+        preyAnimal = null;
+        this.type = s;
     }
 
-    public Tile[] getAdjacentTiles() {
-        return adjacentTiles;
-    }
-
-    public Tile[] getCornerTiles() {
-        Tile[] cornerTiles = new Tile[4];
-
-        if (adjacentTiles[0] != null) {
-            cornerTiles[0] = adjacentTiles[0].getAdjacentTiles()[3];
-            cornerTiles[1] = adjacentTiles[0].getAdjacentTiles()[1];
-        }
-
-        if (adjacentTiles[1] != null) {
-            cornerTiles[1] = adjacentTiles[1].getAdjacentTiles()[0];
-            cornerTiles[2] = adjacentTiles[1].getAdjacentTiles()[2];
-        }
-
-        if (adjacentTiles[2] != null) {
-            cornerTiles[2] = adjacentTiles[2].getAdjacentTiles()[1];
-            cornerTiles[3] = adjacentTiles[2].getAdjacentTiles()[3];
-        }
-        return cornerTiles;
-    }
-
-    public Tile getTile(int index) {
-        return adjacentTiles[index];
-    }
-
-    public Node getCorner(CornerLocation index) {
-        return corners[index.ordinal()];
-    }
-
-    public Node getEdge(EdgeLocation index) {
-        return edges[index.ordinal()];
-    }
-
-    public Node getCenter(int index) {
-        return center;
-    }
-
-    public void rotateClockwise(int numberOfRotations) {
+    // HAS TESTS - Bookkeeping
+    public void rotateCounterClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
         Node[] tempCorners = new Node[COUNT];
 
         for (int i = 0; i < COUNT; i++) {
-            int index = (i + numberOfRotations) % COUNT;
-            tempEdges[index] = edges[i];
-            tempCorners[index] = corners[i];
+            int newIndex = (i + COUNT - numberOfRotations) % COUNT;
+            tempEdges[newIndex] = edges[i];
+            tempCorners[newIndex] = corners[i];
+            if(orientation <= 180) {
+                orientation += 90;
+            }
+            else{
+                orientation = 0;
+            }
         }
+
         edges = tempEdges;
         corners = tempCorners;
     }
 
-    private void setTile(Tile t, int i) throws BadPlacementException {
-        if (i < 0 || i >= COUNT) throw new BadPlacementException("Illegal index");
-        adjacentTiles[i] = t;
+    // HAS TEST - Bookkeeping
+    /**
+     * Add the given tile sections to the tile
+     * 
+     * @param tileSections,
+     * the comma separated list of tile sections to add.
+     */
+    public void addTileSections(TileSection... tileSections) {
+        for (TileSection tileSection: tileSections){
+            tileSection.setTile(this);
+        }
+        this.tileSections.addAll(Arrays.asList(tileSections));
     }
 
-    public void setTopTile(Tile t) throws BadPlacementException {
-        setTile(t, 0);
+    /**
+     * Create the string representing the tile
+     * Will print a lowercase terrain string if a tiger is placed in a location.
+     *
+     * @return
+     * The string representation of the tile.
+     */
+    public String toString() {
+        String bound = "|" + type + "--------------------" + type + "|\n";
+        String rowOne = rowOneToString();
+        String rowTwo = rowTwoToString();
+        String rowThree = rowThreeToString();
+
+        if (location != null) {
+            String locHeader = "|" + spacing("x: " + location.x) + spacing(" ") + spacing("y: " + location.y) + "|\n";
+            return bound + locHeader + rowOne + rowTwo + rowThree + bound;
+        }
+        else {
+            return bound + rowOne + rowTwo + rowThree + bound;
+        }
     }
 
-    public void setBottomTile(Tile t) throws BadPlacementException {
-        setTile(t, 2);
+    /**
+     * Gets the adjacent tile sections to the current tile section
+     *
+     * @param tileSection,
+     * the tile section we want to find adjacent tile sections to
+     *
+     * @return
+     * The list of tile sections that are adjacent to this tile section, returns empty list if there are none.
+     */
+    public List<TileSection> getAdjacentTileSectionsForTileSection(TileSection tileSection) {
+        if (!tileSections.contains(tileSection)) {
+            // The tile section is not on this tile, return empty list
+            return new ArrayList<>();
+        }
+
+        List<Node> tileSectionNodes = tileSection.getNodes();
+        List<Node> tileNodes = nodesClockwise();
+        List<Integer> clockwiseNodeLocations = new ArrayList<>();
+        for (int i = 0; i < tileNodes.size(); ++i) {
+            if (tileNodes.get(i) != null) {
+                // Null nodes aren't important for adjacency.
+                if (tileSectionNodes.contains(tileNodes.get(i))) {
+                    // Use positive numbers to indicate nodes that are part of the tile section
+                    clockwiseNodeLocations.add(i);
+                } else if (tileNodes.get(i) != null) {
+                    // Use negative numbers to represent others
+                    clockwiseNodeLocations.add(-i);
+                }
+            }
+        }
+
+        Set<Node> adjacentNodes = new HashSet<>();
+        for (int i = 1; i < clockwiseNodeLocations.size(); ++i) {
+            int current = clockwiseNodeLocations.get(i);
+            int prev = clockwiseNodeLocations.get(i - 1);
+            Node adjacentNode = null;
+            if (current < 0 && prev > 0) {
+                // The previous node is in the tile section, so the current is adjacent if it is not in it
+                adjacentNode = tileNodes.get(current * -1);
+            }
+            else if (current > 0 && prev < 0) {
+                // The current node is in the tile section, so the previous is adjacent if it is not in it
+                adjacentNode = tileNodes.get(prev * -1);
+            }
+
+            // Check for wrap around adjacency
+            if (i == clockwiseNodeLocations.size() - 1) {
+                if (clockwiseNodeLocations.get(0) > 0 && current < 0) {
+                    // First node is in the tile section and last node is not, last node adjacent
+                    adjacentNode = tileNodes.get(current * -1);
+                }
+                else if (clockwiseNodeLocations.get(0) < 0 && current > 0) {
+                    // Last node is in the tile section and first node is not, first node adjacent
+                    adjacentNode = tileNodes.get(clockwiseNodeLocations.get(0) * -1);
+                }
+            }
+
+            if (adjacentNode != null && !adjacentNodes.contains(adjacentNode)) {
+                adjacentNodes.add(adjacentNode);
+            }
+        }
+
+        // Create a list to return
+        List<TileSection> adjacentTileSections = new ArrayList<>();
+        for (Node adjacentNode : adjacentNodes) {
+            // For each adjacent node, add its tile section if the section is not in the array
+            TileSection adjacentTileSection = adjacentNode.getTileSection();
+            if (!adjacentTileSections.contains(adjacentTileSection)) {
+                adjacentTileSections.add(adjacentTileSection);
+            }
+        }
+
+        return adjacentTileSections;
     }
 
-    public void setLeftTile(Tile t) throws BadPlacementException {
-        setTile(t, 3);
+    /**
+     * Gets the nodes on the tile in a clockwise position, starting with the top left corner and going to the left edge.
+     *
+     * @return
+     * The list of nodes in the clockwise direction around the tile.
+     */
+    public List<Node> nodesClockwise() {
+        // Start at top left corner and end at left edge
+        List<Node> nodesClockwise = new ArrayList<>();
+        nodesClockwise.add(corners[0]);
+        nodesClockwise.add(edges[0]);
+        nodesClockwise.add(corners[1]);
+        nodesClockwise.add(edges[1]);
+        nodesClockwise.add(corners[2]);
+        nodesClockwise.add(edges[2]);
+        nodesClockwise.add(corners[3]);
+        nodesClockwise.add(edges[3]);
+        return nodesClockwise;
     }
 
-    public void setRightTile(Tile t) throws BadPlacementException {
-        setTile(t, 1);
+    /**
+     * Gets the nodes on the tile in the pattern Dave wants for Nodes on a Tile
+     *
+     * @return
+     * The list of nodes in the pattern Dave wants
+     */
+    public List<Node> nodesByRow(){
+        List<Node> nodesByRow = new ArrayList<>();
+        nodesByRow.add(corners[0]);
+        nodesByRow.add(edges[0]);
+        nodesByRow.add(corners[1]);
+        nodesByRow.add(edges[3]);
+        nodesByRow.add(null);   //can't add the TigerDen
+        nodesByRow.add(edges[1]);
+        nodesByRow.add(corners[3]);
+        nodesByRow.add(edges[2]);
+        nodesByRow.add(corners[2]);
+        return nodesByRow;
     }
 
-    public void setEdge(Node node, int i){
-        edges[i] = node;
-    }
-    
-    public void setCorner(Node node, int i){
-        corners[i] = node;
+    /**
+     * Get whether a crocodile can be placed on a given tile
+     *
+     * @return
+     * The boolean state
+     */
+    public boolean canPlaceCrocodile() {
+        boolean hasLake = hasTerrain(Terrain.LAKE);
+        boolean hasJungle = hasTerrain(Terrain.JUNGLE);
+        boolean hasTrail = hasTerrain(Terrain.TRAIL);
+
+        if (hasJungle && (hasTrail || hasLake)) {
+            boolean canPlace = true;
+            // Can place if neither the trails or the lakes have crocs
+            for (TileSection tileSection : tileSections) {
+                if (tileSection.getTerrain()  == Terrain.TRAIL) {
+                    canPlace = canPlace && !tileSection.getRegion().hasCrocodile();
+                }
+                else if (tileSection.getTerrain() == Terrain.LAKE) {
+                    canPlace = canPlace && !tileSection.getRegion().hasCrocodile();
+                }
+            }
+            return canPlace;
+        }
+        else {
+            // The entire tile is lake, cannot place
+            return false;
+        }
     }
 
-    private int inverse(int i) {
-        return (i + 2) % COUNT;
+    /**
+     * Place a crocodile on the tile, updates all lake and trail regions to have crocodiles
+     */
+    public void placeCrocodile() {
+        hasCrocodile = true;
+        for (TileSection tileSection : tileSections) {
+            if (tileSection.getTerrain() == Terrain.TRAIL) {
+                tileSection.getRegion().setHasCrocodile(true);
+            }
+            else if (tileSection.getTerrain() == Terrain.LAKE) {
+                tileSection.getRegion().setHasCrocodile(true);
+            }
+        }
     }
 
-    public void setCenter(Node center) {
-        this.center = center;
+    /*
+     * Get whether a tiger is on any of the TileSections of the Tile
+     *
+     * @return
+     * boolean that shows if there's a tiger on the tile
+     */
+    public boolean hasTiger(){
+        for(TileSection tilesection: tileSections){
+            if(tilesection.hasTiger()){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void addTileSections(TileSection... sections){
-        tileSections.addAll(Arrays.asList(sections));
+    /*
+     * Get the Node where the Tiger is on in the tileSection on the tile
+     *
+     * @return
+     * Node that has the tiger
+     */
+    public Node getTigerZone(){
+        for(TileSection tilesection: tileSections){
+            if(tilesection.hasTiger()){
+                return tilesection.getNodes().get(0);
+            }
+        }
+        return null;
+    }
+    // MARK: Getters and Setters
+
+    // Is there a den in the tile
+    public TigerDen getDen() {
+        return den;
     }
 
-    public boolean hasDeer() {
-        return hasDeer;
+    // Set if the tile has a den
+    public void setDen(TigerDen den) {
+        this.den = den;
     }
 
-    public boolean hasBuffalo() {
-        return hasBuffalo;
+    // Get the edge at a given edge location
+    public Node getEdge(EdgeLocation location) {
+        return edges[location.ordinal()];
     }
 
-    public boolean hasBoar() {
-        return hasBoar;
+    // Set the edge in a given edge location
+    public void setEdge(Node node, EdgeLocation location){
+        edges[location.ordinal()] = node;
     }
 
-    public void setHasDeer(boolean hasDeer) {
-        this.hasDeer = hasDeer;
+    // Get the coirner in a given corner location
+    public Node getCorner(CornerLocation location) {
+        return corners[location.ordinal()];
     }
 
-    public void setHasBuffalo(boolean hasBuffalo) {
-        this.hasBuffalo = hasBuffalo;
+    // Set the corner in a given corner location
+    public void setCorner(Node node, CornerLocation location){
+        corners[location.ordinal()] = node;
     }
 
-    public void setHasBoar(boolean hasBoar) {
-        this.hasBoar = hasBoar;
+    // Get the prey animal on the tile
+    public PreyAnimal getPreyAnimal() {
+        return preyAnimal;
+    }
+
+    // Set the prey animal on a tile.
+    public void setPreyAnimal(PreyAnimal preyAnimal) {
+        this.preyAnimal = preyAnimal;
+    }
+
+    // Get the location for a tile
+    public Point getLocation() {
+        return location;
+    }
+
+    // Get the location for the tile in terms of the Server start tile
+    public Point getServerLocation() {
+        return serverLocation;
+    }
+
+    // Set the location for a tile
+    public void setLocation(Point location, Point boardcenter) {
+        this.location = location;
+        if(location == null){
+            serverLocation = null;
+        }
+        else {
+            this.serverLocation = new Point(location.x - boardcenter.x, location.y - boardcenter.y);
+        }
+    }
+
+    // Get the lost of tile sections on a tile.
+    public List<TileSection> getTileSections() {
+        return tileSections;
+    }
+
+    // Get whether the tile has a crocodile.
+    public boolean hasCrocodile() {
+        return hasCrocodile;
+    }
+
+    // Set the type
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    // Get the type
+    public String getType() {
+        return type;
+    }
+
+    public int getOrientation(){
+        return orientation;
+    }
+
+    // MARK: Private methods
+
+    //
+    // Get the string spacing for given terrain
+    //
+    // @return
+    // The set of spaces for the given terrain
+    //
+    private String spacing(String input) {
+        String out = "";
+        int size = 10 - input.length();
+        for(int i = 0; i < 2; i++) {
+            for (int x = 0; x < size / 2; x++) {
+                out += " ";
+            }
+            if(i == 0) out += input;
+        }
+        if(out.length() == 9)
+            out += " ";
+
+        return out;
+    }
+
+    //
+    // Get the string that represents row one
+    //
+    // @return
+    // the string representing row one
+    //
+    private String rowOneToString() {
+        String rowOne = "|";
+        if(corners[0] != null) {
+            rowOne += spacing((corners[0].isTigerDisplayNode() ?
+                    corners[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[0].getTileSection().getTerrain().toString()));
+        } else {
+            rowOne += spacing("X");
+        }
+
+        rowOne += spacing((edges[0].isTigerDisplayNode() ?
+                    edges[0].getTileSection().getTerrain().toString().toLowerCase() :
+                    edges[0].getTileSection().getTerrain().toString()));
+
+        if(corners[1] != null) {
+            rowOne += spacing((corners[1].isTigerDisplayNode() ?
+                    corners[1].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[1].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowOne += spacing("X") + "|\n";
+        }
+
+        return rowOne;
+    }
+
+    //
+    // Get the string that represents row two
+    //
+    // @return
+    // the string representing row two
+    //
+    private String rowTwoToString() {
+        String rowTwo = "|";
+        rowTwo += spacing((edges[3].isTigerDisplayNode() ?
+                edges[3].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[3].getTileSection().getTerrain().toString()));
+
+        if(den != null) {
+            rowTwo += spacing("True");
+        }
+        else {
+            rowTwo += spacing("False");
+        }
+        rowTwo += spacing((edges[1].isTigerDisplayNode() ?
+                edges[1].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[1].getTileSection().getTerrain().toString())) +
+                "|\n";
+        return rowTwo;
+    }
+
+    //
+    // Get the string that represents row three
+    //
+    // @return
+    // the string representing row three
+    //
+    private String rowThreeToString() {
+        String rowThree = "|";
+        if(corners[3] != null) {
+            rowThree +=  spacing((corners[3].isTigerDisplayNode() ?
+                    corners[3].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[3].getTileSection().getTerrain().toString()));
+        } else {
+            rowThree += spacing("X");
+        }
+
+        rowThree += spacing((edges[2].isTigerDisplayNode() ?
+                edges[2].getTileSection().getTerrain().toString().toLowerCase() :
+                edges[2].getTileSection().getTerrain().toString()));
+
+        if(corners[2] != null) {
+            rowThree += spacing((corners[2].isTigerDisplayNode() ?
+                    corners[2].getTileSection().getTerrain().toString().toLowerCase() :
+                    corners[2].getTileSection().getTerrain().toString())) +
+                    "|\n";
+        } else {
+            rowThree += spacing("X") + "|\n";
+        }
+        return rowThree;
+    }
+
+    //
+    // Get if the tile has a particular terrain on it
+    //
+    // @param terrain,
+    // The terrain type we are looking for
+    //
+    // @return
+    // The boolean representing this state
+    //
+    private boolean hasTerrain(Terrain terrain) {
+        for (TileSection tileSection : tileSections) {
+            if (tileSection.getTerrain() == terrain) {
+                return true;
+            }
+        }
+        return false;
     }
 }

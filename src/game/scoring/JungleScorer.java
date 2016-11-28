@@ -1,30 +1,72 @@
 package game.scoring;
 
 import entities.board.Terrain;
+import entities.board.Tile;
 import entities.overlay.Region;
+import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class JungleScorer extends Scorer {
-    @Override
-    public int score(Region region) {
-        // Does not score until the end
-        return 0;
+
+    /**
+     * Construct a jungle scorer
+     *
+     * @param regionToScore,
+     * The jungle region that will eventually be scored
+     */
+    public JungleScorer(Region regionToScore) {
+        this.regionToScore = regionToScore;
     }
 
+    /**
+     * Score the jungle region, held by the scorer, counting adjacent lakes and dens and adding their value
+     *
+     * @return
+     * The score of the jungle region
+     */
     @Override
-    public int scoreAtEnd(Region region) {
-        List<Region> regions = region.getAdjacentRegions();
-
+    public int score() {
         int score = 0;
-        for(Region r : regions){
-            if(r.getTerrain() == Terrain.LAKE && r.isFinished())
-                score += 3;
-            if(r.getTerrain() == Terrain.DEN && r.isFinished())
-                score += 5;
+        // To avoid repeated adjacent den bonueses or repeated adjacent lake bonuses, keep track of what we've counted
+        Set<Region> adjacentLakes = new HashSet<>();
+        Set<TigerDen> dens = new HashSet<>();
+        for (TileSection tileSection : regionToScore.getTileSections()) {
+            // For each tile section find adjacent tile sections
+            Tile tile = tileSection.getTile();
+            List<TileSection> adjacentTileSections = tile.getAdjacentTileSectionsForTileSection(tileSection);
+            for (TileSection adjacentTileSection : adjacentTileSections) {
+                // For each adjacent tile section get the region and see if it is a lake, complete, and not already
+                // counted
+                Region tileSectionRegion = adjacentTileSection.getRegion();
+                boolean regionIsLake = tileSectionRegion.getTerrain() == Terrain.LAKE;
+                boolean regionIsFinished = tileSectionRegion.isFinished();
+                if (regionIsLake && regionIsFinished && !adjacentLakes.contains(tileSectionRegion)) {
+                    // Lake meets all criteria, add to score and counted lakes
+                    adjacentLakes.add(tileSectionRegion);
+                    score += jungleAdjacentLakeBonus;
+                }
+            }
+            if (tile.getDen() != null && tile.getDen().isComplete() && !dens.contains(tile.getDen())) {
+                // Tile has a den and the tile has not been counted yet, add to score and counted den tiles
+                dens.add(tile.getDen());
+                score += jungleAdjacentDenBonus;
+            }
         }
-
         return score;
+    }
+
+    /**
+     * The score of the jungle if it were complete right now
+     *
+     * @return
+     * The score associated with a completed jungle
+     */
+    @Override
+    public int scoreIfCompletedNow() {
+        return score();  // No difference
     }
 }
