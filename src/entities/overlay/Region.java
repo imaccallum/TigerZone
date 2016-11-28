@@ -3,6 +3,7 @@ package entities.overlay;
 import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
+import entities.board.Tile;
 import entities.player.Player;
 import exceptions.IncompatibleTerrainException;
 import game.messaging.info.RegionInfo;
@@ -29,6 +30,19 @@ public class Region {
         regionId = UUID.randomUUID();
         tileSections = new ArrayList<>();
         hasCrocodile = false;
+    }
+
+    public Region(Region firstRegion, Region secondRegion) throws IncompatibleTerrainException {
+        this.terrain = firstRegion.getTerrain();
+        tileSections = new ArrayList<>();
+        regionId = UUID.randomUUID();
+        hasCrocodile = false;
+        for (TileSection tileSection : firstRegion.getTileSections()) {
+            addTileSection(tileSection);
+        }
+        for (TileSection tileSection : secondRegion.getTileSections()) {
+            addTileSection(tileSection);
+        }
     }
 
     // HAS TESTS - bookkeeping

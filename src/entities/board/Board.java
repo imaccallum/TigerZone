@@ -24,6 +24,9 @@ public class Board {
     private List<TigerDen> tigerDens;
     private Tile lastTilePlaced;
     private Set<Tiger> placedTigers;
+    private Point centerLocation;
+    private Stack<Stack<RegionMerge>> regionMergesForEachPlacedTile;
+    private Stack<Tile> tilesPlacedInOrder;
 
     private int boardSize;
     private int numTiles;
@@ -44,17 +47,20 @@ public class Board {
         regions = new HashMap<>();
         tigerDens = new ArrayList<>();
         placedTigers = new HashSet<>();
+        regionMergesForEachPlacedTile = new Stack<>();
+        tilesPlacedInOrder = new Stack<>();
 
+        centerLocation = new Point(numberOfTiles - 1, numberOfTiles - 1);
         // System.out.println(firstTile.type);
         // Put the first tile down and set all of the open tile locations
-        setTileAtLocation(firstTile, new Point(numberOfTiles - 1, numberOfTiles - 1));
+        setTileAtLocation(firstTile, centerLocation);
 
         // Add all of the regions of the first tile
         for (TileSection tileSection: firstTile.getTileSections()) {
             regions.put(tileSection.getRegion().getRegionId(), tileSection.getRegion());
         }
 
-        lastTilePlaced = firstTile;
+        tilesPlacedInOrder.push(firstTile);
         openTileLocations.add(new Point(numberOfTiles - 1, numberOfTiles));
         openTileLocations.add(new Point(numberOfTiles - 2, numberOfTiles - 1));
         openTileLocations.add(new Point(numberOfTiles, numberOfTiles - 1));
@@ -62,45 +68,50 @@ public class Board {
         numTiles = 1;
     }
 
-    // HAS TESTS - Bookkeeping
+
     /**
-     * places a given tile at a point on the board.
-     *
-     * @param tile,
-     * the tile to be put on the board.
-     *
-     * @param location,
-     * the location as a Point, standard array indexing, x = column, y = row in the matrix.
-     *
-     * @throws BadPlacementException
-     * if a point is out of bounds or a tile does not match the surrounding terrain.
+     * Removes the last placed tile from the board
      */
+    public Tile removeLastPlacedTile() {
+        Tile tile = tilesPlacedInOrder.pop();
+        Point location = tile.getLocation();
+        boardMatrix[location.y][location.x] = null;
 
-    public void remove(Tile tile, Point location) throws BadPlacementException {
-
-
-        if (boardMatrix[location.y][location.x] == null) {
-            throw new BadPlacementException("Index given is out of bounds");
+        // Disconnect the nodes
+        for (Node node : tile.nodesClockwise()) {
+            for (Node connectedNode : node.getConnectedNodes()) {
+                connectedNode.getConnectedNodes().remove(node);
+            }
+            node.getConnectedNodes().clear();
         }
 
-        int row = location.y;
-        int col = location.x;
+        Stack<RegionMerge> mergesToUndo = regionMergesForEachPlacedTile.pop();
 
-        // Get the surrounding tiles of the placement.
-        Tile leftTile = boardMatrix[row][col-1];
-        Tile rightTile = boardMatrix[row][col+1];
-        Tile bottomTile = boardMatrix[row+1][col];
-        Tile topTile = boardMatrix[row-1][col];
+        // Undo the merges in reverse order
+        while (mergesToUndo.isEmpty()) {
+            undoRegionMerge(mergesToUndo.pop());
+        }
 
-        boardMatrix[location.y][location.x] = null;
-        tile.setLocation(null, new Point(boardSize/2 - 1, boardSize/2 - 1));
+        tile.setLocation(null, centerLocation);
+
         numTiles--;
         openTileLocations.add(location);
-
-
     }
 
+    /**
+     * Places a tile on the board
+     *
+     * @param tile,
+     * The tile to be placed on the board
+     *
+     * @param location,
+     * The location to be placed
+     *
+     * @throws BadPlacementException if the placement is not a good one.
+     */
     public void place(Tile tile, Point location) throws BadPlacementException {
+        Stack<RegionMerge> regionMerges = new Stack<>();
+
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
         int row = location.y;
         int col = location.x;
@@ -129,22 +140,26 @@ public class Board {
 
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
         if (leftTile != null) {
-            connectLaterally(tile, leftTile);
+            // Add all at 0 to preserve order of stack
+            regionMerges.addAll(0, connectLaterally(tile, leftTile));
         } else {
             openTileLocations.add(new Point(col-1, row));
         }
         if (rightTile != null) {
-            connectLaterally(rightTile, tile);
+            // Add all at 0 to preserve order of stack
+            regionMerges.addAll(0, connectLaterally(rightTile, tile));
         } else {
             openTileLocations.add(new Point(col+1, row));
         }
         if (topTile != null) {
-            connectVertically(tile, topTile);
+            // Add all at 0 to preserve order of stack
+            regionMerges.addAll(0, connectVertically(tile, topTile));
         } else {
             openTileLocations.add(new Point(col, row-1));
         }
         if (bottomTile != null) {
-            connectVertically(bottomTile, tile);
+            // Add all at 0 to preserve order of stack
+            regionMerges.addAll(0, connectVertically(bottomTile, tile));
         } else {
             openTileLocations.add(new Point(col, row+1));
         }
@@ -157,6 +172,7 @@ public class Board {
         }
 
         lastTilePlaced = tile;
+        regionMergesForEachPlacedTile.push(regionMerges);
     }
 
     // HAS TEST - Bookkeeping
@@ -243,7 +259,7 @@ public class Board {
      * The last tile placed
      */
     public Tile getLastPlacedTile() {
-        return lastTilePlaced;
+        return tilesPlacedInOrder.peek();
     }
 
     /**
@@ -387,22 +403,24 @@ public class Board {
     // @param leftTile,
     // The left tile of the lateral connection
     //
-    private void connectLaterally(Tile rightTile, Tile leftTile) throws BadPlacementException {
+    private Stack<RegionMerge> connectLaterally(Tile rightTile, Tile leftTile) throws BadPlacementException {
+        Stack<RegionMerge> mergedRegionsStack = new Stack<>();
         // The edges to be connected
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
         Node rightEdge = leftTile.getEdge(EdgeLocation.RIGHT);
-        connectNodes(leftEdge, rightEdge);
+        mergedRegionsStack.push(connectNodes(leftEdge, rightEdge));
 
         if (leftEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             // Since the middle terrain is a trail, connect the corners
             Node topLeftCorner = rightTile.getCorner(CornerLocation.TOP_LEFT);
             Node topRightCorner = leftTile.getCorner(CornerLocation.TOP_RIGHT);
-            connectNodes(topLeftCorner, topRightCorner);
+            mergedRegionsStack.push(connectNodes(topLeftCorner, topRightCorner));
 
             Node bottomLeftCorner = rightTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node bottomRightCorner = leftTile.getCorner(CornerLocation.BOTTOM_RIGHT);
-            connectNodes(bottomLeftCorner, bottomRightCorner);
+            mergedRegionsStack.push(connectNodes(bottomLeftCorner, bottomRightCorner));
         }
+        return mergedRegionsStack;
     }
 
     //
@@ -445,22 +463,24 @@ public class Board {
     // @param topTile,
     // The top tile of the vertical connection
     //
-    private void connectVertically(Tile bottomTile, Tile topTile) throws BadPlacementException {
+    private Stack<RegionMerge> connectVertically(Tile bottomTile, Tile topTile) throws BadPlacementException {
+        Stack<RegionMerge> mergedRegionsStack = new Stack<>();
         // The edges to be connected
         Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
-        connectNodes(topEdge, bottomEdge);
+        mergedRegionsStack.push(connectNodes(topEdge, bottomEdge));
 
         if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             // Since the middle terrain is a trail, connect the corners
             Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
             Node topRightCorner = bottomTile.getCorner(CornerLocation.TOP_RIGHT);
-            connectNodes(topRightCorner, bottomRightCorner);
+            mergedRegionsStack.push(connectNodes(topRightCorner, bottomRightCorner));
 
             Node bottomLeftCorner = topTile.getCorner(CornerLocation.BOTTOM_LEFT);
             Node topLeftCorner = bottomTile.getCorner(CornerLocation.TOP_LEFT);
-            connectNodes(topLeftCorner, bottomLeftCorner);
+            mergedRegionsStack.push(connectNodes(topLeftCorner, bottomLeftCorner));
         }
+        return mergedRegionsStack;
     }
 
     //
@@ -496,7 +516,7 @@ public class Board {
     //
     // @throws BadPlacementException if the two nodes cannot be connected
     //
-    private void connectNodes(Node first, Node second) throws BadPlacementException {
+    private RegionMerge connectNodes(Node first, Node second) throws BadPlacementException {
         if (first == null || second == null) {
             throw new BadPlacementException("One of two nodes to be connected is null");
         } else if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
@@ -506,16 +526,22 @@ public class Board {
                     second.getTileSection().getTerrain());
         }
 
+        first.addConnectedNode(second);
+        second.addConnectedNode(first);
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null &&
                 first.getTileSection().getRegion().getRegionId() != second.getTileSection().getRegion().getRegionId()) {
-            first.addConnectedNode(second);
-            second.addConnectedNode(first);
             try {
-                first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
+                Region firstRegion = first.getTileSection().getRegion();
+                Region secondRegion = second.getTileSection().getRegion();
+                Region newRegion = new Region(firstRegion, secondRegion);
+                RegionMerge merge = new RegionMerge(firstRegion, secondRegion, newRegion);
+                regions.remove(firstRegion.getRegionId());
+                regions.remove(secondRegion.getRegionId());
+                regions.put(newRegion.getRegionId(), newRegion);
+                return merge;
             } catch (IncompatibleTerrainException e) {
                 throw new BadPlacementException(e.getMessage());
             }
-            regions.remove(first.getTileSection().getRegion().getRegionId());
         }
     }
 
@@ -523,6 +549,25 @@ public class Board {
     private void setTileAtLocation(Tile tile, Point location) {
         boardMatrix[location.y][location.x] = tile;
         tile.setLocation(location, new Point(boardSize/2 - 1, boardSize/2 - 1));
+    }
+
+    //
+    // Undoes a region merge
+    //
+    // @param mergeToUndo
+    //
+    private void undoRegionMerge(RegionMerge mergeToUndo) {
+        Region newRegion = mergeToUndo.newRegion;
+        List<Region> oldRegions = mergeToUndo.oldRegions;
+        for (Region oldRegion : oldRegions) {
+            newRegion.getTileSections().stream()
+                    .filter(tileSection -> oldRegion.getTileSections().contains(tileSection))
+                    .forEach(tileSection -> {
+                        tileSection.setRegion(oldRegion);
+                    });
+            regions.put(oldRegion.getRegionId(), oldRegion);
+        }
+        regions.remove(newRegion.getRegionId());
     }
 
     // Checks to see if a tiger can be placed
