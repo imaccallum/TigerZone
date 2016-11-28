@@ -104,8 +104,6 @@ public class NetworkContext {
             try {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
-                System.out.println("SERVER INPUT: " + serverInput);
-                System.out.println(gameId);
                 switch(gameId) {
                     case "A": {
                         try {
