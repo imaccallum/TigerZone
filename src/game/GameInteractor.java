@@ -6,7 +6,6 @@ import entities.board.Tile;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
-import entities.player.Player;
 import exceptions.BadPlacementException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
@@ -55,7 +54,7 @@ public class GameInteractor implements Runnable {
     public void place(Tile tile, Point location) throws BadPlacementException {
         board.place(tile, location);
     }
-    public void removeLasPlacedTile() {
+    public void removeLastPlacedTile() {
         board.removeLastPlacedTile();
     }
     // end bad programming practices
@@ -166,6 +165,15 @@ public class GameInteractor implements Runnable {
         }
     }
 
+    /**
+     * handle a request to place a tile on the board
+     *
+     * @param request,
+     * The request to place the tile on the board
+     *
+     * @return
+     * The response result of the tiger being placed on the board
+     */
     public TilePlacementResponse handleTilePlacementRequest(TilePlacementRequest request) {
         if (!request.playerName.equals(playerTurn)) {
             // Not the players turn
@@ -197,6 +205,19 @@ public class GameInteractor implements Runnable {
             boolean canPlaceCrocodile = request.tileToPlace.canPlaceCrocodile();
 
             return new TilePlacementResponse(true, regionTigerPlacements, denPlacement, canPlaceCrocodile);
+        }
+    }
+
+    public void removeTiger(Tiger tiger) {
+        board.removeTiger(tiger);
+    }
+
+    public void stackTiger(Tiger tiger) {
+        try {
+            board.stackTiger(tiger);
+        }
+        catch (StackingTigerException exception) {
+            System.err.println("Stacking tiger error: " + exception.getMessage());
         }
     }
 

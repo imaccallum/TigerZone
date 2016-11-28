@@ -269,19 +269,68 @@ public class Tile {
     }
 
     /*
-     * Get the Node where the Tiger is on in the tileSection on the tile
+     * Get the int for the Node where the Tiger should be placed on in the tileSection on the tile
      *
      * @return
-     * Node that has the tiger
+     * int for the Node that should have the Tiger placed on it
      */
-    public Node getTigerZone(){
-        for(TileSection tilesection: tileSections){
-            if(tilesection.hasTiger()){
-                return tilesection.getNodes().get(0);
+    public int getTigerZone(TileSection tilesection){
+        int min = 9;
+        for(Node nodeInTileSection: tilesection.getNodes()){
+            if(nodeInTileSection.equals(corners[0])){
+                return 1;
+            }
+            if(nodeInTileSection.equals(edges[0]) && min > 2){
+                if(corners[0] == null && edges[0].getTileSection().getTerrain()!=Terrain.LAKE &&
+                        (edges[0].getTileSection().getTerrain() == Terrain.JUNGLE ||
+                                edges[3].getTileSection().getTerrain()==Terrain.JUNGLE)) {
+                    return 1;
+                }
+                else{
+                    min = 2;
+                }
+            }
+            else if(nodeInTileSection.equals(corners[1]) && min > 3){
+                min = 3;
+            }
+            else if(nodeInTileSection.equals(edges[3]) && min > 4){
+                if(corners[0] == null && (edges[0].getTileSection().getTerrain() == Terrain.JUNGLE ||
+                        edges[3].getTileSection().getTerrain()==Terrain.JUNGLE)) {
+                    return 1;
+                }
+                else{
+                    min = 4;
+                }
+            }
+            else if(nodeInTileSection.equals(edges[1]) && min > 6){
+                if(corners[1] == null && edges[0].getTileSection().getTerrain()
+                        .equals(edges[1].getTileSection().getTerrain())) {
+                    min = 3;
+                }
+                else if(den == null && edges[1].getTileSection().getTerrain() == Terrain.TRAIL){
+                    min = 5;
+                }
+                else{
+                    min = 6;
+                }
+            }
+            else if(nodeInTileSection.equals(corners[3]) && min > 7){
+                min = 7;
+            }
+            else if(nodeInTileSection.equals(edges[2]) && min > 8){
+                if(corners[1] == null && edges[2].getTileSection().getTerrain()
+                        .equals(edges[3].getTileSection().getTerrain())) {
+                    min = 7;
+                }
+                else{
+                    min = 8;
+                }
             }
         }
-        return null;
+        return min;
     }
+
+
     // MARK: Getters and Setters
 
     // Is there a den in the tile

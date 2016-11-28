@@ -3,15 +3,9 @@ package entities.overlay;
 import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
-import entities.overlay.TileSection;
-import entities.player.Player;
-import exceptions.BadPlacementException;
 import exceptions.TigerAlreadyPlacedException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 public class TileSectionTest {
     @Test
