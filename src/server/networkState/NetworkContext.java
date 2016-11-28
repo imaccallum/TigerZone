@@ -58,7 +58,6 @@ public class NetworkContext {
 
 
     public Pair<GameOverWrapper, GameOverWrapper> startMatch() {
-        // TODO
         // Parse input for match start
         // Initialize GameManagers
         // Start two threads
@@ -106,24 +105,8 @@ public class NetworkContext {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
                 switch(gameId) {
-                    case "A": {
-                        try {
-                            firstGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (ParseFailureException exception) {
-                            gameOneMessageHandler.setServerInput(serverInput);
-                        }
-                    }
-
-                    case "B": {
-                        try {
-                            secondGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (ParseFailureException exception) {
-                            gameTwoMessageHandler.setServerInput(serverInput);
-                        }
-                    }
-
+                    case "A": gameOneMessageHandler.setServerInput(serverInput);
+                    case "B": gameTwoMessageHandler.setServerInput(serverInput);
                     default: System.err.println("Invalid game Id received");
                 }
             }
@@ -140,6 +123,10 @@ public class NetworkContext {
         } catch (InterruptedException exception) {
             System.err.println("Game interrupted");
         }
+
+        firstGameOverWrapper = gameInteractorOne.getGameOver();
+        secondGameOverWrapper = gameInteractorTwo.getGameOver();
+
         gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
         gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
         return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
