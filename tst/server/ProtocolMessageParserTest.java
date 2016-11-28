@@ -7,6 +7,7 @@ import org.junit.Test;
 import wrappers.BeginTurnWrapper;
 import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 
@@ -266,8 +267,19 @@ public class ProtocolMessageParserTest {
     }
 
     @Test
-    public void parseMove() throws Exception {
+    public void parseForfeit() throws Exception {
+        String error0 = "ILLEGAL TILE PLACEMENT";
+        String input = "FORFEITED: " + error0;
 
+        String error1 = parser.parseForfeit(input);
+        assertEquals(error0, error1);
+    }
+
+    @Test
+    public void parseMove() throws Exception {
+        String input = "";
+
+        PlacementMoveWrapper wrapper = parser.parseMove(input);
     }
 
     @Test

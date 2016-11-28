@@ -3,10 +3,7 @@ import entities.board.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
-import wrappers.BeginTurnWrapper;
-import wrappers.ConfirmedMoveWrapper;
-import wrappers.GameOverWrapper;
-import wrappers.PlacementMoveWrapper;
+import wrappers.*;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -242,7 +239,7 @@ public class ProtocolMessageParser {
             } catch (ParseFailureException e) {}
 
             try {
-                PlacementMoveWrapper move = parseMove(suffix);
+                PlacementMoveWrapper move = parsePlacementMove(suffix);
                 wrapper.setMove(move);
                 return wrapper;
             } catch (ParseFailureException e) {}
@@ -265,7 +262,7 @@ public class ProtocolMessageParser {
 
 
 
-    public PlacementMoveWrapper parseMove(String input) throws ParseFailureException {
+    public PlacementMoveWrapper parsePlacementMove(String input) throws ParseFailureException {
         Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");
         Matcher m0 = p0.matcher(input);
 
@@ -296,6 +293,56 @@ public class ProtocolMessageParser {
         }
 
             throw new ParseFailureException("Failed to parse: " + input);
+    }
+
+    public NonplacementMoveWrapper parseNonplacementMove(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("TILE (.+) UNPLACEABLE (.+)");
+        Matcher m = p.matcher(input);
+
+        if (m.find()) {
+            String tile = m.group(1);
+            String suffix = m.group(2);
+
+            NonplacementMoveWrapper wrapper = new NonplacementMoveWrapper(tile);
+
+            if (suffix.equals("PASSED")) {
+                wrapper.setType(UnplaceableType.PASSED);
+            } else if (suffix.startsWith("RETRIEVED TIGER AT")) {
+                wrapper.setType(UnplaceableType.RETRIEVED_TIGER);
+
+                Pattern p0 = Pattern.compile("RETRIEVED TIGER AT (\\d+) (\\d+)");
+                Matcher m0 = p0.matcher(suffix);
+
+                if (m0.find()) {
+                    int x = Integer.parseInt(m.group(1));
+                    int y = Integer.parseInt(m.group(2));
+                    Point location = new Point(x, y);
+                    wrapper.setTigerLocation(location);
+                } else {
+                    throw new ParseFailureException("Failed to parse: " + input);
+                }
+
+            } else if (suffix.startsWith("ADDED ANOTHER TIGER")) {
+                wrapper.setType(UnplaceableType.ADDED_TIGER);
+
+                Pattern p1 = Pattern.compile("ADDED ANOTHER TIGER TO (\\d+) (\\d+)");
+                Matcher m1 = p1.matcher(suffix);
+
+                if (m1.find()) {
+                    int x = Integer.parseInt(m1.group(1));
+                    int y = Integer.parseInt(m1.group(2));
+                    Point location = new Point(x, y);
+                    wrapper.setTigerLocation(location);
+                } else {
+                    throw new ParseFailureException("Failed to parse: " + input);
+                }
+
+            }
+            return wrapper;
+
+        } else {
+            throw new ParseFailureException("Failed to parse: " + input);
+        }
     }
 
     public int parseTigerZone(String input) throws ParseFailureException {
