@@ -24,6 +24,7 @@ public class Tile {
     private List<TileSection> tileSections;
     private String type;
     private boolean hasCrocodile;
+    private int orientation;
 
     public Tile(String s) {
         edges = new Node[COUNT];
@@ -43,6 +44,12 @@ public class Tile {
             int newIndex = (i + COUNT - numberOfRotations) % COUNT;
             tempEdges[newIndex] = edges[i];
             tempCorners[newIndex] = corners[i];
+            if(orientation <= 180) {
+                orientation += 90;
+            }
+            else{
+                orientation = 0;
+            }
         }
 
         edges = tempEdges;
@@ -181,6 +188,26 @@ public class Tile {
     }
 
     /**
+     * Gets the nodes on the tile in the pattern Dave wants for Nodes on a Tile
+     *
+     * @return
+     * The list of nodes in the pattern Dave wants
+     */
+    public List<Node> nodesByRow(){
+        List<Node> nodesByRow = new ArrayList<>();
+        nodesByRow.add(corners[0]);
+        nodesByRow.add(edges[0]);
+        nodesByRow.add(corners[1]);
+        nodesByRow.add(edges[3]);
+        nodesByRow.add(null);   //can't add the TigerDen
+        nodesByRow.add(edges[1]);
+        nodesByRow.add(corners[3]);
+        nodesByRow.add(edges[2]);
+        nodesByRow.add(corners[2]);
+        return nodesByRow;
+    }
+
+    /**
      * Get whether a crocodile can be placed on a given tile
      *
      * @return
@@ -225,6 +252,28 @@ public class Tile {
         }
     }
 
+    /*
+     * Get whether a tiger is on any of the TileSections of the Tile
+     *
+     * @return
+     * boolean that shows if there's a tiger on the tile
+     */
+    public boolean hasTiger(){
+        for(TileSection tilesection: tileSections){
+            if(tilesection.hasTiger()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Node getTigerZone(){
+        //return which Node tigers are on based upon the lowest number node in the TileSection with the Tiger
+        for(TileSection tilesection: tileSections){
+            return tilesection.getNodes().get(0);
+        }
+        return null;
+    }
     // MARK: Getters and Setters
 
     // Is there a den in the tile
@@ -295,6 +344,10 @@ public class Tile {
     // Get the type
     public String getType() {
         return type;
+    }
+
+    public int getOrientation(){
+        return orientation;
     }
 
     // MARK: Private methods
