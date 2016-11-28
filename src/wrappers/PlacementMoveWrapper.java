@@ -12,13 +12,18 @@ public class PlacementMoveWrapper {
     private Placement placedObject;
     private int zone;
 
-    public PlacementMoveWrapper(String tile, Point location, int orientation, Placement placedObject, int zone) {
+    public PlacementMoveWrapper(String tile, Point location, int orientation) {
         this.tile = tile;
         this.location = location;
         this.orientation = orientation;
-        this.placedObject = placedObject;
-        this.zone = zone;
+    }
 
+    public void setPlacedObject(Placement placedObject) {
+        this.placedObject = placedObject;
+    }
+
+    public void setZone(int zone) {
+        this.zone = zone;
     }
 
     public String getTile() {
