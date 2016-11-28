@@ -25,6 +25,7 @@ public class ProtocolMessageParserTest {
     }
 
 
+
     // MARK: - Other protocol tests
     @Test
     public void parseGID() throws Exception {
@@ -33,6 +34,7 @@ public class ProtocolMessageParserTest {
         String gid1 = parser.parseGID(input);
         assertEquals(gid0, gid1);
     }
+
 
 
     // MARK: - Authentication protocol tests
@@ -244,8 +246,23 @@ public class ProtocolMessageParserTest {
 
     @Test
     public void parseConfirmMove() throws Exception {
-        String input = "";
+        String gid0 = "h43n78durn";
+        String pid0 = "4nuifj43";
+        int move0 = 4;
+        String error0 = "ILLEGAL TILE PLACEMENT";
+
+        String input = "GAME " + gid0 + " MOVE " + move0 + " PLAYER " + pid0 + " FORFEITED: " + error0;
         ConfirmedMoveWrapper wrapper = parser.parseConfirmMove(input);
+
+        String gid1 = wrapper.getGid();
+        String pid1 = wrapper.getPid();
+        int move1 = wrapper.getMoveNumber();
+        String error1 = wrapper.getError();
+
+        assertEquals(gid0, gid1);
+        assertEquals(pid0, pid1);
+        assertEquals(move0, move1);
+        assertEquals(error0, error1);
     }
 
     @Test

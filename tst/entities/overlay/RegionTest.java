@@ -120,8 +120,8 @@ public class RegionTest {
         Region region = new Region(Terrain.TRAIL);
         Node node1 = new Node();
         Node node2 = new Node();
-        node1.setConnectedNode(node2);
-        node2.setConnectedNode(node1);
+        node1.addConnectedNode(node2);
+        node2.addConnectedNode(node1);
         TileSection tileSection1 = new TileSection(Terrain.TRAIL);
         TileSection tileSection2 = new TileSection(Terrain.TRAIL);
         tileSection1.addNodes(node1);
