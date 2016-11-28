@@ -1,23 +1,36 @@
 package controller;
 
+import entities.board.Tile;
 import entities.overlay.TileSection;
 import game.LocationAndOrientation;
 
 public class Move {
+
+    private Tile tile;
+    private String tileType;
+
     private LocationAndOrientation locationAndOrientation;
     private int score;
     private boolean needsTiger;
     private boolean needsCrocodile;
+
     private TileSection tileSection;
+    private int zone;
+
     private int scoreTigerGives;
 
-    public Move(LocationAndOrientation locationAndOrientation, int score, boolean needsTiger, boolean needsCrocodile, int scoreTigerGives ,TileSection tileSection){
+    public Move(Tile tile, LocationAndOrientation locationAndOrientation, int score, boolean needsTiger, boolean needsCrocodile, int scoreTigerGives , TileSection tileSection){
         this.locationAndOrientation = locationAndOrientation;
+        this.tile = tile;
+        tileType = tile.getType();
         this.score = score;
         this.needsTiger = needsTiger;
         this.needsCrocodile = needsCrocodile;
         this.scoreTigerGives = scoreTigerGives;
         this.tileSection = tileSection;
+        if(tileSection != null) {
+            zone = tile.getTigerZone(tileSection);
+        }
     }
 
     public LocationAndOrientation getLocationAndOrientation() {
@@ -32,11 +45,11 @@ public class Move {
         return scoreTigerGives;
     }
 
-    public boolean isNeedsTiger() {
+    public boolean needsTiger() {
         return needsTiger;
     }
 
-    public boolean isNeedsCrocodile() {
+    public boolean needsCrocodile() {
         return needsCrocodile;
     }
 
@@ -67,4 +80,7 @@ public class Move {
     public void setTileSection(TileSection tileSection) {
         this.tileSection = tileSection;
     }
+
+    public Tile getTile() { return tile; }
+    public String getTileType() { return tileType; }
 }

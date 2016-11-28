@@ -9,6 +9,7 @@ import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.info.PlayerInfo;
+import game.messaging.request.FollowerPlacementRequest;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
@@ -24,6 +25,7 @@ import java.util.*;
 public class AIController implements PlayerNotifier {
     private List<Move> moves;
     private GameInteractor gameInteractor;
+    private Move bestMove;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
     private ServerMatchMessageHandler serverMessageHandler;
@@ -41,16 +43,20 @@ public class AIController implements PlayerNotifier {
         messageBuilder = new ProtocolMessageBuilder();
     }
 
-    public LocationAndOrientation getBestMove() {
+    public Move getBestMove() {
+      return bestMove;
+    }
+
+    private Move calculateBestMove() {
         int max = moves.get(0).getScore();
-        LocationAndOrientation loc = moves.get(0).getLocationAndOrientation();
+        Move best = moves.get(0);
         for (Move move: moves) {
             if (move.getScore() > max) {
                 max = move.getScore();
-                loc = move.getLocationAndOrientation();
+                best = move;
             }
         }
-        return loc;
+        return best;
     }
 
     // Use function through the Board's findValidTilePlacements()
@@ -123,7 +129,8 @@ public class AIController implements PlayerNotifier {
         }
         tileScore += scoreWhereTigerWasPlaced;
         boolean needsTiger = scoreWhereTigerWasPlaced > 0;
-        return new Move(null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
+
+        return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
     }
 
     public void clearMoves() {
@@ -154,6 +161,10 @@ public class AIController implements PlayerNotifier {
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
+
+            // Create no moves server commands
+            // else, bestMove contains all info needed to build server commands
+
         }
         else {
             // Decide tile placement from lastGameInfoMessages
@@ -172,21 +183,25 @@ public class AIController implements PlayerNotifier {
                 gameInteractor.removeLastPlacedTile();
             }
 
-            LocationAndOrientation bestMove = getBestMove();
-            tileToPlace.rotateCounterClockwise(bestMove.getOrientation());
+            bestMove = calculateBestMove();
+//            tileToPlace.rotateCounterClockwise(bestMove.getLocationAndOrientation().getOrientation());
+
             moves.clear();
-            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace, bestMove.getLocation());
-            TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
 
-            if (!response.wasValid) {
-                System.err.println("Tile placed in invalid condition.");
-            }
-
+//            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace,
+//                    bestMove.getLocationAndOrientation().getLocation());
+//            TilePlacementResponse response = gameInteractor.handleTilePlacementRequest(request);
+//
+//            if (!response.wasValid) {
+//                System.err.println("Tile placed in invalid condition.");
+//            }
+//
+//
             // Wrap the move, create the server protocol string and output to the server
-            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(), bestMove.getLocation(),
-                                                                          bestMove.getOrientation());
-            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
-            serverMessageHandler.setServerOutput(serverOutput);
+//            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(),
+//                    bestMove.getLocationAndOrientation().getLocation(), bestMove.getLocationAndOrientation().getOrientation());
+//            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
+//            serverMessageHandler.setServerOutput(serverOutput);
         }
 
         PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
