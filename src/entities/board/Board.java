@@ -146,25 +146,25 @@ public class Board {
         // For each non-null tile, connect the tile's tileSections / regions / nodes so that the overlay is updated
         if (leftTile != null) {
             // Add all at 0 to preserve order of stack
-            regionMerges.addAll(0, connectLaterally(tile, leftTile));
+            regionMerges.addAll(connectLaterally(tile, leftTile));
         } else {
             openTileLocations.add(new Point(col-1, row));
         }
         if (rightTile != null) {
             // Add all at 0 to preserve order of stack
-            regionMerges.addAll(0, connectLaterally(rightTile, tile));
+            regionMerges.addAll(connectLaterally(rightTile, tile));
         } else {
             openTileLocations.add(new Point(col+1, row));
         }
         if (topTile != null) {
             // Add all at 0 to preserve order of stack
-            regionMerges.addAll(0, connectVertically(tile, topTile));
+            regionMerges.addAll(connectVertically(tile, topTile));
         } else {
             openTileLocations.add(new Point(col, row-1));
         }
         if (bottomTile != null) {
             // Add all at 0 to preserve order of stack
-            regionMerges.addAll(0, connectVertically(bottomTile, tile));
+            regionMerges.addAll(connectVertically(bottomTile, tile));
         } else {
             openTileLocations.add(new Point(col, row+1));
         }
