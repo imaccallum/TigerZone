@@ -292,7 +292,7 @@ public class ProtocolMessageParser {
             String placement = m0.group(5);
 
             Point point = new Point(x, y);
-            PlacementMoveWrapper wrapper = new PlacementMoveWrapper(tile, point, orientation);
+            PlacementMoveWrapper wrapper = new PlacementMoveWrapper(tile, point, orientation, -1);
 
             if (placement.startsWith("TIGER ")) {
                 wrapper.setPlacedObject(Placement.TIGER);
@@ -320,7 +320,7 @@ public class ProtocolMessageParser {
             String tile = m.group(1);
             String suffix = m.group(2);
 
-            NonplacementMoveWrapper wrapper = new NonplacementMoveWrapper(tile);
+            NonplacementMoveWrapper wrapper = new NonplacementMoveWrapper(tile, -1);
 
             if (suffix.equals("PASSED")) {
                 wrapper.setType(UnplaceableType.PASSED);

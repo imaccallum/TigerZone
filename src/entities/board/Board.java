@@ -712,10 +712,13 @@ public class Board {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"))) {
             writer.write(output);
         }
-
     }
 
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
+    }
+
+    public Point getServerLocation(Point serverLocation) {
+        return new Point(serverLocation.x - centerLocation.x, serverLocation.y - centerLocation.y);
     }
 }
