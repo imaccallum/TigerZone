@@ -1,9 +1,8 @@
 package server;
 
-import entities.board.Placement;
 import entities.board.Tile;
 import game.LocationAndOrientation;
-import wrappers.MoveWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 
@@ -32,10 +31,8 @@ public class ServerOutputHandler {
         }
     }
 
-    public void didMakeMove(MoveWrapper move) {
+    public void didMakeMove(PlacementMoveWrapper move) {
         String serverOutput = protocolMessageBuilder.messageForMove(move, gameId);
 
     }
-
-    public void 
 }

@@ -1,7 +1,7 @@
 package server;
 
 import entities.board.Placement;
-import wrappers.MoveWrapper;
+import wrappers.PlacementMoveWrapper;
 
 import java.awt.*;
 
@@ -14,7 +14,7 @@ public class ProtocolMessageBuilder {
         return "I AM " + username + " " + password;
     }
 
-    public String messageForMove(MoveWrapper move, String gameId) {
+    public String messageForMove(PlacementMoveWrapper move, String gameId) {
         Point location = move.getLocation();
         if (move.getPlacedObject() == Placement.TIGER) {
             int zone = move.getZone();

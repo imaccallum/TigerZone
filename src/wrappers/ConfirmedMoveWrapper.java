@@ -8,10 +8,10 @@ public class ConfirmedMoveWrapper {
     private String gid;
     private int moveNumber;
     private String pid;
-    private MoveWrapper move;
+    private PlacementMoveWrapper move;
     private String error;
 
-    public ConfirmedMoveWrapper(String gid, int moveNumber, String pid, MoveWrapper move, String error) {
+    public ConfirmedMoveWrapper(String gid, int moveNumber, String pid, PlacementMoveWrapper move, String error) {
         this.gid = gid;
         this.moveNumber = moveNumber;
         this.pid = pid;
@@ -31,7 +31,7 @@ public class ConfirmedMoveWrapper {
         return pid;
     }
 
-    public MoveWrapper getMove() {
+    public PlacementMoveWrapper getMove() {
         return move;
     }
 
