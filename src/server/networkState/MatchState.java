@@ -1,4 +1,4 @@
-package wrappers.networkState;
+package server.networkState;
 
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
@@ -44,12 +44,16 @@ public class MatchState extends NetworkState {
         } catch(ParseFailureException e) {}
 
 
-//        // Server tells us remaining tiles
-//        try {
-//
-//        } catch(ParseFailureException e) {}
-//
-//
+        // Server tells us remaining tiles
+        try {
+            Pair<Integer, String[]> pair = parser.parseRemainingTiles(input);
+            int count = pair.getKey().intValue();
+            String[] tiles = pair.getValue();
+
+
+        } catch(ParseFailureException e) {}
+
+
 //        // Server tells us when match begins
 //        try {
 //

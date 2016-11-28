@@ -1,4 +1,4 @@
-package wrappers.networkState;
+package server.networkState;
 
 import exceptions.ParseFailureException;
 import server.ProtocolMessageBuilder;
