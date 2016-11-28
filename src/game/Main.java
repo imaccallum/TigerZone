@@ -5,6 +5,8 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.player.Player;
 import exceptions.BadServerInputException;
+import exceptions.ParseFailureException;
+import server.ServerMatchMessageHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -377,16 +379,33 @@ public class Main {
     }
 
     public void startMatch(BufferedReader in, PrintWriter out) {
+        // TODO
         // Parse input for match start
         // Initialize GameManagers
         // Start two threads
-        Thread matchGameOneThread = new Thread();
-        Thread matchGameTwoThread = new Thread();
-    }
-
-    public void playGame(BufferedReader in, PrintWriter out, GameInteractor gameInteractor) {
-        // Setup relationships, setup AI
-        gameInteractor.playGame();
-
+        Stack<Tile> tileStack = new Stack<>();
+        Stack<Tile> tileStack1 = new Stack<>();
+        GameInteractor gameInteractorOne = new GameInteractor(tileStack);
+        GameInteractor gameInteractorTwo = new GameInteractor(tileStack1);
+        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
+        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
+        MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
+        MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);
+        Thread matchGameOneThread = new Thread(gameInteractorOne);
+        Thread matchGameTwoThread = new Thread(gameInteractorTwo);
+        Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
+        Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
+        matchGameOneThread.run();
+        matchGameTwoThread.run();
+        gameOneMessageRunner.run();
+        gameTwoMessageRunner.run();
+        try {
+            matchGameOneThread.join();
+            matchGameTwoThread.join();
+        } catch (InterruptedException exception) {
+            System.err.println("Game interrupted");
+        }
+        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
+        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
     }
 }
