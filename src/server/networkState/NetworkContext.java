@@ -1,4 +1,4 @@
-package wrappers.networkState;
+package server.networkState;
 
 import java.awt.*;
 
@@ -22,6 +22,9 @@ public class NetworkContext {
     private String startingTile;
     private Point startingTileLocation;
     private int startingTileOrientation;
+
+    private int remainingTileCount;
+    private String[] remainingTiles;
 
     public NetworkContext(String tournamentPassword, String username, String password) {
         this.tournamentPassword = tournamentPassword;
@@ -139,5 +142,21 @@ public class NetworkContext {
 
     public void setStartingTileOrientation(int startingTileOrientation) {
         this.startingTileOrientation = startingTileOrientation;
+    }
+
+    public int getRemainingTileCount() {
+        return remainingTileCount;
+    }
+
+    public void setRemainingTileCount(int remainingTileCount) {
+        this.remainingTileCount = remainingTileCount;
+    }
+
+    public String[] getRemainingTiles() {
+        return remainingTiles;
+    }
+
+    public void setRemainingTiles(String[] remainingTiles) {
+        this.remainingTiles = remainingTiles;
     }
 }
