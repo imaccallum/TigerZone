@@ -64,6 +64,7 @@ public class MatchState extends NetworkState {
             int time = parser.parseMatchBeginsPlanTime(input);
             Pair<GameOverWrapper, GameOverWrapper> pair = context.startMatch();
 
+            System.out.print("Match begins");
             // Both games are done so the game is over
             NetworkState oldState = returnState();
             context.setState(oldState);

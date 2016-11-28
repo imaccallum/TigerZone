@@ -91,10 +91,10 @@ public class NetworkContext {
         Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
         Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
 
-        matchGameOneThread.run();
-        matchGameTwoThread.run();
-        gameOneMessageRunner.run();
-        gameTwoMessageRunner.run();
+        matchGameOneThread.start();
+        matchGameTwoThread.start();
+        gameOneMessageRunner.start();
+        gameTwoMessageRunner.start();
 
         ProtocolMessageParser parser = new ProtocolMessageParser();
         GameOverWrapper firstGameOverWrapper = null;
@@ -104,6 +104,8 @@ public class NetworkContext {
             try {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
+                System.out.println("SERVER INPUT: " + serverInput);
+                System.out.println(gameId);
                 switch(gameId) {
                     case "A": {
                         try {
@@ -111,6 +113,7 @@ public class NetworkContext {
                         }
                         catch (Exception e) {}
                         gameOneMessageHandler.setServerInput(serverInput);
+                        break;
                     }
                     case "B": {
                         try {
@@ -118,8 +121,9 @@ public class NetworkContext {
                         }
                         catch (Exception e) {}
                         gameTwoMessageHandler.setServerInput(serverInput);
+                        break;
                     }
-                    default: System.err.println("Invalid game Id received");
+                    default: System.err.println("Invalid game Id received " + gameId);
                 }
             }
             catch (IOException exception) {
