@@ -9,4 +9,8 @@
 
 *.rtf
 
+*.pdf
+
 lib/mockito-all-1.9.5.jar
+
+*.DS_Store
