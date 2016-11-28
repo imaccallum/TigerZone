@@ -172,7 +172,7 @@ public class ProtocolMessageParserTest {
 
     @Test
     public void parseRemainingTiles() throws Exception {
-        String items = "[JJJJ-, JJJJX, JJJJX, JJJJX, JJJJX, JJTJX, JJTJX, TTTT-, TJTJ-,TJTJ-,TJTJ-,TJTJ-,TJTJ-,TJTJ-,TJTJ-,TJTJ-]";
+        String items = "[JJJJ- JJJJX JJJJX JJJJX JJJJX JJTJX JJTJX TTTT- TJTJ- TJTJ- TJTJ- TJTJ- TJTJ- TJTJ- TJTJ- TJTJ-]";
         String input = "THE REMAINING 9 TILES ARE " + items;
         Pair<Integer, String[]> pair = parser.parseRemainingTiles(input);
 
@@ -256,7 +256,7 @@ public class ProtocolMessageParserTest {
         String gid1 = wrapper.getGid();
         String pid1 = wrapper.getPid();
         int move1 = wrapper.getMoveNumber();
-        String error1 = wrapper.getError();
+        String error1 = wrapper.getForfeitMessage();
 
         assertEquals(gid0, gid1);
         assertEquals(pid0, pid1);

@@ -10,6 +10,9 @@ import javafx.util.Pair;
 import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
 import wrappers.GameOverWrapper;
+import wrappers.networkState.AuthenticationState;
+import wrappers.networkState.NetworkContext;
+import wrappers.networkState.NetworkState;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +31,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        /*
         if (args.length != 2) {
             System.err.println("Usage: java EchoClient <host name> <port number>");
             System.exit(1);
@@ -51,28 +53,32 @@ public class Main {
             // server connection successful
 
             String input;  // string received from server
-            String output;    // string client gives
+            String output = "";    // string client gives
 
-            NetworkContext context = new NetworkContext();
-            context.setTournamentPassword(tournamentPassword);
-            context.setUsername(username);
-            context.setPassword(password);
-            context.setProtocol(new TournamentProtocol(context));
+            NetworkContext context = new NetworkContext(tournamentPassword, username, password);
+            context.setState(new AuthenticationState(context));;
 
 
             while ((input = in.readLine()) != null) {
+
                 System.out.println("SERVER: " + input);
 
-                // Process input using current protocol and formulate response
-                NetworkProtocol protocol = context.getProtocol();
-                output = protocol.processInput(input);
+                // Process input using current state and formulate response
+                NetworkState currentState = context.getState();
+
+                try {
+                    output = currentState.processInput(input);
+                } catch (ParseFailureException e) {
+                    System.err.println("Failed to parse: " + input);
+                    break;
+                }
 
                 if (output != null) {
                     System.out.println("CLIENT: " + output); // print client response
                     out.println(output); // send message to server
-                } else {
-                    break;
                 }
+
+                if (context.shouldReturn()) break;
             }
 
         } catch (UnknownHostException e) {
@@ -87,7 +93,6 @@ public class Main {
             // print appropriate error message, exit program
         }
 
-*/
 
 
 
@@ -97,6 +102,7 @@ public class Main {
 
 
 
+/*
 
 
             //region deckArray
@@ -153,6 +159,7 @@ public class Main {
         game.playGame();
         game.log();
 
+        */
 //        while(!deck.empty())
 //        {
 //            Tile t = deck.pop();
