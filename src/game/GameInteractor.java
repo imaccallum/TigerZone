@@ -1,13 +1,14 @@
 package game;
 
+import controller.AINotifier;
+import controller.Move;
 import controller.ServerListener;
-import entities.board.Board;
-import entities.board.Tiger;
-import entities.board.Tile;
+import entities.board.*;
 import entities.overlay.Region;
 import entities.overlay.TigerDen;
 import entities.overlay.TileSection;
 import exceptions.BadPlacementException;
+import exceptions.ParseFailureException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
 import game.messaging.info.RegionInfo;
@@ -18,23 +19,106 @@ import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.FollowerPlacementResponse;
 import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
+import server.ProtocolMessageBuilder;
+import server.ProtocolMessageParser;
+import server.ServerMatchMessageHandler;
+import wrappers.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GameInteractor {
+public class GameInteractor implements Runnable {
     private String playerTurn;
     private Map<String, Player> players;
     private List<Player> playerList;
     private Board board;
+    private ServerMatchMessageHandler messageHandler;
+    private ProtocolMessageParser messageParser;
+    private ProtocolMessageBuilder messageBuilder;
+    private GameOverWrapper gameOver;
+    private AINotifier aiNotifier;
+    private String gameId;
 
-    public GameInteractor(Tile firstTile, int stackSize) {
+    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler, String gameId) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
         playerTurn = "";
+        this.messageHandler = messageHandler;
+        messageParser = new ProtocolMessageParser();
+        messageBuilder = new ProtocolMessageBuilder();
+        this.gameId = gameId;
+    }
+
+    @Override
+    public void run() {
+        while (gameOver == null) {
+            String message = "";
+            try {
+                message = messageHandler.getServerInput();
+            } catch (InterruptedException e) {
+                System.err.println(e.getMessage());
+            }
+
+            boolean ourTurn = false;
+            BeginTurnWrapper beginTurn = null;
+            try {
+                beginTurn = messageParser.parseBeginTurn(message);
+                ourTurn = true;
+            }
+            catch (ParseFailureException exception) {
+                System.out.println("Failed to parse begin turn");
+            }
+
+            boolean confirmed = false;
+            ConfirmedMoveWrapper confirmedMove = null;
+            try {
+                confirmedMove = messageParser.parseConfirmMove(message);
+                confirmed = true;
+            }
+            catch (ParseFailureException exception) {
+                System.out.println("Failed to parse placement turn");
+            }
+
+            try {
+                gameOver = messageParser.parseGameOver(message);
+            }
+            catch (ParseFailureException exception) {
+                System.out.println("Failed to parse game over");
+            }
+
+            if (ourTurn) {
+                String serverMessage = "";
+                Move bestMove = aiNotifier.decideMove(beginTurn);
+                if (bestMove != null) {
+                    Point location = bestMove.getLocationAndOrientation().getLocation();
+                    int orientation = bestMove.getLocationAndOrientation().getOrientation();
+                    String tile = bestMove.getTile().getType();
+                    PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation);
+                    if (bestMove.needsTiger()) {
+                        placementMove.setPlacedObject(Placement.TIGER);
+                        placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
+                    }
+                    else if (bestMove.needsCrocodile()) {
+                        placementMove.setPlacedObject(Placement.CROCODILE);
+                    }
+                    else {
+                        placementMove.setPlacedObject(Placement.NONE);
+                    }
+                    serverMessage = messageBuilder.messageForMove(placementMove, gameId);
+                }
+                else {
+                    serverMessage = messageBuilder.messageForMove(new NonplacementMoveWrapper())
+                }
+            }
+            else if (confirmed) {
+                confirmMove(confirmedMove);
+            } else {
+
+            }
+        }
     }
 
     public void addPlayer(Player player) {
@@ -201,6 +285,77 @@ public class GameInteractor {
         players.get(playerName).decrementRemainingTigers();
     }
 
+    public void log() throws IOException {
+        board.log();
+    }
+
+    public GameOverWrapper getGameOver() {
+        return gameOver;
+    }
+
+    private boolean confirmMove(ConfirmedMoveWrapper confirmedMove) {
+        if (confirmedMove.hasForfeited()) {
+            return false;
+        }
+        else if (confirmedMove.isPlacementMove()) {
+            PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
+            Point location = placementMove.getLocation();
+            int orientation = placementMove.getOrientation();
+            Tile tileToPlace = TileFactory.makeTile(placementMove.getTile());
+            tileToPlace.rotateCounterClockwise(orientation);
+            if (placementMove.getPlacedObject() == Placement.CROCODILE) {
+                tileToPlace.placeCrocodile();
+            }
+            else if (placementMove.getPlacedObject() == Placement.TIGER) {
+                TileSection tileSection = tileToPlace.tileSectionForZone(placementMove.getZone());
+                if (tileSection == null) {
+                    Tiger tiger = new Tiger(playerTurn, false);
+                    try {
+                        tileToPlace.getDen().placeTiger(tiger);
+                        placeTiger(tiger, playerTurn);
+                    } catch (TigerAlreadyPlacedException e) {
+                        System.err.println("Error placing tiger" + e.getMessage());
+                        return false;
+                    }
+                }
+                else {
+                    Tiger tiger = new Tiger(playerTurn, false);
+                    try {
+                        tileSection.placeTiger(tiger);
+                        placeTiger(tiger, playerTurn);
+                    } catch (TigerAlreadyPlacedException e) {
+                        System.err.println("Error placing tiger: " + e.getMessage());
+                        return false;
+                    }
+                }
+
+            }
+            TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
+            handleTilePlacementRequest(request);
+            return true;
+        }
+        else {
+            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
+            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
+                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
+                return true;
+            }
+            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
+                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
+                return true;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    public void setAiNotifier(AINotifier aiNotifier) {
+        this.aiNotifier = aiNotifier;
+    }
+
+
+
     /*
 
     private boolean attemptTigerPlacementInDen(FollowerPlacementRequest request) {
@@ -294,8 +449,4 @@ public class GameInteractor {
     }
 
     */
-
-    public void log() throws IOException {
-        board.log();
-    }
 }
