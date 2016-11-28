@@ -75,6 +75,31 @@ public class Board {
      * @throws BadPlacementException
      * if a point is out of bounds or a tile does not match the surrounding terrain.
      */
+
+    public void remove(Tile tile, Point location) throws BadPlacementException {
+
+
+        if (boardMatrix[location.y][location.x] == null) {
+            throw new BadPlacementException("Index given is out of bounds");
+        }
+
+        int row = location.y;
+        int col = location.x;
+
+        // Get the surrounding tiles of the placement.
+        Tile leftTile = boardMatrix[row][col-1];
+        Tile rightTile = boardMatrix[row][col+1];
+        Tile bottomTile = boardMatrix[row+1][col];
+        Tile topTile = boardMatrix[row-1][col];
+
+        boardMatrix[location.y][location.x] = null;
+        tile.setLocation(null, new Point(boardSize/2 - 1, boardSize/2 - 1));
+        numTiles--;
+        openTileLocations.add(location);
+
+
+    }
+
     public void place(Tile tile, Point location) throws BadPlacementException {
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
         int row = location.y;
@@ -483,8 +508,8 @@ public class Board {
 
         if (first.getTileSection().getRegion() != null && second.getTileSection().getRegion() != null &&
                 first.getTileSection().getRegion().getRegionId() != second.getTileSection().getRegion().getRegionId()) {
-            first.setConnectedNode(second);
-            second.setConnectedNode(first);
+            first.addConnectedNode(second);
+            second.addConnectedNode(first);
             try {
                 first.getTileSection().getRegion().combineWithRegion(second.getTileSection().getRegion());
             } catch (IncompatibleTerrainException e) {

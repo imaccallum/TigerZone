@@ -163,7 +163,7 @@ public class Region {
             tigerCount.put(tiger.getOwningPlayerName(), count + 1);
         }
 
-        int max = Collections.max(tigerCount.values());
+        int max = tigerCount.size() > 0 ?  Collections.max(tigerCount.values()) : 0;
 
         for(String playerName : tigerCount.keySet()){
             if(tigerCount.get(playerName) == max)
