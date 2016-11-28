@@ -360,7 +360,7 @@ JUNGLE</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>738</x>
-      <y>42</y>
+      <y>30</y>
       <w>108</w>
       <h>66</h>
     </coordinates>
@@ -389,6 +389,22 @@ BOAR</panel_attributes>
 --
 + getOwningPlayerName() : String
 + isStacked() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>150</y>
+      <w>222</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>GameInteractor
+--
+
+--
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

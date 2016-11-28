@@ -64,14 +64,12 @@ public class GameInteractor {
 
             if (validPlacements.isEmpty()) {
                 // As consolation, allow player to stack tigers
-                List<Tiger> tigersThatCanBeStacked = players.get(playerTurn).getPlacedTigers().stream()
-                        .filter(tiger -> !tiger.isStacked())
-                        .collect(Collectors.toList());
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, tigersThatCanBeStacked);
+                Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
+                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, tigersPlacedOnBoard);
             }
             else {
                 // No tigers can be stacked, must place the tile
-                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, new ArrayList<>());
+                player.getPlayerNotifier().startTurn(tileToPlace, validPlacements, new HashSet<>());
             }
 
             // Synthesize the gameStatusMessage and sent it to all players
