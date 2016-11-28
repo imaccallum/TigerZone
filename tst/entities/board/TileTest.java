@@ -182,4 +182,62 @@ public class TileTest {
         Assert.assertEquals(testTile3ServerLocation.x, 1);
         Assert.assertEquals(testTile3ServerLocation.y, 1);
     }
+
+    @Test
+    public void testGetTigerZoneReturnsTheCorrectNumberToPlaceATigerOn(){
+        //bigger jungle
+        int nodeToPlaceTigerForTileSection1 = testTile.getTigerZone(testTile.getTileSections().get(0));
+        //smaller jungle
+        int nodeToPlaceTigerForTileSection2 = testTile.getTigerZone(testTile.getTileSections().get(1));
+        //lake
+        int nodeToPlaceTigerForTileSection3 = testTile.getTigerZone(testTile.getTileSections().get(2));
+        //trail
+        int nodeToPlaceTigerForTileSection4 = testTile.getTigerZone(testTile.getTileSections().get(3));
+        Assert.assertEquals(1, nodeToPlaceTigerForTileSection1);
+        Assert.assertEquals(7, nodeToPlaceTigerForTileSection2);
+        Assert.assertEquals(6, nodeToPlaceTigerForTileSection3);
+        Assert.assertEquals(4, nodeToPlaceTigerForTileSection4);
+
+        testTile.rotateCounterClockwise(1);
+        //bigger jungle
+        nodeToPlaceTigerForTileSection1 = testTile.getTigerZone(testTile.getTileSections().get(0));
+        //smaller jungle
+        nodeToPlaceTigerForTileSection2 = testTile.getTigerZone(testTile.getTileSections().get(1));
+        //lake
+        nodeToPlaceTigerForTileSection3 = testTile.getTigerZone(testTile.getTileSections().get(2));
+        //trail
+        nodeToPlaceTigerForTileSection4 = testTile.getTigerZone(testTile.getTileSections().get(3));
+        Assert.assertEquals(1, nodeToPlaceTigerForTileSection1);
+        Assert.assertEquals(9, nodeToPlaceTigerForTileSection2);
+        Assert.assertEquals(2, nodeToPlaceTigerForTileSection3);
+        Assert.assertEquals(5, nodeToPlaceTigerForTileSection4);
+
+        testTile.rotateCounterClockwise(1);
+        //bigger jungle
+        nodeToPlaceTigerForTileSection1 = testTile.getTigerZone(testTile.getTileSections().get(0));
+        //smaller jungle
+        nodeToPlaceTigerForTileSection2 = testTile.getTigerZone(testTile.getTileSections().get(1));
+        //lake
+        nodeToPlaceTigerForTileSection3 = testTile.getTigerZone(testTile.getTileSections().get(2));
+        //trail
+        nodeToPlaceTigerForTileSection4 = testTile.getTigerZone(testTile.getTileSections().get(3));
+        Assert.assertEquals(1, nodeToPlaceTigerForTileSection1);
+        Assert.assertEquals(3, nodeToPlaceTigerForTileSection2);
+        Assert.assertEquals(4, nodeToPlaceTigerForTileSection3);
+        Assert.assertEquals(2, nodeToPlaceTigerForTileSection4);
+
+        testTile.rotateCounterClockwise(1);
+        //bigger jungle
+        nodeToPlaceTigerForTileSection1 = testTile.getTigerZone(testTile.getTileSections().get(0));
+        //smaller jungle
+        nodeToPlaceTigerForTileSection2 = testTile.getTigerZone(testTile.getTileSections().get(1));
+        //lake
+        nodeToPlaceTigerForTileSection3 = testTile.getTigerZone(testTile.getTileSections().get(2));
+        //trail
+        nodeToPlaceTigerForTileSection4 = testTile.getTigerZone(testTile.getTileSections().get(3));
+        Assert.assertEquals(3, nodeToPlaceTigerForTileSection1);
+        Assert.assertEquals(1, nodeToPlaceTigerForTileSection2);
+        Assert.assertEquals(8, nodeToPlaceTigerForTileSection3);
+        Assert.assertEquals(2, nodeToPlaceTigerForTileSection4);
+    }
 }

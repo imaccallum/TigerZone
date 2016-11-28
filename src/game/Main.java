@@ -6,9 +6,9 @@ import javafx.util.Pair;
 import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
 import wrappers.GameOverWrapper;
-import wrappers.networkState.AuthenticationState;
-import wrappers.networkState.NetworkContext;
-import wrappers.networkState.NetworkState;
+import server.networkState.AuthenticationState;
+import server.networkState.NetworkContext;
+import server.networkState.NetworkState;
 
 import java.io.BufferedReader;
 import java.io.IOException;
