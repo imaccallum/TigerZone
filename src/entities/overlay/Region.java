@@ -3,8 +3,6 @@ package entities.overlay;
 import entities.board.Node;
 import entities.board.Terrain;
 import entities.board.Tiger;
-import entities.board.Tile;
-import entities.player.Player;
 import exceptions.IncompatibleTerrainException;
 import game.messaging.info.RegionInfo;
 import game.scoring.JungleScorer;
@@ -13,7 +11,6 @@ import game.scoring.Scorer;
 import game.scoring.TrailScorer;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 // A region represents a specific area on the board where there is an agglomeration of a specific terrain type

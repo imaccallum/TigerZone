@@ -4,7 +4,6 @@ import entities.board.Tiger;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.TileSection;
-import entities.player.PlayerNotifier;
 import exceptions.ParseFailureException;
 import exceptions.BadPlacementException;
 import game.GameInteractor;
@@ -134,7 +133,7 @@ public class AIController implements PlayerNotifier {
 
     // MARK: Implementation of PlayerNotifier
 
-    public void startTurn() {
+    public boolean startTurn() {
         String serverMessage;
         BeginTurnWrapper beginTurn;
         try {
@@ -143,10 +142,10 @@ public class AIController implements PlayerNotifier {
         }
         catch (InterruptedException exception) {
             System.err.println("Interrupted: " + exception.getMessage());
-            return;
+            return false;
         } catch (ParseFailureException exception) {
             System.err.println("Parse failure: " + exception.getMessage());
-            return;
+            return false;
         }
 
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
@@ -170,7 +169,7 @@ public class AIController implements PlayerNotifier {
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
                 addOptimalScoreForTile(locationAndOrientation, tileToPlace);
-                gameInteractor.removeLasPlacedTile();
+                gameInteractor.removeLastPlacedTile();
             }
 
             LocationAndOrientation bestMove = getBestMove();
@@ -207,5 +206,7 @@ public class AIController implements PlayerNotifier {
             }
             */
         }
+
+        return true;
     }
 }

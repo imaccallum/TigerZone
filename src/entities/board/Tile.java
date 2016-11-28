@@ -274,14 +274,53 @@ public class Tile {
      * @return
      * Node that has the tiger
      */
-    public Node getTigerZone(){
-        for(TileSection tilesection: tileSections){
-            if(tilesection.hasTiger()){
-                return tilesection.getNodes().get(0);
+    public int getTigerZone(TileSection tilesection){
+        int min = 9;
+        for(Node nodeInTileSection: tilesection.getNodes()){
+            if(nodeInTileSection.equals(corners[0])){
+                return 1;
+            }
+            if(nodeInTileSection.equals(edges[0])){
+                if(corners[0] == null && edges[0].getTileSection().getTerrain()
+                                .equals(edges[3].getTileSection().getTerrain())) {
+                    return 1;
+                }
+                else{
+                    min = 2;
+                }
+            }
+            else if(nodeInTileSection.equals(corners[1])){
+                min = 3;
+            }
+            else if(nodeInTileSection.equals(edges[3])){
+                min = 4;
+            }
+            else if(nodeInTileSection.equals(edges[1])){
+                if(corners[1] == null && edges[0].getTileSection().getTerrain()
+                        .equals(edges[1].getTileSection().getTerrain())) {
+                    min = 3;
+                }
+                else{
+                    min = 6;
+                }
+            }
+            else if(nodeInTileSection.equals(corners[3])){
+                min = 7;
+            }
+            else if(nodeInTileSection.equals(edges[2])){
+                if(corners[1] == null && edges[2].getTileSection().getTerrain()
+                        .equals(edges[3].getTileSection().getTerrain())) {
+                    min = 7;
+                }
+                else{
+                    min = 8;
+                }
             }
         }
-        return null;
+        return min;
     }
+
+
     // MARK: Getters and Setters
 
     // Is there a den in the tile
