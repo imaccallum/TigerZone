@@ -1,13 +1,11 @@
 package server;
 
+import entities.board.Placement;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import wrappers.BeginTurnWrapper;
-import wrappers.ConfirmedMoveWrapper;
-import wrappers.GameOverWrapper;
-import wrappers.PlacementMoveWrapper;
+import wrappers.*;
 
 import java.awt.*;
 
@@ -276,10 +274,53 @@ public class ProtocolMessageParserTest {
     }
 
     @Test
-    public void parseMove() throws Exception {
-        String input = "";
+    public void parsePlacementMove() throws Exception {
+        String tile0 = "LLJJ-";
+        int x0 = 5;
+        int y0 = 9;
+        int o0 = 2;
+        String type0 = "TIGER";
+        int zone0 = 7;
+        String input = "PLACED " + tile0 + " AT " + x0 + " " + y0 + " " + o0 + " " + type0 + " " + zone0;
 
-        PlacementMoveWrapper wrapper = parser.parseMove(input);
+        PlacementMoveWrapper wrapper = parser.parsePlacementMove(input);
+
+        String tile1 = wrapper.getTile();
+        Point location = wrapper.getLocation();
+        int x1 = location.x;
+        int y1 = location.y;
+        int o1 = wrapper.getOrientation();
+        int zone1 = wrapper.getZone();
+        Placement p = wrapper.getPlacedObject();
+
+        assertEquals(tile0, tile1);
+        assertEquals(x0, x1);
+        assertEquals(y0, y1);
+        assertEquals(o0, o1);
+        assertEquals(zone0, zone1);
+    }
+
+    @Test
+    public void parseNonplacementMove() throws Exception {
+        String tile0 = "LLJJ-";
+        int x0 = 4;
+        int y0 = 3;
+
+//        String input = "TILE " + tile0 + " UNPLACEABLE PASSED";
+//        String input = "TILE " + tile0 + " UNPLACEABLE ADDED ANOTHER TIGER TO " + x0 + " " + y0;
+        String input = "TILE " + tile0 + " UNPLACEABLE RETRIEVED TIGER AT " + x0 + " " + y0;
+        NonplacementMoveWrapper wrapper = parser.parseNonplacementMove(input);
+
+        System.out.println("Unplaceable type " + wrapper.getType());
+
+        String tile1 = wrapper.getTile();
+        Point location = wrapper.getTigerLocation();
+        int x1 = location.x;
+        int y1 = location.y;
+
+        assertEquals(tile0, tile1);
+        assertEquals(x0, x1);
+        assertEquals(y0, y1);
     }
 
     @Test
