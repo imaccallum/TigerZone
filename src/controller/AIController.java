@@ -138,7 +138,7 @@ public class AIController {
 
     // MARK: Implementation of PlayerNotifier
 
-    public boolean startTurn(BeginTurnWrapper beginTurn) {
+    public boolean decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
@@ -187,25 +187,6 @@ public class AIController {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.setServerOutput(serverOutput);
         }
-
-        PlayerInfo aiPlayerInfo = playersInfo.get(playerName);
-        if (aiPlayerInfo.remainingTigers > 0 || aiPlayerInfo.remainingCrocodiles > 0) {
-            // Can place a follower
-
-            // DECIDE FOLLOWER PLACEMENT HERE
-
-            // Find a tiger to stack
-            Set<Tiger> placedTigers = aiPlayerInfo.placedTigers;
-
-            /*
-            FollowerPlacementResponse followerPlacementResponse = gameInteractor.handleFollowerPlacementRequest(...);
-
-            if (!followerPlacementResponse.wasValid) {
-                // forfeit
-            }
-            */
-        }
-
         return true;
     }
 }

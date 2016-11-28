@@ -1,5 +1,6 @@
 package game;
 
+import controller.ServerListener;
 import entities.board.Board;
 import entities.board.Tiger;
 import entities.board.Tile;
@@ -23,19 +24,17 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GameInteractor implements Runnable {
+public class GameInteractor {
     private String playerTurn;
     private Map<String, Player> players;
     private List<Player> playerList;
     private Board board;
-    private int remainingTiles;
 
     public GameInteractor(Tile firstTile, int stackSize) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
         playerTurn = "";
-        remainingTiles = stackSize - 1;
     }
 
     public void addPlayer(Player player) {
@@ -43,42 +42,12 @@ public class GameInteractor implements Runnable {
         playerList.add(player);
     }
 
-    /**
-     * Runs the game
-     */
-    public void run() {
-
-    }
-
-    // "bad programming practices"
     public void place(Tile tile, Point location) throws BadPlacementException {
         board.place(tile, location);
     }
+
     public void removeLastPlacedTile() {
         board.removeLastPlacedTile();
-    }
-    // end bad programming practices
-
-    /**
-     * Plays the game, ending when the tile stack is empty.
-     */
-    public void playGame() {
-        int playerTurnNumber = 0;
-        while (!(remainingTiles == 0)) {
-            Player player = playerList.get(playerTurnNumber);
-            playerTurn = player.getName();
-            playerTurnNumber = (playerTurnNumber + 1) % playerList.size();
-            player.getPlayerNotifier().startTurn();
-        }
-
-        // Score the regions at the end
-        board.regionsAsList().stream().filter(Region::containsTigers).forEach(region -> {
-            int score = region.getScorer().score();
-            List<String> dominantPlayerNames = region.getDominantPlayerNames();
-            for (String name : dominantPlayerNames) {
-                players.get(name).addToScore(score);
-            }
-        });
     }
 
     /**

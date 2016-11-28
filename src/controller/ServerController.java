@@ -15,7 +15,7 @@ import wrappers.*;
 
 import java.awt.*;
 
-public class ServerController implements ServerListener {
+public class ServerController implements Runnable {
     private ServerMatchMessageHandler matchMessageHandler;
     private ProtocolMessageParser messageParser;
     private GameInteractor gameInteractor;
@@ -24,7 +24,7 @@ public class ServerController implements ServerListener {
 
     public ServerController(GameInteractor gameInteractor, String playerName,
                             ServerMatchMessageHandler matchMessageHandler,
-                            AIController controller) {
+                            AIController aiController) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
         this.matchMessageHandler = matchMessageHandler;
@@ -33,8 +33,7 @@ public class ServerController implements ServerListener {
     }
 
     @Override
-    public boolean listen() {
-
+    public boolean run() {
         String message = "";
         try {
             message = matchMessageHandler.getServerInput();
@@ -131,7 +130,8 @@ public class ServerController implements ServerListener {
     }
 
     private boolean decideMove(BeginTurnWrapper beginTurn) {
-        aiController.startTurn(beginTurn);
-        
+        aiController.decideMove(beginTurn);
+        Move bestMove = aiController.getBestMove();
+        bestMove.
     }
 }
