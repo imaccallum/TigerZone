@@ -182,4 +182,10 @@ public class TileTest {
         Assert.assertEquals(testTile3ServerLocation.x, 1);
         Assert.assertEquals(testTile3ServerLocation.y, 1);
     }
+
+    @Test
+    public void testGetTigerZoneReturnsTheCorrectNumberToPlaceATigerOn(){
+        int nodeToPlaceTigerForTileSection1 = testTile.getTigerZone(testTile.getTileSections().get(0));
+        Assert.assertEquals(nodeToPlaceTigerForTileSection1, 1);
+    }
 }
