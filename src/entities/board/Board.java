@@ -354,6 +354,59 @@ public class Board {
         return regions.get(regionId);
     }
 
+    /**
+     * Add a tiger to the board that is already placed on the board
+     *
+     * @param tiger,
+     * The tiger to be added
+     */
+    public void addPlacedTiger(Tiger tiger) {
+        placedTigers.add(tiger);
+    }
+
+    /**
+     * Remove a tiger from the board
+     *
+     * @param tiger,
+     * The tiger to be removed
+     */
+    public void removeTiger(Tiger tiger) {
+        for (Region region : regionsAsList()) {
+            List<Tiger> tigersInRegion = region.getAllTigers();
+            if (!tigersInRegion.isEmpty()) {
+                for (TileSection section : region.getTileSections()) {
+                    if (tiger.equals(section.getTiger())) {
+                        if (tiger.isStacked()) {
+                            tiger = new Tiger(tiger.getOwningPlayerName(), false);
+                        }
+                        else {
+                            section.removeTiger();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        placedTigers.remove(tiger);
+    }
+
+    /**
+     * Stacks a tiger
+     * @param tigerToStack
+     * @throws StackingTigerException
+     */
+    public void stackTiger(Tiger tigerToStack) throws StackingTigerException {
+        if (!placedTigers.contains(tigerToStack)) {
+            throw new StackingTigerException("Tiger not placed on the board");
+        } else if (tigerToStack.isStacked()) {
+            throw new StackingTigerException("Tiger is already stacked");
+        } else {
+            // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
+            placedTigers.remove(tigerToStack);
+            placedTigers.add(new Tiger(tigerToStack.getOwningPlayerName(), true));
+        }
+    }
+
     //
     // Get the possible tile sections where a tile can be placed
     //
@@ -620,26 +673,6 @@ public class Board {
             writer.write(output);
         }
 
-    }
-
-    public void addPlacedTiger(Tiger tiger) {
-        placedTigers.add(tiger);
-    }
-
-    public void removePlacedTiger(Tiger tiger) {
-        placedTigers.remove(tiger);
-    }
-
-    public void stackTiger(Tiger tigerToStack) throws StackingTigerException {
-        if (!placedTigers.contains(tigerToStack)) {
-            throw new StackingTigerException("Tiger not placed on the board");
-        } else if (tigerToStack.isStacked()) {
-            throw new StackingTigerException("Tiger is already stacked");
-        } else {
-            // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
-            placedTigers.remove(tigerToStack);
-            placedTigers.add(new Tiger(tigerToStack.getOwningPlayerName(), true));
-        }
     }
 
     public List<Region> regionsAsList() {

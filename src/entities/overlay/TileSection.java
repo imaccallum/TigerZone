@@ -100,6 +100,14 @@ public class TileSection {
         this.tigerDisplayNode = nodes.get(0);
     }
 
+    /**
+     * Removes the tiger from the tile section
+     */
+    public void removeTiger() {
+        tiger = null;
+        this.tigerDisplayNode = null;
+    }
+
     // HAS TEST - bookkeeping
     /**
      * Returns if the tile section has a tiger
