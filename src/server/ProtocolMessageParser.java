@@ -3,10 +3,7 @@ import entities.board.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
-import wrappers.BeginTurnWrapper;
-import wrappers.ConfirmedMoveWrapper;
-import wrappers.GameOverWrapper;
-import wrappers.PlacementMoveWrapper;
+import wrappers.*;
 
 import java.awt.*;
 import java.util.regex.Matcher;
@@ -297,6 +294,8 @@ public class ProtocolMessageParser {
 
             throw new ParseFailureException("Failed to parse: " + input);
     }
+
+    public NonplacementMoveWrapper
 
     public int parseTigerZone(String input) throws ParseFailureException {
         Pattern p = Pattern.compile("TIGER (\\d+)");
