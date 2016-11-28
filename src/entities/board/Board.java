@@ -22,7 +22,6 @@ public class Board {
     private HashSet<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<TigerDen> tigerDens;
-    private Tile lastTilePlaced;
     private Set<Tiger> placedTigers;
     private Point centerLocation;
     private Stack<Stack<RegionMerge>> regionMergesForEachPlacedTile;
@@ -175,7 +174,7 @@ public class Board {
             tigerDens.add(den);
         }
 
-        lastTilePlaced = tile;
+        tilesPlacedInOrder.push(tile);
         regionMergesForEachPlacedTile.push(regionMerges);
     }
 
@@ -361,7 +360,7 @@ public class Board {
     //
     public List<TileSection> getPossibleTileSectionTigerPlacements() {
         List<TileSection> tigerPlacementPossibilities = new ArrayList<>();
-        List<TileSection> lastTileSections = lastTilePlaced.getTileSections();
+        List<TileSection> lastTileSections = getLastPlacedTile().getTileSections();
         tigerPlacementPossibilities.addAll(lastTileSections.parallelStream().filter(this::canPlaceTiger)
                                            .collect(Collectors.toList()));
         return tigerPlacementPossibilities;
