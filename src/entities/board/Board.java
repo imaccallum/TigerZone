@@ -119,8 +119,8 @@ public class Board {
         Stack<RegionMerge> regionMerges = new Stack<>();
 
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
-        int row = location.y;
-        int col = location.x;
+        int row = location.y + centerLocation.y;
+        int col = location.x + centerLocation.x;
 
         // Get the surrounding tiles of the placement.
         Tile leftTile = boardMatrix[row][col-1];
