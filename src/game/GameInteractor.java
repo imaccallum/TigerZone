@@ -34,11 +34,11 @@ public class GameInteractor implements Runnable {
     private ServerMatchMessageHandler messageHandler;
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
-    private GameOverWrapper gameOver;
+    private volatile GameOverWrapper gameOver;
     private AIInterface aiNotifier;
     private String gameId;
 
-    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler, String gameId) {
+    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
@@ -46,7 +46,6 @@ public class GameInteractor implements Runnable {
         this.messageHandler = messageHandler;
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
-        this.gameId = gameId;
     }
 
     @Override
@@ -82,7 +81,7 @@ public class GameInteractor implements Runnable {
 
             if (ourTurn) {
                 playerTurn = aiNotifier.getPlayerName();
-                String serverMessage = "";
+                String serverMessage;
                 Move bestMove = aiNotifier.decideMove(beginTurn);
                 if (bestMove != null) {
                     Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
@@ -107,7 +106,7 @@ public class GameInteractor implements Runnable {
                                                                                            beginTurn.getMoveNumber());
                     serverMessage = messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
                 }
-                messageHandler.setServerOutput(serverMessage);
+                messageHandler.addServerOutput(serverMessage);
             }
             else if (confirmed) {
                 playerTurn = confirmedMove.getPid();
@@ -351,6 +350,10 @@ public class GameInteractor implements Runnable {
 
     public void setAiNotifier(AIInterface aiNotifier) {
         this.aiNotifier = aiNotifier;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
 
