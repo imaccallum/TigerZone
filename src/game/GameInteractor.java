@@ -106,7 +106,7 @@ public class GameInteractor implements Runnable {
                                                                                            beginTurn.getMoveNumber());
                     serverMessage = messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
                 }
-                messageHandler.setServerOutput(serverMessage);
+                messageHandler.addServerOutput(serverMessage);
             }
             else if (confirmed) {
                 playerTurn = confirmedMove.getPid();

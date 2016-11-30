@@ -1,45 +1,47 @@
 package server;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class ServerMatchMessageHandler {
     private String gameId;
-    private String serverInput;
-    private String serverOutput;
+    private Queue<String> serverInput;
+    private Queue<String> serverOutput;
 
-    public ServerMatchMessageHandler() {}
-
-    public void setGameId(String gameId) {
-        this.gameId = gameId;
+    public ServerMatchMessageHandler() {
+        serverInput = new LinkedList<>();
+        serverOutput = new LinkedList<>();
     }
 
     public synchronized String getServerInput() throws InterruptedException {
-        while (serverInput == null) {
+        while (serverInput.isEmpty()) {
             wait();
         }
-        String input = serverInput;
-        serverInput = null;
-        return input;
+        return serverInput.remove();
     }
 
-    public synchronized void setServerInput(String input) {
-        serverInput = input;
+    public synchronized void addServerInput(String input) {
+        serverInput.add(input);
         notifyAll();
     }
 
     public synchronized String getServerOutput() throws InterruptedException {
-        while (serverOutput == null) {
+        while (serverOutput.isEmpty()) {
             wait();
         }
-        String output = serverOutput;
-        serverOutput = null;
-        return output;
+        return serverOutput.remove();
     }
 
-    public synchronized void setServerOutput(String output) {
-        serverOutput = output;
+    public synchronized void addServerOutput(String output) {
+        serverOutput.add(output);
         notifyAll();
     }
 
     public String getGameId() {
         return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 }

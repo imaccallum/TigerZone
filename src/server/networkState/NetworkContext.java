@@ -125,7 +125,7 @@ public class NetworkContext {
                         firstGameOverWrapper = parser.parseGameOver(serverInput);
                     }
                     catch (Exception e) {}
-                    gameOneMessageHandler.setServerInput(serverInput);
+                    gameOneMessageHandler.addServerInput(serverInput);
                     break;
                 }
                 else if (gameId.equals(gameId2)) {
@@ -133,7 +133,7 @@ public class NetworkContext {
                         secondGameOverWrapper = parser.parseGameOver(serverInput);
                     }
                     catch (Exception e) {}
-                    gameTwoMessageHandler.setServerInput(serverInput);
+                    gameTwoMessageHandler.addServerInput(serverInput);
                     break;
                 }
                 else {
@@ -157,8 +157,8 @@ public class NetworkContext {
             System.err.println("Game interrupted");
         }
 
-        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
+        gameOneMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
+        gameTwoMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
         return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
     }
 
