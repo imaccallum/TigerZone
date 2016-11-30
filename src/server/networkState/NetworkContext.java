@@ -65,13 +65,16 @@ public class NetworkContext {
         Tile firstTile = TileFactory.makeTile(startingTile);
         Tile secondTile = TileFactory.makeTile(startingTile);
 
-        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
-        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
+        String gameId1 = null;
+        String gameId2 = null;
+
+        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler();
+        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler();
 
         System.out.println(remainingTileCount);
 
-        GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1, gameOneMessageHandler, "A");
-        GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1, gameTwoMessageHandler, "B");
+        GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1, gameOneMessageHandler);
+        GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1, gameTwoMessageHandler);
 
         gameOne.addPlayer(new Player(pid));
         gameOne.addPlayer(new Player(opid));
@@ -99,38 +102,40 @@ public class NetworkContext {
         gameTwoMessageRunner.start();
 
         ProtocolMessageParser parser = new ProtocolMessageParser();
-        GameOverWrapper firstGameOverWrapper = null;
-        GameOverWrapper secondGameOverWrapper = null;
 
-        while (firstGameOverWrapper == null || secondGameOverWrapper == null) {
+        while ((gameOne.getGameOver() == null) || (gameTwo.getGameOver() == null)) {
             try {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
-                switch(gameId) {
-                    case "A": {
-                        try {
-                            firstGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (Exception e) {}
-                        gameOneMessageHandler.setServerInput(serverInput);
-                        break;
-                    }
-                    case "B": {
-                        try {
-                            secondGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (Exception e) {}
-                        gameTwoMessageHandler.setServerInput(serverInput);
-                        break;
-                    }
-                    default: System.err.println("Invalid game Id received " + gameId);
+                if (gameId1 == null) {
+                    gameId1 = gameId;
+                    gameOneMessageHandler.setGameId(gameId1);
+                    gameOne.setGameId(gameId1);
+                }
+                else if (gameId2 == null) {
+                    gameId2 = gameId;
+                    gameTwoMessageHandler.setGameId(gameId2);
+                    gameTwo.setGameId(gameId2);
+                }
+
+                if (gameId.equals(gameId1)) {
+                    gameOneMessageHandler.addServerInput(serverInput);
+                }
+                else if (gameId.equals(gameId2)) {
+                    gameTwoMessageHandler.addServerInput(serverInput);
+                }
+                else {
+                    System.err.println("Invalid game Id received " + gameId);
                 }
             }
             catch (IOException exception) {
                 System.err.println("Received IO exception");
             }
             catch (ParseFailureException exception) {
-                System.err.println("Failed to parse the group id, exception: " + exception.getMessage());
+                System.err.println("Failed to parse the game id, exception: " + exception.getMessage());
+                matchGameOneThread.interrupt();
+                matchGameTwoThread.interrupt();
+                break;
             }
         }
         try {
@@ -140,14 +145,10 @@ public class NetworkContext {
             System.err.println("Game interrupted");
         }
 
-        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
+        gameOneMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
+        gameTwoMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
+        return new Pair<>(gameOne.getGameOver(), gameTwo.getGameOver());
     }
-
-
-
-
 
     public NetworkState getState() {
         return state;

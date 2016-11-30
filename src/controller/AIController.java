@@ -177,7 +177,7 @@ public class AIController implements AIInterface {
 //            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(),
 //                    bestMove.getLocationAndOrientation().getLocation(), bestMove.getLocationAndOrientation().getOrientation());
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
-//            serverMessageHandler.setServerOutput(serverOutput);
+//            serverMessageHandler.addServerOutput(serverOutput);
         }
     }
 
