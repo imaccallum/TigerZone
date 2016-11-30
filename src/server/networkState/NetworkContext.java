@@ -126,6 +126,9 @@ public class NetworkContext {
                 }
                 else {
                     System.err.println("Invalid game Id received " + gameId);
+                    matchGameOneThread.interrupt();
+                    matchGameTwoThread.interrupt();
+                    break;
                 }
             }
             catch (IOException exception) {
