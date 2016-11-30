@@ -40,7 +40,11 @@ public class ChallengeState extends NetworkState {
                 // Do nothing, continue waiting
                 return null;
             } else {
-                throw e;
+
+                NetworkState oldState = returnState();
+                context.setState(oldState);
+                return oldState.processInput(input);
+
             }
         }
 

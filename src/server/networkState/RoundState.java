@@ -56,7 +56,9 @@ public class RoundState extends NetworkState {
 
         } catch (ParseFailureException e) {}
 
-        throw new ParseFailureException("Unable to parse: " + input);
+        NetworkState oldState = returnState();
+        context.setState(oldState);
+        return oldState.processInput(input);
     }
 
     public NetworkState returnState() {
