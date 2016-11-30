@@ -102,10 +102,8 @@ public class NetworkContext {
         gameTwoMessageRunner.start();
 
         ProtocolMessageParser parser = new ProtocolMessageParser();
-        GameOverWrapper firstGameOverWrapper = null;
-        GameOverWrapper secondGameOverWrapper = null;
 
-        while (firstGameOverWrapper == null || secondGameOverWrapper == null) {
+        while ((gameOne.getGameOver() == null) || (gameTwo.getGameOver() == null)) {
             try {
                 String serverInput = in.readLine();
                 String gameId = parser.parseGID(serverInput);
@@ -121,20 +119,10 @@ public class NetworkContext {
                 }
 
                 if (gameId.equals(gameId1)) {
-                    try {
-                        firstGameOverWrapper = parser.parseGameOver(serverInput);
-                    }
-                    catch (Exception e) {}
                     gameOneMessageHandler.addServerInput(serverInput);
-                    break;
                 }
                 else if (gameId.equals(gameId2)) {
-                    try {
-                        secondGameOverWrapper = parser.parseGameOver(serverInput);
-                    }
-                    catch (Exception e) {}
                     gameTwoMessageHandler.addServerInput(serverInput);
-                    break;
                 }
                 else {
                     System.err.println("Invalid game Id received " + gameId);
@@ -159,12 +147,8 @@ public class NetworkContext {
 
         gameOneMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
         gameTwoMessageHandler.addServerOutput(MessageOutputRunner.terminationMessage);
-        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
+        return new Pair<>(gameOne.getGameOver(), gameTwo.getGameOver());
     }
-
-
-
-
 
     public NetworkState getState() {
         return state;

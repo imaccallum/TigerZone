@@ -34,7 +34,7 @@ public class GameInteractor implements Runnable {
     private ServerMatchMessageHandler messageHandler;
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
-    private GameOverWrapper gameOver;
+    private volatile GameOverWrapper gameOver;
     private AIInterface aiNotifier;
     private String gameId;
 
@@ -81,7 +81,7 @@ public class GameInteractor implements Runnable {
 
             if (ourTurn) {
                 playerTurn = aiNotifier.getPlayerName();
-                String serverMessage = "";
+                String serverMessage;
                 Move bestMove = aiNotifier.decideMove(beginTurn);
                 if (bestMove != null) {
                     Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
