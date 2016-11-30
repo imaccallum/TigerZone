@@ -1,25 +1,14 @@
 package server;
 
-import wrappers.NonplacementMoveWrapper;
-import wrappers.PlacementMoveWrapper;
-
 public class ServerMatchMessageHandler {
     private String gameId;
-    private ProtocolMessageBuilder protocolMessageBuilder;
     private String serverInput;
     private String serverOutput;
 
-    public ServerMatchMessageHandler(String gameId) {
+    public ServerMatchMessageHandler() {}
+
+    public void setGameId(String gameId) {
         this.gameId = gameId;
-        protocolMessageBuilder = new ProtocolMessageBuilder();
-    }
-
-    public void makeNonPlacementMove(NonplacementMoveWrapper move) {
-        String serverOutput = protocolMessageBuilder.messageForNonplacementMove(move, gameId);
-    }
-
-    public void makePlacementMove(PlacementMoveWrapper move) {
-        String serverOutput = protocolMessageBuilder.messageForMove(move, gameId);
     }
 
     public synchronized String getServerInput() throws InterruptedException {

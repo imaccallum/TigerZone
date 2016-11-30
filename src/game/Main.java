@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        args = new String[]{"129.68.1.88", "3333", "PersiaRocks!", "Red", "Obiwan77"};
+        args = new String[]{"192.168.1.37", "4444", "TIGERZONE", "TEAMC", "IAMC"};
 
 
         if (args.length != 5) {

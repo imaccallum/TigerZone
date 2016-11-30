@@ -38,7 +38,7 @@ public class GameInteractor implements Runnable {
     private AIInterface aiNotifier;
     private String gameId;
 
-    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler, String gameId) {
+    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
@@ -46,7 +46,6 @@ public class GameInteractor implements Runnable {
         this.messageHandler = messageHandler;
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
-        this.gameId = gameId;
     }
 
     @Override
@@ -351,6 +350,10 @@ public class GameInteractor implements Runnable {
 
     public void setAiNotifier(AIInterface aiNotifier) {
         this.aiNotifier = aiNotifier;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
 
