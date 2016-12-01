@@ -21,14 +21,11 @@ public class AIController implements AIInterface {
     private Move bestMove;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
-    private ServerMatchMessageHandler serverMessageHandler;
     private ProtocolMessageBuilder messageBuilder;
 
-    public AIController(GameInteractor gameInteractor, String playerName,
-                        ServerMatchMessageHandler serverMessageHandler) {
+    public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
-        this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
         messageBuilder = new ProtocolMessageBuilder();
