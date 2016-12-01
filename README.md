@@ -2,11 +2,17 @@
 UF CEN30301 Software Engineering Group C
 
 ## Group Members
+
 Alex Robau      - aerobau
+
 Trevor Fortner  - trevorfortner
+
 Ian MacCallum   - imaccallum
+
 Nikhil Thota    - nt92
+
 Diego Abizaid   - dabizaid
+
 Dean Schaefer   - Dean904
 
 ## Architecture/Design
