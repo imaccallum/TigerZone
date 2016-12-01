@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        args = new String[]{"192.168.1.37", "4444", "TIGERZONE", "TEAMC", "IAMC"};
+        args = new String[]{"192.168.1.19", "4444", "TIGERZONE", "TEAMC", "IAMC"};
 
 
         if (args.length != 5) {
@@ -20,7 +20,8 @@ public class Main {
             System.exit(1);
         }
 
-        // dave sample: java AwesomeClient 129.68.1.88 3333 PersiaRocks! Red Obiwan77
+        // dave sample: java AwesomeClient 129.68.1.88 33
+        // 33 PersiaRocks! Red Obiwan77
 
         int portNumber = Integer.parseInt(args[1]);
 
@@ -30,7 +31,8 @@ public class Main {
         String password = args[4];
 
         try (
-                Socket socket = new Socket(hostName, portNumber); // create the socket within client to communicate with the server
+                // create the socket within client to communicate with the server
+                Socket socket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
