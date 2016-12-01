@@ -26,91 +26,98 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GameInteractor implements Runnable {
+public class GameInteractor {
     private String playerTurn;
     private Map<String, Player> players;
     private List<Player> playerList;
     private Board board;
-    private ServerMatchMessageHandler messageHandler;
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
-    private volatile GameOverWrapper gameOver;
     private AIInterface aiNotifier;
     private String gameId;
 
-    public GameInteractor(Tile firstTile, int stackSize, ServerMatchMessageHandler messageHandler) {
+    public GameInteractor(Tile firstTile, int stackSize) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
         playerList = new ArrayList<>();
         playerTurn = "";
-        this.messageHandler = messageHandler;
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
     }
 
-    @Override
-    public void run() {
-        while (gameOver == null) {
-            String message = "";
-            try {
-                message = messageHandler.getServerInput();
-            } catch (InterruptedException e) {
-                System.err.println(e.getMessage());
+    public String decideTurn(String serverInput) throws ParseFailureException {
+        BeginTurnWrapper beginTurn = messageParser.parseBeginTurn(serverInput);
+        playerTurn = aiNotifier.getPlayerName();
+        Move bestMove = aiNotifier.decideMove(beginTurn);
+        if (bestMove != null) {
+            Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
+            int orientation = bestMove.getLocationAndOrientation().getOrientation();
+            String tile = bestMove.getTile().getType();
+            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation,
+                    beginTurn.getMoveNumber());
+            if (bestMove.needsTiger()) {
+                placementMove.setPlacedObject(Placement.TIGER);
+                placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
             }
-
-            boolean ourTurn = false;
-            BeginTurnWrapper beginTurn = null;
-            try {
-                beginTurn = messageParser.parseBeginTurn(message);
-                ourTurn = true;
+            else if (bestMove.needsCrocodile()) {
+                placementMove.setPlacedObject(Placement.CROCODILE);
             }
-            catch (ParseFailureException exception) {}
-
-            boolean confirmed = false;
-            ConfirmedMoveWrapper confirmedMove = null;
-            try {
-                confirmedMove = messageParser.parseConfirmMove(message);
-                confirmed = true;
+            else {
+                placementMove.setPlacedObject(Placement.NONE);
             }
-            catch (ParseFailureException exception) {}
+            return messageBuilder.messageForMove(placementMove, gameId);
+        }
+        else {
+            NonplacementMoveWrapper nonplacementMove = new NonplacementMoveWrapper(beginTurn.getTile(),
+                    beginTurn.getMoveNumber());
+            return messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
+        }
+    }
 
-            try {
-                gameOver = messageParser.parseGameOver(message);
+    public void confirmMove(ConfirmedMoveWrapper confirmedMove) {
+        if (!confirmedMove.hasForfeited() && confirmedMove.isPlacementMove()) {
+            PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
+            Point location = board.getNativeLocation(placementMove.getLocation());
+            int orientation = placementMove.getOrientation();
+            Tile tileToPlace = TileFactory.makeTile(placementMove.getTile());
+            tileToPlace.rotateCounterClockwise(orientation);
+            if (placementMove.getPlacedObject() == Placement.CROCODILE) {
+                tileToPlace.placeCrocodile();
             }
-            catch (ParseFailureException exception) {}
-
-            if (ourTurn) {
-                playerTurn = aiNotifier.getPlayerName();
-                String serverMessage;
-                Move bestMove = aiNotifier.decideMove(beginTurn);
-                if (bestMove != null) {
-                    Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
-                    int orientation = bestMove.getLocationAndOrientation().getOrientation();
-                    String tile = bestMove.getTile().getType();
-                    PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation,
-                                                                                  beginTurn.getMoveNumber());
-                    if (bestMove.needsTiger()) {
-                        placementMove.setPlacedObject(Placement.TIGER);
-                        placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
+            else if (placementMove.getPlacedObject() == Placement.TIGER) {
+                TileSection tileSection = tileToPlace.tileSectionForZone(placementMove.getZone());
+                if (tileSection == null) {
+                    Tiger tiger = new Tiger(playerTurn, false);
+                    try {
+                        tileToPlace.getDen().placeTiger(tiger);
+                        placeTiger(tiger, playerTurn);
+                    } catch (TigerAlreadyPlacedException e) {
+                        System.err.println("Error placing tiger" + e.getMessage());
+                        return;
                     }
-                    else if (bestMove.needsCrocodile()) {
-                        placementMove.setPlacedObject(Placement.CROCODILE);
-                    }
-                    else {
-                        placementMove.setPlacedObject(Placement.NONE);
-                    }
-                    serverMessage = messageBuilder.messageForMove(placementMove, gameId);
                 }
                 else {
-                    NonplacementMoveWrapper nonplacementMove = new NonplacementMoveWrapper(beginTurn.getTile(),
-                                                                                           beginTurn.getMoveNumber());
-                    serverMessage = messageBuilder.messageForNonplacementMove(nonplacementMove, gameId);
+                    Tiger tiger = new Tiger(playerTurn, false);
+                    try {
+                        tileSection.placeTiger(tiger);
+                        placeTiger(tiger, playerTurn);
+                    } catch (TigerAlreadyPlacedException e) {
+                        System.err.println("Error placing tiger: " + e.getMessage());
+                        return;
+                    }
                 }
-                messageHandler.addServerOutput(serverMessage);
+
             }
-            else if (confirmed) {
-                playerTurn = confirmedMove.getPid();
-                confirmMove(confirmedMove);
+            TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
+            handleTilePlacementRequest(request);
+        }
+        else {
+            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
+            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
+                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
+            }
+            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
+                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
             }
         }
     }
@@ -285,67 +292,6 @@ public class GameInteractor implements Runnable {
 
     public void log() throws IOException {
         board.log();
-    }
-
-    public GameOverWrapper getGameOver() {
-        return gameOver;
-    }
-
-    private boolean confirmMove(ConfirmedMoveWrapper confirmedMove) {
-        if (confirmedMove.hasForfeited()) {
-            return false;
-        }
-        else if (confirmedMove.isPlacementMove()) {
-            PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
-            Point location = board.getNativeLocation(placementMove.getLocation());
-            int orientation = placementMove.getOrientation();
-            Tile tileToPlace = TileFactory.makeTile(placementMove.getTile());
-            tileToPlace.rotateCounterClockwise(orientation);
-            if (placementMove.getPlacedObject() == Placement.CROCODILE) {
-                tileToPlace.placeCrocodile();
-            }
-            else if (placementMove.getPlacedObject() == Placement.TIGER) {
-                TileSection tileSection = tileToPlace.tileSectionForZone(placementMove.getZone());
-                if (tileSection == null) {
-                    Tiger tiger = new Tiger(playerTurn, false);
-                    try {
-                        tileToPlace.getDen().placeTiger(tiger);
-                        placeTiger(tiger, playerTurn);
-                    } catch (TigerAlreadyPlacedException e) {
-                        System.err.println("Error placing tiger" + e.getMessage());
-                        return false;
-                    }
-                }
-                else {
-                    Tiger tiger = new Tiger(playerTurn, false);
-                    try {
-                        tileSection.placeTiger(tiger);
-                        placeTiger(tiger, playerTurn);
-                    } catch (TigerAlreadyPlacedException e) {
-                        System.err.println("Error placing tiger: " + e.getMessage());
-                        return false;
-                    }
-                }
-
-            }
-            TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
-            handleTilePlacementRequest(request);
-            return true;
-        }
-        else {
-            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
-            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
-                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
-                return true;
-            }
-            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
-                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
-                return true;
-            }
-            else {
-                return true;
-            }
-        }
     }
 
     public void setAiNotifier(AIInterface aiNotifier) {
