@@ -6,21 +6,15 @@ import entities.board.Tile;
 import entities.board.TileFactory;
 import exceptions.ParseFailureException;
 import game.GameInteractor;
-import game.MessageOutputRunner;
 import game.Player;
-import javafx.util.Pair;
 import server.ProtocolMessageParser;
-import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
 import wrappers.ConfirmedMoveWrapper;
-import wrappers.GameOverWrapper;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by ianmaccallum on 11/28/16.

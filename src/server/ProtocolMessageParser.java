@@ -279,7 +279,7 @@ public class ProtocolMessageParser {
 
 
     public PlacementMoveWrapper parsePlacementMove(String input) throws ParseFailureException {
-        Pattern p0 = Pattern.compile("PLACED (.+) AT -?(\\d+) -?(\\d+) (\\d+) (.+)");
+        Pattern p0 = Pattern.compile("PLACED (.+) AT (-?\\d+) (-?\\d+) (\\d+) (.+)");
         Matcher m0 = p0.matcher(input);
 
         if (m0.find()) {

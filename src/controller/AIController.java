@@ -3,6 +3,7 @@ package controller;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.TileSection;
+import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.info.PlayerInfo;
@@ -11,6 +12,7 @@ import game.scoring.Scorer;
 import server.ProtocolMessageBuilder;
 import wrappers.BeginTurnWrapper;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -161,13 +163,6 @@ public class AIController implements AIInterface {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
-        if (possibleLocations.isEmpty()) {
-            return new Move(tileToPlace, null, 0, false, false, 0, null);
-        }
-        else {
-            return new Move(tileToPlace, possibleLocations.get(0), 0, false, false, 0, null);
-        }
-        /*
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
@@ -220,7 +215,6 @@ public class AIController implements AIInterface {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.addServerOutput(serverOutput);
         }
-        */
     }
 
     @Override
