@@ -23,6 +23,7 @@ public class AIController implements AIInterface {
     private Map<String, PlayerInfo> playersInfo;
     private ProtocolMessageBuilder messageBuilder;
 
+
     public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
@@ -31,6 +32,12 @@ public class AIController implements AIInterface {
         messageBuilder = new ProtocolMessageBuilder();
     }
 
+    /**
+     * Gets the move with the maximum score
+     *
+     * @return
+     * Returns the bet Move
+     */
     private Move calculateBestMove() {
         int max = moves.get(0).getScore();
         Move best = moves.get(0);
@@ -43,7 +50,15 @@ public class AIController implements AIInterface {
         return best;
     }
 
-    // Use function through the Board's findValidTilePlacements()
+    /**
+     * Meant to add the score of a tile at a certain location & orientation
+     * to list that keeps the optimal move
+     *
+     * @param locationAndOrientation
+     * The orientation of at which the tile is being scored
+     * @param tile
+     * The tile being scored
+     */
     public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile) {
         Move moveWithCroc = null;
         Move moveWithoutCroc = null;
@@ -83,6 +98,15 @@ public class AIController implements AIInterface {
         moves.add(moveWithoutCroc);
     }
 
+    /**
+     * Calculates the score for a certain tile once it has been inserted
+     * including possible ownership and Tiger placement
+     *
+     * @param tile
+     * The tile that is being scored
+     * @return
+     * The preliminary Move that contains info about Tiger placement and possible score
+     */
     public Move calculateScoreForTile(Tile tile){
         int tileScore = 0;
         TileSection sectionWhereTileNeedsToBePlaced  = null;
@@ -124,6 +148,14 @@ public class AIController implements AIInterface {
 
     // MARK: Implementation of AIInterface
 
+    /**
+     * Picks out the best move based on the possible locations and orientations
+     *
+     * @param beginTurn
+     * Used to obtain the tile of the
+     * @return
+     * The Move to be used for the tile placement including Tiger and crocodile Placement
+     */
     public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
