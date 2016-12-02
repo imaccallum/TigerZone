@@ -303,7 +303,14 @@ public class Tile {
                 }
             }
             case 4: return getEdge(EdgeLocation.LEFT).getTileSection();
-            case 5: return null;
+            case 5: {
+                if (getDen() != null) {
+                    return null;
+                }
+                else {
+                    return getEdge(EdgeLocation.BOTTOM).getTileSection();
+                }
+            }
             case 6: return getEdge(EdgeLocation.RIGHT).getTileSection();
             case 7: {
                 Node corner = getCorner(CornerLocation.BOTTOM_LEFT);
@@ -372,15 +379,58 @@ public class Tile {
         if (tilesection.getTerrain() == Terrain.JUNGLE) {
             System.out.println("Placing in Jungle");
             int min = 9;
+            boolean containsCorner0 = false;
+            boolean containsCorner1 = false;
+            boolean containsCorner2 = false;
+            boolean containsCorner3 = false;
+            boolean containsEdge0 = false;
+            boolean containsEdge1 = false;
+            boolean containsEdge2 = false;
+            boolean containsEdge3 = false;
+
             for (Node nodeInTileSection: tilesection.getNodes()) {
-                if (nodeInTileSection == corners[0] || nodeInTileSection.equals(edges[0]) ||
-                        nodeInTileSection.equals(edges[3])) {
-                    min = 1 < min ? 1 : min;
-                } else if (nodeInTileSection.equals(corners[1]) || nodeInTileSection.equals(edges[1])) {
-                    min = 3 < min ? 3 : min;
-                } else if (nodeInTileSection.equals(edges[2]) || nodeInTileSection.equals(corners[3])) {
-                    min = 7 < min ? 7 : min;
+                if (nodeInTileSection == corners[0]) {
+                    containsCorner0 = true;
                 }
+                else if (nodeInTileSection == edges[0]) {
+                    containsEdge0 = true;
+                }
+                else if (nodeInTileSection == corners[1]) {
+                    containsCorner1 = true;
+                }
+                else if (nodeInTileSection == edges[1]) {
+                    containsEdge1 = true;
+                }
+                else if (nodeInTileSection == corners[2]) {
+                    containsCorner2 = true;
+                }
+                else if (nodeInTileSection == edges[2]) {
+                    containsEdge2 = true;
+                }
+                else if (nodeInTileSection == corners[3]) {
+                    containsCorner3 = true;
+                }
+                else if (nodeInTileSection == edges[3]) {
+                    containsEdge3 = true;
+                }
+            }
+
+            if (containsCorner0 || containsEdge0 || containsEdge3) {
+                min = 1;
+            }
+            else if (containsCorner1 || containsEdge1) {
+                min = 3;
+            }
+            else if (containsEdge1 && containsEdge2 && edges[0].getTileSection().getTerrain() != Terrain.TRAIL &&
+                    getDen() == null) {
+                // Does not contain edge 0 or edge 1, edge 0 is not a trail so the middle is not a trail, also no den
+                min = 5;
+            }
+            else if (containsEdge2 || containsCorner3) {
+                min = 7;
+            }
+            else {
+                min = 9;
             }
             System.out.println(min);
             return min;
@@ -409,6 +459,8 @@ public class Tile {
                 min = 2;
             } else if (containsEdge3) {
                 min = 4;
+            } else if (containsEdge1 && containsEdge2 && tilesection.getTerrain() == Terrain.TRAIL) {
+                min = 5;
             } else if (containsEdge1) {
                 min = 6;
             } else if (containsEdge2) {

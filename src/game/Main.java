@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        args = new String[]{"localhost", "4444", "TIGERZONE", "TEAMD", "IAMD"};
+        args = new String[]{"localhost", "4444", "TIGERZONE", "TEAMC", "IAMC"};
 
         if (args.length != 5) {
             System.err.println("Usage: java EchoClient <host name> <port number>");
