@@ -69,6 +69,9 @@ public class GameInteractor {
                     beginTurn.getMoveNumber());
             if (bestMove.needsTiger()) {
                 placementMove.setPlacedObject(Placement.TIGER);
+                Tile tileToPlace = bestMove.getTile();
+                // Rotate the tile first to get the correct tile section
+                tileToPlace.rotateCounterClockwise(bestMove.getLocationAndOrientation().getOrientation());
                 placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
             }
             else if (bestMove.needsCrocodile()) {
