@@ -646,13 +646,12 @@ public class Board {
      * The boolean result if all conditions for a connection is correct.
      */
     private boolean nodeConnectionIsValid(Node first, Node second) {
-        if (first == null || second == null || first.isConnected() || second.isConnected()) {
+        if (first == null || second == null ||
+            first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
             return false;
+        } else {
+            return true;
         }
-        else if (first.getTileSection().getTerrain() != second.getTileSection().getTerrain()) {
-            return false;
-        }
-        return true;
     }
 
     /**
