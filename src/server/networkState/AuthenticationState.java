@@ -4,9 +4,6 @@ import exceptions.ParseFailureException;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
 
-/**
- * Created by ianmaccallum on 11/28/16.
- */
 public class AuthenticationState extends NetworkState {
 
     public AuthenticationState(NetworkContext context) {
@@ -14,7 +11,7 @@ public class AuthenticationState extends NetworkState {
     }
 
     public String processInput(String input) throws ParseFailureException {
-
+        System.out.println("STATE: AUTHENTICATION -- " + input);
         ProtocolMessageParser parser = new ProtocolMessageParser();
         ProtocolMessageBuilder builder = new ProtocolMessageBuilder();
 

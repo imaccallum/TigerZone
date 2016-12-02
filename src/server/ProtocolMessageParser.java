@@ -56,7 +56,7 @@ public class ProtocolMessageParser {
     // MARK: - Challenge protocol parser
     public Pair<String, Integer> parseNewChallenge(String input) throws ParseFailureException {
 
-        Pattern p = Pattern.compile("NEW CHALLENGE (.+) YOU WILL PLAY (\\d+) MATCH.+");
+        Pattern p = Pattern.compile("NEW CHALLENGE (\\d+) YOU WILL PLAY (\\d+) MATCH(.+)?");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -138,7 +138,7 @@ public class ProtocolMessageParser {
     }
 
     public Pair<String, LocationAndOrientation> parseStartingTile(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT (\\d+) (\\d+) (\\d+)");
+        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT -?(\\d+) -?(\\d+) (\\d+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -184,20 +184,13 @@ public class ProtocolMessageParser {
         }
     }
 
-    public GameOverWrapper parseGameOver(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("GAME (.+) OVER PLAYER (.+) (\\d+) PLAYER (.+) (\\d+)");
+    public String parseGameOver(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) OVER.+");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
-
             String gid = m.group(1);
-            String pid0 = m.group(2);
-            String pid1 = m.group(4);
-
-            int score0 = Integer.parseInt(m.group(3));
-            int score1 = Integer.parseInt(m.group(5));
-
-            return new GameOverWrapper(gid, pid0, score0, pid1, score1);
+            return gid;
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
         }
@@ -224,6 +217,7 @@ public class ProtocolMessageParser {
     }
 
     public ConfirmedMoveWrapper parseConfirmMove(String input) throws ParseFailureException {
+//        GAME 1 MOVE 1 PLAYER TEAMD PLACED TLLT- AT 0 -1 0 NONE
         Pattern p = Pattern.compile("GAME (.+) MOVE (\\d+) PLAYER (\\S+) (.+)");
         Matcher m = p.matcher(input);
 
@@ -241,6 +235,10 @@ public class ProtocolMessageParser {
                 String forfeitMessage = parseForfeit(suffix);
                 wrapper.setForfeitMessage(forfeitMessage);
                 wrapper.setHasForfeited(true);
+                wrapper.setIsPlacementMove(false);
+
+//                parseNonplacementMove(forfeitMessage)
+
                 return wrapper;
 
             } catch (ParseFailureException e) {}
@@ -250,6 +248,7 @@ public class ProtocolMessageParser {
                 PlacementMoveWrapper move = parsePlacementMove(suffix);
                 wrapper.setPlacementMove(move);
                 wrapper.setIsPlacementMove(true);
+                wrapper.setHasForfeited(false);
                 return wrapper;
             } catch (ParseFailureException e) {}
 
@@ -280,7 +279,7 @@ public class ProtocolMessageParser {
 
 
     public PlacementMoveWrapper parsePlacementMove(String input) throws ParseFailureException {
-        Pattern p0 = Pattern.compile("PLACED (.+) AT (\\d+) (\\d+) (\\d+) (.+)");
+        Pattern p0 = Pattern.compile("PLACED (.+) AT -?(\\d+) -?(\\d+) (\\d+) (.+)");
         Matcher m0 = p0.matcher(input);
 
         if (m0.find()) {
@@ -288,7 +287,7 @@ public class ProtocolMessageParser {
             String tile = m0.group(1);
             int x = Integer.parseInt(m0.group(2));
             int y = Integer.parseInt(m0.group(3));
-            int orientation = Integer.parseInt(m0.group(4));
+            int orientation = Integer.parseInt(m0.group(4)) / 90;
             String placement = m0.group(5);
 
             Point point = new Point(x, y);
@@ -327,7 +326,7 @@ public class ProtocolMessageParser {
             } else if (suffix.startsWith("RETRIEVED TIGER AT")) {
                 wrapper.setType(UnplaceableType.RETRIEVED_TIGER);
 
-                Pattern p0 = Pattern.compile("RETRIEVED TIGER AT (\\d+) (\\d+)");
+                Pattern p0 = Pattern.compile("RETRIEVED TIGER AT -?(\\d+) -?(\\d+)");
                 Matcher m0 = p0.matcher(suffix);
 
                 if (m0.find()) {
@@ -342,7 +341,7 @@ public class ProtocolMessageParser {
             } else if (suffix.startsWith("ADDED ANOTHER TIGER")) {
                 wrapper.setType(UnplaceableType.ADDED_TIGER);
 
-                Pattern p1 = Pattern.compile("ADDED ANOTHER TIGER TO (\\d+) (\\d+)");
+                Pattern p1 = Pattern.compile("ADDED ANOTHER TIGER TO -?(\\d+) -?(\\d+)");
                 Matcher m1 = p1.matcher(suffix);
 
                 if (m1.find()) {

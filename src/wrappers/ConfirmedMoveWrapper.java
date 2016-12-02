@@ -9,7 +9,7 @@ public class ConfirmedMoveWrapper {
     private int moveNumber;
     private String pid;
 
-    private boolean isPlacementMove;
+    private boolean isPlacementMove = true;
     private PlacementMoveWrapper placementMove;
     private NonplacementMoveWrapper nonplacementMove;
 

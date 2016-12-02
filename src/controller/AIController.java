@@ -21,14 +21,11 @@ public class AIController implements AIInterface {
     private Move bestMove;
     private String playerName;
     private Map<String, PlayerInfo> playersInfo;
-    private ServerMatchMessageHandler serverMessageHandler;
     private ProtocolMessageBuilder messageBuilder;
 
-    public AIController(GameInteractor gameInteractor, String playerName,
-                        ServerMatchMessageHandler serverMessageHandler) {
+    public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
-        this.serverMessageHandler = serverMessageHandler;
         moves = new ArrayList<>();
         this.playersInfo = new HashMap<>();
         messageBuilder = new ProtocolMessageBuilder();
@@ -115,7 +112,7 @@ public class AIController implements AIInterface {
             }
         }
         tileScore += scoreWhereTigerWasPlaced;
-        boolean needsTiger = scoreWhereTigerWasPlaced > 0;
+        boolean needsTiger = false;
 
         return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
     }
@@ -131,6 +128,13 @@ public class AIController implements AIInterface {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
+        if (possibleLocations.isEmpty()) {
+            return new Move(tileToPlace, null, 0, false, false, 0, null);
+        }
+        else {
+            return new Move(tileToPlace, possibleLocations.get(0), 0, false, false, 0, null);
+        }
+        /*
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
@@ -144,17 +148,20 @@ public class AIController implements AIInterface {
             //int rand = new Random().nextInt(possibleLocations.size());
             //TilePlacementRequest request;
             for (LocationAndOrientation locationAndOrientation: possibleLocations){
+                System.out.println("Tile " + tileToPlace.getType() + " location (" + locationAndOrientation.getLocation().getX() + " , " + locationAndOrientation.getLocation().getY() + ")  orientation: " + locationAndOrientation.getOrientation());
                 tileToPlace.rotateCounterClockwise(locationAndOrientation.getOrientation());
                // request =  new TilePlacementRequest(playerName, tileToPlace, locationAndOrientation.getLocation());
                 try {
                     gameInteractor.place(tileToPlace, locationAndOrientation.getLocation());
+
+                    addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                    // Reset rotation
+                    gameInteractor.removeLastPlacedTile();
+
                 } catch (BadPlacementException e) {
                     e.printStackTrace();
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
-                addOptimalScoreForTile(locationAndOrientation, tileToPlace);
-                // Reset rotation
-                gameInteractor.removeLastPlacedTile();
                 tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
             }
 
@@ -163,6 +170,7 @@ public class AIController implements AIInterface {
 
             moves.clear();
             return bestMove;
+
 
 //            TilePlacementRequest request = new TilePlacementRequest(playerName, tileToPlace,
 //                    bestMove.getLocationAndOrientation().getLocation());
@@ -177,8 +185,9 @@ public class AIController implements AIInterface {
 //            PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tileToPlace.getType(),
 //                    bestMove.getLocationAndOrientation().getLocation(), bestMove.getLocationAndOrientation().getOrientation());
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
-//            serverMessageHandler.setServerOutput(serverOutput);
+//            serverMessageHandler.addServerOutput(serverOutput);
         }
+        */
     }
 
     @Override

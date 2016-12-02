@@ -16,6 +16,8 @@ public class MatchState extends NetworkState {
     }
 
     public String processInput(String input) throws ParseFailureException {
+        System.out.println("STATE: MATCH");
+
         ProtocolMessageParser parser = new ProtocolMessageParser();
         ProtocolMessageBuilder builder = new ProtocolMessageBuilder();
 
@@ -62,7 +64,7 @@ public class MatchState extends NetworkState {
         // Server tells us when match begins
         try {
             int time = parser.parseMatchBeginsPlanTime(input);
-            Pair<GameOverWrapper, GameOverWrapper> pair = context.startMatch();
+            context.startMatch();
 
             // Both games are done so the game is over
             NetworkState oldState = returnState();
@@ -71,7 +73,9 @@ public class MatchState extends NetworkState {
 
         } catch(ParseFailureException e) {}
 
-        throw new ParseFailureException(input);
+        NetworkState oldState = returnState();
+        context.setState(oldState);
+        return oldState.processInput(input);
     }
 
     public NetworkState returnState() {

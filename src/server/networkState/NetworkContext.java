@@ -11,6 +11,8 @@ import game.Player;
 import javafx.util.Pair;
 import server.ProtocolMessageParser;
 import server.ServerMatchMessageHandler;
+import wrappers.BeginTurnWrapper;
+import wrappers.ConfirmedMoveWrapper;
 import wrappers.GameOverWrapper;
 
 import java.awt.*;
@@ -47,31 +49,22 @@ public class NetworkContext {
     private BufferedReader in;
     private PrintWriter out;
 
-    private Lock mutex = new ReentrantLock();
-
 
     public NetworkContext(BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
     }
 
-
-
-    public Pair<GameOverWrapper, GameOverWrapper> startMatch() {
-        // Parse input for match start
-        // Initialize GameManagers
-        // Start two threads
+    public void startMatch() {
+        System.out.println("STATE: GAME");
 
         Tile firstTile = TileFactory.makeTile(startingTile);
         Tile secondTile = TileFactory.makeTile(startingTile);
 
-        ServerMatchMessageHandler gameOneMessageHandler = new ServerMatchMessageHandler("A");
-        ServerMatchMessageHandler gameTwoMessageHandler = new ServerMatchMessageHandler("B");
-
         System.out.println(remainingTileCount);
 
-        GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1, gameOneMessageHandler, "A");
-        GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1, gameTwoMessageHandler, "B");
+        GameInteractor gameOne = new GameInteractor(firstTile, remainingTileCount + 1);
+        GameInteractor gameTwo = new GameInteractor(secondTile, remainingTileCount + 1);
 
         gameOne.addPlayer(new Player(pid));
         gameOne.addPlayer(new Player(opid));
@@ -79,75 +72,105 @@ public class NetworkContext {
         gameTwo.addPlayer(new Player(pid));
         gameTwo.addPlayer(new Player(opid));
 
-        AIInterface ai1 = new AIController(gameOne, pid, gameOneMessageHandler);
-        AIInterface ai2 = new AIController(gameTwo, pid, gameTwoMessageHandler);
+        AIInterface ai1 = new AIController(gameOne, pid);
+        AIInterface ai2 = new AIController(gameTwo, pid);
 
         gameOne.setAiNotifier(ai1);
         gameTwo.setAiNotifier(ai2);
 
-        MessageOutputRunner gameOneMessageOutputRunner = new MessageOutputRunner(mutex, out, gameOneMessageHandler);
-        MessageOutputRunner gameTwoMessageOutputRunner = new MessageOutputRunner(mutex, out, gameTwoMessageHandler);
-
-        Thread matchGameOneThread = new Thread(gameOne);
-        Thread matchGameTwoThread = new Thread(gameTwo);
-        Thread gameOneMessageRunner = new Thread(gameOneMessageOutputRunner);
-        Thread gameTwoMessageRunner = new Thread(gameTwoMessageOutputRunner);
-
-        matchGameOneThread.start();
-        matchGameTwoThread.start();
-        gameOneMessageRunner.start();
-        gameTwoMessageRunner.start();
-
         ProtocolMessageParser parser = new ProtocolMessageParser();
-        GameOverWrapper firstGameOverWrapper = null;
-        GameOverWrapper secondGameOverWrapper = null;
 
-        while (firstGameOverWrapper == null || secondGameOverWrapper == null) {
-            try {
-                String serverInput = in.readLine();
-                String gameId = parser.parseGID(serverInput);
-                switch(gameId) {
-                    case "A": {
-                        try {
-                            firstGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (Exception e) {}
-                        gameOneMessageHandler.setServerInput(serverInput);
-                        break;
+        boolean gameOneOver = false;
+        boolean gameTwoOver = false;
+
+        try {
+
+            String serverInput;
+            String serverOutput = "";
+
+            while (true) {
+
+                if (gameOneOver && gameTwoOver) return;
+
+                serverInput = in.readLine();
+                System.out.println("SERVER: " + serverInput);
+
+                // Check if game is still running
+                try {
+                    String gameId = parser.parseGameOver(serverInput);
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOneOver = true;
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        gameTwoOver = true;
                     }
-                    case "B": {
-                        try {
-                            secondGameOverWrapper = parser.parseGameOver(serverInput);
-                        }
-                        catch (Exception e) {}
-                        gameTwoMessageHandler.setServerInput(serverInput);
-                        break;
+
+                    continue;
+                }
+                catch (ParseFailureException parseException) {}
+
+
+                // Check if begin turn
+                try {
+
+                    BeginTurnWrapper beginTurn = parser.parseBeginTurn(serverInput);
+                    String gameId = beginTurn.getGid();
+                    System.out.println("BEGINNING TURN " + beginTurn.getGid() + " tile: " + beginTurn.getTile());
+
+
+                    if (gameOne.getGameId() == null) {
+                        gameOne.setGameId(gameId);
+                    } else if (gameTwo.getGameId() == null) {
+                        gameTwo.setGameId(gameId);
                     }
-                    default: System.err.println("Invalid game Id received " + gameId);
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        serverOutput = gameOne.decideTurn(serverInput);
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        serverOutput = gameTwo.decideTurn(serverInput);
+                    } else {
+                        System.err.println("Invalid game Id received " + gameId);
+                        return;
+                    }
+
+                    System.out.println("CLIENT: " + serverOutput);
+                    out.println(serverOutput);
+                    continue;
+
+                } catch (ParseFailureException e) {}
+
+
+                // Check if confirm move
+                try {
+                    ConfirmedMoveWrapper confirmedMove = parser.parseConfirmMove(serverInput);
+                    String gameId = confirmedMove.getGid();
+                    System.out.println("PARSED CONFIRM MOVE " + gameId);
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOne.confirmMove(confirmedMove);
+                        continue;
+                    } else if (gameOne.getGameId() == null) {
+                        gameOne.setGameId(gameId);
+                    } else if (gameTwo.getGameId() == null) {
+                        gameTwo.setGameId(gameId);
+                    }
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOne.confirmMove(confirmedMove);
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        gameTwo.confirmMove(confirmedMove);
+                    } else {
+                        System.err.println("Received confirmed move with bad GID: " + confirmedMove.getGid());
+                        return;
+                    }
+                } catch (ParseFailureException e) {
+
                 }
             }
-            catch (IOException exception) {
-                System.err.println("Received IO exception");
-            }
-            catch (ParseFailureException exception) {
-                System.err.println("Failed to parse the group id, exception: " + exception.getMessage());
-            }
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getLocalizedMessage());
         }
-        try {
-            matchGameOneThread.join();
-            matchGameTwoThread.join();
-        } catch (InterruptedException exception) {
-            System.err.println("Game interrupted");
-        }
-
-        gameOneMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        gameTwoMessageHandler.setServerOutput(MessageOutputRunner.terminationMessage);
-        return new Pair<>(firstGameOverWrapper, secondGameOverWrapper);
     }
-
-
-
-
 
     public NetworkState getState() {
         return state;

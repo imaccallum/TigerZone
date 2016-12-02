@@ -17,18 +17,21 @@ public class ProtocolMessageBuilder {
     }
     public String messageForMove(PlacementMoveWrapper move, String gameId) {
         Point location = move.getLocation();
+        int orientation = move.getOrientation() * 90;
+
+
         if (move.getPlacedObject() == Placement.TIGER) {
             int zone = move.getZone();
             return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
-                    location.x + " " + location.y + " " + move.getOrientation() + " TIGER " + zone;
+                    location.x + " " + location.y + " " + orientation + " TIGER " + zone;
         }
         else if (move.getPlacedObject() == Placement.CROCODILE) {
             return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
-                    location.x + " " + location.y + " " + move.getOrientation() + " " + "CROCODILE";
+                    location.x + " " + location.y + " " + orientation + " " + "CROCODILE";
         }
         else {
             return "GAME " + gameId + " MOVE " + move.getMoveNumber() + " PLACE " + move.getTile() + " AT " +
-                    location.x + " " + location.y + " " + move.getOrientation() + " NONE";
+                    location.x + " " + location.y + " " + orientation + " NONE";
         }
     }
 
