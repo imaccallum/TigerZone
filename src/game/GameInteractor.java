@@ -135,15 +135,18 @@ public class GameInteractor {
             TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
             handleTilePlacementRequest(request);
         }
+        else if (confirmedMove.hasForfeited()) {
+            return;
+        }
         else {
             System.out.println("NONPLACEMENT MOVE");
-//            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
-//            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
-//                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
-//            }
-//            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
-//                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
-//            }
+            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
+            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
+                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
+            }
+            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
+                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
+            }
         }
     }
 

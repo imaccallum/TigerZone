@@ -27,6 +27,7 @@ public class Board {
     private Point centerLocation;
     private Stack<Stack<RegionMerge>> regionMergesForEachPlacedTile;
     private Stack<Tile> tilesPlacedInOrder;
+    private Stack<List<Point>> locationsOpenedForEachPlacedTile;
 
     private int boardSize;
     private int numTiles;
@@ -49,6 +50,7 @@ public class Board {
         placedTigers = new HashSet<>();
         regionMergesForEachPlacedTile = new Stack<>();
         tilesPlacedInOrder = new Stack<>();
+        locationsOpenedForEachPlacedTile = new Stack<>();
 
         centerLocation = new Point(numberOfTiles - 1, numberOfTiles - 1);
         // System.out.println(firstTile.type);
@@ -97,6 +99,9 @@ public class Board {
             undoRegionMerge(mergesToUndo.pop());
         }
 
+        List<Point> openLocationsToRemove = locationsOpenedForEachPlacedTile.pop();
+        openTileLocations.removeAll(openLocationsToRemove);
+
         tile.setLocation(null, centerLocation);
 
         numTiles--;
@@ -117,8 +122,7 @@ public class Board {
      */
     public void place(Tile tile, Point location) throws BadPlacementException {
         Stack<RegionMerge> regionMerges = new Stack<>();
-
-        System.out.println("Placing tile at location " + location);
+        List<Point> locationsAddedToOpenLocations = new ArrayList<>();
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
         int col = location.x;
         int row = location.y;
@@ -148,25 +152,33 @@ public class Board {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectLaterally(tile, leftTile));
         } else {
-            openTileLocations.add(new Point(col-1, row));
+            Point loc = new Point(col-1, row);
+            openTileLocations.add(loc);
+            locationsAddedToOpenLocations.add(loc);
         }
         if (rightTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectLaterally(rightTile, tile));
         } else {
-            openTileLocations.add(new Point(col+1, row));
+            Point loc = new Point(col+1, row);
+            openTileLocations.add(loc);
+            locationsAddedToOpenLocations.add(loc);
         }
         if (topTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(tile, topTile));
         } else {
-            openTileLocations.add(new Point(col, row + 1));
+            Point loc = new Point(col, row + 1);
+            openTileLocations.add(loc);
+            locationsAddedToOpenLocations.add(loc);
         }
         if (bottomTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(bottomTile, tile));
         } else {
-            openTileLocations.add(new Point(col, row - 1));
+            Point loc = new Point(col, row - 1);
+            openTileLocations.add(loc);
+            locationsAddedToOpenLocations.add(loc);
         }
 
         if (tile.getDen() != null) {
@@ -175,12 +187,7 @@ public class Board {
             den.setBoard(this);
             tigerDens.add(den);
         }
-
-        for (Point p: openTileLocations) {
-            System.out.println("Open location: (" + p.getX() + " , " + p.getY() + ")");
-        }
-
-
+        locationsOpenedForEachPlacedTile.push(locationsAddedToOpenLocations);
         tilesPlacedInOrder.push(tile);
         regionMergesForEachPlacedTile.push(regionMerges);
     }
