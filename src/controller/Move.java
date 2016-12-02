@@ -82,5 +82,6 @@ public class Move {
     }
 
     public Tile getTile() { return tile; }
+    
     public String getTileType() { return tileType; }
 }
