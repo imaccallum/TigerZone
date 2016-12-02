@@ -341,7 +341,7 @@ public class Tile {
         }
     }
 
-    /*
+    /**
      * Get whether a tiger is on any of the TileSections of the Tile
      *
      * @return
@@ -356,7 +356,7 @@ public class Tile {
         return false;
     }
 
-    /*
+    /**
      * Get the int for the Node where the Tiger should be placed on in the tileSection on the tile
      *
      * @return
