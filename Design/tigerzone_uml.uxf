@@ -1,0 +1,1709 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1945</x>
+      <y>370</y>
+      <w>265</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>Tile
+--
+- COUNT: int
+- edges: Node[]
+- corners: Node[]
+- den: TigerDen
+- preyAnimal: PreyAnimal
+- location: Point
+- tileSections : List&lt;TileSection&gt;
+- type: String
+- hasCrocodile: boolean
+- orientation: int
+- serverLocation: Point
+--
++ Tile(s: String)
+--
++ rotateClockwise(numberOfRotations: int) : void
++ addTileSections(TileSection... tileSections) : void
++ toString() : String
++ getAdjacentTileSectionsForTileSection(tileSection: TileSection) : List&lt;TileSection&gt;
++ nodesClockwise() : List&lt;Node&gt;
++ canPlaceCrocodile() : boolean
++ placeCrocodile() : void
++ tileSectionForZone(zone: int) : TileSection
++ getTigerZone(tilesection: TileSection) : int
+--
++ hasTiger() : boolean
++ getDen() : TigerDen
++ setDen(den: TigerDen) : void
++ getEdge(location: EdgeLocation) : Node
++ setEdge(edgeNode: Node, location: EdgeLocation) : void
++ getCorner(location: CornerLocation) : Node
++ setConer(cornerNode: Node, location: CornerLocation) : void
++ getPreyAnimal() : PreyAnimal
++ setPreyAnimal(preyAnimal: PreyAnimal) : void
++ getLocation() : Point
++ getServerLocation() : Point
++ setLocation(location: Point) : void
++ getTileSections() : List&lt;TileSection&gt;
++ hasCrocodile() : boolean
++ getType() : String
++ getOrientation() : int
+--
+- setOrientation(orientation: int) : void
+- spacing(input: String) : String
+- rowOneToString() : String
+- rowTwoToString() : String
+- rowThreeToString() : String
+- hasTerrain(terrain: Terrain) : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2330</x>
+      <y>595</y>
+      <w>165</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>TileSection
+--
+- nodes: List&lt;Node&gt;
+- terrain : Terrain
+- tile: Tile
+- region: Region
+- tiger: Tiger
+- tigerDisplayNode: Node
+--
++ TileSection(terrain: Terrain)
+--
++ addNodes(Node... node) : void
++ toString() : void
++ hasOpenConnection() : boolean
++ placeTiger(tiger: Tiger) : void
++ removeTiger() : void
++ hasTiger() : boolean
+--
++ getTerrain() : Terrain
++ getTile() : Tile
++ setTile(tile: Tile) : void
++ getRegion() : Region
++ setRegion(region: Region) : void
++ getTiger() : Tiger
++ getTigerDisplayNode() : Node
++ getNodes() : List&lt;Node&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1945</x>
+      <y>745</y>
+      <w>235</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>Region
+--
+- regionId : UUID
+- tileSections : List&lt;TileSection&gt;
+- terrain: Terrain
+- hasCrocodile: boolean
+--
++ Region(terrain: Terrain)
+--
++ addTileSection(section : TileSection) : void
++ combineWithRegion(region: Region) : void
++ isFinished() : boolean
++ containsTigers() : boolean
++ getScorer() : Scorer  // Factory
++ getAllTigers(): List&lt;Tiger&gt;
++ getDominantPlayerNames() : List&lt;String&gt;
++ getRegionInfo() : RegionInfo
+--
++ getRegionId() : UUID
++ getTileSections() : List&lt;TileSection&gt; : void
++ getTerrain() : Terrain
++ hasCrocodile() : boolean
++ setHasCrocodile(hasCrocodile: boolean) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2205</x>
+      <y>600</y>
+      <w>135</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0;180.0;90.0;250.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2175</x>
+      <y>640</y>
+      <w>130</w>
+      <h>155</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;290.0;240.0;290.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1485</x>
+      <y>485</y>
+      <w>345</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+- boardMatrix: Tile[][]
+- openTileLocations: HashSet&lt;Point&gt;
+- regions: Map&lt;UUID, Region&gt;
+- tigerDens: List&lt;TigerDen&gt;
+- placedTigers: Set&lt;Tiger&gt;
+- lastTilePlaced: Tile
+- centerLocation: Point
+- regionMergesForEachPlacedTile: Stack&lt;Stack&lt;RegionMerge&gt;&gt;
+- tilesPlacedInOrder: Stack&lt;Tile&gt;
+- boardSize: int
+- numTiles: int
+--
++ Board(numberOfTiles: int, firstTile: Tile)
+--
++ removeLastPlacedTile() : Tile
++ place(tile: Tile, location: Point) : void throws
++ findValidTilePlacements(tile: Tile) : List&lt;LocationAndOrientation&gt; 
++ getTile(tileLocation: Point) : Tile
++ getTileFromServerLocation(serverLocation: Point) : Tile
++ getNumTiles() : int
++ getOpenTileLocations() : HashSet&lt;Point&gt;
++ getLastPlacedTile() : Tile
++ toString() : String
++ removeTigerFromTileAt(location: Point) : void
++ stackTigerAt(location: Point) : void
++ getPossibleTileSectionTigerPlacements() : List&lt;TileSection&gt;
+- lateralConnectionIsValid(rightTile: Tile, leftTile: Tile) : boolean
+- connectLaterally(rightTile: Tile, leftTile: Tile) : void throws
+- verticalConnectionIsValid(bottomTile: Tile, topTile: Tile) : boolean
+- connectVertically(bottomTile: Tile, topTile: Tile) : void throws
+- nodeConnectionIsValid(first: Node, second: Node) : boolean
+- connectNodes(first: Node, second: Node) : void throws
+- setTileAtLocation(tile: Tile, location: Point) : void
+- undoRegionMerge(mergeToUndo: RegionMerge): void
++ canPlaceTiger(section: TileSection) : boolean
++ log() : void throws
++ addPlacedTiger(tiger: Tiger) : void
++ removePlacedTiger(tiger: Tiger) : void
++ stackTiger(tigerToStack: Tiger) : void throws
++ regionsAsList() : List&lt;Region&gt;
++ getServerLocation(location: Point) : Point
++ getNativeLocation(serverlocation: Point) : Point</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1825</x>
+      <y>550</y>
+      <w>130</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1825</x>
+      <y>570</y>
+      <w>130</w>
+      <h>205</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;390.0;240.0;390.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2220</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+CornerLocation
+--
+TOP_LEFT
+TOP_RIGHT
+BOTTOM_LEFT
+BOTTOM_RIGHT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2115</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+EdgeLocation
+--
+TOP
+RIGHT
+BOTTOM
+LEFT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1945</x>
+      <y>920</y>
+      <w>235</w>
+      <h>125</h>
+    </coordinates>
+    <panel_attributes>TigerDen
+--
+- tiger: Tiger
+- centerTileLocation : Point
+- requiredTileLocations : Map&lt;Point, Boolean&gt;
+- board: Board
+--
++ TigerDen()
+--
++ placeTiger(tiger: Tiger) : void
++ isComplete() : boolean
++ removeTiger() : void
+- updateRequiredLocations() : void
+--
++ getTiger() : Tiger
++ getCenterTileLocation() : Point
++ getRequiredTileLocations() : Map&lt;Point, Boolean&gt;
++ setBoard(board: Board) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1825</x>
+      <y>595</y>
+      <w>130</w>
+      <h>365</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;710.0;240.0;710.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1480</x>
+      <y>335</y>
+      <w>375</w>
+      <h>115</h>
+    </coordinates>
+    <panel_attributes>AIController
+--
+- moves: List&lt;Move&gt;
+- gameInteractor: GameInteractor
+- bestMove: Move
+- playerName: String
+- playersInfo: Map&lt;String, PlayerInfo&gt;
+- messageBuilder: ProtocolMessageBuilder
+--
++ AIController(gameInteractor: GameInteractor, playerName: String)
+--
++ calculateBestMove() : Move
++ addOptimalScoreForTile(locationAndOrientation: LocationAndOrientation) : void
++ clearMoves() : void
++ decideMove(BeginTurnWrapper beginTurn) : Move
++ getPlayerName() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2330</x>
+      <y>815</y>
+      <w>165</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Node
+--
+- connectedNodes: List&lt;Node&gt;
+- tileSection: TileSection
+--
++ Node()
+--
++ isTigerDisplayNode() : boolean
++ getTileSection() : TileSection
++ setTileSection(tileSection: TileSection) : void
++ getConnectedNodes() : List&lt;Node&gt;
++ addConnectedNode(node: Node) : void
++ isConnected() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2490</x>
+      <y>650</y>
+      <w>70</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;120.0;340.0;10.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2205</x>
+      <y>565</y>
+      <w>135</w>
+      <h>265</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;510.0;250.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1910</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+Terrain
+--
+LAKE
+TRAIL
+JUNGLE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2015</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+PreyAnimal
+--
+DEER
+BUFFALO
+BOAR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>615</y>
+      <w>185</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Tiger
+--
+- owningPlayerName: String
+- stacked: boolean
+--
++ Tiger(owningPlayerName: String, stacked: boolean)
+--
++ getOwningPlayerName() : String
++ isStacked() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1590</x>
+      <y>275</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+AIInterface
+--
+decideMove(BeginTurnWrapper beginTurn): Move
+getPlayerName(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1670</x>
+      <y>310</y>
+      <w>15</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>895</x>
+      <y>295</y>
+      <w>530</w>
+      <h>205</h>
+    </coordinates>
+    <panel_attributes>Move
+--
+- tile: Tile
+- tileType: String
+- locationAndOrientation: LocationAndOrientation
+- score: int
+- needsTiger: boolean
+- needsCrocodile: boolean
+- tileSection: TileSection
+- zone: int
+- scoreTigerGives: int
+--
++ Move(tile: Tile, locationAndOrientation: LocationAndOrientation, score: int, needsTiger: boolean, needsCrocodile: boolean, scoreTigerGives: int, tileSection: TileSection)
+--
++ getLocationAndOrientation() : LocationAndOrientation
++ getScore() : int
++ getScoreTigerGives() : int
++ needsTiger() : boolean
++ needsCrocodile() : boolean
++ setScore(score: int) : void
++ getTileSection() : TileSection
++ setLocationAndOrientation(locationAndOrientation: LocationAndOrientation) : void
++ setNeedsTiger(needsTiger: boolean) : void
++ setScoreTigerGives(scoreTigerGives: int) : void
++ setTileSection(tileSection: TileSection) : void
++ getTile() : Tile
++ getTileType() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2320</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+Placement
+--
+NONE
+TIGER
+CROCODILE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1125</x>
+      <y>670</y>
+      <w>275</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>RegionMerge
+--
++ FIRST_OLD_REGION: Region
++ SECOND_OLD_REGION: Region
++ NEW_REGION: Region
+--
+RegionMerge(firstOldRegions: Region, secondOldRegion: Region, newRegion: Region)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>0</y>
+      <w>185</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>TileFactory
+&lt;&lt;Link with NetworkContext, AIController, GameInteractor&gt;&gt;
+--
+--
+_makeTile(s: String) : Tile_
+_makeTileA() : Tile_
+_makeTileB() : Tile_
+_makeTileC() : Tile_
+_makeTileD() : Tile_
+_makeTileE() : Tile_
+_makeTileF() : Tile_
+_makeTileG() : Tile_
+_makeTileH() : Tile_
+_makeTileI() : Tile_
+_makeTileJ() : Tile_
+_makeTileK() : Tile_
+_makeTileL() : Tile_
+_makeTileM() : Tile_
+_makeTileN() : Tile_
+_makeTileO() : Tile_
+_makeTileP() : Tile_
+_makeTileQ() : Tile_
+_makeTileR() : Tile_
+_makeTileS() : Tile_
+_makeTileT() : Tile_
+_makeTileU() : Tile_
+_makeTileV() : Tile_
+_makeTileW() : Tile_
+_makeTileX() : Tile_
+_makeTileY() : Tile_
+_makeTileZ() : Tile_
+_makeTile0() : Tile_
+_makeTile1() : Tile_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1805</x>
+      <y>200</y>
+      <w>145</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>BadPlacementException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ BadPlacementException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1970</x>
+      <y>200</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>IncompatibleTerrainException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ IncompatibleTerrainException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2145</x>
+      <y>200</y>
+      <w>145</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>ParseFailureException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ ParseFailureException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2310</x>
+      <y>200</y>
+      <w>145</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>StackingTigerException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ StackingTigerException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2045</x>
+      <y>155</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>TigerAlreadyPlacedException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ TigerAlreadyPlacedException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>980</x>
+      <y>515</y>
+      <w>360</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>PlayerInfo
+--
++ PLAYER_NAME: String
++ SCORE: int
++ REMAINING_TIGERS: int
++ REMAINING_CROCODILES: int
++ PLACED_TIGERS: Set&lt;Tiger&gt;
+--
+PlayerInfo(playerName: String, score: int, remainingTigers: int, remainingCrocodiles: int, placedTigers: Set&lt;Tiger&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1490</x>
+      <y>855</y>
+      <w>330</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>RegionInfo
+--
++ REGION_ID: UUID
++ NUMBER_OF_OPEN_NODE_CONNECTIONS: int
++ PROJECTED_SCORE_UPON_COMPLETION: int
+--
++ RegionInfo(regionId: UUID, numberOfOpenNodeConnections: int, projectedScoreUponCompletion: int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1540</x>
+      <y>940</y>
+      <w>235</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>RegionTigerPlacement
+--
++ REGION_INFO: RegionInfo
++ JUST_COMPLETED: boolean
+--
++ RegionTigerPlacement(regionInfo: RegionInfo, justCompleted: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1070</x>
+      <y>1090</y>
+      <w>305</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>TigerDenTigerPlacement
+--
++ CENTER_POINT: Point
++ SURROUNDING_POINT_STATUSES: Map&lt;Point, Boolean&gt;
+--
++ TigerDenTigerPlacement(centerPoint: Point, surroundingPointStatuses: Map&lt;Point, Boolean&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1155</x>
+      <y>215</y>
+      <w>275</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>TilePlacementRequest
+--
++ PLAYER_NAME: String
++ TILE_TO_PLACE: Tile
++ LOCATION_TO_PLACE_AT: Point
+--
+TilePlacementRequest(playerName: String, tileToPlace: Tile, locationToPlaceAt: Point)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>930</x>
+      <y>995</y>
+      <w>595</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>TilePlacementResponse
+--
++ WAS_VALID: boolean
++ REGION_TIGER_PLACEMENT_OPTIONS: List&lt;RegionTigerPlacement&gt;
++ TIGER_DEN_PLACEMENT_OPTION: TigerDenTigerPlacement
++ CAN_PLACE_CROCODILE: boolean
+--
++ TilePlacementResponse(wasValid: boolean, regionTigerPlacementOptions: List&lt;RegionTigerPlacement&gt;, tigerDenPlacementOption: TigerDenTigerPlacement, canPlaceCrocodile: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>955</x>
+      <y>600</y>
+      <w>445</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>ValidMovesResponse
+--
++ LOCATIONS_AND_ORIENTATIONS: List&lt;LocationAndOrientation&gt;
++ TIGER_PLACED_ON_BOARD: Set&lt;Tiger&gt;
++ TILE_IS_UNPLACEABLE: boolean
+--
++ ValidMovesResponse(locationAndOrientations: List&lt;LocationAndOrientation&gt;, tigerPlacedOnBoard: Set&lt;Tiger&gt;, tileIsUnplaceable: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2230</x>
+      <y>980</y>
+      <w>125</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>/Scorer/
+--
+_# jungleAdjacentDenBonus: int = 5_
+_# jungleAdjacentLakeBonus: int = 3_
+_# completeLakeScorePerTile: int = 2_
+_# incompleteLakeScorePerTile: int = 1_
+_# gameTrailScorePerTile: int = 1_
+# regionToScore: Region
+--
+/+ score() : int/
+/+ scoreIfCompletedNow() : int/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2350</x>
+      <y>1015</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2370</x>
+      <y>950</y>
+      <w>40</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;280.0;60.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2400</x>
+      <y>945</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>JungleScorer
+--
++ JungleScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2400</x>
+      <y>1005</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>TrailScorer
+--
++ TrailScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2400</x>
+      <y>1070</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>LakeScorer
+--
++ LakeScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1120</x>
+      <y>730</y>
+      <w>280</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>GameInteractor
+--
+- playerTurn: String
+- players: Map&lt;String, Player&gt;
+- playerList: List&lt;Player&gt;
+- board: Board
+- messageParser: ProtocolMessageParser
+- messageBuilder: ProtocolMessageBuilder
+- aiNotifier: AIInterface
+- gameId: String
+--
++ GameInteractor(firstTile: Tile, stackSize: int)
+--
++ decideTurn(serverInput String) : String
++ confirmMove(confirmedMove: ConfirmedMoveWrapper): void
++ addPlayer(player: Player) : void
++ place(tile: Tile, location: Point) : void
++ removeLastPlacedTile() : void
++ getValidMoves(tile: Tile) : ValidMovesResponse
++ getPlayers() : Map&lt;String, Player&gt;
++ handleTilePlacementRequest(request: TilePlacementRequest) : TilePlacementRequest
++ removeTigerFromTileAt(location: Point, playername: String) : void
++ stackTigerAt(tiger: Tiger, playername: String) : void
++ placeTiger(tiger: Tiger, playername: String) : void
++ setAiNotifier(aiNotifier: AIInterface) : void
++ setGameID(gameId: String) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1685</x>
+      <y>1025</y>
+      <w>175</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>LocationAndOrientation
+&lt;&lt;Used by Move, ValidMovesResponse,
+GameInteractor, AIController, 
+ProtocolMessageParser,Board&gt;&gt;
+--
+- LOCATION: Point
+- ORIENTATION: int
+--
+LocationAndOrientation(location: Point, orientation: int)
+--
++ getLocation(): Point
++ getOrientation(): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>650</y>
+      <w>85</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>Main
+--
+_main(args: String[]) : void_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>320</y>
+      <w>125</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Player
+--
+- NAME: String
+- score: int
+- remainingTigers: int
+- remainingCrocodiles: int
+- placedTigers: Set&lt;Tiger&gt;
+--
++ Player(name: String)
+--
++ addPlacedTiger(tiger: Tiger) : void
++ getName() : String
++ getScore() : int
++ getRemainingTigers() : int
++ incrementRemainingTigers() : void
++ decrementRemainingTigers() : void
++ hasRemainingTigers() : void
++ getRemainingCrocodiles() : int
++ hasRemainingCrocodiles() : boolean
++ getPlacedTigers() : Set&lt;Tiger&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>135</x>
+      <y>635</y>
+      <w>120</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>/NetworkState/
+--
+# context: NetworkContext
+--
+# NetworkState(context: NetworkContext)
+--
+/+ processInput(input: String) : String/
+/+ returnState() : NetworkState/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>250</x>
+      <y>660</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>595</y>
+      <w>40</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;440.0;50.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>575</y>
+      <w>155</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>AuthenticationState
+--
++ AuthenticationState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>640</y>
+      <w>155</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>ChallengeState
+--
++ ChallengeState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>715</y>
+      <w>155</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>MatchState
+--
++ MatchState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>295</x>
+      <y>790</y>
+      <w>155</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>RoundState
+--
++ RoundState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>730</y>
+      <w>40</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>490</y>
+      <w>205</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>NetworkContext
+--
+- state: NetworkState
+- tournamentPassword: String
+- username: String
+- password: String
+- pid: String
+- opid: String
+- cid: String
+- rid: String
+- round: int
+- roundCount: int
+- shouldReturn: boolean
+- startingTile: String
+- startingTileLocation: Point
+- startingTileOrientation: int
+- remainingTileCount: int
+- remainingTiles: String[]
+- in: BufferedReader
+- out: PrintWriter
+--
++ NetworkContext(in: BufferedReader, out: PrintWriter)
+--
++ startMatch() : Pair&lt;GameOverWrapper, GameOverWrapper&gt;
++ getState() : NetworkState
++ setState(state: NetworkState) : void
++ getTournamentPassword() : String
++ setTournamentPassword(tournamentPassword: String) : void
++ getUsername() : String
++ setUsername(username: String) : void
++ getPassword() : String
++ setPassword(password: String) : void
++ setPid(pid: String) : void
++ setOpid(opid: String) : void
++ setCid(cid: String) : void
++ setRid(rid: String) : void
++ setRoundCount(roundCount: int) : void
++ shouldReturn() : boolean
++ setShouldReturn(shouldReturn: boolean) : void
++ setStartingTile(startingTile: String) : void
++ setStartingTileLocation(startingTileLocation: Point) : void
++ setStartingTileOrientation(startingTileOrientation: int) : void
++ setRemainingTileCount(remainingTileCount: int) : void
++ setRemainingTiles(remainingTiles: String[]) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>465</x>
+      <y>845</y>
+      <w>275</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ProtocolMessageBuilder
+&lt;&lt;Also used by AIController&gt;
+--
+--
++ joinBuilder(tournamentPassword: String) : String
++ identityBuilder(username: String, password: String) : String
++ messageForMove(move: PlacementMoveWrapper, gameId: String) : String
++ messageForNonplacementMove(gameId: String, move: NonplacementMoveWrapper) : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>805</x>
+      <y>700</y>
+      <w>225</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>ProtocolMessageParser
+--
+--
++ parseGID(input: String) : String
++ parseGoodbye(input: String) : boolean
++ parseIsSparta(input: String) : boolean
++ parseIsHello(input: String) : boolean
++ parseWelcomePID(input: String) : String
++ parseNewChallenge(input: String) : Pair&lt;String, Integer&gt;
++ parseIsEndofChallenge(input: String) : boolean
++ parseIsWaitForNextChallenge(input: String) : boolean
++ parseBeginRound(input: String) : Pair&lt;String, Integer&gt;
++ parseEndRound(input: String) : Pair&lt;String, Integer&gt;
++ parseEndRoundAndWait(input: String) : Pair&lt;String, Integer&gt;
++ parseOpponentPID(input: String) : String
++ parseStartingTile(input: String) : Pair&lt;String, LocationAndOrientation&gt;
++ parseRemainingTiles(input: String) : Pair&lt;Integer, String[]&gt;
++ parseMatchBeginsPlanTime(input: String) : Integer
++ parseGameOver(input: String) : String
++ parseBeginTurn(input: String) : BeginTurnWrapper
++ parseConfirmMove(input: String) : ConfirmedMoveWrapper
++ parseForfeit(input: String) : String
++ parsePlacementMove(input: String) : PlacementMoveWrapper
++ parseNonplacementMove(input: String) : NonplacementMoveWrapper
++ parseTigerZone(input: String) : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>170</y>
+      <w>230</w>
+      <h>95</h>
+    </coordinates>
+    <panel_attributes>BeginTurnWrapper
+--
+- gid: String
+- time: int
+- moveNumber: int
+- tile: String
+--
++ BeginTurnWrapper(gid: String, time: int, moveNumber: int, tile: String)
+--
++ getGid() : String
++ getTime() : int
++ getMoveNumber() : int
++ getTile() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>430</x>
+      <y>960</y>
+      <w>260</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>ConfirmedMoveWrapper
+--
+- gid: String
+- moveNumber: int
+- pid: String
+- isPlacementMove: boolean
+- placementMove: PlacementMoveWrapper
+- nonplacementMove: NonplacementMoveWrapper
+- hasForfeited: boolean
+- forfeitMessage: String
+--
++ ConfirmedMoveWrapper(gid: String, moveNumber: int, pid: String)
+--
++ isPlacementMove() : boolean
++ setIsPlacementMove(placementMove: boolean): void
++ getPlacementMove(): PlacementMoveWrapper
++ setPlacementMove(placementMove: PlacementMoveWrapper) : void
++ setNonplacementMove(nonplacementMove: NonplacementMoveWrapper) : void
++ hasForfeited() : boolean
++ setHasForfeited(hasForfeited: boolean) : void
++ getForfeitMessage() : String
++ setForfeitMessage(forfeitMessage: String) : void
++ getGid() : String
++ getMoveNumber() : int
++ getPid() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>1090</y>
+      <w>260</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>NonplacementMoveWrapper
+&lt;&lt;Also used by GameInteractor&gt;&gt;
+--
+- tile: String
+- type: UnplaceableType
+- tigerLocation: Point
+- moveNumber: int
+--
++ NonplacementMoveWrapper(tile: String, moveNumber: int)
+--
++ setType(type: UnplaceableType) : void
++ setTigerLocation(tigerLocation: Point) : void
++ getTile() : String
++ getType() : UnplaceableType
++ getTigerLocation() : Point
++ getMoveNumber() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>430</x>
+      <y>1220</y>
+      <w>260</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>PlacementMoveWrapper
+&lt;&lt;Also used by GameInteractor and AIController&gt;&gt;
+--
+- tile: String
+- location: Point
+- orientation: int
+- placedObject: Placement
+- zone: int
+- moveNumber: int
+--
++ PlacementMoveWrapper(tile: String, location: Point, orientation: int, moveNumber: int)
+--
++ setPlacedObject(placedObject: Placement) : void
++ setZone(zone: int) : void
++ getTile() : String
++ getLocation() : Point
++ getOrientation : int
++ getPlacedObject() : Placement
++ getZone() : int
++ getMoveNumber() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1810</x>
+      <y>250</y>
+      <w>90</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+UnplaceableType
+--
+PASSED
+RETRIEVED_TIGER
+ADDED_TIGER</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1420</x>
+      <y>390</y>
+      <w>70</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1395</x>
+      <y>690</y>
+      <w>100</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>180.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>850</x>
+      <y>385</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>260.0;340.0;50.0;340.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1335</x>
+      <y>415</y>
+      <w>155</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>290.0;10.0;210.0;10.0;210.0;280.0;10.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1815</x>
+      <y>820</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;120.0;80.0;120.0;80.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1395</x>
+      <y>795</y>
+      <w>105</w>
+      <h>95</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;170.0;190.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1650</x>
+      <y>900</y>
+      <w>15</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>870</y>
+      <w>120</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;20.0;10.0;10.0;10.0;190.0;220.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>980</y>
+      <w>145</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;270.0;90.0;270.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1250</x>
+      <y>920</y>
+      <w>15</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1395</x>
+      <y>550</y>
+      <w>55</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>90.0;10.0;90.0;150.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1095</x>
+      <y>645</y>
+      <w>35</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;240.0;10.0;240.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1125</x>
+      <y>1050</y>
+      <w>15</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1425</x>
+      <y>235</y>
+      <w>110</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>200.0;200.0;200.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1565</x>
+      <y>245</y>
+      <w>15</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>200</y>
+      <w>140</w>
+      <h>610</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1200.0;60.0;1200.0;60.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>150</y>
+      <w>900</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;680.0;10.0;10.0;1780.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>825</x>
+      <y>275</y>
+      <w>710</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>1400.0;10.0;10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>825</x>
+      <y>465</y>
+      <w>285</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>550.0;440.0;210.0;440.0;210.0;200.0;10.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>530</y>
+      <w>320</w>
+      <h>115</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0;620.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>80</x>
+      <y>655</y>
+      <w>65</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2175</x>
+      <y>860</y>
+      <w>130</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0;240.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>785</x>
+      <y>465</y>
+      <w>15</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;300.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>850</x>
+      <y>535</y>
+      <w>140</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1025</x>
+      <y>760</y>
+      <w>85</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>760</y>
+      <w>115</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>40</x>
+      <y>530</y>
+      <w>165</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;240.0;10.0;10.0;310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>830</y>
+      <w>530</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>1040.0;10.0;940.0;10.0;940.0;200.0;10.0;200.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>185</x>
+      <y>685</y>
+      <w>430</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;490.0;840.0;490.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1005</x>
+      <y>180</y>
+      <w>530</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>1040.0;120.0;1040.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>180</y>
+      <w>120</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>685</x>
+      <y>805</y>
+      <w>130</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;500.0;170.0;500.0;170.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>685</x>
+      <y>760</y>
+      <w>80</w>
+      <h>265</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>140.0;10.0;140.0;510.0;10.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>765</x>
+      <y>1050</y>
+      <w>25</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0;30.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>565</x>
+      <y>1145</y>
+      <w>225</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;430.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>685</x>
+      <y>1140</y>
+      <w>95</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;250.0;10.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>565</x>
+      <y>1170</y>
+      <w>15</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+</diagram>

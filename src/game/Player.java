@@ -13,7 +13,7 @@ public class Player {
     private int remainingCrocodiles;
     private Set<Tiger> placedTigers;
 
-    public Player(String name){
+    public Player(String name) {
         this.name = name;
         remainingTigers = 7;
         remainingCrocodiles = 2;

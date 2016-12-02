@@ -10,10 +10,13 @@ import game.messaging.info.PlayerInfo;
 import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
 import server.ProtocolMessageBuilder;
-import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
 
-import java.util.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AIController implements AIInterface {
     private List<Move> moves;
@@ -23,6 +26,7 @@ public class AIController implements AIInterface {
     private Map<String, PlayerInfo> playersInfo;
     private ProtocolMessageBuilder messageBuilder;
 
+
     public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
@@ -31,6 +35,12 @@ public class AIController implements AIInterface {
         messageBuilder = new ProtocolMessageBuilder();
     }
 
+    /**
+     * Gets the move with the maximum score
+     *
+     * @return
+     * Returns the bet Move
+     */
     private Move calculateBestMove() {
         int max = moves.get(0).getScore();
         Move best = moves.get(0);
@@ -43,7 +53,15 @@ public class AIController implements AIInterface {
         return best;
     }
 
-    // Use function through the Board's findValidTilePlacements()
+    /**
+     * Meant to add the score of a tile at a certain location & orientation
+     * to list that keeps the optimal move
+     *
+     * @param locationAndOrientation
+     * The orientation of at which the tile is being scored
+     * @param tile
+     * The tile being scored
+     */
     public void addOptimalScoreForTile(LocationAndOrientation locationAndOrientation, Tile tile) {
         Move moveWithCroc = null;
         Move moveWithoutCroc = null;
@@ -83,9 +101,18 @@ public class AIController implements AIInterface {
         moves.add(moveWithoutCroc);
     }
 
+    /**
+     * Calculates the score for a certain tile once it has been inserted
+     * including possible ownership and Tiger placement
+     *
+     * @param tile
+     * The tile that is being scored
+     * @return
+     * The preliminary Move that contains info about Tiger placement and possible score
+     */
     public Move calculateScoreForTile(Tile tile){
         int tileScore = 0;
-        TileSection sectionWhereTileNeedsToBePlaced  = null;
+        TileSection sectionWhereTigerNeedsToBePlaced  = null;
         int scoreWhereTigerWasPlaced = 0;
 
         // Assumes you have inserted the tile and will delete it later on if the move is not optimal
@@ -101,10 +128,11 @@ public class AIController implements AIInterface {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() &&
+                    gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
                     if (regionScore > scoreWhereTigerWasPlaced) {
                         scoreWhereTigerWasPlaced = regionScore;
-                        sectionWhereTileNeedsToBePlaced = tileSection;
+                        sectionWhereTigerNeedsToBePlaced = tileSection;
                     }
                 } else {
                     tileScore -= regionScore;
@@ -112,9 +140,9 @@ public class AIController implements AIInterface {
             }
         }
         tileScore += scoreWhereTigerWasPlaced;
-        boolean needsTiger = false;
+        boolean needsTiger = sectionWhereTigerNeedsToBePlaced != null;
 
-        return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
+        return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTigerNeedsToBePlaced);
     }
 
     public void clearMoves() {
@@ -124,17 +152,18 @@ public class AIController implements AIInterface {
 
     // MARK: Implementation of AIInterface
 
+    /**
+     * Picks out the best move based on the possible locations and orientations
+     *
+     * @param beginTurn
+     * Used to obtain the tile of the
+     * @return
+     * The Move to be used for the tile placement including Tiger and crocodile Placement
+     */
     public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocations = validMoves.locationsAndOrientations;
-        if (possibleLocations.isEmpty()) {
-            return new Move(tileToPlace, null, 0, false, false, 0, null);
-        }
-        else {
-            return new Move(tileToPlace, possibleLocations.get(0), 0, false, false, 0, null);
-        }
-        /*
 
         if (possibleLocations.isEmpty()) {
             // Stack a tiger or remove a tiger?
@@ -187,7 +216,6 @@ public class AIController implements AIInterface {
 //            String serverOutput = messageBuilder.messageForMove(placementMove, serverMessageHandler.getGameId());
 //            serverMessageHandler.addServerOutput(serverOutput);
         }
-        */
     }
 
     @Override

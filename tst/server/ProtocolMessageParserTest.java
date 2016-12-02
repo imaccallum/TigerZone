@@ -1,6 +1,6 @@
 package server;
 
-import entities.board.Placement;
+import wrappers.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;

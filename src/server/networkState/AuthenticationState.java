@@ -10,6 +10,14 @@ public class AuthenticationState extends NetworkState {
         super(context);
     }
 
+    /**
+     * Parses server input
+     *
+     * @param input
+     * @return
+     * A string built to represent the server sematics
+     * @throws ParseFailureException
+     */
     public String processInput(String input) throws ParseFailureException {
         System.out.println("STATE: AUTHENTICATION -- " + input);
         ProtocolMessageParser parser = new ProtocolMessageParser();

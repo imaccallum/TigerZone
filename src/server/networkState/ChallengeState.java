@@ -14,6 +14,13 @@ public class ChallengeState extends NetworkState {
         super(context);
     }
 
+    /**
+     * Processes the input string
+     * @param input
+     * @return
+     * a processed string
+     * @throws ParseFailureException
+     */
     public String processInput(String input) throws ParseFailureException {
         System.out.println("STATE: CHALLENGE");
         ProtocolMessageParser parser = new ProtocolMessageParser();
