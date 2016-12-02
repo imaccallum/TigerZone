@@ -45,8 +45,9 @@ public class Tile {
             int newIndex = (i + COUNT - numberOfRotations) % COUNT;
             tempEdges[newIndex] = edges[i];
             tempCorners[newIndex] = corners[i];
-            setOrientation(orientation + numberOfRotations);
         }
+
+        this.orientation = Math.abs((orientation + COUNT - numberOfRotations) % COUNT);
 
         edges = tempEdges;
         corners = tempCorners;

@@ -112,7 +112,7 @@ public class AIController implements AIInterface {
             }
         }
         tileScore += scoreWhereTigerWasPlaced;
-        boolean needsTiger = scoreWhereTigerWasPlaced > 0;
+        boolean needsTiger = false;
 
         return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
     }
@@ -141,6 +141,7 @@ public class AIController implements AIInterface {
             //int rand = new Random().nextInt(possibleLocations.size());
             //TilePlacementRequest request;
             for (LocationAndOrientation locationAndOrientation: possibleLocations){
+                System.out.println("Tile " + tileToPlace.getType() + " location (" + locationAndOrientation.getLocation().getX() + " , " + locationAndOrientation.getLocation().getY() + ")  orientation: " + locationAndOrientation.getOrientation());
                 tileToPlace.rotateCounterClockwise(locationAndOrientation.getOrientation());
                // request =  new TilePlacementRequest(playerName, tileToPlace, locationAndOrientation.getLocation());
                 try {

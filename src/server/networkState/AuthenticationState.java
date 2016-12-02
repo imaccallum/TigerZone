@@ -11,7 +11,7 @@ public class AuthenticationState extends NetworkState {
     }
 
     public String processInput(String input) throws ParseFailureException {
-
+        System.out.println("STATE: AUTHENTICATION -- " + input);
         ProtocolMessageParser parser = new ProtocolMessageParser();
         ProtocolMessageBuilder builder = new ProtocolMessageBuilder();
 
