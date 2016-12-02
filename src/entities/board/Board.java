@@ -119,14 +119,12 @@ public class Board {
         Stack<RegionMerge> regionMerges = new Stack<>();
 
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
-        int row = location.y;
         int col = location.x;
-
-        // Get the surrounding tiles of the placement.
-        Tile leftTile = boardMatrix[row][col-1];
-        Tile rightTile = boardMatrix[row][col+1];
-        Tile bottomTile = boardMatrix[row+1][col];
-        Tile topTile = boardMatrix[row-1][col];
+        int row = location.y;
+        Tile leftTile = boardMatrix[row][col - 1];
+        Tile rightTile = boardMatrix[row][col + 1];
+        Tile topTile = boardMatrix[row + 1][col];
+        Tile bottomTile = boardMatrix[row - 1][col];
 
         // If they are all null, we are trying to place a tile that will not be adjacent to any other tile and thus
         // throw a bad tile placement exception.
@@ -161,13 +159,13 @@ public class Board {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(tile, topTile));
         } else {
-            openTileLocations.add(new Point(col, row-1));
+            openTileLocations.add(new Point(col, row + 1));
         }
         if (bottomTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(bottomTile, tile));
         } else {
-            openTileLocations.add(new Point(col, row+1));
+            openTileLocations.add(new Point(col, row - 1));
         }
 
         if (tile.getDen() != null) {
@@ -193,17 +191,26 @@ public class Board {
      * as a point and an Orientation as an integer
      */
     public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
+
+//        System.out.println(this.toString());
+
+
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (Point openTileLocation : openTileLocations) {   // for each open tile
             int col = openTileLocation.x;
             int row = openTileLocation.y;
             Tile left = boardMatrix[row][col - 1];
             Tile right = boardMatrix[row][col + 1];
-            Tile top = boardMatrix[row - 1][col];
-            Tile bottom = boardMatrix[row + 1][col];
+            Tile top = boardMatrix[row + 1][col];
+            Tile bottom = boardMatrix[row - 1][col];
 
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
                 // By placing this at the end the tile is rotated 4 times and thus comes back to original position
+
+
+//                System.out.println("Tile: " + tile.getType() + "  orientation: " + tileOrientation + " location");
+//                System.out.println(tile.toString());
+
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
                     continue;
                 }
@@ -217,8 +224,7 @@ public class Board {
                     continue;
                 }
 
-                Point current = new Point(openTileLocation.x, openTileLocation.y);
-                LocationAndOrientation locationAndOrientation = new LocationAndOrientation(current, tileOrientation);
+                LocationAndOrientation locationAndOrientation = new LocationAndOrientation(openTileLocation, tileOrientation);
                 validPlacements.add(locationAndOrientation);
             }
         }
@@ -544,6 +550,12 @@ public class Board {
     // The boolean as to whether the connection is valid.
     private boolean verticalConnectionIsValid(Tile bottomTile, Tile topTile) {
         // The edges to be connected
+//
+//        System.out.println("VERTICAL CONNECTION");
+//        System.out.println(topTile);
+//        System.out.println(bottomTile);
+//
+
         Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
         boolean result = nodeConnectionIsValid(topEdge, bottomEdge);

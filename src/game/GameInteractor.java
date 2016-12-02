@@ -34,6 +34,11 @@ public class GameInteractor {
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
     private AIInterface aiNotifier;
+
+    public String getGameId() {
+        return gameId;
+    }
+
     private String gameId;
 
     public GameInteractor(Tile firstTile, int stackSize) {
@@ -76,6 +81,7 @@ public class GameInteractor {
 
     public void confirmMove(ConfirmedMoveWrapper confirmedMove) {
         if (!confirmedMove.hasForfeited() && confirmedMove.isPlacementMove()) {
+            System.out.println("PLACEMENT MOVE");
             PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
             Point location = board.getNativeLocation(placementMove.getLocation());
             int orientation = placementMove.getOrientation();
@@ -112,13 +118,14 @@ public class GameInteractor {
             handleTilePlacementRequest(request);
         }
         else {
-            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
-            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
-                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
-            }
-            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
-                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
-            }
+            System.out.println("NONPLACEMENT MOVE");
+//            NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
+//            if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
+//                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
+//            }
+//            else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
+//                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
+//            }
         }
     }
 

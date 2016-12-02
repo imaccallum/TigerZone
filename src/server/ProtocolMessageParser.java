@@ -56,7 +56,7 @@ public class ProtocolMessageParser {
     // MARK: - Challenge protocol parser
     public Pair<String, Integer> parseNewChallenge(String input) throws ParseFailureException {
 
-        Pattern p = Pattern.compile("NEW CHALLENGE (.+) YOU WILL PLAY (\\d+) MATCH.+");
+        Pattern p = Pattern.compile("NEW CHALLENGE (\\d+) YOU WILL PLAY (\\d+) MATCH(.+)?");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -184,20 +184,13 @@ public class ProtocolMessageParser {
         }
     }
 
-    public GameOverWrapper parseGameOver(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("GAME (.+) OVER PLAYER (.+) (\\d+) PLAYER (.+) (\\d+)");
+    public String parseGameOver(String input) throws ParseFailureException {
+        Pattern p = Pattern.compile("GAME (.+) OVER.+");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
-
             String gid = m.group(1);
-            String pid0 = m.group(2);
-            String pid1 = m.group(4);
-
-            int score0 = Integer.parseInt(m.group(3));
-            int score1 = Integer.parseInt(m.group(5));
-
-            return new GameOverWrapper(gid, pid0, score0, pid1, score1);
+            return gid;
         } else {
             throw new ParseFailureException("Failed to parse: " + input);
         }
@@ -241,6 +234,10 @@ public class ProtocolMessageParser {
                 String forfeitMessage = parseForfeit(suffix);
                 wrapper.setForfeitMessage(forfeitMessage);
                 wrapper.setHasForfeited(true);
+                wrapper.setIsPlacementMove(false);
+
+//                parseNonplacementMove(forfeitMessage)
+
                 return wrapper;
 
             } catch (ParseFailureException e) {}
@@ -250,6 +247,7 @@ public class ProtocolMessageParser {
                 PlacementMoveWrapper move = parsePlacementMove(suffix);
                 wrapper.setPlacementMove(move);
                 wrapper.setIsPlacementMove(true);
+                wrapper.setHasForfeited(false);
                 return wrapper;
             } catch (ParseFailureException e) {}
 

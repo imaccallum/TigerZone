@@ -49,20 +49,17 @@ public class NetworkContext {
     private BufferedReader in;
     private PrintWriter out;
 
-    private Lock mutex = new ReentrantLock();
-
 
     public NetworkContext(BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
     }
 
-    public Pair<GameOverWrapper, GameOverWrapper> startMatch() {
+    public void startMatch() {
+        System.out.println("STATE: GAME");
+
         Tile firstTile = TileFactory.makeTile(startingTile);
         Tile secondTile = TileFactory.makeTile(startingTile);
-
-        String gameId1 = null;
-        String gameId2 = null;
 
         System.out.println(remainingTileCount);
 
@@ -82,71 +79,95 @@ public class NetworkContext {
         gameTwo.setAiNotifier(ai2);
 
         ProtocolMessageParser parser = new ProtocolMessageParser();
-        boolean gameOneDone = false;
-        boolean gameTwoDone = false;
 
-        while (true) {
-            try {
-                String serverInput = in.readLine();
-                String serverOutput;
+        boolean gameOneOver = false;
+        boolean gameTwoOver = false;
 
-                try {
-                    GameOverWrapper gameOver1 = parser.parseGameOver(serverInput);
-                    GameOverWrapper gameOver2 = parser.parseGameOver(in.readLine());
-                    return new Pair<>(gameOver1, gameOver2);
-                }
-                catch (ParseFailureException parseException) {
-                    // continue
-                }
+        try {
 
+            String serverInput;
+            String serverOutput = "";
+
+            while (true) {
+
+                if (gameOneOver && gameTwoOver) return;
+
+                serverInput = in.readLine();
                 System.out.println("SERVER: " + serverInput);
-                BeginTurnWrapper beginTurn = parser.parseBeginTurn(serverInput);
-                String gameId = beginTurn.getGid();
 
-                if (gameId1 == null) {
-                    gameId1 = gameId;
-                    gameOne.setGameId(gameId1);
-                }
+                // Check if game is still running
+                try {
+                    String gameId = parser.parseGameOver(serverInput);
 
-                if (gameId.equals(gameId1)) {
-                    serverOutput = gameOne.decideTurn(serverInput);
-                }
-                else if (gameId.equals(gameId2)) {
-                    serverOutput = gameOne.decideTurn(serverInput);
-                }
-                else {
-                    System.err.println("Invalid game Id received " + gameId);
-                    break;
-                }
-                out.println(serverOutput);
-
-                for (int i = 0; i < 2; i++) {
-                    serverInput = in.readLine();
-                    System.out.println("SERVER: " + serverInput);
-                    ConfirmedMoveWrapper confirmedMove = parser.parseConfirmMove(serverInput);
-                    gameId = confirmedMove.getGid();
-                    if (gameId1.equals(gameId)) {
-                        gameOne.confirmMove(confirmedMove);
-                    } else if (gameId2 == null) {
-                        gameId2 = confirmedMove.getGid();
-                        gameTwo.confirmMove(confirmedMove);
-                    } else if (gameId.equals(gameId2)) {
-                        gameTwo.confirmMove(confirmedMove);
-                    } else {
-                        System.err.println("Received confirmed move with bad GID: " + confirmedMove.getGid());
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOneOver = true;
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        gameTwoOver = true;
                     }
 
+                    continue;
                 }
+                catch (ParseFailureException parseException) {}
+
+
+                // Check if begin turn
+                try {
+
+                    BeginTurnWrapper beginTurn = parser.parseBeginTurn(serverInput);
+                    String gameId = beginTurn.getGid();
+                    System.out.println("BEGINNING TURN " + beginTurn.getGid() + " tile: " + beginTurn.getTile());
+
+
+                    if (gameOne.getGameId() == null) {
+                        gameOne.setGameId(gameId);
+                    } else if (gameTwo.getGameId() == null) {
+                        gameTwo.setGameId(gameId);
+                    }
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        serverOutput = gameOne.decideTurn(serverInput);
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        serverOutput = gameTwo.decideTurn(serverInput);
+                    } else {
+                        System.err.println("Invalid game Id received " + gameId);
+                        return;
+                    }
+
+                    System.out.println("CLIENT: " + serverOutput);
+                    out.println(serverOutput);
+                    continue;
+
+                } catch (ParseFailureException e) {}
+
+
+                // Check if confirm move
+                try {
+                    ConfirmedMoveWrapper confirmedMove = parser.parseConfirmMove(serverInput);
+                    String gameId = confirmedMove.getGid();
+                    System.out.println("PARSED CONFIRM MOVE " + gameId);
+
+
+                    if (gameOne.getGameId() == null) {
+                        gameOne.setGameId(gameId);
+                    } else if (gameTwo.getGameId() == null) {
+                        gameTwo.setGameId(gameId);
+                    }
+
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOne.confirmMove(confirmedMove);
+                        continue;
+                    } else if (gameId.equals(gameTwo.getGameId())) {
+                        gameTwo.confirmMove(confirmedMove);
+                        continue;
+                    } else {
+                        System.err.println("Received confirmed move with bad GID: " + confirmedMove.getGid());
+                        return;
+                    }
+                } catch (ParseFailureException e) {}
             }
-            catch (IOException exception) {
-                System.err.println("Received IO exception");
-            }
-            catch (ParseFailureException exception) {
-                System.err.println("Failed to parse the game id, exception: " + exception.getMessage());
-                break;
-            }
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getLocalizedMessage());
         }
-        return new Pair<>(null, null);
     }
 
     public NetworkState getState() {
