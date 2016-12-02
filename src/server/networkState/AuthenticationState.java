@@ -4,9 +4,6 @@ import exceptions.ParseFailureException;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
 
-/**
- * Created by ianmaccallum on 11/28/16.
- */
 public class AuthenticationState extends NetworkState {
 
     public AuthenticationState(NetworkContext context) {

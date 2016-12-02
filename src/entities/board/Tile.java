@@ -45,7 +45,7 @@ public class Tile {
             int newIndex = (i + COUNT - numberOfRotations) % COUNT;
             tempEdges[newIndex] = edges[i];
             tempCorners[newIndex] = corners[i];
-            setOrientation(numberOfRotations);
+            setOrientation(orientation + numberOfRotations);
         }
 
         edges = tempEdges;
@@ -529,7 +529,7 @@ public class Tile {
     }
 
     private void setOrientation(int orientation){
-        orientation = orientation % COUNT;
+        this.orientation = orientation % COUNT;
     }
 
     // MARK: Private methods
