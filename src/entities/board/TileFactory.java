@@ -322,7 +322,6 @@ public class TileFactory {
         }
         catch(IncompatibleTerrainException e){}
 
-        System.out.println(tile.toString());
         return tile;
     }
 
