@@ -118,6 +118,7 @@ public class Board {
     public void place(Tile tile, Point location) throws BadPlacementException {
         Stack<RegionMerge> regionMerges = new Stack<>();
 
+        System.out.println("Placing tile at location " + location);
         // For naming consistent with orientation of tile matrix, get x and y as row, col integers
         int col = location.x;
         int row = location.y;
@@ -175,11 +176,15 @@ public class Board {
             tigerDens.add(den);
         }
 
+        for (Point p: openTileLocations) {
+            System.out.println("Open location: (" + p.getX() + " , " + p.getY() + ")");
+        }
+
+
         tilesPlacedInOrder.push(tile);
         regionMergesForEachPlacedTile.push(regionMerges);
     }
 
-    // HAS TEST - Bookkeeping
     /**
      * Finds the valid tile placements as a list of locations and orientations in location, orientation order
      *
@@ -199,6 +204,7 @@ public class Board {
         for (Point openTileLocation : openTileLocations) {   // for each open tile
             int col = openTileLocation.x;
             int row = openTileLocation.y;
+            Tile current = boardMatrix[row][col];
             Tile left = boardMatrix[row][col - 1];
             Tile right = boardMatrix[row][col + 1];
             Tile top = boardMatrix[row + 1][col];
@@ -211,6 +217,9 @@ public class Board {
 //                System.out.println("Tile: " + tile.getType() + "  orientation: " + tileOrientation + " location");
 //                System.out.println(tile.toString());
 
+                if (current != null) {
+                    continue;
+                }
                 if (top != null && !verticalConnectionIsValid(tile, top)) {
                     continue;
                 }
@@ -726,6 +735,10 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
     }

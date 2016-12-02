@@ -146,8 +146,10 @@ public class NetworkContext {
                     String gameId = confirmedMove.getGid();
                     System.out.println("PARSED CONFIRM MOVE " + gameId);
 
-
-                    if (gameOne.getGameId() == null) {
+                    if (gameId.equals(gameOne.getGameId())) {
+                        gameOne.confirmMove(confirmedMove);
+                        continue;
+                    } else if (gameOne.getGameId() == null) {
                         gameOne.setGameId(gameId);
                     } else if (gameTwo.getGameId() == null) {
                         gameTwo.setGameId(gameId);
@@ -155,15 +157,15 @@ public class NetworkContext {
 
                     if (gameId.equals(gameOne.getGameId())) {
                         gameOne.confirmMove(confirmedMove);
-                        continue;
                     } else if (gameId.equals(gameTwo.getGameId())) {
                         gameTwo.confirmMove(confirmedMove);
-                        continue;
                     } else {
                         System.err.println("Received confirmed move with bad GID: " + confirmedMove.getGid());
                         return;
                     }
-                } catch (ParseFailureException e) {}
+                } catch (ParseFailureException e) {
+
+                }
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getLocalizedMessage());
