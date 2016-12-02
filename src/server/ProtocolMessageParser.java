@@ -288,7 +288,7 @@ public class ProtocolMessageParser {
             String tile = m0.group(1);
             int x = Integer.parseInt(m0.group(2));
             int y = Integer.parseInt(m0.group(3));
-            int orientation = Integer.parseInt(m0.group(4));
+            int orientation = Integer.parseInt(m0.group(4)) / 90;
             String placement = m0.group(5);
 
             Point point = new Point(x, y);
