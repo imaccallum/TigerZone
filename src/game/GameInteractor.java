@@ -87,6 +87,9 @@ public class GameInteractor {
             int orientation = placementMove.getOrientation();
             Tile tileToPlace = TileFactory.makeTile(placementMove.getTile());
             tileToPlace.rotateCounterClockwise(orientation);
+
+            System.out.println("Location " + location.getX() + " " + location.getY());
+
             if (placementMove.getPlacedObject() == Placement.CROCODILE) {
                 tileToPlace.placeCrocodile();
             }

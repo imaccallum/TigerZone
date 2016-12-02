@@ -146,13 +146,15 @@ public class AIController implements AIInterface {
                // request =  new TilePlacementRequest(playerName, tileToPlace, locationAndOrientation.getLocation());
                 try {
                     gameInteractor.place(tileToPlace, locationAndOrientation.getLocation());
+
+                    addOptimalScoreForTile(locationAndOrientation, tileToPlace);
+                    // Reset rotation
+                    gameInteractor.removeLastPlacedTile();
+
                 } catch (BadPlacementException e) {
                     e.printStackTrace();
                 }
                 // TilePlacementResponse placementResponse = gameInteractor.handleTilePlacementRequest(request);
-                addOptimalScoreForTile(locationAndOrientation, tileToPlace);
-                // Reset rotation
-                gameInteractor.removeLastPlacedTile();
                 tileToPlace.rotateCounterClockwise(4 - locationAndOrientation.getOrientation());
             }
 
