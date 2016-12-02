@@ -50,6 +50,16 @@ public class GameInteractor {
         messageBuilder = new ProtocolMessageBuilder();
     }
 
+    /**
+     * Sets all of the parameters for a Move to be decided in terms of possible follower placement
+     *
+     * @param serverInput
+     * The String for the input from the server
+     * @return
+     * A String that contains the message of the Move that was just constructed
+     * @throws ParseFailureException
+     * May return an exception if the parsing of the turn goes wrong
+     */
     public String decideTurn(String serverInput) throws ParseFailureException {
         BeginTurnWrapper beginTurn = messageParser.parseBeginTurn(serverInput);
         playerTurn = aiNotifier.getPlayerName();
@@ -79,6 +89,12 @@ public class GameInteractor {
         }
     }
 
+    /**
+     * Confirms the move that was just made making sure that there are no illegal placements
+     *
+     * @param confirmedMove
+     * The move to be confirmed
+     */
     public void confirmMove(ConfirmedMoveWrapper confirmedMove) {
         if (!confirmedMove.hasForfeited() && confirmedMove.isPlacementMove()) {
             System.out.println("PLACEMENT MOVE");
@@ -132,6 +148,11 @@ public class GameInteractor {
         }
     }
 
+    /**
+     * Adds a player to the list of of players and the Map
+     * @param player
+     * The player to be added
+     */
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
         playerList.add(player);
@@ -280,11 +301,27 @@ public class GameInteractor {
         }
     }
 
+    /**
+     * Removes a Tiger from the given location
+     *
+     * @param location
+     * The location from which a Tiger is to be removed
+     * @param playerName
+     * The Player that receives the tiger back;
+     */
     public void removeTigerFromTileAt(Point location, String playerName) {
         board.removeTigerFromTileAt(location);
         players.get(playerName).incrementRemainingTigers();
     }
 
+    /**
+     * Adds a Tiger at a location on which there is already a Tiger
+     *
+     * @param location
+     * The location on which the Tiger is to be stacked
+     * @param playerName
+     * The name of the player who will place the Tiger
+     */
     public void stackTigerAt(Point location, String playerName) {
         try {
             board.stackTigerAt(location);
@@ -295,6 +332,14 @@ public class GameInteractor {
         }
     }
 
+    /**
+     * Places a Tiger at a given location
+     *
+     * @param tiger
+     * The Tiger to be placed
+     * @param playerName
+     * The location on which the Tiger is to be placed
+     */
     public void placeTiger(Tiger tiger, String playerName) {
         players.get(playerName).addPlacedTiger(tiger);
         players.get(playerName).decrementRemainingTigers();

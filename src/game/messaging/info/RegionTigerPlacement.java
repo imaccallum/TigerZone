@@ -12,7 +12,7 @@ public class RegionTigerPlacement {
     public final boolean justCompleted;
 
     /**
-     * Consturcts a RegionTigerPlacement, all properties are final to protect data
+     * Constructs a RegionTigerPlacement, all properties are final to protect data
      *
      * @param regionInfo,
      * The info about the region a tiger can be placed in
