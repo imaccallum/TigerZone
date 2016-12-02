@@ -22,14 +22,28 @@ Architecture and design information can be found in the /Design directory.
 Source code can be found in the /src directory.
 
 ## Compilation
-// TODO: someone write detailed instructions on how to compile/build the client
+
+#### Command-Line compilation
+From the directory where you cloned the repo (*the root directory*), create a directory called `out`
+
+Run (*from the root directory*):
+
+`javac -d out -sourcepath src src/game/Main.java`
+
+#### IntelliJ compilation
+Simply right click on Main.java and click `Compile` 
 
 ## Running
-// TODO: someone write detailed instructions on how to run the client.
+
+#### IntelliJ running
+Simply right click on Main.java and click `Run` 
 
 ## Testing
-// TODO: all the test (unit and acceptance) code you wrote for the client,
-detailed instructions on how to run the tests
+
+#### Unit Tests via IntelliJ
++ Make sure the `tst` directory is marked as your *Tests Root*
++ Make sure **JUnit4** is added to your classpath. 
++ Right-click `tst` and click `Run 'All Tests'`
 
 ## Known Bugs
 // TODO: a detailed list of all the known bugs/issues needing to be addressed (if the repository system has an issue tracking system, record the issues there)
