@@ -370,12 +370,12 @@ public class Tile {
      */
     public int getTigerZone(TileSection tilesection){
         int min = 9;
-        for(Node nodeInTileSection: tilesection.getNodes()){
+        for(Node nodeInTileSection: tilesection.getNodes()) {
             if(nodeInTileSection.equals(corners[0])){
                 return 1;
             }
             if(nodeInTileSection.equals(edges[0]) && min > 2){
-                if(tilesection.getTerrain() == Terrain.LAKE && tilesection.getNodes().size()>=2 &&
+                if(tilesection.getTerrain() == Terrain.LAKE && tilesection.getNodes().size() >= 2 &&
                         edges[3].getTileSection().getTerrain() == Terrain.LAKE){
                     return 1;
                 }

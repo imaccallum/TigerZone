@@ -28,7 +28,6 @@ import java.util.List;
 public class GameInteractor {
     private String playerTurn;
     private Map<String, Player> players;
-    private List<Player> playerList;
     private Board board;
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
@@ -43,7 +42,6 @@ public class GameInteractor {
     public GameInteractor(Tile firstTile, int stackSize) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
-        playerList = new ArrayList<>();
         playerTurn = "";
         messageParser = new ProtocolMessageParser();
         messageBuilder = new ProtocolMessageBuilder();
@@ -95,6 +93,7 @@ public class GameInteractor {
      * The move to be confirmed
      */
     public void confirmMove(ConfirmedMoveWrapper confirmedMove) {
+        playerTurn = confirmedMove.getPid();
         if (!confirmedMove.hasForfeited() && confirmedMove.isPlacementMove()) {
             System.out.println("PLACEMENT MOVE");
             PlacementMoveWrapper placementMove = confirmedMove.getPlacementMove();
@@ -134,6 +133,7 @@ public class GameInteractor {
             }
             TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
             handleTilePlacementRequest(request);
+            System.out.println(board.toString());
         }
         else if (confirmedMove.hasForfeited()) {
             return;
@@ -157,7 +157,6 @@ public class GameInteractor {
      */
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
-        playerList.add(player);
     }
 
     public void place(Tile tile, Point location) throws BadPlacementException {

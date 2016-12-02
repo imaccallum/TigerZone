@@ -112,7 +112,7 @@ public class AIController implements AIInterface {
      */
     public Move calculateScoreForTile(Tile tile){
         int tileScore = 0;
-        TileSection sectionWhereTileNeedsToBePlaced  = null;
+        TileSection sectionWhereTigerNeedsToBePlaced  = null;
         int scoreWhereTigerWasPlaced = 0;
 
         // Assumes you have inserted the tile and will delete it later on if the move is not optimal
@@ -128,10 +128,11 @@ public class AIController implements AIInterface {
             }
             else {
                 // If you can claim the region as your own.
-                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() && gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty() &&
+                    gameInteractor.getPlayers().get(playerName).hasRemainingTigers()) {
                     if (regionScore > scoreWhereTigerWasPlaced) {
                         scoreWhereTigerWasPlaced = regionScore;
-                        sectionWhereTileNeedsToBePlaced = tileSection;
+                        sectionWhereTigerNeedsToBePlaced = tileSection;
                     }
                 } else {
                     tileScore -= regionScore;
@@ -139,9 +140,9 @@ public class AIController implements AIInterface {
             }
         }
         tileScore += scoreWhereTigerWasPlaced;
-        boolean needsTiger = false;
+        boolean needsTiger = sectionWhereTigerNeedsToBePlaced != null;
 
-        return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTileNeedsToBePlaced);
+        return new Move(tile, null, tileScore, needsTiger, false, scoreWhereTigerWasPlaced ,sectionWhereTigerNeedsToBePlaced);
     }
 
     public void clearMoves() {
