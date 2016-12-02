@@ -15,7 +15,7 @@ public class RoundState extends NetworkState {
     }
 
     public String processInput(String input) throws ParseFailureException {
-
+        System.out.println("STATE: ROUND");
         ProtocolMessageParser parser = new ProtocolMessageParser();
         ProtocolMessageBuilder builder = new ProtocolMessageBuilder();
 
