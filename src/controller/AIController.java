@@ -3,17 +3,18 @@ package controller;
 import entities.board.Tile;
 import entities.board.TileFactory;
 import entities.overlay.TileSection;
-import exceptions.BadPlacementException;
 import game.GameInteractor;
 import game.LocationAndOrientation;
 import game.messaging.info.PlayerInfo;
 import game.messaging.response.ValidMovesResponse;
 import game.scoring.Scorer;
 import server.ProtocolMessageBuilder;
-import server.ServerMatchMessageHandler;
 import wrappers.BeginTurnWrapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AIController implements AIInterface {
     private List<Move> moves;

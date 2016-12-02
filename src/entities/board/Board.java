@@ -254,6 +254,14 @@ public class Board {
     }
 
 
+    /**
+     * Translates the server location to our board coordinates
+     *
+     * @param serverLocation
+     * a point of the coordinated in the server
+     * @return Tile
+     * returns the appropriate tile centered on our board
+     */
     public Tile getTileFromServerLocation(Point serverLocation) {
         int x = serverLocation.x + centerLocation.x;
         int y = serverLocation.y + centerLocation.y;
@@ -462,12 +470,11 @@ public class Board {
         }
     }
 
-    //
-    // Get the possible tile sections where a tile can be placed
-    //
-    // @return
-    // The list of the tile sections
-    //
+    /**
+     *  Get the possible tile sections on the last placed tiger where a tile can be placed
+     *  @return
+     *  The list of the tile sections
+     */
     public List<TileSection> getPossibleTileSectionTigerPlacements() {
         List<TileSection> tigerPlacementPossibilities = new ArrayList<>();
         List<TileSection> lastTileSections = getLastPlacedTile().getTileSections();
@@ -476,17 +483,16 @@ public class Board {
         return tigerPlacementPossibilities;
     }
 
-    //
-    // Find out whether a given lateral connection is valid
-    //
-    // @param rightTile,
-    // The right tile in the lateral connection
-    //
-    // @param leftTile,
-    // The left tile in the lateral connection
-    //
-    // @return
-    // The boolean as to whether the connection is valid.
+    /**
+     * Find out whether a given lateral connection is valid
+     * by comparing the pertinent nodes of a tile
+     * @param rightTile
+     * The right tile in the lateral connection
+     * @param leftTile
+     * The left tile in the lateral connection
+     * @return
+     * The boolean as to whether the connection is valid.
+     */
     private boolean lateralConnectionIsValid(Tile rightTile, Tile leftTile) {
         // Get the edges to be connected
         Node leftEdge = rightTile.getEdge(EdgeLocation.LEFT);
@@ -507,15 +513,16 @@ public class Board {
         return result;
     }
 
-    //
-    // Connect two tiles laterally
-    //
-    // @param rightTile,
-    // The right tile of the lateral connection
-    //
-    // @param leftTile,
-    // The left tile of the lateral connection
-    //
+    /**
+     * Connect the nodes of two tiles laterally
+     * @param rightTile
+     * The right tile of the lateral connection
+     * @param leftTile
+     * The left tile of the lateral connection
+     * @return
+     * A stack of region merges which act as the history of merges
+     * @throws BadPlacementException
+     */
     private Stack<RegionMerge> connectLaterally(Tile rightTile, Tile leftTile) throws BadPlacementException {
         Stack<RegionMerge> mergedRegionsStack = new Stack<>();
         // The edges to be connected
@@ -546,17 +553,15 @@ public class Board {
         return mergedRegionsStack;
     }
 
-    //
-    // Find out whether a given vertical connection is valid
-    //
-    // @param bottomTile,
-    // The bottom tile in the vertical connection
-    //
-    // @param topTile,
-    // The top tile in the vertical connection
-    //
-    // @return
-    // The boolean as to whether the connection is valid.
+    /**
+     * Find out whether a given vertical connection is valid
+     * @param bottomTile
+     * The bottom tile in the vertical connection
+     * @param topTile
+     * The top tile in the vertical connection
+     * @return
+     * The boolean as to whether the connection is valid.
+     */
     private boolean verticalConnectionIsValid(Tile bottomTile, Tile topTile) {
         // The edges to be connected
 //
@@ -583,15 +588,16 @@ public class Board {
         return result;
     }
 
-    //
-    // Connect two tiles vertically
-    //
-    // @param bottomTile,
-    // The bottom tile of the vertical connection
-    //
-    // @param topTile,
-    // The top tile of the vertical connection
-    //
+    /**
+     * Connect the nodes of two tiles vertically
+     * @param bottomTile
+     * The bottom tile of the vertical connection
+     * @param topTile
+     * The top tile of the vertical connection
+     * @return
+     * A stack of region merges which act as the history of merges
+     * @throws BadPlacementException
+     */
     private Stack<RegionMerge> connectVertically(Tile bottomTile, Tile topTile) throws BadPlacementException {
         Stack<RegionMerge> mergedRegionsStack = new Stack<>();
         // The edges to be connected
@@ -621,18 +627,17 @@ public class Board {
         return mergedRegionsStack;
     }
 
-    //
-    // Attempt to connect two nodes, check for existance, same terrain, and not connected
-    //
-    // @param first,
-    // The first node in the connection
-    //
-    // @param second,
-    // The second node in the connection
-    //
-    // @return
-    // The boolean result if all conditions for a connection is correct.
-    //
+
+    /**
+     * Attempt to connect two nodes, check for existance, same terrain, and not connected
+     *
+     * @param first
+     * The first node in the connection
+     * @param second
+     * The second node in the connection
+     * @return
+     * The boolean result if all conditions for a connection is correct.
+     */
     private boolean nodeConnectionIsValid(Node first, Node second) {
         if (first == null || second == null || first.isConnected() || second.isConnected()) {
             return false;
@@ -643,17 +648,17 @@ public class Board {
         return true;
     }
 
-    //
-    // Connect two nodes
-    //
-    // @param first,
-    // The first node to be connected
-    //
-    // @param second,
-    // The second node to be connected
-    //
-    // @throws BadPlacementException if the two nodes cannot be connected
-    //
+    /**
+     * Connect two nodes
+     * @param first
+     * The first node to be connected
+     * @param second
+     * The second node to be connected
+     * @return
+     * A RegionMerge object to act as a history for each region
+     * @throws BadPlacementException
+     * if the two nodes cannot be connected
+     */
     private RegionMerge connectNodes(Node first, Node second) throws BadPlacementException {
         if (first == null || second == null) {
             throw new BadPlacementException("One of two nodes to be connected is null");
@@ -690,11 +695,10 @@ public class Board {
         tile.setLocation(location, centerLocation);
     }
 
-    //
-    // Undoes a region merge
-    //
-    // @param mergeToUndo
-    //
+    /**
+     * Undoes a region merge
+     * @param mergeToUndo
+     */
     private void undoRegionMerge(RegionMerge mergeToUndo) {
         Region newRegion = mergeToUndo.newRegion;
         List<Region> oldRegions = Arrays.asList(mergeToUndo.firstOldRegion, mergeToUndo.secondOldRegion);
@@ -709,7 +713,12 @@ public class Board {
         regions.remove(newRegion.getRegionId());
     }
 
-    // Checks to see if a tiger can be placed
+    /**
+     * Checks to see if a tiger can be placed
+     * @param section
+     * @return
+     * a boolean representing whether a tile can be placed
+     */
     public boolean canPlaceTiger(TileSection section) {
         Region region = section.getRegion();
         if (region.containsTigers()) {
@@ -718,7 +727,11 @@ public class Board {
         return true;
     }
 
-    // Log the state of the board to a file.
+    /**
+     * Logs the current representation of the board to a file textually
+     * Includes nodes of each region, files go in /logs
+     * @throws IOException
+     */
     public void log() throws IOException {
         // Get the output string for the board.
         String output = toString();
@@ -735,10 +748,7 @@ public class Board {
         }
     }
 
-    /**
-     *
-     * @return
-     */
+  
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
     }
