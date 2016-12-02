@@ -42,6 +42,8 @@ Simply right click on Main.java and click `Run`
 
 #### Unit Tests via IntelliJ
 + Make sure the `tst` directory is marked as your *Tests Root*
++ Make sure **Mockito** is added to your classpath. 
+    + For more detailed (IntelliJ-based) instructions, see InstructionsForTheseFiles.md in the /lib directory
 + Make sure **JUnit4** is added to your classpath. 
 + Right-click `tst` and click `Run 'All Tests'`
 
