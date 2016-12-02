@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2112</x>
+      <y>246</y>
+      <w>318</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>Tile
+--
+- COUNT: int
+- edges: Node[]
+- corners: Node[]
+- den: TigerDen
+- preyAnimal: PreyAnimal
+- location: Point
+- tileSections : List&lt;TileSection&gt;
+- type: String
+- hasCrocodile: boolean
+- orientation: int
+- serverLocation: Point
+--
++ Tile(s: String)
+--
++ rotateClockwise(numberOfRotations: int) : void
++ addTileSections(TileSection... tileSections) : void
++ toString() : String
++ getAdjacentTileSectionsForTileSection(tileSection: TileSection) : List&lt;TileSection&gt;
++ nodesClockwise() : List&lt;Node&gt;
++ canPlaceCrocodile() : boolean
++ placeCrocodile() : void
++ tileSectionForZone(zone: int) : TileSection
++ getTigerZone(tilesection: TileSection) : int
+--
++ hasTiger() : boolean
++ getDen() : TigerDen
++ setDen(den: TigerDen) : void
++ getEdge(location: EdgeLocation) : Node
++ setEdge(edgeNode: Node, location: EdgeLocation) : void
++ getCorner(location: CornerLocation) : Node
++ setConer(cornerNode: Node, location: CornerLocation) : void
++ getPreyAnimal() : PreyAnimal
++ setPreyAnimal(preyAnimal: PreyAnimal) : void
++ getLocation() : Point
++ getServerLocation() : Point
++ setLocation(location: Point) : void
++ getTileSections() : List&lt;TileSection&gt;
++ hasCrocodile() : boolean
++ getType() : String
++ getOrientation() : int
+--
+- setOrientation(orientation: int) : void
+- spacing(input: String) : String
+- rowOneToString() : String
+- rowTwoToString() : String
+- rowThreeToString() : String
+- hasTerrain(terrain: Terrain) : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2574</x>
+      <y>384</y>
+      <w>198</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>TileSection
+--
+- nodes: List&lt;Node&gt;
+- terrain : Terrain
+- tile: Tile
+- region: Region
+- tiger: Tiger
+- tigerDisplayNode: Node
+--
++ TileSection(terrain: Terrain)
+--
++ addNodes(Node... node) : void
++ toString() : void
++ hasOpenConnection() : boolean
++ placeTiger(tiger: Tiger) : void
++ removeTiger() : void
++ hasTiger() : boolean
+--
++ getTerrain() : Terrain
++ getTile() : Tile
++ setTile(tile: Tile) : void
++ getRegion() : Region
++ setRegion(region: Region) : void
++ getTiger() : Tiger
++ getTigerDisplayNode() : Node
++ getNodes() : List&lt;Node&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2112</x>
+      <y>564</y>
+      <w>282</w>
+      <h>198</h>
+    </coordinates>
+    <panel_attributes>Region
+--
+- regionId : UUID
+- tileSections : List&lt;TileSection&gt;
+- terrain: Terrain
+- hasCrocodile: boolean
+--
++ Region(terrain: Terrain)
+--
++ addTileSection(section : TileSection) : void
++ combineWithRegion(region: Region) : void
++ isFinished() : boolean
++ containsTigers() : boolean
++ getScorer() : Scorer  // Factory
++ getAllTigers(): List&lt;Tiger&gt;
++ getDominantPlayerNames() : List&lt;String&gt;
++ getRegionInfo() : RegionInfo
+--
++ getRegionId() : UUID
++ getTileSections() : List&lt;TileSection&gt; : void
++ getTerrain() : Terrain
++ hasCrocodile() : boolean
++ setHasCrocodile(hasCrocodile: boolean) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2424</x>
+      <y>390</y>
+      <w>162</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0;180.0;90.0;250.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2388</x>
+      <y>438</y>
+      <w>156</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;290.0;240.0;290.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>252</y>
+      <w>414</w>
+      <h>408</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+- boardMatrix: Tile[][]
+- openTileLocations: HashSet&lt;Point&gt;
+- regions: Map&lt;UUID, Region&gt;
+- tigerDens: List&lt;TigerDen&gt;
+- placedTigers: Set&lt;Tiger&gt;
+- lastTilePlaced: Tile
+- centerLocation: Point
+- regionMergesForEachPlacedTile: Stack&lt;Stack&lt;RegionMerge&gt;&gt;
+- tilesPlacedInOrder: Stack&lt;Tile&gt;
+- boardSize: int
+- numTiles: int
+--
++ Board(numberOfTiles: int, firstTile: Tile)
+--
++ removeLastPlacedTile() : Tile
++ place(tile: Tile, location: Point) : void throws
++ findValidTilePlacements(tile: Tile) : List&lt;LocationAndOrientation&gt; 
++ getTile(tileLocation: Point) : Tile
++ getTileFromServerLocation(serverLocation: Point) : Tile
++ getNumTiles() : int
++ getOpenTileLocations() : HashSet&lt;Point&gt;
++ getLastPlacedTile() : Tile
++ toString() : String
++ removeTigerFromTileAt(location: Point) : void
++ stackTigerAt(location: Point) : void
++ getPossibleTileSectionTigerPlacements() : List&lt;TileSection&gt;
+- lateralConnectionIsValid(rightTile: Tile, leftTile: Tile) : boolean
+- connectLaterally(rightTile: Tile, leftTile: Tile) : void throws
+- verticalConnectionIsValid(bottomTile: Tile, topTile: Tile) : boolean
+- connectVertically(bottomTile: Tile, topTile: Tile) : void throws
+- nodeConnectionIsValid(first: Node, second: Node) : boolean
+- connectNodes(first: Node, second: Node) : void throws
+- setTileAtLocation(tile: Tile, location: Point) : void
+- undoRegionMerge(mergeToUndo: RegionMerge): void
++ canPlaceTiger(section: TileSection) : boolean
++ log() : void throws
++ addPlacedTiger(tiger: Tiger) : void
++ removePlacedTiger(tiger: Tiger) : void
++ stackTiger(tigerToStack: Tiger) : void throws
++ regionsAsList() : List&lt;Region&gt;
++ getServerLocation(location: Point) : Point
++ getNativeLocation(serverlocation: Point) : Point</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1968</x>
+      <y>330</y>
+      <w>156</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1968</x>
+      <y>354</y>
+      <w>156</w>
+      <h>246</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;390.0;240.0;390.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2538</x>
+      <y>114</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+CornerLocation
+--
+TOP_LEFT
+TOP_RIGHT
+BOTTOM_LEFT
+BOTTOM_RIGHT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2412</x>
+      <y>114</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+EdgeLocation
+--
+TOP
+RIGHT
+BOTTOM
+LEFT
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2112</x>
+      <y>774</y>
+      <w>282</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>TigerDen
+--
+- tiger: Tiger
+- centerTileLocation : Point
+- requiredTileLocations : Map&lt;Point, Boolean&gt;
+- board: Board
+--
++ TigerDen()
+--
++ placeTiger(tiger: Tiger) : void
++ isComplete() : boolean
++ removeTiger() : void
+- updateRequiredLocations() : void
+--
++ getTiger() : Tiger
++ getCenterTileLocation() : Point
++ getRequiredTileLocations() : Map&lt;Point, Boolean&gt;
++ setBoard(board: Board) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1968</x>
+      <y>384</y>
+      <w>156</w>
+      <h>438</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;710.0;240.0;710.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1578</x>
+      <y>666</y>
+      <w>306</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>notify all players about status of game (score, forfeits, tigers left)
+advance turn
+notify a player that its their turn
+give them valid tile placements and orientations
+give them all tiles in the stack
+wait for tile placement (hand control to player controller)
+game manager receives player's move
+check for tiger placements
+notify player of tiger placements
+receive possible tiger placement
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1554</x>
+      <y>72</y>
+      <w>450</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>AIController
+--
+- moves: List&lt;Move&gt;
+- gameInteractor: GameInteractor
+- bestMove: Move
+- playerName: String
+- playersInfo: Map&lt;String, PlayerInfo&gt;
+- messageBuilder: ProtocolMessageBuilder
+--
++ AIController(gameInteractor: GameInteractor, playerName: String)
+--
++ calculateBestMove() : Move
++ addOptimalScoreForTile(locationAndOrientation: LocationAndOrientation) : void
++ clearMoves() : void
++ decideMove(BeginTurnWrapper beginTurn) : Move
++ getPlayerName() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2574</x>
+      <y>648</y>
+      <w>198</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>Node
+--
+- connectedNodes: List&lt;Node&gt;
+- tileSection: TileSection
+--
++ Node()
+--
++ isTigerDisplayNode() : boolean
++ getTileSection() : TileSection
++ setTileSection(tileSection: TileSection) : void
++ getConnectedNodes() : List&lt;Node&gt;
++ addConnectedNode(node: Node) : void
++ isConnected() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2766</x>
+      <y>450</y>
+      <w>84</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;120.0;340.0;10.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2424</x>
+      <y>348</y>
+      <w>162</w>
+      <h>318</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;510.0;250.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2166</x>
+      <y>114</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+Terrain
+--
+LAKE
+TRAIL
+JUNGLE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2292</x>
+      <y>114</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+PreyAnimal
+--
+DEER
+BUFFALO
+BOAR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2574</x>
+      <y>240</y>
+      <w>222</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Tiger
+--
+- owningPlayerName: String
+- stacked: boolean
+--
++ Tiger(owningPlayerName: String, stacked: boolean)
+--
++ getOwningPlayerName() : String
++ isStacked() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1686</x>
+      <y>0</y>
+      <w>192</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+AIInterface
+--
+decideMove(BeginTurnWrapper beginTurn): Move
+getPlayerName(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1782</x>
+      <y>42</y>
+      <w>18</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>786</x>
+      <y>78</y>
+      <w>636</w>
+      <h>246</h>
+    </coordinates>
+    <panel_attributes>Move
+--
+- tile: Tile
+- tileType: String
+- locationAndOrientation: LocationAndOrientation
+- score: int
+- needsTiger: boolean
+- needsCrocodile: boolean
+- tileSection: TileSection
+- zone: int
+- scoreTigerGives: int
+--
++ Move(tile: Tile, locationAndOrientation: LocationAndOrientation, score: int, needsTiger: boolean, needsCrocodile: boolean, scoreTigerGives: int, tileSection: TileSection)
+--
++ getLocationAndOrientation() : LocationAndOrientation
++ getScore() : int
++ getScoreTigerGives() : int
++ needsTiger() : boolean
++ needsCrocodile() : boolean
++ setScore(score: int) : void
++ getTileSection() : TileSection
++ setLocationAndOrientation(locationAndOrientation: LocationAndOrientation) : void
++ setNeedsTiger(needsTiger: boolean) : void
++ setScoreTigerGives(scoreTigerGives: int) : void
++ setTileSection(tileSection: TileSection) : void
++ getTile() : Tile
++ getTileType() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2658</x>
+      <y>114</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt; enum &gt;&gt;
+Placement
+--
+NONE
+TIGER
+CROCODILE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1176</x>
+      <y>414</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>RegionMerge
+--
++ FIRST_OLD_REGION: Region
++ SECOND_OLD_REGION: Region
++ NEW_REGION: Region
+--
+RegionMerge(firstOldRegions: Region, secondOldRegion: Region, newRegion: Region)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2478</x>
+      <y>816</y>
+      <w>108</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>TileFactory
+--
+--
+_makeTile(s: String) : Tile_
+_makeTileA() : Tile_
+_makeTileB() : Tile_
+_makeTileC() : Tile_
+_makeTileD() : Tile_
+_makeTileE() : Tile_
+_makeTileF() : Tile_
+_makeTileG() : Tile_
+_makeTileH() : Tile_
+_makeTileI() : Tile_
+_makeTileJ() : Tile_
+_makeTileK() : Tile_
+_makeTileL() : Tile_
+_makeTileM() : Tile_
+_makeTileN() : Tile_
+_makeTileO() : Tile_
+_makeTileP() : Tile_
+_makeTileQ() : Tile_
+_makeTileR() : Tile_
+_makeTileS() : Tile_
+_makeTileT() : Tile_
+_makeTileU() : Tile_
+_makeTileV() : Tile_
+_makeTileW() : Tile_
+_makeTileX() : Tile_
+_makeTileY() : Tile_
+_makeTileZ() : Tile_
+_makeTile0() : Tile_
+_makeTile1() : Tile_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2628</x>
+      <y>804</y>
+      <w>174</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>BadPlacementException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ BadPlacementException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2622</x>
+      <y>852</y>
+      <w>192</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>IncompatibleTerrainException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ IncompatibleTerrainException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2628</x>
+      <y>900</y>
+      <w>174</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>ParseFailureException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ ParseFailureException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2628</x>
+      <y>948</y>
+      <w>174</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>StackingTigerException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ StackingTigerException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2622</x>
+      <y>996</y>
+      <w>192</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>TigerAlreadyPlacedException 
+&lt;&lt;extends Exception&gt;&gt;
+--
++ TigerAlreadyPlacedException(message: String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1098</x>
+      <y>510</y>
+      <w>432</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>PlayerInfo
+--
++ PLAYER_NAME: String
++ SCORE: int
++ REMAINING_TIGERS: int
++ REMAINING_CROCODILES: int
++ PLACED_TIGERS: Set&lt;Tiger&gt;
+--
+PlayerInfo(playerName: String, score: int, remainingTigers: int, remainingCrocodiles: int, placedTigers: Set&lt;Tiger&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1122</x>
+      <y>618</y>
+      <w>396</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>RegionInfo
+--
++ REGION_ID: UUID
++ NUMBER_OF_OPEN_NODE_CONNECTIONS: int
++ PROJECTED_SCORE_UPON_COMPLETION: int
+--
++ RegionInfo(regionId: UUID, numberOfOpenNodeConnections: int, projectedScoreUponCompletion: int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1194</x>
+      <y>702</y>
+      <w>282</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>RegionTigerPlacement
+--
++ REGION_INFO: RegionInfo
++ JUST_COMPLETED: boolean
+--
++ RegionTigerPlacement(regionInfo: RegionInfo, justCompleted: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1146</x>
+      <y>780</y>
+      <w>366</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>TigerDenTigerPlacement
+--
++ CENTER_POINT: Point
++ SURROUNDING_POINT_STATUSES: Map&lt;Point, Boolean&gt;
+--
++ TigerDenTigerPlacement(centerPoint: Point, surroundingPointStatuses: Map&lt;Point, Boolean&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1170</x>
+      <y>858</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>TilePlacementRequest
+--
++ PLAYER_NAME: String
++ TILE_TO_PLACE: Tile
++ LOCATION_TO_PLACE_AT: Point
+--
+TilePlacementRequest(playerName: String, tileToPlace: Tile, locationToPlaceAt: Point)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1002</x>
+      <y>930</y>
+      <w>714</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>TilePlacementResponse
+--
++ WAS_VALID: boolean
++ REGION_TIGER_PLACEMENT_OPTIONS: List&lt;RegionTigerPlacement&gt;
++ TIGER_DEN_PLACEMENT_OPTION: TigerDenTigerPlacement
++ CAN_PLACE_CROCODILE: boolean
+--
++ TilePlacementResponse(wasValid: boolean, regionTigerPlacementOptions: List&lt;RegionTigerPlacement&gt;, tigerDenPlacementOption: TigerDenTigerPlacement, canPlaceCrocodile: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1062</x>
+      <y>1014</y>
+      <w>534</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ValidMovesResponse
+--
++ LOCATIONS_AND_ORIENTATIONS: List&lt;LocationAndOrientation&gt;
++ TIGER_PLACED_ON_BOARD: Set&lt;Tiger&gt;
++ TILE_IS_UNPLACEABLE: boolean
+--
++ ValidMovesResponse(locationAndOrientations: List&lt;LocationAndOrientation&gt;, tigerPlacedOnBoard: Set&lt;Tiger&gt;, tileIsUnplaceable: boolean)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>666</x>
+      <y>420</y>
+      <w>150</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>/Scorer/
+--
+_# jungleAdjacentDenBonus: int = 5_
+_# jungleAdjacentLakeBonus: int = 3_
+_# completeLakeScorePerTile: int = 2_
+_# incompleteLakeScorePerTile: int = 1_
+_# gameTrailScorePerTile: int = 1_
+# regionToScore: Region
+--
+/+ score() : int/
+/+ scoreIfCompletedNow() : int/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>462</y>
+      <w>72</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>834</x>
+      <y>384</y>
+      <w>48</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;280.0;60.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>378</y>
+      <w>156</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>JungleScorer
+--
++ JungleScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>450</y>
+      <w>156</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>TrailScorer
+--
++ TrailScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>528</y>
+      <w>156</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>LakeScorer
+--
++ LakeScorer(regionToScore: Region)
+--
++ score() : int
++ scoreIfCompletedNow() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>354</x>
+      <y>66</y>
+      <w>336</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>GameInteractor
+--
+- playerTurn: String
+- players: Map&lt;String, Player&gt;
+- playerList: List&lt;Player&gt;
+- board: Board
+- messageParser: ProtocolMessageParser
+- messageBuilder: ProtocolMessageBuilder
+- aiNotifier: AIInterface
+- gameId: String
+--
++ GameInteractor(firstTile: Tile, stackSize: int)
+--
++ decideTurn(serverInput String) : String
++ confirmMove(confirmedMove: ConfirmedMoveWrapper): void
++ addPlayer(player: Player) : void
++ place(tile: Tile, location: Point) : void
++ removeLastPlacedTile() : void
++ getValidMoves(tile: Tile) : ValidMovesResponse
++ getPlayers() : Map&lt;String, Player&gt;
++ handleTilePlacementRequest(request: TilePlacementRequest) : TilePlacementRequest
++ removeTigerFromTileAt(location: Point, playername: String) : void
++ stackTigerAt(tiger: Tiger, playername: String) : void
++ placeTiger(tiger: Tiger, playername: String) : void
++ setAiNotifier(aiNotifier: AIInterface) : void
++ setGameID(gameId: String) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>360</y>
+      <w>210</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>LocationAndOrientation
+--
+- LOCATION: Point
+- ORIENTATION: int
+--
+LocationAndOrientation(location: Point, orientation: int)
+--
++ getLocation(): Point
++ getOrientation(): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>492</y>
+      <w>102</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Main
+--
+_main(args: String[]) : void_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>18</x>
+      <y>192</y>
+      <w>312</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>MessageOutputRunner
+--
+_+ terminationMessage : String = "TERMINATE MESSAGE OUTPUT TO SERVER"_
+- mutex: Lock
+- serverOutput: PrintWriter
+- messageHandler: ServerMatchMessageHandler
+--
+MessageOutputRunner(mutex: Lock, serverOutput: PrintWriter, messageHandler: ServerMatchMessageHandler)
+--
+run() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>798</x>
+      <y>648</y>
+      <w>150</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Player
+--
+- NAME: String
+- score: int
+- remainingTigers: int
+- remainingCrocodiles: int
+- placedTigers: Set&lt;Tiger&gt;
+--
++ Player(name: String)
+--
++ addPlacedTiger(tiger: Tiger) : void
++ getName() : String
++ getScore() : int
++ getRemainingTigers() : int
++ incrementRemainingTigers() : void
++ decrementRemainingTigers() : void
++ hasRemainingTigers() : void
++ getRemainingCrocodiles() : int
++ hasRemainingCrocodiles() : boolean
++ getPlacedTigers() : Set&lt;Tiger&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>282</x>
+      <y>660</y>
+      <w>144</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>/NetworkState/
+--
+# context: NetworkContext
+--
+# NetworkState(context: NetworkContext)
+--
+/+ processInput(input: String) : String/
+/+ returnState() : NetworkState/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>690</y>
+      <w>72</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>444</x>
+      <y>612</y>
+      <w>48</w>
+      <h>276</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;440.0;50.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>588</y>
+      <w>186</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>AuthenticationState
+--
++ AuthenticationState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>666</y>
+      <w>186</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>ChallengeState
+--
++ ChallengeState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>756</y>
+      <w>186</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>MatchState
+--
++ MatchState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>474</x>
+      <y>846</y>
+      <w>186</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>RoundState
+--
++ RoundState(context: NetworkContext)
+--
++ processInput(input: String) : String
++ returnState() : NetworkState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>444</x>
+      <y>774</y>
+      <w>48</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>546</y>
+      <w>246</w>
+      <h>408</h>
+    </coordinates>
+    <panel_attributes>NetworkContext
+--
+- state: NetworkState
+- tournamentPassword: String
+- username: String
+- password: String
+- pid: String
+- opid: String
+- cid: String
+- rid: String
+- round: int
+- roundCount: int
+- shouldReturn: boolean
+- startingTile: String
+- startingTileLocation: Point
+- startingTileOrientation: int
+- remainingTileCount: int
+- remainingTiles: String[]
+- in: BufferedReader
+- out: PrintWriter
+--
++ NetworkContext(in: BufferedReader, out: PrintWriter)
+--
++ startMatch() : Pair&lt;GameOverWrapper, GameOverWrapper&gt;
++ getState() : NetworkState
++ setState(state: NetworkState) : void
++ getTournamentPassword() : String
++ setTournamentPassword(tournamentPassword: String) : void
++ getUsername() : String
++ setUsername(username: String) : void
++ getPassword() : String
++ setPassword(password: String) : void
++ setPid(pid: String) : void
++ setOpid(opid: String) : void
++ setCid(cid: String) : void
++ setRid(rid: String) : void
++ setRoundCount(roundCount: int) : void
++ shouldReturn() : boolean
++ setShouldReturn(shouldReturn: boolean) : void
++ setStartingTile(startingTile: String) : void
++ setStartingTileLocation(startingTileLocation: Point) : void
++ setStartingTileOrientation(startingTileOrientation: int) : void
++ setRemainingTileCount(remainingTileCount: int) : void
++ setRemainingTiles(remainingTiles: String[]) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
