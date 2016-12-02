@@ -18,7 +18,6 @@ import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
-import server.ServerMatchMessageHandler;
 import wrappers.*;
 
 import java.awt.*;

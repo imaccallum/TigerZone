@@ -1,6 +1,6 @@
 package server;
 
-import entities.board.Placement;
+import wrappers.Placement;
 import wrappers.NonplacementMoveWrapper;
 import wrappers.PlacementMoveWrapper;
 import wrappers.UnplaceableType;
