@@ -748,7 +748,7 @@ public class Board {
         }
     }
 
-  
+
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
     }

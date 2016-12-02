@@ -36,6 +36,11 @@ public class Tile {
     }
 
     // HAS TESTS - Bookkeeping
+
+    /**
+     * Rotates the tile by changing the indices of nodes in the tile
+     * @param numberOfRotations
+     */
     public void rotateCounterClockwise(int numberOfRotations) {
 
         Node[] tempEdges = new Node[COUNT];
@@ -341,7 +346,7 @@ public class Tile {
         }
     }
 
-    /*
+    /**
      * Get whether a tiger is on any of the TileSections of the Tile
      *
      * @return
@@ -356,9 +361,10 @@ public class Tile {
         return false;
     }
 
-    /*
+    /**
      * Get the int for the Node where the Tiger should be placed on in the tileSection on the tile
      *
+     * @param tilesection
      * @return
      * int for the Node that should have the Tiger placed on it
      */
@@ -533,14 +539,12 @@ public class Tile {
         this.orientation = orientation % COUNT;
     }
 
-    // MARK: Private methods
-
-    //
-    // Get the string spacing for given terrain
-    //
-    // @return
-    // The set of spaces for the given terrain
-    //
+    /**
+     * Get the string spacing for given terrain
+     * @param input
+     * @return
+     * The set of spaces for the given terrain
+     */
     private String spacing(String input) {
         String out = "";
         int size = 10 - input.length();
@@ -556,12 +560,11 @@ public class Tile {
         return out;
     }
 
-    //
-    // Get the string that represents row one
-    //
-    // @return
-    // the string representing row one
-    //
+    /**
+     * Get the string that represents row one
+     * @return
+     * the string representing row one
+     */
     private String rowOneToString() {
         String rowOne = "|";
         if(corners[0] != null) {
@@ -588,12 +591,11 @@ public class Tile {
         return rowOne;
     }
 
-    //
-    // Get the string that represents row two
-    //
-    // @return
-    // the string representing row two
-    //
+    /**
+     * Get the string that represents row one
+     * @return
+     * the string representing row one
+     */
     private String rowTwoToString() {
         String rowTwo = "|";
         rowTwo += spacing((edges[3].isTigerDisplayNode() ?
@@ -613,12 +615,11 @@ public class Tile {
         return rowTwo;
     }
 
-    //
-    // Get the string that represents row three
-    //
-    // @return
-    // the string representing row three
-    //
+    /**
+     * Get the string that represents row one
+     * @return
+     * the string representing row one
+     */
     private String rowThreeToString() {
         String rowThree = "|";
         if(corners[3] != null) {
@@ -643,16 +644,15 @@ public class Tile {
         }
         return rowThree;
     }
-
-    //
-    // Get if the tile has a particular terrain on it
-    //
-    // @param terrain,
-    // The terrain type we are looking for
-    //
-    // @return
-    // The boolean representing this state
-    //
+    
+    /**
+     * Get if the tile has a particular terrain on it
+     *
+     * @param terrain
+     * The terrain type we are looking for
+     * @return
+     * The boolean representing this state
+     */
     private boolean hasTerrain(Terrain terrain) {
         for (TileSection tileSection : tileSections) {
             if (tileSection.getTerrain() == terrain) {
