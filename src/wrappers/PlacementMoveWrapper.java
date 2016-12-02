@@ -1,7 +1,5 @@
 package wrappers;
 
-import entities.board.Placement;
-
 import java.awt.*;
 
 public class PlacementMoveWrapper {
