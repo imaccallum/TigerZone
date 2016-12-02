@@ -311,8 +311,8 @@ public class Board {
      * A string representation of the board
      */
     public String toString() {
-        int rowStart = boardSize;
-        int rowStop = 0;
+        int rowStart = 0;
+        int rowStop = boardSize;
         int colStart = boardSize;
         int colStop = 0;
 
@@ -320,10 +320,10 @@ public class Board {
         String output = "";
 
         for (Point p : openTileLocations) {
-            if (p.y < rowStart) {
+            if (p.y > rowStart) {
                 rowStart = p.y;
             }
-            if (p.y > rowStop) {
+            if (p.y < rowStop) {
                 rowStop = p.y;
             }
             if (p.x < colStart) {
@@ -334,7 +334,7 @@ public class Board {
             }
         }
 
-        for (int row = rowStart; row < rowStop; row++) {          // for each row
+        for (int row = rowStart; row > rowStop; row--) {          // for each row
             ArrayList<String> splits = new ArrayList<>();
             for (int col = colStart; col < colStop; col++) {     // and each column
                 if (boardMatrix[row][col] != null) {         // where there is a tile
