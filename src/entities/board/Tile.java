@@ -644,7 +644,7 @@ public class Tile {
         }
         return rowThree;
     }
-    
+
     /**
      * Get if the tile has a particular terrain on it
      *
