@@ -1,9 +1,5 @@
 package game.messaging.info;
 
-import entities.board.Tiger;
-
-import java.util.Set;
-
 public class PlayerInfo {
     /**
      * The player's name associated with this player info
@@ -26,11 +22,6 @@ public class PlayerInfo {
     public final int remainingCrocodiles;
 
     /**
-     * The tigers placed on the board for the player
-     */
-    public final Set<Tiger> placedTigers;
-
-    /**
      * Constructs the player info, all properties are final to protect data
      *
      * @param playerName,
@@ -44,16 +35,11 @@ public class PlayerInfo {
      *
      * @param remainingCrocodiles,
      * The number of remaining crocodiles the player has
-     *
-     * @param placedTigers,
-     * The placed tigers on the board for the player
      */
-    public PlayerInfo(String playerName, int score, int remainingTigers, int remainingCrocodiles,
-                      Set<Tiger> placedTigers) {
+    public PlayerInfo(String playerName, int score, int remainingTigers, int remainingCrocodiles) {
         this.playerName = playerName;
         this.score = score;
         this.remainingTigers = remainingTigers;
         this.remainingCrocodiles = remainingCrocodiles;
-        this.placedTigers = placedTigers;
     }
 }

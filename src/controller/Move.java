@@ -1,36 +1,23 @@
 package controller;
 
-import entities.board.Tile;
-import entities.overlay.TileSection;
 import game.LocationAndOrientation;
 
 public class Move {
-
-    private Tile tile;
     private String tileType;
-
     private LocationAndOrientation locationAndOrientation;
     private int score;
     private boolean needsTiger;
     private boolean needsCrocodile;
+    private int tigerZone;
 
-    private TileSection tileSection;
-    private int zone;
-
-    private int scoreTigerGives;
-
-    public Move(Tile tile, LocationAndOrientation locationAndOrientation, int score, boolean needsTiger, boolean needsCrocodile, int scoreTigerGives , TileSection tileSection){
+    public Move(String tileType, LocationAndOrientation locationAndOrientation, int score,
+                boolean needsTiger, boolean needsCrocodile, int tigerZone) {
         this.locationAndOrientation = locationAndOrientation;
-        this.tile = tile;
-        tileType = tile.getType();
+        this.tileType = tileType;
         this.score = score;
         this.needsTiger = needsTiger;
         this.needsCrocodile = needsCrocodile;
-        this.scoreTigerGives = scoreTigerGives;
-        this.tileSection = tileSection;
-        if(tileSection != null) {
-            zone = tile.getTigerZone(tileSection);
-        }
+        this.tigerZone = tigerZone;
     }
 
     public LocationAndOrientation getLocationAndOrientation() {
@@ -39,10 +26,6 @@ public class Move {
 
     public int getScore() {
         return score;
-    }
-
-    public int getScoreTigerGives() {
-        return scoreTigerGives;
     }
 
     public boolean needsTiger() {
@@ -57,10 +40,6 @@ public class Move {
         this.score = score;
     }
 
-    public TileSection getTileSection() {
-        return tileSection;
-    }
-
     public void setLocationAndOrientation(LocationAndOrientation locationAndOrientation){
         this.locationAndOrientation = locationAndOrientation;
     }
@@ -69,19 +48,17 @@ public class Move {
         this.needsTiger = needsTiger;
     }
 
-    public void setScoreTigerGives(int scoreTigerGives){
-        this.scoreTigerGives = scoreTigerGives;
-    }
-
     public void setNeedsCrocodile(boolean needsCrocodile){
         this.needsCrocodile = needsCrocodile;
     }
-
-    public void setTileSection(TileSection tileSection) {
-        this.tileSection = tileSection;
-    }
-
-    public Tile getTile() { return tile; }
     
     public String getTileType() { return tileType; }
+
+    public int getTigerZone() {
+        return tigerZone;
+    }
+
+    public void setTigerZone(int tigerZone) {
+        this.tigerZone = tigerZone;
+    }
 }

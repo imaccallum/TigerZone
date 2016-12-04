@@ -40,6 +40,9 @@ public class Region {
         for (TileSection tileSection : secondRegion.getTileSections()) {
             addTileSection(tileSection);
         }
+        if (firstRegion.hasCrocodile() || secondRegion.hasCrocodile()) {
+            this.hasCrocodile = true;
+        }
     }
 
     // HAS TESTS - bookkeeping
@@ -200,7 +203,7 @@ public class Region {
                 }
             }
         }
-        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore);
+        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore, getDominantPlayerNames());
     }
 
 

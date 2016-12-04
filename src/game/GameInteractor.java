@@ -11,11 +11,11 @@ import exceptions.ParseFailureException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
 import game.messaging.info.RegionInfo;
-import game.messaging.info.RegionTigerPlacement;
 import game.messaging.info.TigerDenTigerPlacement;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
 import game.messaging.response.ValidMovesResponse;
+import javafx.util.Pair;
 import server.ProtocolMessageBuilder;
 import server.ProtocolMessageParser;
 import wrappers.*;
@@ -24,6 +24,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameInteractor {
     private String playerTurn;
@@ -32,13 +33,17 @@ public class GameInteractor {
     private ProtocolMessageParser messageParser;
     private ProtocolMessageBuilder messageBuilder;
     private AIInterface aiNotifier;
-
-    public String getGameId() {
-        return gameId;
-    }
-
     private String gameId;
 
+    /**
+     * Construct a game interactor with a first tile and a stack size
+     *
+     * @param firstTile,
+     * The first tile to be placed in the game
+     *
+     * @param stackSize,
+     * The number of tiles total in the stack of tiles to be placed
+     */
     public GameInteractor(Tile firstTile, int stackSize) {
         board = new Board(stackSize, firstTile);
         players = new HashMap<>();
@@ -64,15 +69,12 @@ public class GameInteractor {
         if (bestMove != null) {
             Point location = board.getServerLocation(bestMove.getLocationAndOrientation().getLocation());
             int orientation = bestMove.getLocationAndOrientation().getOrientation();
-            String tile = bestMove.getTile().getType();
+            String tile = bestMove.getTileType();
             PlacementMoveWrapper placementMove = new PlacementMoveWrapper(tile, location, orientation,
                     beginTurn.getMoveNumber());
             if (bestMove.needsTiger()) {
                 placementMove.setPlacedObject(Placement.TIGER);
-                Tile tileToPlace = bestMove.getTile();
-                // Rotate the tile first to get the correct tile section
-                tileToPlace.rotateCounterClockwise(bestMove.getLocationAndOrientation().getOrientation());
-                placementMove.setZone(bestMove.getTile().getTigerZone(bestMove.getTileSection()));
+                placementMove.setZone(bestMove.getTigerZone());
             }
             else if (bestMove.needsCrocodile()) {
                 placementMove.setPlacedObject(Placement.CROCODILE);
@@ -116,7 +118,7 @@ public class GameInteractor {
                     Tiger tiger = new Tiger(playerTurn, false);
                     try {
                         tileToPlace.getDen().placeTiger(tiger);
-                        placeTiger(tiger, playerTurn);
+                        players.get(playerTurn).addPlacedTiger(tiger, location);
                     } catch (TigerAlreadyPlacedException e) {
                         System.err.println("Error placing tiger" + e.getMessage());
                         return;
@@ -126,7 +128,7 @@ public class GameInteractor {
                     Tiger tiger = new Tiger(playerTurn, false);
                     try {
                         tileSection.placeTiger(tiger);
-                        placeTiger(tiger, playerTurn);
+                        players.get(playerTurn).addPlacedTiger(tiger, location);
                     } catch (TigerAlreadyPlacedException e) {
                         System.err.println("Error placing tiger: " + e.getMessage());
                         return;
@@ -134,8 +136,42 @@ public class GameInteractor {
                 }
 
             }
-            TilePlacementRequest request = new TilePlacementRequest(playerTurn, tileToPlace, location);
-            handleTilePlacementRequest(request);
+            try {
+                board.place(tileToPlace, location);
+            }
+            catch (BadPlacementException e) {
+                System.err.println("Received bad placement exception while confirming a move: " + e.getMessage());
+            }
+
+            for (TileSection tileSection : tileToPlace.getTileSections()) {
+                Region region = tileSection.getRegion();
+                List<Tiger> regionTigers = region.getAllTigers();
+                if (region.isFinished() && !regionTigers.isEmpty()) {
+                    Set<Player> awardedPlayers = new HashSet<>();
+                    // Return tigers in that region
+                    for (Tiger tiger : regionTigers) {
+                        String owningPlayerName = tiger.getOwningPlayerName();
+                        Player player = players.get(owningPlayerName);
+                        int score = region.getScorer().score();
+                        if (region.getDominantPlayerNames().contains(owningPlayerName) &&
+                            !awardedPlayers.contains(player)) {
+                            awardedPlayers.add(player);
+                            player.addToScore(score);
+                        }
+
+                        player.incrementRemainingTigers();
+                        if (tiger.isStacked()) {
+                            // Increment remaining tigers an additional time
+                            player.incrementRemainingTigers();
+                        }
+
+                        Point locationToRemoveTigerFrom = player.getPlacedTigers().get(tiger);
+                        // Totally remove the tiger from the board
+                        board.removeTigerFromTileAt(locationToRemoveTigerFrom, true);
+                        player.getPlacedTigers().remove(tiger);
+                    }
+                }
+            }
             System.out.println(board.toString());
         }
         else if (confirmedMove.hasForfeited()) {
@@ -144,11 +180,32 @@ public class GameInteractor {
         else {
             System.out.println("NONPLACEMENT MOVE");
             NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
+            Point location = nonplacementMove.getTigerLocation();
             if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
-                removeTigerFromTileAt(nonplacementMove.getTigerLocation(), playerTurn);
+                // Remove a tiger from the board, allow unstacking
+                Pair<Tiger, Tiger> tigers = board.removeTigerFromTileAt(location, false);
+                if (tigers.getKey() != null) {
+                    // There is a removed tiger
+                    players.get(playerTurn).getPlacedTigers().remove(tigers.getKey());
+                }
+                else {
+                    System.err.println("Failed to remove a tiger from the board");
+                }
+                if (tigers.getValue() != null) {
+                    // There is a placed tiger
+                    players.get(playerTurn).getPlacedTigers().put(tigers.getValue(), location);
+                }
+
             }
             else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
-                stackTigerAt(nonplacementMove.getTigerLocation(), playerTurn);
+                try {
+                    Pair<Tiger, Tiger> tigers = board.stackTigerAt(location);
+                    players.get(playerTurn).getPlacedTigers().remove(tigers.getKey());
+                    players.get(playerTurn).getPlacedTigers().put(tigers.getValue(), location);
+                }
+                catch (StackingTigerException exception) {
+                    System.err.println("Problem confirming tiger stacking: " + exception);
+                }
             }
         }
     }
@@ -166,10 +223,6 @@ public class GameInteractor {
         board.place(tile, location);
     }
 
-    public void removeLastPlacedTile() {
-        board.removeLastPlacedTile();
-    }
-
     /**
      * Get the valid moves for a tile on the board
      *
@@ -183,16 +236,12 @@ public class GameInteractor {
         List<LocationAndOrientation> validPlacements = board.findValidTilePlacements(tile);
         if (validPlacements.isEmpty()) {
             // As consolation, allow player to stack tigers
-            Set<Tiger> tigersPlacedOnBoard = players.get(playerTurn).getPlacedTigers();
-            return new ValidMovesResponse(validPlacements, tigersPlacedOnBoard, true);
+            List<Point> tigersPlacedLocations = new ArrayList<>(players.get(playerTurn).getPlacedTigers().values());
+            return new ValidMovesResponse(validPlacements, tigersPlacedLocations, true);
         }
         else {
-            return new ValidMovesResponse(validPlacements, new HashSet<>(), false);
+            return new ValidMovesResponse(validPlacements, new ArrayList<>(), false);
         }
-    }
-
-    public Map<String, Player> getPlayers() {
-        return players;
     }
 
     /**
@@ -204,6 +253,7 @@ public class GameInteractor {
      * @return
      * The response result of the tiger being placed on the board
      */
+    /*
     public TilePlacementResponse handleTilePlacementRequest(TilePlacementRequest request) {
         if (!request.playerName.equals(playerTurn)) {
             // Not the players turn
@@ -237,18 +287,85 @@ public class GameInteractor {
             return new TilePlacementResponse(true, regionTigerPlacements, denPlacement, canPlaceCrocodile);
         }
     }
+    */
 
     /**
-     * Removes a Tiger from the given location
+     * Try a tile placement and get information about that tile placement in a response
      *
-     * @param location
-     * The location from which a Tiger is to be removed
-     * @param playerName
-     * The Player that receives the tiger back;
+     * @param request,
+     * The tile placement request to try
+     *
+     * @return
+     * The reponse data associated with the tile placement tried
      */
-    public void removeTigerFromTileAt(Point location, String playerName) {
-        board.removeTigerFromTileAt(location);
-        players.get(playerName).incrementRemainingTigers();
+    public TilePlacementResponse tryTilePlacement(TilePlacementRequest request) {
+        if (!request.playerName.equals(playerTurn)) {
+            // Not the players turn
+            return new TilePlacementResponse(false, null, false, new HashMap<>());
+        }
+        else {
+            try {
+                board.place(request.tileToPlace, request.locationToPlaceAt);
+            }
+            catch (BadPlacementException exception) {
+                System.err.println(exception.getMessage());
+                return new TilePlacementResponse(false, null, false, new HashMap<>());
+            }
+
+
+            Map<Region, Set<Region>> allMergedRegions = new HashMap<>();
+            Stack<RegionMerge> lastRegionMerges = board.getLastRegionMerges();
+
+            while (!lastRegionMerges.isEmpty()) {
+                RegionMerge regionMerge = lastRegionMerges.pop();
+                boolean found = false;
+                for (Set<Region> regionSet : allMergedRegions.values()) {
+                    if (regionSet.contains(regionMerge.newRegion)) {
+                        regionSet.remove(regionMerge.newRegion);
+                        regionSet.add(regionMerge.firstOldRegion);
+                        regionSet.add(regionMerge.secondOldRegion);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // Create a new entry in the map
+                    Set<Region> oldRegions = new HashSet<>();
+                    oldRegions.add(regionMerge.firstOldRegion);
+                    oldRegions.add(regionMerge.secondOldRegion);
+                    allMergedRegions.put(regionMerge.newRegion, oldRegions);
+                }
+            }
+
+            Map<UUID, Integer> oldRegionScores = new HashMap<>();
+            for (Map.Entry<Region, Set<Region>> newAndOldRegionsEntry : allMergedRegions.entrySet()) {
+                Integer oldScore = 0;
+                for (Region region : newAndOldRegionsEntry.getValue()) {
+                    oldScore  += region.getScorer().scoreIfCompletedNow();
+                }
+                oldRegionScores.put(newAndOldRegionsEntry.getKey().getRegionId(), oldScore);
+            }
+
+
+            Map<RegionInfo, Integer> regionsEffected = new HashMap<>();
+            for (TileSection tileSection : request.tileToPlace.getTileSections()) {
+                RegionInfo regionInfo = tileSection.getRegion().getRegionInfo();
+                regionsEffected.put(regionInfo, oldRegionScores.get(regionInfo.regionId));
+            }
+
+            TigerDenTigerPlacement denPlacement = null;
+            if (request.tileToPlace.getDen() != null) {
+                TigerDen den = request.tileToPlace.getDen();
+                denPlacement = new TigerDenTigerPlacement(den.getCenterTileLocation(), den.getRequiredTileLocations());
+            }
+
+            boolean canPlaceCrocodile = request.tileToPlace.canPlaceCrocodile();
+
+            // undo the tile placement
+            board.removeLastPlacedTile();
+
+            return new TilePlacementResponse(true, denPlacement, canPlaceCrocodile, regionsEffected);
+        }
     }
 
     /**
@@ -269,19 +386,6 @@ public class GameInteractor {
         }
     }
 
-    /**
-     * Places a Tiger at a given location
-     *
-     * @param tiger
-     * The Tiger to be placed
-     * @param playerName
-     * The location on which the Tiger is to be placed
-     */
-    public void placeTiger(Tiger tiger, String playerName) {
-        players.get(playerName).addPlacedTiger(tiger);
-        players.get(playerName).decrementRemainingTigers();
-    }
-
     public void log() throws IOException {
         board.log();
     }
@@ -292,5 +396,9 @@ public class GameInteractor {
 
     public void setGameId(String gameId) {
         this.gameId = gameId;
+    }
+
+    public String getGameId() {
+        return gameId;
     }
 }

@@ -1,5 +1,6 @@
 package game.messaging.info;
 
+import java.util.List;
 import java.util.UUID;
 
 public class RegionInfo {
@@ -16,7 +17,12 @@ public class RegionInfo {
     /**
      * The projected score of the region if it is completed with the minimum number of tiles
      */
-    public final int projectedScoreUponCompletion;
+    public final int scoreIfRegionCompletedNow;
+
+    /**
+     * The dominant players in the region
+     */
+    public final List<String> dominantPlayerNames;
 
     /**
      * Construct a RegionInfo, all properties are final to protect data
@@ -27,12 +33,17 @@ public class RegionInfo {
      * @param numberOfOpenNodeConnections,
      * The number of remaining open node connections
      *
-     * @param projectedScoreUponCompletion,
-     * The projected score of the region if it is completed with the minimum number of tile placements
+     * @param scoreIfRegionCompletedNow,
+     * The score of the region if it were completed now
+     *
+     * @param dominantPlayerNames,
+     * The dominant players in the region
      */
-    public RegionInfo(UUID regionId, int numberOfOpenNodeConnections, int projectedScoreUponCompletion) {
+    public RegionInfo(UUID regionId, int numberOfOpenNodeConnections, int scoreIfRegionCompletedNow,
+                      List<String> dominantPlayerNames) {
         this.regionId = regionId;
         this.numberOfOpenNodeConnections = numberOfOpenNodeConnections;
-        this.projectedScoreUponCompletion = projectedScoreUponCompletion;
+        this.scoreIfRegionCompletedNow = scoreIfRegionCompletedNow;
+        this.dominantPlayerNames = dominantPlayerNames;
     }
 }

@@ -3,7 +3,10 @@ package game;
 import entities.board.Tiger;
 import game.messaging.info.PlayerInfo;
 
+import java.awt.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Player {
@@ -11,28 +14,22 @@ public class Player {
     private int score;
     private int remainingTigers;
     private int remainingCrocodiles;
-    private Set<Tiger> placedTigers;
+    private Map<Tiger, Point> placedTigers;
 
     public Player(String name) {
         this.name = name;
         remainingTigers = 7;
         remainingCrocodiles = 2;
         score = 0;
-        placedTigers = new HashSet<>();
+        placedTigers = new HashMap<>();
     }
 
-    public void addPlacedTiger(Tiger tiger) {
-        placedTigers.add(tiger);
-    }
-
-    public void removePlacedTiger(Tiger tiger) {
-        placedTigers.remove(tiger);
+    public void addPlacedTiger(Tiger tiger, Point location) {
+        placedTigers.put(tiger, location);
     }
 
     public PlayerInfo getPlayerInfo() {
-        Set<Tiger> placedTigersCopy = new HashSet<>();
-        placedTigersCopy.addAll(placedTigers);
-        return new PlayerInfo(name, score, remainingTigers, remainingCrocodiles, placedTigersCopy);
+        return new PlayerInfo(name, score, remainingTigers, remainingCrocodiles);
     }
 
     public String getName() {
@@ -79,7 +76,7 @@ public class Player {
         return getRemainingCrocodiles() > 0;
     }
 
-    public Set<Tiger> getPlacedTigers() {
+    public Map<Tiger, Point> getPlacedTigers() {
         return placedTigers;
     }
 }

@@ -8,6 +8,7 @@ import exceptions.IncompatibleTerrainException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
 import game.LocationAndOrientation;
+import javafx.util.Pair;
 
 import java.awt.*;
 import java.io.*;
@@ -18,19 +19,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Board {
-
     private Tile[][] boardMatrix;
     private HashSet<Point> openTileLocations;
     private Map<UUID, Region> regions;
     private List<TigerDen> tigerDens;
     private Set<Tiger> placedTigers;
     private Point centerLocation;
+    private int boardSize;
+    private int numTiles;
+
+    // MARK: History related items to be able to reverse tile placements
     private Stack<Stack<RegionMerge>> regionMergesForEachPlacedTile;
     private Stack<Tile> tilesPlacedInOrder;
     private Stack<List<Point>> locationsOpenedForEachPlacedTile;
-
-    private int boardSize;
-    private int numTiles;
 
     /**
      * Constucts a board with a given tile stack size and a first tile.
@@ -203,10 +204,6 @@ public class Board {
      * as a point and an Orientation as an integer
      */
     public List<LocationAndOrientation> findValidTilePlacements(Tile tile) {
-
-//        System.out.println(this.toString());
-
-
         List<LocationAndOrientation> validPlacements = new ArrayList<>();
         for (Point openTileLocation : openTileLocations) {   // for each open tile
             int col = openTileLocation.x;
@@ -218,12 +215,7 @@ public class Board {
             Tile bottom = boardMatrix[row - 1][col];
 
             for (int tileOrientation = 0; tileOrientation < 4; ++tileOrientation, tile.rotateCounterClockwise(1)) {
-                // By placing this at the end the tile is rotated 4 times and thus comes back to original position
-
-
-//                System.out.println("Tile: " + tile.getType() + "  orientation: " + tileOrientation + " location");
-//                System.out.println(tile.toString());
-
+                // Tile should be rotated 4 times and come back to its initial position
                 if (current != null) {
                     continue;
                 }
@@ -240,8 +232,7 @@ public class Board {
                     continue;
                 }
 
-                LocationAndOrientation locationAndOrientation = new LocationAndOrientation(openTileLocation, tileOrientation);
-                validPlacements.add(locationAndOrientation);
+                validPlacements.add(new LocationAndOrientation(openTileLocation, tileOrientation));
             }
         }
         return validPlacements;
@@ -274,6 +265,7 @@ public class Board {
         int y = serverLocation.y + centerLocation.y;
         return getTile(new Point(x, y));
     }
+
     /**
      * Get the number of tiles
      *
@@ -302,6 +294,18 @@ public class Board {
      */
     public Tile getLastPlacedTile() {
         return tilesPlacedInOrder.peek();
+    }
+
+    /**
+     * Get the last stack of region merges that were performed
+     *
+     * @return
+     * The last stack of regon merges performed
+     */
+    public Stack<RegionMerge> getLastRegionMerges() {
+        Stack<RegionMerge> lastRegionMerges = new Stack<>();
+        lastRegionMerges.addAll(regionMergesForEachPlacedTile.peek());
+        return lastRegionMerges;
     }
 
     /**
@@ -402,54 +406,89 @@ public class Board {
     }
 
     /**
-     * Remove a tiger from the board
+     * Remove a tiger from the board, unstacking if it is not a total removal and the tiger is stacked
      *
      * @param location,
      * The tile location to remove the tiger from
+     *
+     * @param totalRemoval,
+     * Whether or not we want the tiger to be totally removed or if unstacking is allowed
+     *
+     * @return
+     * The pair of the tiger removed and the tiger placed if there is one
      */
-    public void removeTigerFromTileAt(Point location) {
+    public Pair<Tiger, Tiger> removeTigerFromTileAt(Point location, boolean totalRemoval) {
         Tile tileToRemoveTigerFrom = getTile(location);
         Tiger removedTiger = null;
-        if (tileToRemoveTigerFrom.getDen().getTiger() != null) {
-            removedTiger = tileToRemoveTigerFrom.getDen().getTiger();
-            tileToRemoveTigerFrom.getDen().removeTiger();
+        Tiger placedTiger = null;
+        TigerDen denInTile = tileToRemoveTigerFrom.getDen();
+        if (denInTile != null && denInTile.getTiger() != null) {
+            removedTiger = denInTile.getTiger();
+            denInTile.removeTiger();
+            if (removedTiger.isStacked() && !totalRemoval) {
+                // Unstack the tiger instead
+                placedTiger = new Tiger(removedTiger.getOwningPlayerName(), false);
+                try {
+                    denInTile.placeTiger(placedTiger);
+                }
+                catch (TigerAlreadyPlacedException e) {
+                    System.err.println("Problem unstacking tiger in den");
+                }
+            }
         }
         else {
             for (TileSection tileSection : tileToRemoveTigerFrom.getTileSections()) {
                 if  (tileSection.getTiger() != null) {
                     removedTiger = tileSection.getTiger();
                     tileSection.removeTiger();
+                    if (removedTiger.isStacked() && !totalRemoval) {
+                        // unstack the tiger instead
+                        placedTiger = new Tiger(removedTiger.getOwningPlayerName(), false);
+                        try {
+                            tileSection.placeTiger(placedTiger);
+                        }
+                        catch (TigerAlreadyPlacedException e) {
+                            System.err.println("Problem unstacking tiger in tile section");
+                        }
+                    }
                 }
             }
         }
         if (removedTiger != null) {
             placedTigers.remove(removedTiger);
         }
+        if (placedTiger != null) {
+            placedTigers.add(placedTiger);
+        }
+        return new Pair<>(removedTiger, placedTiger);
     }
 
     /**
      * Stacks a tiger
+     *
      * @param location,
      * The location of the tile to stack the tiger at
      *
-     * @throws StackingTigerException if there is already a tiger or whatever
+     * @return
+     * The pair of the removed tiger and the placed tiger, returns null if something went wrong
+     *
+     * @throws StackingTigerException if there is no tiger or the tiger is already stacked
      */
-    public void stackTigerAt(Point location) throws StackingTigerException {
+    public Pair<Tiger, Tiger> stackTigerAt(Point location) throws StackingTigerException {
         Tile tile = getTileFromServerLocation(location);
-        Tiger tiger;
+        Tiger removedTiger = null;
+        Tiger placedTiger = null;
         if (tile.getDen().getTiger() != null) {
-            tiger = tile.getDen().getTiger();
-            if (!placedTigers.contains(tiger)) {
-                throw new StackingTigerException("Tiger not placed on the board");
-            } else if (tiger.isStacked()) {
+            removedTiger = tile.getDen().getTiger();
+            if (removedTiger.isStacked()) {
                 throw new StackingTigerException("Tiger is already stacked");
             } else {
                 // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
-                tiger = new Tiger(tiger.getOwningPlayerName(), true);
+                placedTiger = new Tiger(removedTiger.getOwningPlayerName(), true);
             }
             tile.getDen().removeTiger();
             try {
-                tile.getDen().placeTiger(tiger);
+                tile.getDen().placeTiger(placedTiger);
             } catch (TigerAlreadyPlacedException e) {
                 throw new StackingTigerException(e.getMessage());
             }
@@ -457,23 +496,29 @@ public class Board {
         else {
             for (TileSection tileSection : tile.getTileSections()) {
                 if  (tileSection.getTiger() != null) {
-                    tiger = tileSection.getTiger();
-                    if (!placedTigers.contains(tiger)) {
-                        throw new StackingTigerException("Tiger not placed on the board");
-                    } else if (tiger.isStacked()) {
+                    removedTiger = tileSection.getTiger();
+                    if (removedTiger.isStacked()) {
                         throw new StackingTigerException("Tiger is already stacked");
                     } else {
                         // Tigers are final value types, remove old, create new that is stacked, add to placed tigers
-                        tiger = new Tiger(tiger.getOwningPlayerName(), true);
+                        placedTiger = new Tiger(removedTiger.getOwningPlayerName(), true);
                     }
                     tileSection.removeTiger();
                     try {
-                        tileSection.placeTiger(tiger);
+                        tileSection.placeTiger(placedTiger);
                     } catch (TigerAlreadyPlacedException e) {
                         throw new StackingTigerException(e.getMessage());
                     }
                 }
             }
+        }
+
+        if (placedTiger != null) {
+            placedTigers.remove(removedTiger);
+            placedTigers.add(placedTiger);
+            return new Pair<>(removedTiger, placedTiger);
+        } else {
+            throw new StackingTigerException("Removed tiger or placed tiger were null when stacking tiger");
         }
     }
 
@@ -522,13 +567,17 @@ public class Board {
 
     /**
      * Connect the nodes of two tiles laterally
-     * @param rightTile
+     *
+     * @param rightTile,
      * The right tile of the lateral connection
-     * @param leftTile
+     *
+     * @param leftTile,
      * The left tile of the lateral connection
+     *
      * @return
      * A stack of region merges which act as the history of merges
-     * @throws BadPlacementException
+     *
+     * @throws BadPlacementException if the connection is invalid
      */
     private Stack<RegionMerge> connectLaterally(Tile rightTile, Tile leftTile) throws BadPlacementException {
         Stack<RegionMerge> mergedRegionsStack = new Stack<>();
@@ -570,17 +619,12 @@ public class Board {
      * The boolean as to whether the connection is valid.
      */
     private boolean verticalConnectionIsValid(Tile bottomTile, Tile topTile) {
-        // The edges to be connected
-//
-//        System.out.println("VERTICAL CONNECTION");
-//        System.out.println(topTile);
-//        System.out.println(bottomTile);
-//
-
+        // Get the edges that need to be connected
         Node bottomEdge = topTile.getEdge(EdgeLocation.BOTTOM);
         Node topEdge = bottomTile.getEdge(EdgeLocation.TOP);
         boolean result = nodeConnectionIsValid(topEdge, bottomEdge);
 
+        // If the edges were trails we need to connect the corner nodes as well
         if (bottomEdge.getTileSection().getTerrain() == Terrain.TRAIL) {
             // Since the middle terrain is a trail, get the corners and connect them up as well
             Node bottomRightCorner = topTile.getCorner(CornerLocation.BOTTOM_RIGHT);
@@ -703,7 +747,9 @@ public class Board {
 
     /**
      * Undoes a region merge
-     * @param mergeToUndo
+     *
+     * @param mergeToUndo,
+     * The region merge item to undo
      */
     private void undoRegionMerge(RegionMerge mergeToUndo) {
         Region newRegion = mergeToUndo.newRegion;
@@ -721,7 +767,10 @@ public class Board {
 
     /**
      * Checks to see if a tiger can be placed
-     * @param section
+     *
+     * @param section,
+     * The sectionwe are trying to place a tiger on
+     *
      * @return
      * a boolean representing whether a tile can be placed
      */
@@ -736,7 +785,8 @@ public class Board {
     /**
      * Logs the current representation of the board to a file textually
      * Includes nodes of each region, files go in /logs
-     * @throws IOException
+     *
+     * @throws IOException if logging fails
      */
     public void log() throws IOException {
         // Get the output string for the board.
@@ -754,15 +804,38 @@ public class Board {
         }
     }
 
-
+    /**
+     * Get the regions as a list
+     *
+     * @return
+     * The List of regions
+     */
     public List<Region> regionsAsList() {
         return new ArrayList<>(regions.values());
     }
 
+    /**
+     * Get the server location from a given native location
+     *
+     * @param location,
+     * The native location according to board coordinates
+     *
+     * @return
+     * The server location for that board location
+     */
     public Point getServerLocation(Point location) {
         return new Point(location.x - centerLocation.x, location.y - centerLocation.y);
     }
 
+    /**
+     * Gets the native location coordinate location for the given server coordinates
+     *
+     * @param serverLocation,
+     * The location according to pserver coordinates
+     *
+     * @return
+     * The native coordinate based location from the given server coordinate location.
+     */
     public Point getNativeLocation(Point serverLocation) {
         return new Point(serverLocation.x + centerLocation.x, serverLocation.y + centerLocation.y);
     }

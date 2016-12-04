@@ -1,22 +1,15 @@
 package game.messaging.response;
 
-import entities.board.Tiger;
-import game.messaging.info.RegionTigerPlacement;
+import game.messaging.info.RegionInfo;
 import game.messaging.info.TigerDenTigerPlacement;
 
-import java.util.List;
+import java.util.Map;
 
 public class TilePlacementResponse {
     /**
      * Whether or not the tile placement was valid
      */
     public final boolean wasValid;
-
-    /**
-     * The list of tiger placements for the regions
-     */
-    public final List<RegionTigerPlacement> regionTigerPlacementOptions;
-
     /**
      * The possible placement in a TigerDen if there is one
      */
@@ -28,27 +21,32 @@ public class TilePlacementResponse {
     public final boolean canPlaceCrocodile;
 
     /**
+     * The mapping of region infos to the score differentials
+     */
+    public final Map<RegionInfo, Integer> regionsEffected;
+
+    /**
      * Construct a TilePlacement response, All properties are constant to protect board data
      *
      * @param wasValid,
      * Whether or not the tile placement was valid
-     *
-     * @param regionTigerPlacementOptions,
-     * The tiger placement options pertaining to board regions such as lakes, jungles, and trails
      *
      * @param tigerDenPlacementOption,
      * The tiger placement option of a den if the tile has one
      *
      * @param canPlaceCrocodile,
      * Represents whether a crocodile can be placed.
+     *
+     * @param regionsEffected,
+     * The map of region info to score differentials representing the regions effected by this placement
      */
     public TilePlacementResponse(boolean wasValid,
-                                 List<RegionTigerPlacement> regionTigerPlacementOptions,
                                  TigerDenTigerPlacement tigerDenPlacementOption,
-                                 boolean canPlaceCrocodile) {
+                                 boolean canPlaceCrocodile,
+                                 Map<RegionInfo, Integer> regionsEffected) {
         this.wasValid = wasValid;
-        this.regionTigerPlacementOptions = regionTigerPlacementOptions;
         this.tigerDenPlacementOption = tigerDenPlacementOption;
         this.canPlaceCrocodile = canPlaceCrocodile;
+        this.regionsEffected = regionsEffected;
     }
 }
