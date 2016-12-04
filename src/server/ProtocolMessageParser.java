@@ -1,5 +1,5 @@
 package server;
-import entities.board.Placement;
+import wrappers.Placement;
 import exceptions.ParseFailureException;
 import game.LocationAndOrientation;
 import javafx.util.Pair;
@@ -138,7 +138,7 @@ public class ProtocolMessageParser {
     }
 
     public Pair<String, LocationAndOrientation> parseStartingTile(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT -?(\\d+) -?(\\d+) (\\d+)");
+        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT (-?\\d+) (-?\\d+) (\\d+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
@@ -279,7 +279,7 @@ public class ProtocolMessageParser {
 
 
     public PlacementMoveWrapper parsePlacementMove(String input) throws ParseFailureException {
-        Pattern p0 = Pattern.compile("PLACED (.+) AT -?(\\d+) -?(\\d+) (\\d+) (.+)");
+        Pattern p0 = Pattern.compile("PLACED (.+) AT (-?\\d+) (-?\\d+) (\\d+) (.+)");
         Matcher m0 = p0.matcher(input);
 
         if (m0.find()) {
@@ -326,7 +326,7 @@ public class ProtocolMessageParser {
             } else if (suffix.startsWith("RETRIEVED TIGER AT")) {
                 wrapper.setType(UnplaceableType.RETRIEVED_TIGER);
 
-                Pattern p0 = Pattern.compile("RETRIEVED TIGER AT -?(\\d+) -?(\\d+)");
+                Pattern p0 = Pattern.compile("RETRIEVED TIGER AT (-?\\d+) (-?\\d+)");
                 Matcher m0 = p0.matcher(suffix);
 
                 if (m0.find()) {
@@ -341,7 +341,7 @@ public class ProtocolMessageParser {
             } else if (suffix.startsWith("ADDED ANOTHER TIGER")) {
                 wrapper.setType(UnplaceableType.ADDED_TIGER);
 
-                Pattern p1 = Pattern.compile("ADDED ANOTHER TIGER TO -?(\\d+) -?(\\d+)");
+                Pattern p1 = Pattern.compile("ADDED ANOTHER TIGER TO (-?\\d+) (-?\\d+)");
                 Matcher m1 = p1.matcher(suffix);
 
                 if (m1.find()) {

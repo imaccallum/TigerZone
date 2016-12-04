@@ -97,6 +97,10 @@ public class TigerDen {
     //
     // Update the required locations by checking the board again to see if the tiles have been placed
     //
+
+    /**
+     * Updates the locations of the adjacent Tile of the Den
+     */
     private void updateRequiredLocations() {
         if (centerTileLocation != null) {
             Point right = new Point(centerTileLocation.x, centerTileLocation.y + 1);
