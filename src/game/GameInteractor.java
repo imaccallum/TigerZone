@@ -182,26 +182,30 @@ public class GameInteractor {
             NonplacementMoveWrapper nonplacementMove = confirmedMove.getNonplacementMove();
             Point location = nonplacementMove.getTigerLocation();
             if (nonplacementMove.getType() == UnplaceableType.RETRIEVED_TIGER) {
+                Player player = players.get(playerTurn);
                 // Remove a tiger from the board, allow unstacking
                 Pair<Tiger, Tiger> tigers = board.removeTigerFromTileAt(location, false);
                 if (tigers.getKey() != null) {
                     // There is a removed tiger
-                    players.get(playerTurn).getPlacedTigers().remove(tigers.getKey());
+                    player.getPlacedTigers().remove(tigers.getKey());
                 }
                 else {
                     System.err.println("Failed to remove a tiger from the board");
                 }
                 if (tigers.getValue() != null) {
                     // There is a placed tiger
-                    players.get(playerTurn).getPlacedTigers().put(tigers.getValue(), location);
+                    player.getPlacedTigers().put(tigers.getValue(), location);
                 }
+                player.incrementRemainingTigers();
 
             }
             else if (nonplacementMove.getType() == UnplaceableType.ADDED_TIGER) {
                 try {
+                    Player player = players.get(playerTurn);
                     Pair<Tiger, Tiger> tigers = board.stackTigerAt(location);
-                    players.get(playerTurn).getPlacedTigers().remove(tigers.getKey());
-                    players.get(playerTurn).getPlacedTigers().put(tigers.getValue(), location);
+                    player.getPlacedTigers().remove(tigers.getKey());
+                    player.getPlacedTigers().put(tigers.getValue(), location);
+                    player.decrementRemainingTigers();
                 }
                 catch (StackingTigerException exception) {
                     System.err.println("Problem confirming tiger stacking: " + exception);
@@ -217,10 +221,6 @@ public class GameInteractor {
      */
     public void addPlayer(Player player) {
         players.put(player.getName(), player);
-    }
-
-    public void place(Tile tile, Point location) throws BadPlacementException {
-        board.place(tile, location);
     }
 
     /**
@@ -365,24 +365,6 @@ public class GameInteractor {
             board.removeLastPlacedTile();
 
             return new TilePlacementResponse(true, denPlacement, canPlaceCrocodile, regionsEffected);
-        }
-    }
-
-    /**
-     * Adds a Tiger at a location on which there is already a Tiger
-     *
-     * @param location
-     * The location on which the Tiger is to be stacked
-     * @param playerName
-     * The name of the player who will place the Tiger
-     */
-    public void stackTigerAt(Point location, String playerName) {
-        try {
-            board.stackTigerAt(location);
-            players.get(playerName).decrementRemainingTigers();
-        }
-        catch (StackingTigerException exception) {
-            System.err.println("Stacking tiger error: " + exception.getMessage());
         }
     }
 
