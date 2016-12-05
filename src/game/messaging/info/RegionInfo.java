@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class RegionInfo {
+    public int possibleTigerPlacementZone;
+
     /**
      * The id of the region
      */
@@ -25,6 +27,11 @@ public class RegionInfo {
     public final List<String> dominantPlayerNames;
 
     /**
+     * Whether or not the region is finished
+     */
+    public final boolean isFinished;
+
+    /**
      * Construct a RegionInfo, all properties are final to protect data
      *
      * @param regionId,
@@ -40,10 +47,12 @@ public class RegionInfo {
      * The dominant players in the region
      */
     public RegionInfo(UUID regionId, int numberOfOpenNodeConnections, int scoreIfRegionCompletedNow,
-                      List<String> dominantPlayerNames) {
+                      List<String> dominantPlayerNames, boolean isFinished) {
         this.regionId = regionId;
         this.numberOfOpenNodeConnections = numberOfOpenNodeConnections;
         this.scoreIfRegionCompletedNow = scoreIfRegionCompletedNow;
         this.dominantPlayerNames = dominantPlayerNames;
+        this.isFinished = isFinished;
+        this.possibleTigerPlacementZone = 10;  // Start with it invalid
     }
 }

@@ -203,7 +203,7 @@ public class Region {
                 }
             }
         }
-        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore, getDominantPlayerNames());
+        return new RegionInfo(regionId, countUnconnectedNodes, projectedScore, getDominantPlayerNames(),isFinished());
     }
 
 

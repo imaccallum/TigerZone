@@ -376,54 +376,74 @@ public class Tile {
      * int for the Node that should have the Tiger placed on it
      */
     public int getTigerZone(TileSection tilesection){
-        if (tilesection.getTerrain() == Terrain.JUNGLE) {
-            System.out.println("Placing in Jungle");
-            int min = 9;
-            boolean containsCorner0 = false;
-            boolean containsCorner1 = false;
-            boolean containsCorner2 = false;
-            boolean containsCorner3 = false;
-            boolean containsEdge0 = false;
-            boolean containsEdge1 = false;
-            boolean containsEdge2 = false;
-            boolean containsEdge3 = false;
-
-            for (Node nodeInTileSection: tilesection.getNodes()) {
-                if (nodeInTileSection == corners[0]) {
-                    containsCorner0 = true;
-                }
-                else if (nodeInTileSection == edges[0]) {
-                    containsEdge0 = true;
-                }
-                else if (nodeInTileSection == corners[1]) {
-                    containsCorner1 = true;
-                }
-                else if (nodeInTileSection == edges[1]) {
-                    containsEdge1 = true;
-                }
-                else if (nodeInTileSection == corners[2]) {
-                    containsCorner2 = true;
-                }
-                else if (nodeInTileSection == edges[2]) {
-                    containsEdge2 = true;
-                }
-                else if (nodeInTileSection == corners[3]) {
-                    containsCorner3 = true;
-                }
-                else if (nodeInTileSection == edges[3]) {
-                    containsEdge3 = true;
-                }
+        int numberOfTrails = 0;
+        int numberOfLakeEdges = 0;
+        for (TileSection tileSection : tileSections) {
+            if (tileSection.getTerrain() == Terrain.TRAIL) {
+                numberOfTrails++;
             }
+        }
+        if (edges[0].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
+        if (edges[1].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
+        if (edges[2].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
+        if (edges[3].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
 
-            if (containsCorner0 || containsEdge0 || containsEdge3) {
+        System.out.println("Tile orientation: " + orientation * 90);
+        System.out.println("Placing tiger in " + tilesection.getTerrain());
+
+        boolean hasIntersection = numberOfTrails > 1;
+        boolean containsCorner0 = false;
+        boolean containsCorner1 = false;
+        boolean containsCorner2 = false;
+        boolean containsCorner3 = false;
+        boolean containsEdge0 = false;
+        boolean containsEdge1 = false;
+        boolean containsEdge2 = false;
+        boolean containsEdge3 = false;
+
+        for (Node nodeInTileSection: tilesection.getNodes()) {
+            if (nodeInTileSection == corners[0]) {
+                containsCorner0 = true;
+            }
+            else if (nodeInTileSection == edges[0]) {
+                containsEdge0 = true;
+            }
+            else if (nodeInTileSection == corners[1]) {
+                containsCorner1 = true;
+            }
+            else if (nodeInTileSection == edges[1]) {
+                containsEdge1 = true;
+            }
+            else if (nodeInTileSection == corners[2]) {
+                containsCorner2 = true;
+            }
+            else if (nodeInTileSection == edges[2]) {
+                containsEdge2 = true;
+            }
+            else if (nodeInTileSection == corners[3]) {
+                containsCorner3 = true;
+            }
+            else if (nodeInTileSection == edges[3]) {
+                containsEdge3 = true;
+            }
+        }
+        if (tilesection.getTerrain() == Terrain.JUNGLE) {
+            int min = 10;
+            if (corners[0] == null && !edges[0].getTileSection().equals(edges[3].getTileSection()) &&
+                edges[0].getTileSection().getTerrain() == Terrain.LAKE &&
+                edges[3].getTileSection().getTerrain() == Terrain.LAKE) {
+                // Special case for the weird tile
+                min = 1;
+            } else if (containsCorner0 || containsEdge0 || containsEdge3) {
                 min = 1;
             }
             else if (containsCorner1 || containsEdge1) {
                 min = 3;
             }
-            else if (containsEdge1 && containsEdge2 && edges[0].getTileSection().getTerrain() != Terrain.TRAIL &&
-                    getDen() == null) {
-                // Does not contain edge 0 or edge 1, edge 0 is not a trail so the middle is not a trail, also no den
+            else if ((containsEdge1 || containsEdge2) && edges[0].getTileSection().getTerrain() != Terrain.TRAIL &&
+                    getDen() == null && (numberOfLakeEdges != 3)) {
+                // Does not contain edge 0 or edge 1, edge 0 is not a trail so the middle is not a trail, also no den,
+                // And lakes do not dominate the board
                 min = 5;
             }
             else if (containsEdge2 || containsCorner3) {
@@ -435,23 +455,7 @@ public class Tile {
             System.out.println(min);
             return min;
         }
-        else {
-            boolean containsEdge0 = false;
-            boolean containsEdge1 = false;
-            boolean containsEdge2 = false;
-            boolean containsEdge3 = false;
-            for (Node nodeInTileSection : tilesection.getNodes()) {
-                System.out.println("Placing tiger in " + tilesection.getTerrain());
-                if (nodeInTileSection.equals(edges[0])) {
-                    containsEdge0 = true;
-                } else if (nodeInTileSection.equals(edges[1])) {
-                    containsEdge1 = true;
-                } else if (nodeInTileSection.equals(edges[2])) {
-                    containsEdge2 = true;
-                } else {
-                    containsEdge3 = true;
-                }
-            }
+        else if (tilesection.getTerrain() == Terrain.LAKE) {
             int min = 10;
             if (containsEdge0 && containsEdge3) {
                 min = 1;
@@ -459,11 +463,31 @@ public class Tile {
                 min = 2;
             } else if (containsEdge3) {
                 min = 4;
-            } else if (containsEdge1 && containsEdge2 && tilesection.getTerrain() == Terrain.TRAIL) {
-                min = 5;
             } else if (containsEdge1) {
                 min = 6;
             } else if (containsEdge2) {
+                min = 8;
+            }
+            System.out.println(min);
+            return min;
+        }
+        else {
+            // Trail
+            int min = 10;
+            if (containsEdge0) {
+                min = 2;
+            }
+            else if (containsEdge3) {
+                min = 4;
+            }
+            else if ((containsEdge2 || containsEdge1) && !hasIntersection && getDen() == null &&
+                    (numberOfLakeEdges != 3)) {
+                min = 5;
+            }
+            else if (containsEdge1) {
+                min = 6;
+            }
+            else if (containsEdge2) {
                 min = 8;
             }
             System.out.println(min);

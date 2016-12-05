@@ -10,6 +10,7 @@ import exceptions.BadPlacementException;
 import exceptions.ParseFailureException;
 import exceptions.StackingTigerException;
 import exceptions.TigerAlreadyPlacedException;
+import game.messaging.info.PlayerInfo;
 import game.messaging.info.RegionInfo;
 import game.messaging.info.TigerDenTigerPlacement;
 import game.messaging.request.TilePlacementRequest;
@@ -111,6 +112,7 @@ public class GameInteractor {
 
             if (placementMove.getPlacedObject() == Placement.CROCODILE) {
                 tileToPlace.placeCrocodile();
+                players.get(playerTurn).decrementRemainingCrocodiles();
             }
             else if (placementMove.getPlacedObject() == Placement.TIGER) {
                 TileSection tileSection = tileToPlace.tileSectionForZone(placementMove.getZone());
@@ -119,6 +121,7 @@ public class GameInteractor {
                     try {
                         tileToPlace.getDen().placeTiger(tiger);
                         players.get(playerTurn).addPlacedTiger(tiger, location);
+                        players.get(playerTurn).decrementRemainingTigers();
                     } catch (TigerAlreadyPlacedException e) {
                         System.err.println("Error placing tiger" + e.getMessage());
                         return;
@@ -129,12 +132,12 @@ public class GameInteractor {
                     try {
                         tileSection.placeTiger(tiger);
                         players.get(playerTurn).addPlacedTiger(tiger, location);
+                        players.get(playerTurn).decrementRemainingTigers();
                     } catch (TigerAlreadyPlacedException e) {
                         System.err.println("Error placing tiger: " + e.getMessage());
                         return;
                     }
                 }
-
             }
             try {
                 board.place(tileToPlace, location);
@@ -346,11 +349,38 @@ public class GameInteractor {
                 oldRegionScores.put(newAndOldRegionsEntry.getKey().getRegionId(), oldScore);
             }
 
-
+            Map<UUID, Integer> regionTigerZonePlacements = new HashMap<>();
+            Set<UUID> recordedRegions = new HashSet<>();
             Map<RegionInfo, Integer> regionsEffected = new HashMap<>();
             for (TileSection tileSection : request.tileToPlace.getTileSections()) {
-                RegionInfo regionInfo = tileSection.getRegion().getRegionInfo();
-                regionsEffected.put(regionInfo, oldRegionScores.get(regionInfo.regionId));
+                if (!recordedRegions.contains(tileSection.getRegion().getRegionId())) {
+                    RegionInfo regionInfo = tileSection.getRegion().getRegionInfo();
+                    Integer oldScore = oldRegionScores.get(regionInfo.regionId);
+                    int newScore = regionInfo.scoreIfRegionCompletedNow;
+                    Integer scoreDifferential = oldScore != null ? newScore - oldScore : newScore;
+                    regionsEffected.put(regionInfo, scoreDifferential);
+                    recordedRegions.add(regionInfo.regionId);
+                }
+                if (tileSection.getRegion().getDominantPlayerNames().isEmpty()) {
+                    // Can place a tiger
+                    UUID regionId = tileSection.getRegion().getRegionId();
+                    Integer recordedZone = regionTigerZonePlacements.get(regionId);
+                    int foundZone = request.tileToPlace.getTigerZone(tileSection);
+                    if (recordedZone == null ) {
+                        regionTigerZonePlacements.put(regionId, foundZone);
+                    }
+                    else if (foundZone < recordedZone) {
+                        regionTigerZonePlacements.put(regionId, foundZone);
+                    }
+                }
+
+            }
+
+            for (RegionInfo regionEffected : regionsEffected.keySet()) {
+                Integer found = regionTigerZonePlacements.get(regionEffected.regionId);
+                if (found != null) {
+                    regionEffected.possibleTigerPlacementZone = found;
+                }
             }
 
             TigerDenTigerPlacement denPlacement = null;
@@ -382,5 +412,11 @@ public class GameInteractor {
 
     public String getGameId() {
         return gameId;
+    }
+
+    public List<PlayerInfo> getPlayerInfos() {
+        return players.values().stream()
+                .map(Player::getPlayerInfo)
+                .collect(Collectors.toList());
     }
 }

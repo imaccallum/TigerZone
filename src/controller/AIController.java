@@ -5,6 +5,7 @@ import entities.board.TileFactory;
 import entities.overlay.TileSection;
 import game.GameInteractor;
 import game.LocationAndOrientation;
+import game.messaging.info.PlayerInfo;
 import game.messaging.info.RegionInfo;
 import game.messaging.request.TilePlacementRequest;
 import game.messaging.response.TilePlacementResponse;
@@ -12,17 +13,20 @@ import game.messaging.response.ValidMovesResponse;
 import wrappers.BeginTurnWrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AIController implements AIInterface {
     private GameInteractor gameInteractor;
     private String playerName;
+    private Map<String, PlayerInfo> playerInfos;
 
 
     public AIController(GameInteractor gameInteractor, String playerName) {
         this.gameInteractor = gameInteractor;
         this.playerName = playerName;
+        this.playerInfos = new HashMap<>();
     }
 
     private Move calculateMoveWithCrocodile(String tileToPlaceName, LocationAndOrientation locationAndOrientation) {
@@ -67,26 +71,34 @@ public class AIController implements AIInterface {
             if (effectedRegionEntry.getKey().dominantPlayerNames.contains(playerName)) {
                 // one of our regions is being added to, add the score difference
                 baseTileScore += scoreDifference;
+                if (effectedRegionEntry.getKey().isFinished) {
+                    baseTileScore += effectedRegionEntry.getKey().scoreIfRegionCompletedNow;
+                }
             }
             else if (!effectedRegionEntry.getKey().dominantPlayerNames.isEmpty()) {
                 // Someone else has that region, subtract the score difference from ours
                 baseTileScore -= scoreDifference;
+                if (effectedRegionEntry.getKey().isFinished) {
+                    baseTileScore -= effectedRegionEntry.getKey().scoreIfRegionCompletedNow;
+                }
             } else {
                 // We could place a tiger here, create a new tiger move
-                int zoneToPlaceTigerIn = -1;
-                for (TileSection tileSection : tileToPlace.getTileSections()) {
-                    if (tileSection.getRegion().getRegionId() == effectedRegionEntry.getKey().regionId) {
-                        zoneToPlaceTigerIn = tileToPlace.getTigerZone(tileSection);
-                    }
-                }
+                int zoneToPlaceTigerIn = effectedRegionEntry.getKey().possibleTigerPlacementZone;
 
-                if (zoneToPlaceTigerIn == -1) {
+                if (zoneToPlaceTigerIn == 10) {
                     System.err.println("Region info with no dominant players could not find zone to place tiger in");
                 }
                 else {
+                    if (effectedRegionEntry.getKey().isFinished) {
+                        // If the region is finished and can be claimed, add the entire value of the region
+                        baseTileScore += effectedRegionEntry.getKey().scoreIfRegionCompletedNow;
+                    }
+                    else {
+                        // Add this weight since we would be placing a tiger in the region as well
+                        baseTileScore += scoreDifference;
+                    }
                     // Create the move and add it to the moves list
-                    Move move = new Move(tileToPlaceName, locationAndOrientation,
-                                         effectedRegionEntry.getKey().scoreIfRegionCompletedNow, true, false,
+                    Move move = new Move(tileToPlaceName, locationAndOrientation, baseTileScore, true, false,
                                          zoneToPlaceTigerIn);
                     tigerPlacementMoves.add(move);
                 }
@@ -149,13 +161,23 @@ public class AIController implements AIInterface {
      */
     public Move decideMove(BeginTurnWrapper beginTurn) {
         Tile tileToPlace = TileFactory.makeTile(beginTurn.getTile());
+        List<PlayerInfo> updatedPlayerInfos = gameInteractor.getPlayerInfos();
+
+        for (PlayerInfo playerInfo : updatedPlayerInfos) {
+            playerInfos.put(playerInfo.playerName, playerInfo);
+        }
+
         ValidMovesResponse validMoves = gameInteractor.getValidMoves(tileToPlace);
         List<LocationAndOrientation> possibleLocationsAndOrientations = validMoves.locationsAndOrientations;
         List<Move> possibleMoves = new ArrayList<>();
         for (LocationAndOrientation locationAndOrientation : possibleLocationsAndOrientations) {
-            possibleMoves.add(calculateMoveWithCrocodile(beginTurn.getTile(), locationAndOrientation));
             possibleMoves.add(calculateMoveWithoutFollowers(beginTurn.getTile(), locationAndOrientation));
-            possibleMoves.addAll(calculateMovesWithTigers(beginTurn.getTile(), locationAndOrientation));
+            if (tileToPlace.canPlaceCrocodile() && playerInfos.get(playerName).remainingCrocodiles > 0) {
+                possibleMoves.add(calculateMoveWithCrocodile(beginTurn.getTile(), locationAndOrientation));
+            }
+            if (playerInfos.get(playerName).remainingTigers > 0) {
+                possibleMoves.addAll(calculateMovesWithTigers(beginTurn.getTile(), locationAndOrientation));
+            }
         }
 
         if (possibleMoves.isEmpty()) {

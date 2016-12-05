@@ -85,7 +85,7 @@ public class Board {
 
         // Disconnect the nodes
         for (Node node : tile.nodesClockwise()) {
-            if(node!=null) {
+            if(node != null) {
                 for (Node connectedNode : node.getConnectedNodes()) {
                     connectedNode.getConnectedNodes().remove(node);
                 }
@@ -154,32 +154,40 @@ public class Board {
             regionMerges.addAll(connectLaterally(tile, leftTile));
         } else {
             Point loc = new Point(col-1, row);
-            openTileLocations.add(loc);
-            locationsAddedToOpenLocations.add(loc);
+            if (!openTileLocations.contains(loc)) {
+                openTileLocations.add(loc);
+                locationsAddedToOpenLocations.add(loc);
+            }
         }
         if (rightTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectLaterally(rightTile, tile));
         } else {
             Point loc = new Point(col+1, row);
-            openTileLocations.add(loc);
-            locationsAddedToOpenLocations.add(loc);
+            if (!openTileLocations.contains(loc)) {
+                openTileLocations.add(loc);
+                locationsAddedToOpenLocations.add(loc);
+            }
         }
         if (topTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(tile, topTile));
         } else {
             Point loc = new Point(col, row + 1);
-            openTileLocations.add(loc);
-            locationsAddedToOpenLocations.add(loc);
+            if (!openTileLocations.contains(loc)) {
+                openTileLocations.add(loc);
+                locationsAddedToOpenLocations.add(loc);
+            }
         }
         if (bottomTile != null) {
             // Add all at 0 to preserve order of stack
             regionMerges.addAll(connectVertically(bottomTile, tile));
         } else {
             Point loc = new Point(col, row - 1);
-            openTileLocations.add(loc);
-            locationsAddedToOpenLocations.add(loc);
+            if (!openTileLocations.contains(loc)) {
+                openTileLocations.add(loc);
+                locationsAddedToOpenLocations.add(loc);
+            }
         }
 
         if (tile.getDen() != null) {
