@@ -388,9 +388,6 @@ public class Tile {
         if (edges[2].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
         if (edges[3].getTileSection().getTerrain() == Terrain.LAKE) numberOfLakeEdges++;
 
-        System.out.println("Tile orientation: " + orientation * 90);
-        System.out.println("Placing tiger in " + tilesection.getTerrain());
-
         boolean hasIntersection = numberOfTrails > 1;
         boolean containsCorner0 = false;
         boolean containsCorner1 = false;
@@ -452,7 +449,6 @@ public class Tile {
             else {
                 min = 9;
             }
-            System.out.println(min);
             return min;
         }
         else if (tilesection.getTerrain() == Terrain.LAKE) {
@@ -468,7 +464,6 @@ public class Tile {
             } else if (containsEdge2) {
                 min = 8;
             }
-            System.out.println(min);
             return min;
         }
         else {
@@ -490,7 +485,6 @@ public class Tile {
             else if (containsEdge2) {
                 min = 8;
             }
-            System.out.println(min);
             return min;
         }
     }

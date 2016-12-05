@@ -175,7 +175,6 @@ public class GameInteractor {
                     }
                 }
             }
-            System.out.println(board.toString());
         }
         else if (confirmedMove.hasForfeited()) {
             return;
