@@ -97,6 +97,9 @@ public class NetworkContext {
                         gameOneOver = true;
                     } else if (gameId.equals(gameTwo.getGameId())) {
                         gameTwoOver = true;
+                    } else {
+                        System.err.println("Received bad game id: " + gameId);
+                        return;
                     }
 
                     continue;
