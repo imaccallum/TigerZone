@@ -138,7 +138,7 @@ public class ProtocolMessageParser {
     }
 
     public Pair<String, LocationAndOrientation> parseStartingTile(String input) throws ParseFailureException {
-        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT (-?\\d+) (->\\d+) (\\d+)");
+        Pattern p = Pattern.compile("STARTING TILE IS (.+) AT (-?\\d+) (-?\\d+) (\\d+)");
         Matcher m = p.matcher(input);
 
         if (m.find()) {
